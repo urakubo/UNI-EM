@@ -1,0 +1,203 @@
+/* 全体コンテンツ包み */
+
+html,body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* コンテンツ(左) */
+.left-container {
+  width: 60%;
+  height: 100vh;
+  float: left;
+  background-color: #FFFFFF;
+  position: static; /* Three.js を上手く動かすために fixed or static でなくてはならないらしい*/
+  top: 0;
+  left: 0;
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+  overflow: auto;
+}
+
+/* コンテンツ(右) */
+.right-container {
+  width: 40%;
+  min-width: 400px;
+  float: right;
+  background-color: #FFFFFF;
+  margin: 0;
+  padding: 0;
+  border: 0 none;
+  font-family: 'Arial',sans-serif;
+  font-size:14px;
+  height: 100vh;
+  overflow: auto;
+}
+
+.tabulator{
+  font-size:12px;
+}
+
+
+/* In line message */
+.InLineMessage {
+ display:inline-block;
+}
+
+
+/* For accordion menu */
+ol ,ul {
+    list-style:none;
+    list-style-type: none;
+    padding-left: 5px
+}
+#menu {
+    width: 98%;
+    margin:0;
+}
+
+.archive {
+    background:#e2e2e2;
+    color:#000;
+    padding:2px 5px;
+    border-bottom:1px solid #FFF;
+    cursor:pointer;
+    border-radius: 4px;
+}
+.subMenu li {
+    background-color:#9CF;
+    padding:5px 10px;
+    border-bottom:1px solid #FFF;
+}
+
+.menu-label {
+  display: inline-block;
+}
+
+.appearance-actions .menu-label {
+  width: 160px;
+  font-size: 14px;
+}
+
+.marker-label-actions .menu-label {
+  width: 56px;
+  font-size: 14px;
+}
+
+.save-image {
+  margin-top: 8px;
+}
+
+fieldset.table-frame {
+  width: 92%;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  padding: 6px;
+  margin: 0;
+}
+
+.object-table-actions {
+  margin-top: 8px;
+}
+
+.marker-table-actions {
+  margin: 8px 0 2px 0;
+}
+
+
+/* Buttons */
+.btn {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 4px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  border-radius: 4px;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.btn1 {background-color: #4CAF50;} /* Green */
+.btn2 {background-color: #008CBA;} /* Blue */
+.btn3 {background-color: #f44336;} /* Red */
+.btn4 {background-color: #d7d7d7;color:black;} /* Grey */
+.btn5 {background-color: #555555;} /* Orange */
+
+.btn1:hover {background-color: #4CAF50;}
+.btn2:hover {background-color: #008CBA;}
+.btn3:hover {background-color: #f44336;}
+.btn4:hover {background-color: #e7e7e7;color:black;}
+.btn5:hover {background-color: #555555;}
+
+.font1 {font-size:10px;}
+.font2 {font-size:12px;}
+.font3 {font-size:14px;}
+.font4 {font-size:16px;}
+.font5 {font-size:18px;}
+
+/* Toggle switch */
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 28px;
+  height: 14px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 10px;
+  width: 10px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(13px);
+  -ms-transform: translateX(13px);
+  transform: translateX(13px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 13px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}

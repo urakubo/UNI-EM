@@ -1,0 +1,64 @@
+{
+  "name": "chillout",
+  "version": "3.1.9",
+  "description": "Reduce CPU usage in JavaScript",
+  "main": "dist/chillout.js",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "babelify": "^8.0.0",
+    "bannerify": "^1.0.1",
+    "browserify": "^16.2.2",
+    "es6-shim": "^0.35.3",
+    "karma": "^2.0.2",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-detect-browsers": "^2.3.2",
+    "karma-firefox-launcher": "^1.1.0",
+    "karma-ie-launcher": "^1.0.0",
+    "karma-mocha": "^1.3.0",
+    "karma-mocha-reporter": "^2.2.5",
+    "karma-safari-launcher": "^1.0.0",
+    "mocha": "^5.1.1",
+    "pidusage": "1.0.2",
+    "power-assert": "^1.5.0",
+    "semver": "^5.6.0",
+    "uglify-js": "^3.3.24",
+    "uglifyify": "^5.0.0",
+    "watchify": "^3.11.0"
+  },
+  "scripts": {
+    "compile": "browserify src/index.js -o dist/chillout.js -s chillout -t [ babelify ] -p [ bannerify --file src/banner.js ] --no-bundle-external --bare",
+    "watch": "watchify src/index.js -o dist/chillout.js -s chillout -t [ babelify ] -p [ bannerify --file src/banner.js ] --no-bundle-external --bare --poll=200 -v",
+    "minify": "uglifyjs dist/chillout.js -o dist/chillout.min.js --comments -c warnings=false -m -b ascii_only=true,beautify=false",
+    "build": "npm run compile && npm run minify",
+    "test": "npm run build && mocha test/test-node && karma start karma.conf.js",
+    "travis": "npm run build && mocha test/test-node && karma start karma.conf.js --single-run",
+    "benchmark": "node test/benchmark"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/polygonplanet/chillout.git"
+  },
+  "keywords": [
+    "cpu",
+    "async/await",
+    "async",
+    "await",
+    "asynchronous",
+    "async function",
+    "iterate",
+    "iterator",
+    "iteration",
+    "promise",
+    "setimmediate",
+    "forEach",
+    "repeat"
+  ],
+  "author": "polygon planet <polygon.planet.aqua@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/polygonplanet/chillout/issues"
+  },
+  "homepage": "https://github.com/polygonplanet/chillout"
+}

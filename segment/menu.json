@@ -1,0 +1,14 @@
+{
+"2D DNN": {
+	"Sub":		0,
+	"Func":		"_2D_DNN"
+},
+"3D FFN": {
+	"Sub":		0,
+	"Func":		"_3D_FFN"
+},
+"Tensorboard": {
+	"Sub":		0,
+	"Func":		"_Tensorboard"
+}
+}

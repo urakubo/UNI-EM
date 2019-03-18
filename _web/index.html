@@ -1,0 +1,459 @@
+<html>
+<head>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0'>
+
+  <link rel="stylesheet" type="text/css" href="css/dojo.css">
+  <link rel="stylesheet" type="text/css" href="css/opentip.css">
+  <link rel="stylesheet" type="text/css" href="css/dragresize.css">
+
+<!-- Add by HU  -->
+  <link rel="stylesheet" type="text/css" href="css/dragmenu.css">
+
+
+  <link rel="stylesheet" type="text/css" href="gui/css/vendors/bootstrap/theme/flatly/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="gui/css/vendors/bootstrap-slider/bootstrap-slider.min.css">
+  <link rel="stylesheet" type="text/css" href="gui/css/gui.css">
+
+
+  <script src="gui/js/vendors/es5-shim/es5-shim.min.js"></script>
+  <script src="gui/js/vendors/es5-shim/es5-sham.min.js"></script>
+  <script src="gui/js/vendors/json3/json3.min.js"></script>
+  <script src="gui/js/vendors/es6-shim/es6-shim.min.js"></script>
+  <script src="gui/js/vendors/es6-shim/es6-sham.min.js"></script>
+  <script src="gui/js/vendors/es7-shim/es7-shim.min.js"></script>
+  <script src="gui/js/vendors/console-polyfill/console-polyfill.js"></script>
+  <script src="gui/js/vendors/jquery/jquery-3.3.1.min.js"></script>
+  <script src="gui/js/vendors/bootstrap-slider/bootstrap-slider.min.js"></script>
+  <script src="gui/js/vendors/underscore/underscore-min.js"></script>
+  <script src="gui/js/vendors/eventbus/eventbus.min.js"></script>
+  <script src="gui/js/vendors/chillout/chillout.min.js"></script>
+
+  <!--
+  jQuery UIは未使用のためコメントアウトしておく
+  <script type='text/javascript' src='lib/jquery-ui.min.js'></script>
+  -->
+
+  <script type='text/javascript' src='lib/jquery.slimscroll.min.js'></script>
+  <script type="text/javascript" src='lib/zlib.min.js'></script>
+  <script type="text/javascript" src='lib/xtk.js'></script>
+  <script type="text/javascript" src='lib/opentip-native.min.js'></script>
+  <script type="text/javascript" src='lib/dragresize.js'></script>
+
+  <script type='text/javascript' src='dojo.js?111'></script>
+  <script type='text/javascript' src='viewer.js'></script>
+  <script type='text/javascript' src='controller.js?00'></script>
+  <script type='text/javascript' src='camera.js'></script>
+  <script type='text/javascript' src='interactor.js'></script>
+  <script type='text/javascript' src='loader.js'></script>
+  <script type='text/javascript' src='websocket.js'></script>
+  <script type='text/javascript' src='offscreen_renderer.js'></script>
+  <script type='text/javascript' src='util.js'></script>
+
+<!-- Add by HU  -->
+  <script type='text/javascript' src='dragmenu.js'></script>
+
+  <script src="gui/js/dist/gui.js"></script>
+
+
+  <!--
+  // <script type="text/javascript" src="lib/X/lib/google-closure-library/closure/goog/base.js"></script>
+  // <script type="text/javascript" src="lib/X/xtk-deps.js"></script>
+  -->
+
+  <!-- SHADERS -->
+  <script id="fs1" type="x-shader/x-fragment">
+    #version 300 es
+    precision highp float;
+    precision highp int;
+    precision highp usampler2D;
+
+    uniform sampler2D uImageSampler;
+    uniform sampler2D uColorMapSampler;
+    uniform usampler2D uTextureSampler;
+    uniform usampler2D uLockTableSampler;
+    uniform usampler2D uMergeTableKeySampler;
+    uniform usampler2D uMergeTableValueSampler;
+    // Values for given IDS
+    uniform uint uActivatedId;
+    uniform uint uHighlightedId;
+    // Display settings
+    uniform int uBorders;
+    uniform float uOpacity;
+    uniform bool uOnlyLocked;
+    uniform bool uShowOverlay;
+    // Current modes
+    uniform int uSplitMode;
+    uniform int uAdjustMode;
+    // Information about textures
+    uniform float uMaxColors;
+    uniform float uMergeTableLength;
+    uniform float uLockTableLength;
+
+    // Max number of merges or locks
+    const int MAX = 10000;
+    const int bMAX = int(ceil(log2(float(MAX))));
+
+    in vec3 vPosition;
+    in vec2 vTexturePosition;
+
+    out vec4 fragmentColor;
+
+    // Convert int rgba to a 32 bit value
+    uint unpack (uvec4 bytes) {
+      uint sum = (bytes.a << 24) | (bytes.b << 16);
+      sum = sum | (bytes.g << 8) | (bytes.r);
+      return sum;
+    }
+
+    //
+    // Unpack ID from texture
+    //
+    uint id_map(uint m, usampler2D samp, float len) {
+      // Value for given index
+      vec2 m_pos = vec2(float(m)/len, 0.0);
+      uvec4 m_value = texture(samp, m_pos);
+      return unpack(m_value);
+    }
+
+    //
+    // Binary Search
+    //
+    bool bin_search(uint key, usampler2D samp, float len) {
+
+      // Array size
+      uint first = uint(0);
+      uint last = uint(len);
+
+      // Search within log(n) runtime
+      for (int i = 0; i <= bMAX; i++) {
+        // Break if list gone
+        if (first > last) break;
+
+        // Evaluate the midpoint
+        uint mid = (first + last) / uint(2);
+        uint here = id_map(mid, samp, len);
+
+        // Search below midpoint
+        if (key < here){
+          last = mid - uint(1);
+          continue;
+        }
+        // Search above midpoint
+        if (key > here){
+          first = mid + uint(1);
+          continue;
+        }
+        // Return found
+        return true;
+      }
+      // Not found
+      return false;
+    }
+
+    //
+    // MERGETABLE
+    //
+    uint merge_id(uint key) {
+      if (bin_search(key, uMergeTableKeySampler, uMergeTableLength)){
+        // Return value from merge table
+        return id_map(key, uMergeTableValueSampler, uMergeTableLength);
+      }
+      return key;
+    }
+
+    //
+    // LOCKTABLE
+    //
+    bool is_locked(uint key) {
+      return bin_search(key, uLockTableSampler, uLockTableLength);
+    }
+
+    //
+    // BORDERS
+    //
+    bool show_borders(uint id) {
+
+      if (uBorders == 1) {
+
+        // Offset one pixel
+        const float delta = 1.0/512.0;
+
+        // grab surrounding ids
+        uint id_l = unpack(texture(uTextureSampler, vec2(vTexturePosition.x - delta, vTexturePosition.y)));
+        uint id_r = unpack(texture(uTextureSampler, vec2(vTexturePosition.x + delta, vTexturePosition.y)));
+        uint id_b = unpack(texture(uTextureSampler, vec2(vTexturePosition.x, vTexturePosition.y - delta)));
+        uint id_t = unpack(texture(uTextureSampler, vec2(vTexturePosition.x, vTexturePosition.y + delta)));
+
+        // Use merges
+        id_l = merge_id(id_l);
+        id_r = merge_id(id_r);
+        id_b = merge_id(id_b);
+        id_t = merge_id(id_t);
+
+        return (id != id_l || id != id_r || id != id_b || id != id_t);
+      }
+      return false;
+    }
+
+    //
+    // COLORTABLE
+    //
+    vec4 lookup_color(uint id) {
+      // Get the color of the ID from colormap
+      float mod_id = mod(float(id), uMaxColors);
+      vec2 colormap_pos = vec2(mod_id / (uMaxColors - 1.0), 0.);
+      vec4 color = texture(uColorMapSampler, colormap_pos);
+
+      // default opacity
+      return vec4(color.rgb, uOpacity/255.0);
+    }
+
+    //
+    // Get color of id
+    //
+    vec4 id_color(uint id) {
+
+      // Background
+      if (id == uint(0)){
+        return vec4(0.0);
+      }
+      // Borders
+      if (show_borders(id)){
+        return vec4(vec3(0.0), 1.0);
+      }
+
+      // Locked ID values
+      if (is_locked(id)) {
+        // Stripes every 0.05 of size 0.01
+        bool xbar = mod(vTexturePosition.x, 0.05) < 0.01;
+        bool ybar = mod(vTexturePosition.y, 0.05) < 0.01;
+        // Lookup the color
+        vec4 color = lookup_color(id);
+
+        if (xbar || ybar) {
+          // Highlight
+          return vec4(color.rgb * 1.5, color.a);
+        }
+        // Dim alpha
+        return vec4(color.rgb, color.a * 0.5);
+      }
+
+      // Hide all unlocked
+      if (uOnlyLocked){
+        return vec4(0.0);
+      }
+
+      if (uSplitMode > 0) {
+        // Hide the active label
+        if (uActivatedId == id){
+          return vec4(0.0);
+        }
+        // Lookup the color
+        return lookup_color(id);
+      }
+
+      if (uAdjustMode > 0) {
+        // Only show the active label
+        if (uActivatedId == id){
+          // Lookup the color
+          return lookup_color(id);
+        }
+        return vec4(0.0);
+      }
+
+      // Lookup the color
+      vec4 color = lookup_color(id);
+
+      if (uHighlightedId == id) {
+        return vec4(color.rgb, 0.8);
+      }
+
+      if (uActivatedId == id) {
+        return vec4(color.rgb, 0.8);
+      }
+
+      // Normal Id
+      return color;
+    }
+
+
+    //
+    //
+    //
+    void main() {
+
+      // grab image data
+      vec4 image = texture(uImageSampler, vTexturePosition);
+      // Simple with no ids
+      if (!uShowOverlay){
+        fragmentColor = image;
+        return;
+      }
+
+      // grab 32 bit segmentation ID
+      uvec4 rgba_ids = texture(uTextureSampler, vTexturePosition);
+      uint id = merge_id(unpack(rgba_ids));
+      // Color Segmentation ID
+      vec4 color = id_color(id);
+      // Render Color over image
+      fragmentColor = mix(image, color, color.a);
+      return;
+    }
+  </script>
+
+  <script id="vs1" type="x-shader/x-vertex">
+    #version 300 es
+    in vec3 aPosition;
+    in vec2 aTexturePosition;
+
+    out vec3 vPosition;
+    out vec2 vTexturePosition;
+
+    void main() {
+
+      vTexturePosition = aTexturePosition;
+
+      gl_Position = vec4(aPosition,1.);
+
+    }
+
+  </script>
+  <script type="text/javascript">
+    Opentip.defaultStyle = 'dark';
+    window.onload = function() {
+      DOJO.init();
+      DojoGUI.init();
+    };
+  </script>
+</head>
+<body>
+  <div id='blocker'>
+    <br>
+    <br>
+    <br>
+    <br>
+    <p align="center">
+    <font size=+5>Saving..</font>
+    </p>
+  </div>
+
+  <div id='loading_blocker'>
+    <div class="loading-wrapper">
+      <div>Loading..</div>
+      <img src="gfx/loading-three-dots.svg">
+    </div>
+  </div>
+
+	<!-- Draggable Adjust control panel. Adds by H Urakubo -->
+	<div id="extend_adjust" style='left:800px;top:100px;'>
+  	<div id="extend_adjust_header">Adjust</div>
+  	<img id="eraser" src='gfx/eraser_mini.png'>
+  	<p id="colorbox"></p>
+  	<p id="colorbox2"></p>
+	</div>
+
+  <div class="gui-header-toolbar clearfix">
+    <div class="gui-menu gui-unselectable">
+      <img src='gfx/menu.png'>
+      <span class="gui-menu-label">Close Menu</span>
+    </div>
+    <div class="gui-decoline"></div>
+    <div class="gui-slicenumber-wrapper">
+      <div id='slicenumber'>0/X</div>
+      <div id='label'>Label n/a</div>
+    </div>
+    <div class="gui-decoline"></div>
+    <div class="gui-head-wrap">
+      <div class="gui-slider-text">Zoom</div>
+      <div class="gui-zoom-wrapper"></div>
+    </div>
+    <div class="gui-head-wrap">
+      <div class="gui-slider-text">Opacity</div>
+      <div class="gui-opacity-wrapper"></div>
+    </div>
+    <div class="gui-decoline"></div>
+
+    <div id='tools' class='toolbar'>
+      <img src='gfx/undo.png' id='undo' class='tool' data-ot='Undo' data-ot-target='true' data-ot-tip-joint='bottom'>
+      <img src='gfx/redo.png' id='redo' class='tool' data-ot='Redo' data-ot-target='true' data-ot-tip-joint='bottom'>
+      <img src='gfx/merge.png' id='merge' class='tool' data-ot='Merge Mode' data-ot-target='true' data-ot-tip-joint='bottom'>
+      <img src='gfx/merge_selected.png' id='merge_selected' class='tool' style='display:none' data-ot='Stop Merge Mode' data-ot-target='true' data-ot-tip-joint='bottom'>
+      <img src='gfx/split.png' id='split' class='tool' data-ot='Split Mode' data-ot-target='true' data-ot-tip-joint='bottom'>
+      <img src='gfx/split_selected.png' id='split_selected' class='tool' style='display:none' data-ot='Stop Split Mode' data-ot-target='true' data-ot-tip-joint='bottom'>
+
+      <!-- Adjustは公開APIではなくなったが機能としては存在するため残す、ただし動かない可能性あり -->
+      <img src='gfx/adjust.png' id='adjust' class='tool' data-ot='Adjust Mode' data-ot-target='true' data-ot-tip-joint='bottom'>
+      <img src='gfx/adjust_selected.png' id='adjust_selected' class='tool' style='display:none' data-ot='Stop Adjust Mode' data-ot-target='true' data-ot-tip-joint='bottom'>
+
+      <img src='gfx/3d.png' id='3d' class='tool' style='margin-top:3px;' data-ot='3D Rendering' data-ot-target='true' data-ot-tip-joint='bottom'>
+      <img src='gfx/3d_selected.png' id='3d_selected' class='tool' style='margin-top:3px;display:none' data-ot='Stop 3D Rendering' data-ot-target='true' data-ot-tip-joint='bottom'>
+      <!--
+      <img src='gfx/link.png' id='link' class='tool' data-ot='Collaboration Mode' data-ot-target='true' data-ot-tip-joint='bottom'>
+      <img src='gfx/link_selected.png' id='link_selected' class='tool' style='display:none' data-ot='Stop Collaboration Mode' data-ot-target='true' data-ot-tip-joint='bottom'>
+      -->
+      <img src='gfx/save.png' id='save' class='tool' style='margin-top:6px;' data-ot='Save' data-ot-target='true' data-ot-tip-joint='bottom'>
+    </div>
+  </div>
+
+
+  <div id='dojo1' class='viewer'></div>
+  <div class="gui-slice">
+    <div class="gui-slice-wrapper"></div>
+    <div class="gui-slider-text">Slice</div>
+  </div>
+
+  <div id='info' class='infopanel'>
+    <ul>
+      <li><div class="icon"><img src='gfx/icon_slice.png'></div><div class="key">W</div><div class="key">S</div><p>Next / Previous Slice</p></li>
+      <li><div class="icon"><img src='gfx/icon_zoom.png'></div><div class="key">C</div><div class="key">X</div><p>Zoom In / Out</p></li>
+      <li><div class="icon"><img src='gfx/icon_delete.png'></div><div class="key">DEL</div><p>Delete Segment</p></li>
+      <!--<li><div class="icon"><img src='gfx/icon_mark.png'></div><div class="key">Z</div><p>Mark Problem</p></li>-->
+      <li><div class="icon"><img src='gfx/icon_lock.png'></div><div class="key">L</div><p>Lock / Unlock Segment</p></li>
+<li><div class="icon"><img src='gfx/icon_lock_flip.png'></div><div class="key">P</div><p>Only Show Locked Segments</p></li>
+      <li><div class="icon"><img src='gfx/icon_mono.png'></div><div class="key">Q</div><p>Toggle Segmentation Overlay</p></li>
+      <li><div class="icon"><img src='gfx/icon_border.png'></div><div class="key">A</div><p>Toggle Borders</p></li>
+      <li><div class="icon"><img src='gfx/icon_mono_border.png'></div><div class="key">F</div><p>Toggle Borders &amp; Segmentation</p></li>
+      <li><div class="icon"><img src='gfx/icon_opacity.png'></div><div class="key">E</div><div class="key">D</div><p>Increase / Decrease Opacity</p></li>
+    </ul>
+    <div class="dotline"></div>
+    <ul>
+      <li><div class="icon"><img src='gfx/icon_esc.png'></div><div class="key">Esc</div><p>Discard <span>[Split]</span> / Reset Tool</p></li>
+      <li><div class="icon"><img src='gfx/icon_tab.png'></div><div class="key">Tab</div><p>Confirm <span>[Adjust]</span></p></li>
+    </ul>
+    <div class="dotline"></div>
+    <ul>
+      <li><div class="icon"><img src='gfx/icon_jump_to_xyz.png'></div><div class="key">J</div><p>Jump to X, Y, Z</p></li>
+      <li><div class="icon"><img src='gfx/icon_jump_to_z.png'></div><div class="key">K</div><p>Jump to Z</p></li>
+    </ul>
+    <div class="dotline"></div>
+    <ul class="mouse">
+      <li><div class="icon"><img src='gfx/icon_move.png'></div><div class="key-mouse"><img src='gfx/mouse_right.png'></div><p>Move Image</p></li>
+      <li><div class="icon"><img src='gfx/icon_zoom.png'></div><div class="key-mouse"><img src='gfx/mouse_scroll.png'></div><p>Zoom In / Out</p></li>
+    </ul>
+    <div class="dotline"></div>
+    <ul>
+      <li><div class="icon"><img src='gfx/icon_brush_plus.png'></div><div class="key">+</div><p>Increase Brush Size <span>[Merge]</span></p></li>
+      <li><div class="icon"><img src='gfx/icon_brush_minus.png'></div><div class="key">-</div><p>Decrease Brush Size <span>[Merge]</span></p></li>
+    </ul>
+    <div class="dotline"></div>
+    <ul class="mode">
+      <li><div class="icon"><img src='gfx/merge.png' width="16" height="16"></div><div class="key">1</div><p>Merge Mode</p></li>
+      <li><div class="icon"><img src='gfx/split.png' width="16" height="16"></div><div class="key">2</div><p>Split Mode</p></li>
+      <li><div class="icon"><img src='gfx/adjust.png' width="16" height="16"></div><div class="key">3</div><p>Adjust Mode</p></li>
+      <li><div class="icon"><img src='gfx/3d.png' width="16" height="16"></div><div class="key">4</div><p>3D Rendering</p></li>
+      <!--
+      <li><div class="icon"><img src='gfx/link.png' width="16" height="16"></div><div class="key">5</div><p>Collaboration Mode</p></li>
+      -->
+    </ul>
+  </div>
+
+  <div id='log' class='logpanel'>
+  </div>
+
+  <div id='threeD' class='draggable_panel' style='left:300px;top:10px;'>
+    <div class="drsMoveHandle" style='position:absolute;width:100%;z-index:2000;'>3D Rendering</div>
+    <div id='threeDcontent' style='width:100%;height:100%;'></div>
+  </div>
+
+</body>
+</html>

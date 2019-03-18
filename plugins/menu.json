@@ -1,0 +1,26 @@
+{
+"2D Filters": {
+	"Sub":		0,
+	"Func":		"_2D_Filters"
+},
+"2D Watershed": {
+	"Sub":		0,
+	"Func":		"_2D_Watershed"
+},
+"3D Filters": {
+	"Sub":		0,
+	"Func":		"_3D_Filters"
+},
+"User Defined1": {
+	"Sub":		0,
+	"Func":		"UserDefined_"
+},
+"User Defined2": {
+	"Sub":		1,
+	"Func":		"UserDefined_"
+},
+"User Defined3": {
+	"Sub":		0,
+	"Func":		"UserDefined_"
+}
+}

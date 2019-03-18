@@ -1,0 +1,42 @@
+#extend_adjust {
+display: none;
+position: absolute;
+z-index: 9;
+background-color: #f1f1f1;
+border: 1px solid #d3d3d3;
+text-align: center;
+width: 60px;
+border-radius:0.4em;
+}
+
+#extend_adjust_header {
+font-size: 11px;
+font-weight: bold;
+display: none;
+padding: 2px;
+cursor: move;
+z-index: 10;
+background-color: #f1f1f1;
+border: 1px solid #f1f1f1;
+color: #000000;
+width: 58px;
+border-radius:0.4em;
+}
+
+#colorbox {
+border:1px  solid #FFF;   /* 枠線 */
+border-radius:0.4em;        /* 角丸 */
+background-color:#ccffcc; /* 背景色 */
+width: 50px;
+height: 40px;
+margin: auto;
+}
+
+#colorbox2 {
+border:1px  solid #FFF;   /* 枠線 */
+border-radius:0.4em;        /* 角丸 */
+background-color:#ccbbcc; /* 背景色 */
+width: 50px;
+height: 40px;
+margin: auto;
+}

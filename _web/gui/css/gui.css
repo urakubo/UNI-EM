@@ -1,0 +1,266 @@
+body,
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5 ,.h6,
+.tooltip,
+.popover,
+#loading_blocker {
+  font-family: Verdana, Tahoma, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.gui-header-toolbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 50px;
+  background: #f3f3f3;
+  padding: 0;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.gui-header-toolbar .gui-menu {
+  cursor: pointer;
+  float: left;
+  margin: 9px;
+  width: 114px;
+}
+
+.gui-header-toolbar .gui-menu:hover {
+  opacity: 0.7;
+}
+
+.gui-header-toolbar .gui-menu .gui-menu-label {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.gui-decoline {
+  float: left;
+  margin: 10px;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #fff;
+  height: 30px;
+}
+
+.gui-unselectable {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.gui-head-wrap {
+  float: left;
+  margin: 5px 10px;
+}
+
+.gui-slider-text {
+  font-size: 11px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* zoom slider */
+.gui-header-toolbar .gui-zoom-wrapper {}
+
+.gui-header-toolbar .gui-zoom-wrapper .slider.slider-horizontal {
+  width: 150px;
+  height: 20px;
+}
+
+/* opacity slider */
+.gui-header-toolbar .gui-opacity-wrapper {}
+
+.gui-header-toolbar .gui-opacity-wrapper .slider.slider-horizontal {
+  width: 150px;
+  height: 20px;
+}
+
+.gui-header-toolbar .gui-slicenumber-wrapper {
+  float: left;
+  margin: 14px 10px;
+  width: 240px;
+}
+
+/* slice slider */
+.gui-slice {
+  position: absolute;
+  bottom: 20px;
+  left: calc(50% - 300px);
+  width: 600px;
+  z-index: 1;
+}
+
+.gui-slice-wrapper {
+  display: none;
+}
+
+.gui-slice-wrapper .slider.slider-horizontal {
+  width: 600px;
+}
+
+.gui-slice .gui-slider-text {
+  margin: 5px 0 0;
+}
+
+/* --- style based dojo.css --- */
+
+.viewer {
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+}
+
+.infopanel {
+  position: absolute;
+  top: 55px;
+  left: 10px;
+  bottom: auto;
+  background: rgba(255, 255, 255, 0.6);
+  padding: 15px;
+  border-radius: 5px;
+  z-index: 3;
+}
+
+.infopanel ul {
+  list-style-type: none;
+  color: #111;
+  font-size: 12px;
+  font-style: italic;
+  margin: 0;
+  padding: 0;
+}
+
+.infopanel ul li {
+  margin: 0 0 2px;
+  line-height: 1.8;
+}
+
+.infopanel .icon {
+  display: inline-block;
+  padding: 1px 8px 0 0;
+  vertical-align: middle;
+}
+
+.infopanel .key {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: bold;
+  font-style: normal;
+  background: #666;
+  color: #fff;
+  border-radius: 2px;
+  width: 36px;
+  text-align: center;
+  margin: 0 2px;
+}
+
+.infopanel p {
+  display: inline-block;
+  margin: 0;
+}
+
+.infopanel p span {
+  color: #5570b5;
+}
+
+.infopanel .key + p {
+  margin-left: 50px;
+}
+
+.infopanel .key + .key + p {
+  margin-left: 12px;
+}
+
+.infopanel ul.mouse .key-mouse {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 12px;
+}
+
+.infopanel ul.mouse .key-mouse + p {
+  margin-left: 38px;
+}
+
+.infopanel ul.mode .key {
+  background: #5570b5;
+}
+
+.infopanel ul.mode .key + p {
+  color: #5570b5;
+}
+
+.infopanel .dotline {
+  border-bottom: 1px dotted rgba(0, 0, 0, 0.3);
+  margin: 5px 0;
+  width: 100%;
+}
+
+.toolbar {
+  float: left;
+  margin: 9px;
+  width: auto;
+  height: auto;
+  position: static;
+}
+
+.toolbar img {
+  margin-right: 10px;
+  float: left;
+}
+
+.toolbar img:hover {
+  opacity: 0.7;
+}
+
+.toolbar #undo, .toolbar #redo {
+  width: auto;
+}
+
+.logpanel {
+  font-size: 11px;
+}
+
+.threeDpanel {
+  top: 50px;
+}
+
+#loading_blocker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 500000;
+  text-align: center;
+}
+
+#loading_blocker .loading-wrapper {
+  margin-top: 30px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  width: 100%;
+  height: 300px;
+  color: #fff;
+  text-align: center;
+  font-size: 60px;
+  font-weight: bold;
+}
+
+#loading_blocker .loading-wrapper div {
+  margin: 50px;
+}
+
+#loading_blocker .loading-wrapper img {
+  display: block;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 1111px) {
+  .gui-header-toolbar {
+    height: 100px;
+  }
+}
