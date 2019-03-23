@@ -45,12 +45,9 @@ class TrainingTab(MiscellaneousSegment):
                         'Path to folder containing segmentation',
                         'Output Filetype',
                         'Directory with checkpoint to resume training from or use for testing',
-                        'Model',
-                        'Discriminator on target vs output or paired with input (CycleGAN only)',
+                        'Loss Function',
                         'Number of training epochs',
                         'Write current training images every display frequency steps',
-                        'X Loss Function (only for pix2pix2 or CycleGAN)',
-                        'X Loss Function (only for pix2pix2 or CycleGAN)',
                         'Dimensions for Augmentation',
                         'Save Parameters ',
                         'Load Parameters ',
@@ -59,13 +56,13 @@ class TrainingTab(MiscellaneousSegment):
                         'Number of highway units in highway net',
                         'Number of dense blocks in dense net',
                         'Number of dense connected layers in each block of the dense net',
-                        'Generator'
+                        'Network topology'
                         ]
 
         datadir = u_info.data_path
-        imgpath =  os.path.join(datadir, "_2DNN_training_images")
-        segpath =  os.path.join(datadir, "_2DNN_ground_truth")
-        modelpath =  os.path.join(datadir, "_2DNN_model_tensorflow")
+        imgpath =  os.path.join(datadir, "DNN_training_images")
+        segpath =  os.path.join(datadir, "DNN_ground_truth")
+        modelpath =  os.path.join(datadir, "DNN_model_tensorflow")
         paramfile = os.path.join(datadir, "parameters", "Training_2D.pickle")
         self.args = [
                         ['Image Folder',    'LineEdit', imgpath, 'BrowseDirImg'],
@@ -73,12 +70,9 @@ class TrainingTab(MiscellaneousSegment):
                         ['Segmentation Folder',   'LineEdit', segpath, 'BrowseDirImg'],
                         ['Output Filetype', 'ComboBox', ['png','jpeg']],
                         ['Checkpoint Folder',      'LineEdit', modelpath, 'BrowseDir'],
-                        ['Model', 'ComboBox',   ['pix2pix','pix2pix2','CycleGAN']],
-                        ['Discriminator', 'ComboBox', ['', 'paired', 'unpaired']],
+                        ['Loss Function', 'ComboBox', ["softmax", "hinge", "square", "approx", "dice", "logistic"]],
                         ['Maximal Epochs', 'SpinBox', [1, 2000, 65535]],
                         ['Display Frequency', 'SpinBox', [0, 200, 65535]],
-                        ['X Loss Function', 'ComboBox',   ["hinge", "square", "softmax", "approx", "dice", "logistic"]],
-                        ['Y Loss Function', 'ComboBox',   ["hinge", "square", "softmax", "approx", "dice", "logistic"]],
                         ['Augmentation',    'ComboBox', ["fliplr, flipud, transpose", "fliplr, flipud", "fliplr", "flipud", "None"]],
                         ['Save Parameters', 'LineEdit',paramfile, 'BrowseFile'],
                         ['Load Parameters', 'LineEdit',paramfile, 'BrowseFile'],
@@ -87,10 +81,13 @@ class TrainingTab(MiscellaneousSegment):
                         ['N highway units','SpinBox',[1,9,255]],
                         ['N dense blocks','SpinBox',[1,5,255]],
                         ['N dense layers','SpinBox',[1,5,255]],
-                        ['Generator', 'Tab', ['unet', 'resnet', 'highwaynet', 'densenet']]
+                        ['Network', 'Tab', ['unet', 'resnet', 'highwaynet', 'densenet']]
                         ]
 
-        self.display_order = [0, 1, 2, 3, 4, 5, 6, -1, 7, 8, 9, 10, 11, 12, 13]
+        #                         'Model',
+        #  ['Model', 'ComboBox',   ['pix2pix','pix2pix2','CycleGAN']]
+
+        self.display_order = [0, 1, 2, 3, 4,  -1, 5, 6, 7, 8, 9, 10]
         self.args_header   = [self.args[i][0] for i in range(len(self.args))]
         self.obj_args = []
 
@@ -193,6 +190,6 @@ class TrainingTab(MiscellaneousSegment):
 
 
     def _ExecuteTraining(self):
-        ExecuteTraining(self.obj_args, self.args)
+        ExecuteTraining(self.obj_args, self.args, self.parent)
         QMessageBox.about(self.parent, '2D DNN', 'Training runs on a different process.\nLaunch Tensorboard to monitor the progress.')
         return True

@@ -46,9 +46,9 @@ class InferenceTab(MiscellaneousSegment):
                         ]
 
         datadir   =  u_info.data_path
-        imgpath   =  os.path.join(datadir, "_2DNN_test_images")
-        outpath   =  os.path.join(datadir, "_2DNN_inference")
-        modelpath =  os.path.join(datadir, "_2DNN_model_tensorflow")
+        imgpath   =  os.path.join(datadir, "DNN_test_images")
+        outpath   =  os.path.join(datadir, "DNN_segmentation")
+        modelpath =  os.path.join(datadir, "DNN_model_tensorflow")
         paramfile =  os.path.join(datadir, "parameters", "Inference_2D.pickle")
         self.args = [
                         ['Image Folder',    'LineEdit', imgpath, 'BrowseDirImg'],
@@ -116,7 +116,7 @@ class InferenceTab(MiscellaneousSegment):
         return tab
 
     def _ExecuteInference(self):
-        ExecuteInference(self.obj_args, self.args)
+        ExecuteInference(self.obj_args, self.args, self.parent)
         QMessageBox.about(self.parent, '2D DNN', 'Inference runs on a different process.')
         return True
 

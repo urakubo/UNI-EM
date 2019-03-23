@@ -24,9 +24,10 @@ class Credit():
     def Credit(self):
         #QMessageBox.setIcon(QMessageBox.Information)
         msg = QMessageBox(QMessageBox.Information, "About UNI-EM",
-                            "<h1>UNI-EM Ver0.65</h1><BR>"
+                            "<h1>UNI-EM Ver0.70</h1><BR>"
                             "(C) 2019 Hidetoshi Urakubo, Torsten Bullmann, Ryoji Miyamoto, Shin Ishii.<BR>"
-                            "Powered by the following software:<BR>"
+                            "This project is licensed under the GNU General Public License Version 3 (GPLv3).<BR>"
+                            "UNI-EM is powered by the following software:<BR>"
                             "<a href=\"https://github.com/google/ffn\">Flood filling networks</a><BR> "
                             "<a href=\"https://github.com/affinelayer/pix2pix-tensorflow\">Imagetranslation-tensorflow</a><BR> "
                             "<a href=\"https://www.tensorflow.org/\">Tensorflow</a>,<BR>"
