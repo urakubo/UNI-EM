@@ -16,7 +16,7 @@ import pickle
 from PyQt5.QtWidgets import QMainWindow, qApp, QApplication, QWidget, QTabWidget, QSizePolicy, QInputDialog, \
     QLineEdit, QComboBox, QDialog, QDialogButtonBox, QFormLayout, QGridLayout, QMessageBox, QSpinBox, QCheckBox, \
     QGroupBox, QHBoxLayout, QLabel, QLineEdit, QMenu, QMenuBar, QPushButton, QFileDialog, QTextEdit, QVBoxLayout, \
-    QTreeView, QFileSystemModel, QListView, QTableView, QAbstractItemView
+    QTreeView, QFileSystemModel, QListView
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt, pyqtSlot,  QAbstractListModel, QModelIndex, QVariant, QDir, QSize, QTimer
 import PyQt5.QtGui as QtGui
@@ -49,111 +49,76 @@ class _MyListModel(QAbstractListModel):
             return QVariant()
 
 
-class _Dialog_ImageFolder(QDialog):
+class _Dialog_ImageFolder(QWidget):
     def __init__(self, parent):
-        super(_Dialog_ImageFolder, self).__init__()
+        super().__init__()
         self.left   = 300
         self.top    = 300
-        self.width  = 600
-        self.height = 400
+        self.width  = 800
+        self.height = 600
         self.title  = "Image folder dialog"
+        # self.path = parent.init_path
+        self.initUI()
 
-        path = parent.init_path
-        # path = QDir.rootPath()
+    def initUI(self):
+        # show in Icon Mode
+
+        # path = self.path
+        path = QDir.rootPath()
+
+
+        self.layout = QHBoxLayout(self)
+        self.treeview = QTreeView()
+        self.layout.addWidget(self.treeview)
 
         self.dirModel = QFileSystemModel()
-        self.dirModel.setRootPath(parent.init_path)
-        #==========
+        self.dirModel.setRootPath(QDir.rootPath())
         self.dirModel.setFilter(QDir.NoDotAndDotDot | QDir.AllDirs)
-        self.treeview = QTreeView()
-        #self.dirModel.setFilter(QDir.AllDirs)
-        #self.treeview = QTableView()
-        #==========
         self.treeview.setModel(self.dirModel)
-        #treeview.setRootIndex(self.dirModel.index(QDir.rootPath()))
-        self.treeview.setRootIndex(self.dirModel.index(""))
+        self.treeview.setRootIndex(self.dirModel.index(path))
         self.treeview.clicked.connect(self.on_clicked)
+
         #--- Hide All Header Sections Except First ----
+
         header = self.treeview.header()
         for sec in range(1, header.count()):
             header.setSectionHidden(sec, True)
-        #--- ---- ---- ---- ---- ---- ---- ---- ---- --
 
-        focus_path = parent.init_path
-        focus_index = self.dirModel.index(focus_path)
-        self.treeview.setCurrentIndex(focus_index)
-        self.current_row_changed()
+        #--- ---- ---- ---- ---- ---- ---- ---- ---- --
+        # self.fileModel = QFileSystemModel()
+        # self.fileModel.setFilter(QDir.NoDotAndDotDot | QDir.Files)
 
         self.listview = QListView()
         self.listview.setViewMode(QListView.IconMode)
         self.listview.setIconSize(QSize(192,192))
+        self.layout.addWidget(self.listview)
 
-        targetfiles1 =  glob.glob(os.path.join( path, '*.png'))
-        targetfiles2 =  glob.glob(os.path.join( path, '*.tif'))
-        targetfiles3 =  glob.glob(os.path.join( path, '*.tiff'))
-        targetfiles  = targetfiles1 + targetfiles2 + targetfiles3
+        targetfiles =  glob.glob(os.path.join( path, '*.png'))
         lm = _MyListModel(targetfiles, self)
         self.listview.setModel(lm)
 
-        self.sub_layout = QHBoxLayout()
-        self.sub_layout.addWidget(self.treeview)
-        self.sub_layout.addWidget(self.listview)
-
-        self.buttonBox = QDialogButtonBox(QDialogButtonBox.Open | QDialogButtonBox.Cancel)
-        self.buttonBox.accepted.connect(self.accept)
-        self.buttonBox.rejected.connect(self.reject)
-
-        self.main_layout = QVBoxLayout()
-        self.main_layout.addLayout(self.sub_layout)
-        self.main_layout.addWidget(self.buttonBox)
-        self.setLayout(self.main_layout)
-
+        self.setLayout(self.layout)
         self.setGeometry(self.left, self.top, self.width, self.height)
         self.setWindowTitle(self.title)
         self.setWindowIcon(QIcon(os.path.join(icon_dir, 'Mojo2_16.png')))
         self.show()
 
-    def current_row_changed(self):
-        index = self.treeview.currentIndex()
-        self.treeview.scrollTo(index, QAbstractItemView.EnsureVisible)
-        self.treeview.resizeColumnToContents(0)
-
     def on_clicked(self, index):
         path = self.dirModel.fileInfo(index).absoluteFilePath()
         # self.listview.setRootIndex(self.fileModel.setRootPath(path))
-        # print('Path:   ', path)
+        print('Path:   ', path)
 
-        targetfiles1 =  glob.glob(os.path.join( path, '*.png'))
-        targetfiles2 =  glob.glob(os.path.join( path, '*.tif'))
-        targetfiles3 =  glob.glob(os.path.join( path, '*.tiff'))
-        targetfiles  = targetfiles1 + targetfiles2 + targetfiles3
-
+        targetfiles =  glob.glob(os.path.join( path, '*.png'))
         lm = _MyListModel(targetfiles, self)
         self.listview.setModel(lm)
         # for file in targetfiles:
         #     print(file)
 
-    def accept(self):
-        print('Accepted')
-        index = self.treeview.currentIndex()
-        print('Specified file path: ', self.dirModel.filePath(index))
-        self.close()
-        return self.dirModel.filePath(index)
 
 class MiscellaneousSegment():
 
     def browse_dir_img(self, lineedit_obj):
         currentdir = lineedit_obj.text()
-
-        self.init_path = lineedit_obj.text()
-        self.newdir = _Dialog_ImageFolder(self)
-        print('Dialog closed.')
-
-        # if not (self.newdir == False or self.newdir == None ):
-        #   self.newdir = self.newdir.replace('/', os.sep)
-        #    lineedit_obj.setText(self.newdir)
-        #    return True
-        #return False
         #File = QFileDialog()
         #File.List = 1
         # newfile = File.getOpenFileName(self.parent, "Select Folder", currentdir, ("Image Files (*.png *.tif *.tiff)"))
@@ -163,6 +128,8 @@ class MiscellaneousSegment():
         #newfile = newfile.replace('/', os.sep)
         #newdir = os.path.dirname(newfile)
         #lineedit_obj.setText(newdir)
+        self.init_path = lineedit_obj.text()
+        self.second_window = _Dialog_ImageFolder(self)
 
         # dialog = QFileDialog()
         # dialog.setAcceptMode(QFileDialog.AcceptOpen)
@@ -171,6 +138,8 @@ class MiscellaneousSegment():
         # dialog.setWindowTitle("Open Folder")
         # dialog.setNameFilters(["Image Files (*.png *.tif *.tiff)"])
         # filename = dialog.exec_()
+
+        return True
 
 
     def browse_dir(self, lineedit_obj):
