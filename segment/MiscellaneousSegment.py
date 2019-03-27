@@ -18,7 +18,7 @@ from PyQt5.QtWidgets import QMainWindow, qApp, QApplication, QWidget, QTabWidget
     QGroupBox, QHBoxLayout, QLabel, QLineEdit, QMenu, QMenuBar, QPushButton, QFileDialog, QTextEdit, QVBoxLayout, \
     QTreeView, QFileSystemModel, QListView, QTableView, QAbstractItemView
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtCore import Qt, pyqtSlot,  QAbstractListModel, QModelIndex, QVariant, QDir, QSize, QTimer
+from PyQt5.QtCore import Qt, pyqtSlot,  QAbstractListModel, QModelIndex, QVariant, QDir, QSize
 import PyQt5.QtGui as QtGui
 
 from typing import Any
@@ -48,21 +48,21 @@ class _MyListModel(QAbstractListModel):
         else:
             return QVariant()
 
+class _Dialog_ImageFolder():
+    def __init__(self, parent, title, init_path):
+        self.w = QDialog(parent)
 
-class _Dialog_ImageFolder(QDialog):
-    def __init__(self, parent):
-        super(_Dialog_ImageFolder, self).__init__()
+        self.parent = parent
         self.left   = 300
         self.top    = 300
         self.width  = 600
         self.height = 400
-        self.title  = "Image folder dialog"
+        self.title  = title
 
-        path = parent.init_path
         # path = QDir.rootPath()
 
         self.dirModel = QFileSystemModel()
-        self.dirModel.setRootPath(parent.init_path)
+        self.dirModel.setRootPath(init_path)
         #==========
         self.dirModel.setFilter(QDir.NoDotAndDotDot | QDir.AllDirs)
         self.treeview = QTreeView()
@@ -79,8 +79,7 @@ class _Dialog_ImageFolder(QDialog):
             header.setSectionHidden(sec, True)
         #--- ---- ---- ---- ---- ---- ---- ---- ---- --
 
-        focus_path = parent.init_path
-        focus_index = self.dirModel.index(focus_path)
+        focus_index = self.dirModel.index(init_path)
         self.treeview.setCurrentIndex(focus_index)
         self.current_row_changed()
 
@@ -88,11 +87,11 @@ class _Dialog_ImageFolder(QDialog):
         self.listview.setViewMode(QListView.IconMode)
         self.listview.setIconSize(QSize(192,192))
 
-        targetfiles1 =  glob.glob(os.path.join( path, '*.png'))
-        targetfiles2 =  glob.glob(os.path.join( path, '*.tif'))
-        targetfiles3 =  glob.glob(os.path.join( path, '*.tiff'))
+        targetfiles1 =  glob.glob(os.path.join( init_path, '*.png'))
+        targetfiles2 =  glob.glob(os.path.join( init_path, '*.tif'))
+        targetfiles3 =  glob.glob(os.path.join( init_path, '*.tiff'))
         targetfiles  = targetfiles1 + targetfiles2 + targetfiles3
-        lm = _MyListModel(targetfiles, self)
+        lm = _MyListModel(targetfiles, self.parent)
         self.listview.setModel(lm)
 
         self.sub_layout = QHBoxLayout()
@@ -106,12 +105,13 @@ class _Dialog_ImageFolder(QDialog):
         self.main_layout = QVBoxLayout()
         self.main_layout.addLayout(self.sub_layout)
         self.main_layout.addWidget(self.buttonBox)
-        self.setLayout(self.main_layout)
 
-        self.setGeometry(self.left, self.top, self.width, self.height)
-        self.setWindowTitle(self.title)
-        self.setWindowIcon(QIcon(os.path.join(icon_dir, 'Mojo2_16.png')))
-        self.show()
+
+        self.w.setGeometry(self.left, self.top, self.width, self.height)
+        self.w.setWindowTitle(self.title)
+        self.w.setWindowIcon(QIcon(os.path.join(icon_dir, 'Mojo2_16.png')))
+        self.w.setLayout(self.main_layout)
+        # self.w.exec_()
 
     def current_row_changed(self):
         index = self.treeview.currentIndex()
@@ -128,49 +128,36 @@ class _Dialog_ImageFolder(QDialog):
         targetfiles3 =  glob.glob(os.path.join( path, '*.tiff'))
         targetfiles  = targetfiles1 + targetfiles2 + targetfiles3
 
-        lm = _MyListModel(targetfiles, self)
+        lm = _MyListModel(targetfiles, self.parent)
         self.listview.setModel(lm)
-        # for file in targetfiles:
-        #     print(file)
 
     def accept(self):
-        print('Accepted')
         index = self.treeview.currentIndex()
-        print('Specified file path: ', self.dirModel.filePath(index))
-        self.close()
-        return self.dirModel.filePath(index)
+        self.newdir = self.dirModel.filePath(index)
+        self.w.done(1)
+        #return True
+
+    def reject(self):
+        self.w.done(0)
+        #return False
+
+    def GetValue(self):
+        index = self.treeview.currentIndex()
+        self.newdir = self.dirModel.filePath(index)
+        return self.newdir
 
 class MiscellaneousSegment():
 
     def browse_dir_img(self, lineedit_obj):
         currentdir = lineedit_obj.text()
+        Dialog = _Dialog_ImageFolder(self.parent, "Select Image Folder",  currentdir)
+        return_flag = Dialog.w.exec_()
+        if return_flag == 1:
+            newdir = Dialog.GetValue()
+            lineedit_obj.setText(newdir)
+            return True
+        return False
 
-        self.init_path = lineedit_obj.text()
-        self.newdir = _Dialog_ImageFolder(self)
-        print('Dialog closed.')
-
-        # if not (self.newdir == False or self.newdir == None ):
-        #   self.newdir = self.newdir.replace('/', os.sep)
-        #    lineedit_obj.setText(self.newdir)
-        #    return True
-        #return False
-        #File = QFileDialog()
-        #File.List = 1
-        # newfile = File.getOpenFileName(self.parent, "Select Folder", currentdir, ("Image Files (*.png *.tif *.tiff)"))
-        # newfile = newfile[0]
-        # if len(newfile) == 0:
-        #    return False
-        #newfile = newfile.replace('/', os.sep)
-        #newdir = os.path.dirname(newfile)
-        #lineedit_obj.setText(newdir)
-
-        # dialog = QFileDialog()
-        # dialog.setAcceptMode(QFileDialog.AcceptOpen)
-        # dialog.setFileMode(QFileDialog.AnyFile)
-        # dialog.ViewMode(QFileDialog.Detail)
-        # dialog.setWindowTitle("Open Folder")
-        # dialog.setNameFilters(["Image Files (*.png *.tif *.tiff)"])
-        # filename = dialog.exec_()
 
 
     def browse_dir(self, lineedit_obj):

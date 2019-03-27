@@ -86,7 +86,7 @@ class Params:
             # print('Run on live python.')
             self.data_path = path.join(main_dir, "data")
 
-        self.tensorboard_path = os.path.normpath( path.join(self.data_path, "_2DNN_model_tensorflow") )
+        self.tensorboard_path = os.path.normpath( path.join(self.data_path, "DNN_model_tensorflow") )
 
     def SetUserInfo(self, user_path):
 

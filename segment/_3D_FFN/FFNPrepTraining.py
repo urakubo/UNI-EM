@@ -91,17 +91,17 @@ class FFNPrepTraining(MiscellaneousSegment):
     def __init__(self, u_info):
         ##
         datadir = u_info.data_path
-        training_image_path = os.path.join(datadir, "_3DNN_training_images")
-        ground_truth_path   = os.path.join(datadir, "_3DNN_ground_truth")
+        training_image_path = os.path.join(datadir, "DNN_training_images")
+        ground_truth_path   = os.path.join(datadir, "DNN_ground_truth")
         processed_file_path   = os.path.join(datadir, "ffn")
         self.paramfile = os.path.join(datadir, "parameters", "FFN_PrepTraining.pickle")
 
         self.filter_name = 'FFN Preparation'
 
         self.tips = [
-                        'Path to folder containing images',
-                        'Path to folder containing ground truth',
-                        'Tensorflow file follder'
+                        'Input: Path to folder containing images',
+                        'Input: Path to folder containing ground truth',
+                        'Output: Tensorflow file folder'
                         ]
 
 

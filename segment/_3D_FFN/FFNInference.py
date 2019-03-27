@@ -144,19 +144,19 @@ class FFNInference(MiscellaneousSegment):
     def __init__(self, u_info):
         ##
         datadir = u_info.data_path
-        Inference_image_path = os.path.join(datadir, "_3DNN_test_images")
+        Inference_image_path = os.path.join(datadir, "DNN_test_images")
         ffn_file_path        = os.path.join(datadir, "ffn")
-        tensorflow_file      = os.path.join(datadir, "_3DNN_model_tensorflow", "model.ckpt-2000000")
+        tensorflow_file      = os.path.join(datadir, "DNN_model_tensorflow", "model.ckpt-2000000")
         self.paramfile = os.path.join(datadir, "parameters", "FFN_Inference.pickle")
 
         self.filter_name = 'FFN Inference'
 
         self.tips = [
-                        'Path to folder containing target images',
-                        'Output inference folder',
-                        'Tensorflow model Files. 3 files are required. Please remove their suffixes',
+                        'Input: Path to folder containing target images',
+                        'Output: Path to folder storing inferred images',
+                        'Input: Tensorflow model Files. 3 files are required. Please remove their suffixes',
                         'Click it if you used in the training process',
-                        'Checkpoint Interval',
+                        'Output Checkpoint Interval',
                         'Tensorflow file follder'
                         ]
 

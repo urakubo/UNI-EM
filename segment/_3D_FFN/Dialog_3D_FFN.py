@@ -58,21 +58,12 @@ class Dialog_3D_FFN(QWidget):
         tabs.resize(300, 500)
 
         ##
-        ## Prepare FFN training
+        ## FFN preparation
         ##
         prep_ffn = FFNPrepTraining(self.u_info)
-
         table1 = TableGeneratorFFN(self)
-        thumb1 = ThumbnailGeneratorFFN(self)
         Widget1_bottom, obj_args, args = table1.GenerateTableObject(prep_ffn) # Widget
-        Widget1_top = thumb1.GenerateThumbnailObject(prep_ffn, obj_args, args)  # Widget
-
-        tab1 = QWidget()
-        tab1.layout = QVBoxLayout(tab1)
-        tab1.layout.addWidget(Widget1_top)
-        tab1.layout.addWidget(Widget1_bottom)
-        tab1.setLayout(tab1.layout)
-        tabs.addTab(tab1, 'Preprocessing')
+        tabs.addTab(Widget1_bottom, 'Preprocessing')
 
         ##
         ## FFN training

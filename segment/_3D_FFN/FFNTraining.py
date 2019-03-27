@@ -86,18 +86,18 @@ class FFNTraining(MiscellaneousSegment):
         training_image_file = os.path.join(datadir, "ffn", "grayscale_maps.h5")
         ground_truth_file   = os.path.join(datadir, "ffn", "groundtruth.h5")
         record_file_path   = os.path.join(datadir, "ffn", "tf_record_file")
-        tensorflow_file_path   = os.path.join(datadir, "_3DNN_model_tensorflow")
+        tensorflow_file_path   = os.path.join(datadir, "DNN_model_tensorflow")
         self.paramfile = os.path.join(datadir, "parameters", "FFN_Training.pickle")
 
         self.filter_name = 'FFN Training'
 
         self.tips = [
                         'Maximal Training Steps',
-                        'Effective paramter set for Anisotropic EM image',
-                        'Training Image h5 File',
-                        'Ground Truth h5 File',
-                        'FFN File Folder',
-                        'Tensorlflow Model Folder'
+                        'Paramter set for Anisotropic EM image',
+                        'Input: Training Image h5 File',
+                        'Input: Ground Truth h5 File',
+                        'Input: Tensorflow Record File',
+                        'Output: Tensorlflow Model Folder'
                         ]
 
         self.args = [
