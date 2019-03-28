@@ -20,8 +20,8 @@ class Label():
     def __init__(self, u_info):
 
         datadir =  u_info.data_path
-        imgpath =  os.path.join(datadir, "_2DNN_inference")
-        outpath =  os.path.join(datadir, "_2DNN_segmentation")
+        imgpath =  os.path.join(datadir, "DNN_segmentation")
+        outpath =  os.path.join(datadir, "DNN_segmentation")
         self.paramfile = os.path.join(datadir, "parameters", "Gaussian_2D.pickle")
 
         self.filter_name = 'Label'

@@ -37,6 +37,8 @@ from Binary   import Binary
 from Invert   import Invert
 from Label   import Label
 from Canny   import Canny
+from Skimg   import Skimg
+from CLAHE   import CLAHE
 
 class Dialog_2D_Filters(QWidget, MiscellaneousPlugins):
     def __init__(self, parent):
@@ -86,10 +88,22 @@ class Dialog_2D_Filters(QWidget, MiscellaneousPlugins):
         tabs = self.AppendTab(tabs, lbl)
 
         ##
-        ## Generate labeling tab
+        ## Generate Canny tab
         ##
         can = Canny(self.u_info)
         tabs = self.AppendTab(tabs, can)
+
+        ##
+        ## Generate 2D Watershed tab
+        ##
+        skimg = Skimg(self.u_info)
+        tabs = self.AppendTab(tabs, skimg)
+
+        ##
+        ## Generate CLAHE tab
+        ##
+        clahe = CLAHE(self.u_info)
+        tabs = self.AppendTab(tabs, clahe)
 
 
         ##

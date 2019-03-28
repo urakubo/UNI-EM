@@ -26,10 +26,8 @@ sys.path.append(plugins_dir)
 # ----------------------------------------------------------------------
 
 #sys.path.append(path.join(plugins_dir, "superpixel"))
-sys.path.append(path.join(plugins_dir, "_2D_watershed"))
 sys.path.append(path.join(plugins_dir, "_3D_filters"))
 sys.path.append(path.join(plugins_dir, "_2D_filters"))
-from Dialog_2D_Watershed import Dialog_2D_Watershed
 from Dialog_3D_Filters import Dialog_3D_Filters
 from Dialog_2D_Filters import Dialog_2D_Filters
 
@@ -39,9 +37,6 @@ class Plugins():
 
     def _2D_Filters(self):
         self.tmp = Dialog_2D_Filters(self)
-
-    def _2D_Watershed(self):
-        self.tmp = Dialog_2D_Watershed(self)
 
     def _3D_Filters(self):
         self.tmp = Dialog_3D_Filters(self)

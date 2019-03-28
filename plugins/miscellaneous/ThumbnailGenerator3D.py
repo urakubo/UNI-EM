@@ -127,7 +127,7 @@ class ThumbnailGenerator3D(MiscellaneousPlugins):
 
         thumb.layout.addWidget(QLabel('Target image'), 0, 1, alignment=Qt.AlignCenter)
         thumb.layout.addWidget(self.canvas1, 1, 1, 1, 1, alignment=Qt.AlignCenter)
-        thumb.layout.setColumnMinimumWidth(0, 50)
+        thumb.layout.setColumnMinimumWidth(0, 130)
         #thumb.layout.setColumnMinimumWidth(3, 50)
         #thumb.layout.addWidget(QLabel('Output image'), 0, 1, alignment=Qt.AlignCenter)
         #thumb.layout.addWidget(self.canvas2, 1, 1, 1, 1, alignment=Qt.AlignCenter)

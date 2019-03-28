@@ -3,10 +3,6 @@
 	"Sub":		0,
 	"Func":		"_2D_Filters"
 },
-"2D Watershed": {
-	"Sub":		0,
-	"Func":		"_2D_Watershed"
-},
 "3D Filters": {
 	"Sub":		0,
 	"Func":		"_3D_Filters"
