@@ -49,9 +49,6 @@
   <script type='text/javascript' src='offscreen_renderer.js'></script>
   <script type='text/javascript' src='util.js'></script>
 
-<!-- Add by HU  -->
-  <script type='text/javascript' src='dragmenu.js'></script>
-
   <script src="gui/js/dist/gui.js"></script>
 
 
@@ -347,8 +344,14 @@
 	<!-- Draggable Adjust control panel. Adds by H Urakubo -->
 	<div id="extend_adjust" style='left:800px;top:100px;'>
   	<div id="extend_adjust_header">Adjust</div>
+  	<div id="adjust_subheader">Eraser</div>
   	<img id="eraser" src='gfx/eraser_mini.png'>
+  	<div id="adjust_subheader">Latest</div>
   	<p id="colorbox"></p>
+  	<div id="adjust_subheader">PaintID</div>
+  	<font size="1" color="black">
+  	<input id="text_form" name="inputid" class="text_form" value= "255" type="text" style="width:45px;" maxlength=5></input>
+  	</font>
   	<p id="colorbox2"></p>
 	</div>
 
@@ -437,10 +440,10 @@
     </ul>
     <div class="dotline"></div>
     <ul class="mode">
-      <li><div class="icon"><img src='gfx/merge.png' width="16" height="16"></div><div class="key">1</div><p>Merge Mode</p></li>
-      <li><div class="icon"><img src='gfx/split.png' width="16" height="16"></div><div class="key">2</div><p>Split Mode</p></li>
-      <li><div class="icon"><img src='gfx/adjust.png' width="16" height="16"></div><div class="key">3</div><p>Adjust Mode</p></li>
-      <li><div class="icon"><img src='gfx/3d.png' width="16" height="16"></div><div class="key">4</div><p>3D Rendering</p></li>
+      <li><div class="icon"><img src='gfx/merge.png' width="16" height="16"></div><div class="key">F1</div><p>Merge Mode</p></li>
+      <li><div class="icon"><img src='gfx/split.png' width="16" height="16"></div><div class="key">F2</div><p>Split Mode</p></li>
+      <li><div class="icon"><img src='gfx/adjust.png' width="16" height="16"></div><div class="key">F3</div><p>Adjust Mode</p></li>
+      <li><div class="icon"><img src='gfx/3d.png' width="16" height="16"></div><div class="key">F4</div><p>3D Rendering</p></li>
       <!--
       <li><div class="icon"><img src='gfx/link.png' width="16" height="16"></div><div class="key">5</div><p>Collaboration Mode</p></li>
       -->

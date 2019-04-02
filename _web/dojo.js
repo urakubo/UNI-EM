@@ -17,7 +17,6 @@ DOJO.single_segment = false;
 DOJO.onmouse_prevous_leftclick = false;
 DOJO.onmouse_present_leftclick = false;
 
-
 DOJO.init = function() {
 
   DOJO.viewer = new J.viewer('dojo1');
@@ -130,7 +129,7 @@ DOJO.setup_buttons = function() {
         DOJO.mode = DOJO.modes.adjust;
         //console.log(DOJO.viewer._controller)
 		DOJO.viewer._controller.circle_cursor()
-        //DOJO.viewer._canvas.style.cursor = iconname; 
+        //DOJO.viewer._canvas.style.cursor = iconname;
       } else {
       	DOJO.viewer._canvas.style.cursor = 'auto';
         DOJO.reset_tools();
@@ -184,57 +183,67 @@ DOJO.setup_buttons = function() {
 
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
   var extend_adjust = document.getElementById('extend_adjust');
-  extend_adjust.onmousedown = function(e) {
-		// console.log('Anyway, on mouse button')
-    	e = e || window.event;
-    	e.preventDefault();
-    	// get the mouse cursor position at startup:
-    	pos3 = e.clientX;
-    	pos4 = e.clientY;
-    	document.onmouseup = closeDragElement;
-    	// call a function whenever the cursor moves:
-    	document.onmousemove = elementDrag;
-  		}
-	elementDrag = function(e) {
-		// console.log('elementDrag on Adjust');
-    	e = e || window.event;
-    	e.preventDefault();
-    	// calculate the new cursor position:
-    	pos1 = pos3 - e.clientX;
-   		pos2 = pos4 - e.clientY;
-    	pos3 = e.clientX;
-    	pos4 = e.clientY;
-    	// set the element's new position:
-    	extend_adjust.style.top = (extend_adjust.offsetTop - pos2) + "px";
-    	extend_adjust.style.left = (extend_adjust.offsetLeft - pos1) + "px";
-  		}
-	closeDragElement = function() {
-    	// stop moving when mouse button is released:
-    	document.onmouseup = null;
-    	document.onmousemove = null;
-  		}
+  var extend_adjust_header = document.getElementById('extend_adjust_header');
 
+  extend_adjust.onmousedown = function(e) {
+    e = e || window.event;
+
+    var target = e.target || e.srcElement;
+    // input要素などの入力が効かなくなるためextend_adjust_headerをドラッグハンドラとする
+    if (target !== extend_adjust && target !== extend_adjust_header) {
+      return;
+    }
+    e.preventDefault();
+
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  };
+
+  var elementDrag = function(e) {
+    e = e || window.event;
+    e.preventDefault();
+
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+
+    // set the element's new position:
+    extend_adjust.style.top = (extend_adjust.offsetTop - pos2) + "px";
+    extend_adjust.style.left = (extend_adjust.offsetLeft - pos1) + "px";
+    // extend_adjust.style.position = 'absolute';
+  };
+
+  var closeDragElement = function() {
+    // stop moving when mouse button is released:
+    document.onmouseup = null;
+    document.onmousemove = null;
+    //extend_adjust.style.position = 'fixed';
+  };
 
   var adjust_start_colorbox = document.getElementById('colorbox');
   adjust_start_colorbox.onclick = function() {
-  			if (!DOJO.viewer.is_locked(this._adjust_id))
-				DOJO.viewer._controller.start_adjust_colorbox()
-  		}
+    if (!DOJO.viewer.is_locked(this._adjust_id))
+      DOJO.viewer._controller.start_adjust_colorbox();
+  };
 
-
-  var adjust_start_colorbox = document.getElementById('colorbox2');
-  adjust_start_colorbox.onclick = function() {
-  			if (!DOJO.viewer.is_locked(this._adjust_id))
-				DOJO.viewer._controller.start_adjust_colorbox2()
-  		}
-
+  var adjust_start_colorbox2 = document.getElementById('colorbox2');
+  adjust_start_colorbox2.onclick = function() {
+    if (!DOJO.viewer.is_locked(this._adjust_id))
+      DOJO.viewer._controller.start_adjust_colorbox2();
+  };
 
   var adjust_start_eraser = document.getElementById('eraser');
   adjust_start_eraser.onclick = function() {
-  			if (!DOJO.viewer.is_locked(this._adjust_id))
-				DOJO.viewer._controller.start_adjust_eraser()
-  		}
-
+    if (!DOJO.viewer.is_locked(this._adjust_id))
+      DOJO.viewer._controller.start_adjust_eraser();
+  };
 
   var save = document.getElementById('save');
 

@@ -313,67 +313,6 @@ class Controller(object):
     output['value'] = [len(self.__actions[username])]*2
     self.__websocket.send(json.dumps(output))
 
-  def _undo_split(self, action):
-
-    self.z = action['value'][0]
-    bb = action['value'][1]
-    old_area = action['value'][2]
-
-    self.x_tiles = range((bb[0] // 512), (((bb[2] - 1) // 512) + 1))
-    self.y_tiles = range((bb[1] // 512), (((bb[3] - 1) // 512) + 1))
-    self.x_tiles = list(self.x_tiles)
-    self.y_tiles = list(self.y_tiles)
-
-    tile_dict = {}  # here this is the segmentation
-
-    # Load segmentation data
-    tile_dict = self.file_iter(tile_dict)[0]
-    # go through rows of each segmentation
-    row_val = self.tile_iter(tile_dict)[0]
-
-    # Temporarily harden new merges
-    new_merges = self.__new_merge_table
-    for k, v in new_merges.items():
-      while str(v) in new_merges: v = new_merges[str(v)]
-      row_val[np.where(row_val == float(k))] = v
-
-    #
-    # NOW REPLACE THE PIXEL DATA
-    # but take offset of tile into account
-    #
-    offset_x = self.x_tiles[0] * self.__u_info.tile_num_pixels_x
-    offset_y = self.y_tiles[0] * self.__u_info.tile_num_pixels_y
-
-    bb_relative = np.array(bb) - [offset_x, offset_y, offset_x, offset_y]
-
-    row_val[bb_relative[1]:bb_relative[3], bb_relative[0]:bb_relative[2]] = old_area
-
-    # Save all the splits
-    self.save_iter(row_val)
-
-    # send reload event
-    output = {}
-    output['name'] = 'HARD_RELOAD'
-    output['origin'] = 'SERVER'
-    output['value'] = {'z': self.z, 'full_bbox': str(bb)}
-    # print output
-    self.__websocket.send(json.dumps(output))
-
-  def _undo_merge(self, action):
-
-    ids = action['value'][0]
-    for i in ids:
-
-      key = str(i)
-
-      if key in self.__new_merge_table:
-        del self.__new_merge_table[key]
-      else:
-        # this was already undo'ed before
-        pass
-
-    self.send_undo_merge('SERVER', ids)
-    self.send_redraw('SERVER')
 
 
 
@@ -390,11 +329,67 @@ class Controller(object):
       # undo merge and split
       #
       if action['type'] == 'MERGE_GROUP':
-        self._undo_merge(action)
 
-      # undo split
+        ids = action['value'][0]
+
+        for i in ids:
+
+          key = str(i)
+
+          if key in self.__new_merge_table:
+            del self.__new_merge_table[key]
+          else:
+            # this was already undo'ed before
+            pass
+
+        self.send_undo_merge('SERVER', ids)
+        self.send_redraw('SERVER')
+
       elif action['type'] == 'SPLIT':
-        self._undo_split(action)
+
+        self.z = action['value'][0]
+        bb = action['value'][1]
+        old_area = action['value'][2]
+
+        self.x_tiles = range((bb[0]//512), (((bb[2]-1)//512) + 1))
+        self.y_tiles = range((bb[1]//512), (((bb[3]-1)//512) + 1))
+        self.x_tiles = list(self.x_tiles)
+        self.y_tiles = list(self.y_tiles)
+
+        tile_dict = {} # here this is the segmentation
+
+        # Load segmentation data
+        tile_dict = self.file_iter(tile_dict)[0]
+        # go through rows of each segmentation
+        row_val = self.tile_iter(tile_dict)[0]
+
+        # Temporarily harden new merges
+        new_merges = self.__new_merge_table
+        for k,v in new_merges.items():
+          while str(v) in new_merges: v = new_merges[str(v)]
+          row_val[np.where(row_val==float(k))] = v
+
+        #
+        # NOW REPLACE THE PIXEL DATA
+        # but take offset of tile into account
+        #
+        offset_x = self.x_tiles[0]*self.__u_info.tile_num_pixels_x
+        offset_y = self.y_tiles[0]*self.__u_info.tile_num_pixels_y
+
+        bb_relative =  np.array(bb) - [offset_x, offset_y, offset_x , offset_y]
+
+        row_val[bb_relative[1]:bb_relative[3],bb_relative[0]:bb_relative[2]] = old_area
+
+        # Save all the splits
+        self.save_iter(row_val)
+
+        # send reload event
+        output = {}
+        output['name'] = 'HARD_RELOAD'
+        output['origin'] = 'SERVER'
+        output['value'] = {'z':self.z, 'full_bbox':str(bb)}
+        # print output
+        self.__websocket.send(json.dumps(output))
 
       # decrease value
       value = max(0, value-1)
@@ -941,11 +936,16 @@ class Controller(object):
     # full_coords = np.where(tile == label_id)
     # full_bbox = [min(full_coords[1]), min(full_coords[0]), max(full_coords[1]), max(full_coords[0])]
 
-    # full_bbox = bb
+    # Save all the splits, yielding offsets
+    offsets = self.save_iter(row_val)
+
+    full_bbox = bb
     # full_coords = np.where(row_val == label_id)
     # full_bbox = [min(full_coords[1]), min(full_coords[0]), max(full_coords[1]), max(full_coords[0])]
-
-
+    # full_bb[0] += offsets[0]
+    # full_bb[1] += offsets[1]
+    # full_bb[2] += offsets[0]
+    # full_bb[3] += offsets[1]
 
 
     #
@@ -966,26 +966,16 @@ class Controller(object):
     #action['value'] = [current_action, action_value]
     #self.add_action(action)
 
-    # Save all the splits, yielding offsets
-    offsets = self.save_iter(row_val)
-    full_bb = bb
-    #print('bb     : ', bb)
-    #print('offsets: ',offsets)
-    full_bb[0] += offsets[0]
-    full_bb[1] += offsets[1]
-    full_bb[2] += offsets[0]
-    full_bb[3] += offsets[1]
-
     output = {}
     output['name'] = 'RELOAD'
     output['origin'] = input['origin']
-    output['value'] = {'z':values["z"], 'full_bbox':str(full_bb)}
+    output['value'] = {'z':values["z"], 'full_bbox':str(full_bbox)}
     self.__websocket.send(json.dumps(output))
 
     output = {}
     output['name'] = 'ADJUSTDONE'
     output['origin'] = input['origin']
-    output['value'] = {'z':values["z"], 'full_bbox':str(full_bb)}
+    output['value'] = {'z':values["z"], 'full_bbox':str(full_bbox)}
     self.__websocket.send(json.dumps(output))
 
 

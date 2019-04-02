@@ -135,6 +135,10 @@ J.interactor.prototype.on_wheel_pinch = function(e) {
 };
 
 J.interactor.prototype.onkeydown = function(e) {
+  // 現在フォーカスしてる要素がbody以外なら何もしない(他のinput要素などに入力できなくなるため)
+  if (document.activeElement !== document.body) {
+    return;
+  }
 
   if (!this._viewer._image_buffer_ready) return;
 
@@ -158,11 +162,11 @@ J.interactor.prototype.onkeydown = function(e) {
   // 27: ESC
   // 189: - DECREASE OPACITY
   // 187: = INCREASE OPACITY
-  // 49: 1 DE-/ACTIVATE MERGETOOL
-  // 50: 2 DE-/ACTIVATE SPLITTOOL
-  // 51: 3 DE-/ACTIVATE ADJUST
-  // 52: 4 DE-/ACTIVATE 3D RENDERING
-  // 53: 5 DE-/ACTIVATE COLLABORATION MODE
+  // 112:F1 49: 1 DE-/ACTIVATE MERGETOOL
+  // 113:F2 50: 2 DE-/ACTIVATE SPLITTOOL
+  // 114:F3 51: 3 DE-/ACTIVATE ADJUST
+  // 115:F4 52: 4 DE-/ACTIVATE 3D RENDERING
+  // 116:F5 53: 5 DE-/ACTIVATE COLLABORATION MODE
   // 9: TAB FINISH ADJUST
   // 90 + CTRL: CTRL+Z UNDO
   // 89 + CTRL: CTRL+Y REDO
@@ -348,41 +352,42 @@ J.interactor.prototype.onkeydown = function(e) {
       this._keypress_callback = null;
     }.bind(this),10);
 
-  } else if (e.keyCode == 49) {
+  } else if (e.keyCode == 112) {
 
     this._keypress_callback = setTimeout(function() {
       document.getElementById('merge').click();
       this._keypress_callback = null;
     }.bind(this),10);
 
-  } else if (e.keyCode == 50) {
+  } else if (e.keyCode == 113) {
 
     this._keypress_callback = setTimeout(function() {
       document.getElementById('split').click();
       this._keypress_callback = null;
     }.bind(this),10);
 
-  } else if (e.keyCode == 51) {
+  } else if (e.keyCode == 114) {
 
     this._keypress_callback = setTimeout(function() {
       document.getElementById('adjust').click();
       this._keypress_callback = null;
     }.bind(this),10);
 
-  } else if (e.keyCode == 52) {
+  } else if (e.keyCode == 115) {
 
     this._keypress_callback = setTimeout(function() {
       document.getElementById('3d').click();
       this._keypress_callback = null;
     }.bind(this),10);
 
-  } else if (e.keyCode == 53) {
-
+  } else if (e.keyCode == 116) {
+    // linkは現在未使用でエラーが出るのでコメントアウトしておく
+    /*
     this._keypress_callback = setTimeout(function() {
       document.getElementById('link').click();
       this._keypress_callback = null;
     }.bind(this),10);
-
+    */
   }
 
 };

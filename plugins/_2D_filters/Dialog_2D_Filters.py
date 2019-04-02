@@ -28,6 +28,7 @@ sys.path.append(main_dir)
 icon_dir = path.join(main_dir, "icons")
 sys.path.append(os.path.join(main_dir, "plugins", "miscellaneous"))
 
+
 from MiscellaneousPlugins  import MiscellaneousPlugins
 from TableGenerator import TableGenerator
 from ThumbnailGenerator import ThumbnailGenerator

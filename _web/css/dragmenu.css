@@ -1,6 +1,6 @@
 #extend_adjust {
+position: fixed;
 display: none;
-position: absolute;
 z-index: 9;
 background-color: #f1f1f1;
 border: 1px solid #d3d3d3;
@@ -23,6 +23,12 @@ width: 58px;
 border-radius:0.4em;
 }
 
+#adjust_subheader {
+font-size: 11px;
+padding: 2px;
+color: #000080;
+}
+
 #colorbox {
 border:1px  solid #FFF;   /* 枠線 */
 border-radius:0.4em;        /* 角丸 */
@@ -40,3 +46,4 @@ width: 50px;
 height: 40px;
 margin: auto;
 }
+
