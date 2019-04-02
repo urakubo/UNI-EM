@@ -69,7 +69,7 @@ class PersephonepWindow(QWidget):
         # setting button
         #self.back_button = QPushButton('back')
         #self.back_button.setToolTip('Go back to previous page.')
-        #self.back_button.clicked.connect(self.window.back)        
+        #self.back_button.clicked.connect(self.window.back)
         #self.forward_button = QPushButton('forward')
         #self.forward_button.setToolTip('Go to the next page.')
         #self.forward_button.clicked.connect(self.window.forward)
