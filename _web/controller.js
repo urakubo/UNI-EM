@@ -48,6 +48,7 @@ J.controller = function(viewer) {
   this._brush_bbox = [];
   this._brush_size = 10;
   this._brush_ijs = [];
+  this._adjust_paint_id = 255;
   
   // H Urakubo
   this._brush_sizes = [];
@@ -834,12 +835,19 @@ J.controller.prototype.start_adjust = function(id, x, y) {
   this._adjust_prev_id = this._adjust_id;
   document.getElementById('colorbox').style.backgroundColor = rgbToHex(color[0], color[1], color[2]);
 
-  var color = this._viewer.get_color(1);
+  var color = this._viewer.get_color(this._adjust_paint_id);
   document.getElementById('colorbox2').style.backgroundColor = rgbToHex(color[0], color[1], color[2]);
 
   this.activate(id);
 };
 
+
+J.controller.prototype.adjust_changeID = function() {
+  this._adjust_paint_id = document.getElementById('paint_id').value;
+  console.log("Input ID: ", this._adjust_paint_id)
+  var color = this._viewer.get_color(this._adjust_paint_id);
+  document.getElementById('colorbox2').style.backgroundColor = rgbToHex(color[0], color[1], color[2]);
+}
 
 J.controller.prototype.start_adjust_colorbox = function() {
 
@@ -860,13 +868,13 @@ J.controller.prototype.start_adjust_colorbox2 = function() {
 
   if (id == 0) return;
   this._adjust_mode = 1;
-  this._adjust_id = 1;
+  this._adjust_id = this._adjust_paint_id;
   this._brush_ijs = [];
   
   this._brush_segment_ids = [];
   this._brush_sizes    = [];
   this._viewer = DOJO.viewer;
-
+  console.log("Paint ID: ", this._adjust_paint_id)
   //this.circle_cursor();
   this.activate(this._adjust_id);
 };
@@ -874,7 +882,7 @@ J.controller.prototype.start_adjust_colorbox2 = function() {
 
 J.controller.prototype.start_adjust_eraser = function() {
 
-	console.log("Anyway eraser was activated.")
+	console.log("Eraser was activated.")
 
   this._adjust_id = 0;
   this._adjust_mode = 1;
@@ -1564,3 +1572,11 @@ J.controller.prototype.end = function() {
   this.activate(null);
 
 };
+
+
+//
+// Initial colorpanel color setting
+//
+//  var color = DOJO.viewer.get_color(DOJO.viewer._adjust_paint_id);
+//  document.getElementById('colorbox2').style.backgroundColor = rgbToHex(color[0], color[1], color[2]);
+

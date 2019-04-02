@@ -116,13 +116,19 @@ DOJO.setup_buttons = function() {
   };
 
 
-  // Adjustは公開APIではなくなったが機能としては存在するのでボタン機能を残しておく
+  // 
   var adjust = document.getElementById('adjust');
   var adjust_selected = document.getElementById('adjust_selected');
 
     adjust.onclick = adjust_selected.onclick = function() {
       if (DOJO.mode != DOJO.modes.adjust) {
         DOJO.reset_tools();
+        
+        // Reflect paint ID color
+        var color = DOJO.viewer.get_color(DOJO.viewer._controller._adjust_paint_id);
+        //console.log('Paint ID: ', DOJO.viewer._controller._adjust_paint_id)
+        //console.log('PaintCol: ', color)
+		document.getElementById('colorbox2').style.backgroundColor = rgbToHex(color[0], color[1], color[2]);
         $('#extend_adjust, #extend_adjust_header').show();
         adjust.style.display = 'none';
         adjust_selected.style.display = 'block';
@@ -181,6 +187,12 @@ DOJO.setup_buttons = function() {
   // Adds by H Urakubo (19/2/10)
   //
 
+
+//
+// H Urakubo
+//
+
+
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
   var extend_adjust = document.getElementById('extend_adjust');
   var extend_adjust_header = document.getElementById('extend_adjust_header');
@@ -233,6 +245,7 @@ DOJO.setup_buttons = function() {
       DOJO.viewer._controller.start_adjust_colorbox();
   };
 
+
   var adjust_start_colorbox2 = document.getElementById('colorbox2');
   adjust_start_colorbox2.onclick = function() {
     if (!DOJO.viewer.is_locked(this._adjust_id))
@@ -245,8 +258,23 @@ DOJO.setup_buttons = function() {
       DOJO.viewer._controller.start_adjust_eraser();
   };
 
-  var save = document.getElementById('save');
+  var adjust_changeID = document.getElementById('paint_id');
+  adjust_changeID.addEventListener("keyup", function(event) {
+  // Number 13 is the "Enter" key on the keyboard
+  if (event.keyCode === 13) {
+    if (!DOJO.viewer.is_locked(this._adjust_id))
+      DOJO.viewer._controller.adjust_changeID();
+  }
+	});
 
+
+
+//  adjust_changeID.onclick = function() {
+//    if (!DOJO.viewer.is_locked(this._adjust_id))
+//      DOJO.viewer._controller.adjust_changeID();
+//  };
+
+  var save = document.getElementById('save');
   save.onclick = function() {
 
     // if (confirm("Saving might take hours and Dojo will be unusable during this time!\n\nDo you really want to save right now?") == true) {
