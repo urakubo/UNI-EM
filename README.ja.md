@@ -19,6 +19,7 @@
 - [使い方：2D/3Dフィルタ](Documents/HowToUse.ja.md#2D3Dフィルタ)
 - [適用事例1：2次元DNNによるミトコンドリアのセグメンテーション](Documents/Workflow1.ja.md)
 - [適用事例2：3次元FFNによる細胞膜のセグメンテーション](Documents/Workflow2.ja.md)
+- [プラグインの作り方](Documents/HowToMakePlugin.ja.md) 
 ---
 
 ## はじめに：
