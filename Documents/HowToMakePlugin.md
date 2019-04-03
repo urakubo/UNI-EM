@@ -31,7 +31,7 @@ class Plugins():
     def Template(self):
         self.tmp = Dialog_Template(self)
 ```
-The folder UNI_EM\plugins\Template is included in a search path (line 1), and the Dialog_Template class in that folder is imported (line 2). The function "Template" assigns the Dialog_Template class to an object (self.tmp). Next check the content of UNI_EM\plugins\Template\Dialog_Template.py. This program creates the control panel (Widget) itself.
+The folder UNI_EM\plugins\Template is included in a search path (line 1), and the Dialog_Template class in that folder is imported (line 2). The function "Template" assigns the Dialog_Template class to an object (self.tmp). Next check the content of UNI_EM\plugins\Template\Dialog_Template.py. This program creates a control panel (Widget).
 ```python
 from Training   import Training
 from Inference  import Inference
