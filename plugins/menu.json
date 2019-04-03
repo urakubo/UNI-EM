@@ -7,12 +7,16 @@
 	"Sub":		0,
 	"Func":		"_3D_Filters"
 },
-"User Defined1": {
+"Template": {
 	"Sub":		0,
+	"Func":		"Template"
+},
+"User Defined1": {
+	"Sub":		1,
 	"Func":		"UserDefined_"
 },
 "User Defined2": {
-	"Sub":		1,
+	"Sub":		0,
 	"Func":		"UserDefined_"
 },
 "User Defined3": {

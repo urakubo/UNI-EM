@@ -25,7 +25,6 @@ sys.path.append(main_dir)
 icon_dir = path.join(main_dir, "icons")
 
 from TableGeneratorFFN import TableGeneratorFFN
-from ThumbnailGeneratorFFN import ThumbnailGeneratorFFN
 from FFNPrepTraining   import FFNPrepTraining
 from FFNTraining    import FFNTraining
 from FFNInference   import FFNInference
