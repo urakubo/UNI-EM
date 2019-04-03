@@ -49,21 +49,21 @@ class Dialog_Template(QWidget, MiscellaneousTemplate):
         tab_inference    = self.GenerateTabWidget(inference)
         tabs.addTab(tab_inference, 'Inference')
 ```
-最初の二行で Training.py および Inference.py 読み込み、initUI 内にて、Training tab と Inference tab を読み込みます。そこで、UNI_EM\plugins\Template\Training.py を確認します。
+最初の二行で Training.py および Inference.py 読み込み、initUI 内にて、Training tab と Inference tab を読み込みます。そこで、Trainingタブの内容を決定する UNI_EM\plugins\Template\Training.py を確認します。
 ```python
 ##
 exec_dir = os.path.join(main_dir, 'plugins','Template')
-exec_train = 'python ' +  os.path.join(exec_dir, 'run_example.py')
+exec_template = 'python ' +  os.path.join(exec_dir, 'run_example.py')
 ##
 
 class Training(MiscellaneousTemplate):
     def _Run(self, params, comm_title):
         ##
-        comm_train = exec_train + ' ' \
+        comm_run = exec_train + ' ' \
                      + ' --training_image_folder '    + params['Training image folder'] + ' ' \
                      + ' --ground_truth_folder '      + params['Ground truth folder'] + ' ' \
                      + ' --tensorflow_model_folder ' + params['Tensorflow model folder']  + ' ' \
-        s.run(comm_train.split())
+        s.run(comm_run.split())
 
     def __init__(self, u_info):
     	##
@@ -86,6 +86,14 @@ class Training(MiscellaneousTemplate):
                         ['Tensorflow model folder' , 'LineEdit', tensorflow_file_path  , 'BrowseDir'],
             ]
 ```
-exec_train にて実行する外部プログラムを指定します。
+exec_train にて実行する外部プログラムを指定します。ここでは、UNI_EM\plugins\Template\ フォルダ内の python run_example.py を実行することにします。関数 _Run では引数を指定をすると共に s.run にて関数を実行します。引数の指定は、関数__init__ にてself.arg を指定することで、GUIにて行うことができます。上段左より、項目"Checkpoint Interval"を作って下限100, 上限65535, 既定値1800のSpinboxを介して数値を設定することを意味します。self.tipsは各項目上にマウスカーソルを置くと現れる注意書きです。Trainingクラスを実行し、GenerateTabWidget関数がそれを正しく解釈することができると、下のようなダイアログ（Control panel) が現れます。Control panelを通じて各種引数の設定、"Execute"ボタンによるプログラムの実行を行うことができます。
+
+<BR>
+<p align="center">
+  <img src="Images/Template_Training.png" alt="Template dialog" width="800">
+</p>
+<BR>
+
+
 
 
