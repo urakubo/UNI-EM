@@ -86,7 +86,7 @@ class Training(MiscellaneousTemplate):
                         ['Tensorflow model folder' , 'LineEdit', tensorflow_file_path  , 'BrowseDir'],
             ]
 ```
-exec_train にて実行する外部プログラムを指定します。ここでは、UNI_EM\plugins\Template\ フォルダ内の python run_example.py を実行することにします。関数 _Run では引数を指定をすると共に s.run にて関数を実行します。引数の指定は、関数__init__ にてself.arg を指定することで、GUIにて行うことができます。上段左より、項目"Checkpoint Interval"を作って下限100, 上限65535, 既定値1800のSpinboxを介して数値を設定することを意味します。self.tipsは各項目上にマウスカーソルを置くと現れる注意書きです。Trainingクラスを実行し、GenerateTabWidget関数がそれを正しく解釈することができると、下のようなダイアログ（Control panel) が現れます。Control panelを通じて各種引数の設定、"Execute"ボタンによるプログラムの実行を行うことができます。
+exec_train にて実行する外部プログラムを指定します。ここでは、UNI_EM\plugins\Template\ フォルダ内の python run_example.py を実行することにします。関数 _Run では引数を指定をすると共に s.run にて関数を実行しています。引数の指定は、関数__init__ にてself.arg を指定することで、GUIにて行うことができます。上段左より、項目"Checkpoint Interval"を作って下限100, 上限65535, 既定値1800のSpinboxを介して数値を設定することを意味します。self.tipsは各項目上にマウスカーソルを置くと現れる注意書きです。Trainingクラスを実行し、GenerateTabWidget関数がそれを正しく解釈することができると、下のようなダイアログ（Control panel) が現れます。Control panelを通じて各種引数の設定、"Execute"ボタンによるプログラムの実行を行うことができます。
 
 <BR>
 <p align="center">
