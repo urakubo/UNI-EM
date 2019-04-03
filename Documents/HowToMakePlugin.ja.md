@@ -92,7 +92,7 @@ exec_train にて実行する外部プログラムを指定します。ここで
 <p align="center">
   <img src="Images/Template_Training.png" alt="Template dialog" width="800">
 </p>
-<BR>
+<BR>　
 
 
 
