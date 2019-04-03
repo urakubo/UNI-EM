@@ -2,7 +2,7 @@
 
 ## プラグインの作り方
 
-UNI-EMでは、ご自身のPython等の実行形式プログラムを容易にプラグインにすることができます。ここでは、テンプレートプラグイン Templete がどのように導入されているか確認します。まず、UNI_EM\plugins\menu.json を開いてください。menu.json は Plugin ドロップダウンメニューの内容を決定します。
+UNI-EMでは、ご自身のPython等の実行形式プログラムを容易にプラグインにすることができます。ここでは、テンプレートプラグイン Templete がどのように導入されているか確認します。まず、UNI_EM\plugins\menu.json を開いてください。menu.json は Plugin ドロップダウンメニューの内容を指定しており、次の様な内容になります（抜粋）。
 ```json
 {
 "2D/3D Filters": {
@@ -23,7 +23,7 @@ UNI-EMでは、ご自身のPython等の実行形式プログラムを容易に�
 },
 }
 ```
-ここで、最上位のkey (e.g., "2D/3D Filters") はPluginsのドロップダウンメニューの項目です。key "Sub" はドロップダウン階層を指定回数一段落とすことを指示し、key "Func" は UNI_EM\plugins\Plugin.py にて呼び出される関数名を指定します。次に、ドロップダウンメニューより呼び出される UNI_EM\plugins\Plugin.py の内容を確認します。
+ここで、最上位のkey (e.g., "2D/3D Filters") はPluginsのドロップダウンメニューの項目です。key "Sub" はドロップダウン階層を指定回数一段落とすことを指示し、key "Func" は UNI_EM\plugins\Plugin.py にて呼び出される関数名を指定します。次に、ドロップダウンメニューより呼び出される UNI_EM\plugins\Plugin.py の内容を確認します（抜粋）。
 ```python
 sys.path.append(path.join(plugins_dir, "Template"))
 from Dialog_Template   import Dialog_Template
@@ -32,7 +32,7 @@ class Plugins():
     def Template(self):
         self.tmp = Dialog_Template(self)
 ```
-一行目では UNI_EM\plugins\Template フォルダを参照することを指定し、二行目では Dialog_Template.py ファイルの Dialog_Templateクラスを読み込むことを指定し、def Template(self) 内で Dialog_Template を呼び出しています。さらに、ダイアログ本体を作成する UNI_EM\plugins\Template\Dialog_Template.pyを確認します。
+一行目では UNI_EM\plugins\Template フォルダを参照することを指定し、二行目では Dialog_Template.py ファイルの Dialog_Templateクラスを読み込むことを指定し、def Template(self) 内で実際に Dialog_Template を呼び出しています。さらに、このダイアログ本体を作成する UNI_EM\plugins\Template\Dialog_Template.pyを確認します（抜粋）。
 ```python
 from Training   import Training
 from Inference  import Inference
@@ -49,7 +49,7 @@ class Dialog_Template(QWidget, MiscellaneousTemplate):
         tab_inference    = self.GenerateTabWidget(inference)
         tabs.addTab(tab_inference, 'Inference')
 ```
-最初の二行で Training.py および Inference.py 読み込み、initUI 内にて、Training tab と Inference tab を読み込みます。そこで、Trainingタブの内容を決定する UNI_EM\plugins\Template\Training.py を確認します。
+最初の二行で Training.py および Inference.py 読み込み、initUI 内にて、Training tab と Inference tab を読み込んでいます。さらに、Trainingタブの内容を決定する UNI_EM\plugins\Template\Training.py を確認します（抜粋）。
 ```python
 ##
 exec_dir = os.path.join(main_dir, 'plugins','Template')
@@ -86,7 +86,7 @@ class Training(MiscellaneousTemplate):
                         ['Tensorflow model folder' , 'LineEdit', tensorflow_file_path  , 'BrowseDir'],
             ]
 ```
-exec_train にて実行する外部プログラムを指定します。ここでは、UNI_EM\plugins\Template\ フォルダ内の python run_example.py を実行することにします。関数 _Run では引数を指定をすると共に s.run にて関数を実行しています。引数の指定は、関数__init__ にてself.arg を指定することで、GUIにて行うことができます。上段左より、項目"Checkpoint Interval"を作って下限100, 上限65535, 既定値1800のSpinboxを介して数値を設定することを意味します。self.tipsは各項目上にマウスカーソルを置くと現れる注意書きです。Trainingクラスを実行し、GenerateTabWidget関数がそれを正しく解釈することができると、下のようなダイアログ（Control panel) が現れます。Control panelを通じて各種引数の設定、"Execute"ボタンによるプログラムの実行を行うことができます。
+変数 exec_template に実行する外部プログラムを指定しています。ここでは、UNI_EM\plugins\Template\ フォルダ内の python run_example.py を指定しています。関数 _Run では引数を指定をすると共に s.run にて関数を実行しています。引数の指定は、関数__init__ にてself.arg を指定することで、GUIにて行います。上段左より、項目"Checkpoint Interval"を作って下限100, 上限65535, 既定値1800のSpinboxを作成し、Spinboxを介して値を設定することを示します。self.tipsは各項目上にマウスカーソルを置くと現れる注意書きです。Trainingクラスを実行したのち、GenerateTabWidget関数がクラス変数を正しく解釈することができると、下のようなダイアログ（Control panel) が現れます。Control panelを通じて各種引数の設定を行うと共に、"Execute"ボタンによりプログラムを実行することができます。
 
 <BR>
 <p align="center">
