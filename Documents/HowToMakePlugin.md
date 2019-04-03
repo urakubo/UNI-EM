@@ -1,7 +1,7 @@
 [Japanese version here](HowToMakePlugin.ja.md)
 
-## How to make a plug-in
-Users can easily embed their own executable programs (including python programs) in UNI-EM as a plug-in. Here we show how to make such a plug-in by introducing a pre-installed template. The template plug-in incorporates an external Python program "run_example.py" in UNI_EM\ plugins\Template. First, check the content of UNI_EM\plugins\menu.json that determines the Plugin dropdown menu.
+## How to make a plugin
+Users can easily embed their own executable program (including a Python program) in UNI-EM as a plug-in. Here we show how to make such a plugin by introducing a pre-installed template. The template plugin incorporates an external Python program "run_example.py" in UNI_EM\ plugins\Template. First, check the content of UNI_EM\plugins\menu.json that determines the Plugin dropdown menu.
 ```json
 {
 "2D/3D Filters": {
@@ -22,8 +22,7 @@ Users can easily embed their own executable programs (including python programs)
 },
 }
 ```
-Where the keys at a highest level (e.g., "2D/3D Filters") denote the contents of the dropdown menu, and the key "sub" denotes the numbers of lower-level contents that are generated afterwards. The keys "Func" denote the functions that are called in UNI_EM\plugins\Plugin.py. Here, Plugin.py is shown as follows: 
-
+Where the keys at a highest level (e.g., "2D/3D Filters") corresnpond the contents of the dropdown menu, and the key "sub" denotes the numbers of lower-level contents that are generated afterwards. The keys "Func" specify the functions that are called in UNI_EM\plugins\Plugin.py. Here, Plugin.py is shown as follows:
 ```python
 sys.path.append(path.join(plugins_dir, "Template"))
 from Dialog_Template   import Dialog_Template
@@ -32,7 +31,7 @@ class Plugins():
     def Template(self):
         self.tmp = Dialog_Template(self)
 ```
-where the folder UNI_EM\plugins\Template is included in a search path (line 1), and Dialog_Template class in that folder is imported (line 2). The function "Template" assigns the Dialog_Template class to an object (line 6). Then, check the content of UNI_EM\plugins\Template\Dialog_Template.py. Dialog_Template.py is a program to generate the control panel (Widget) itself.
+The folder UNI_EM\plugins\Template is included in a search path (line 1), and the Dialog_Template class in that folder is imported (line 2). The function "Template" assigns the Dialog_Template class to an object (self.tmp). Next check the content of UNI_EM\plugins\Template\Dialog_Template.py. Dialog_Template.py is a program to create the control panel (Widget) itself.
 ```python
 from Training   import Training
 from Inference  import Inference
@@ -49,7 +48,7 @@ class Dialog_Template(QWidget, MiscellaneousTemplate):
         tab_inference    = self.GenerateTabWidget(inference)
         tabs.addTab(tab_inference, 'Inference')
 ```
-The program imports Training.py and Inference.py in the first two lines, and they are assigned to objects in initUI. Here UNI_EM\ plugins\Template\Training.py is show as follows:
+Dialog_Template.py imports Training.py and Inference.py in the first two lines, and initUI assigns them to objects. One of the class UNI_EM\ plugins\Template\Training.py can be read as follows:
 ```python
 ##
 exec_dir = os.path.join(main_dir, 'plugins','Template')
@@ -86,8 +85,8 @@ class Training(MiscellaneousTemplate):
                         ['Tensorflow model folder' , 'LineEdit', tensorflow_file_path  , 'BrowseDir'],
             ]
 ```
-where the global variable exec_template holds the name of the target external program. Here, 
-exec_template="python UNI_EM\plugins\Template\ run_example.py" In the function _Run, its arguments are specified and the function is executed by s.run. The arguments are set through a control panel (GUI), and the contents of the GUI is determined by the variable self.arg. For example, in the first line, it generates QSpinBox for setting a parameter entitled "Checkpoint Interval" under min=100, max=100, and the default value=1800. Here, self.tips denotes the tool tips that appear when the cursor point is located at the titles. If the Training class is successfully read by the subsequent GenerateTabWidget, the control panel appears shown as below. Users can set parameters through this control panel, and execute it by pressing the execute button.
+where the global variable exec_template holds the name of the target external program, i.e.,  
+exec_template="python UNI_EM\plugins\Template\run_example.py." The function _Run associates its arguments and executes run_example.py (s.run). The arguments are set through a control panel (GUI) that is spcified by the variable self.arg. For example, in the first line, self.arg generates QSpinBox for setting a parameter entitled "Checkpoint Interval" under min=100, max=100, and the default value=1800. Here, self.tips denote the tool tips that appear when the cursor point is located at the titles. If the Training class is successfully read by the subsequent GenerateTabWidget, the control panel appears shown as below. Users can set parameters through this control panel, and execute it by pressing the execute button.
 
 <BR>
 <p align="center">
