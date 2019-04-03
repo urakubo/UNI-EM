@@ -2,7 +2,7 @@
 
 ## プラグインの作り方
 
-UNI-EMでは、ご自身のPython等の実行形式プログラムを容易にプラグインにすることができます。ここでは、Templateプラグインがどのように導入されるか確認します。ここで、最終的に Template プラグインにて実行されるPythonプログラムは UNI_EM\plugins\Template\run_example.py です。まず、UNI_EM\plugins\menu.json を開いてください。menu.json は Plugin ドロップダウンメニューの内容を指定しており、次の様な内容になります（抜粋）。
+UNI-EMでは、ご自身のPython等の実行形式プログラムを容易にプラグインにすることができます。ここでは、Templateプラグインがどのように導入されるか確認します。ここで、Template プラグインにて実行されるPythonプログラムは UNI_EM\plugins\Template\run_example.py です。まず、UNI_EM\plugins\menu.json を開いてください。menu.json は Plugin ドロップダウンメニューの内容を指定しており、次の様な内容になります（抜粋）。
 ```json
 {
 "2D/3D Filters": {
