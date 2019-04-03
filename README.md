@@ -23,6 +23,7 @@ Check the following pages after installation.
 - [How to use: 2D and 3D filters](Documents/HowToUse.md#2D-and-3D-filters)
 - [Example workflow1: Mitochondria segmentation by use of 2D DNN](Documents/Workflow1.md)
 - [Example workflow2: Membrane segmentation by use of 3D FFN](Documents/Workflow2.md) 
+- [How to make a plugin](Documents/HowToMakePlugin.md) 
 ---
 
 ## Introduction
