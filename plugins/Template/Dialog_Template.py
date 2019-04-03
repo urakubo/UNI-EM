@@ -35,31 +35,23 @@ class Dialog_Template(QWidget, MiscellaneousTemplate):
 
     def initUI(self):
 
-        ##
-        ## Generate tab
-        ##
+        # Generate tab
         tabs   = QTabWidget()
         layout = QVBoxLayout()
         layout.addWidget(tabs)
         self.setLayout(layout)
 
-        ##
-        ## Training
-        ##
+        # Training
         training        = Training(self.u_info)
         tab_training    = self.GenerateTabWidget(training)
         tabs.addTab(tab_training, 'Training')
 
-        ##
-        ## Inferernce
-        ##
+        # Inferernce
         inference        = Inference(self.u_info)
         tab_inference    = self.GenerateTabWidget(inference)
         tabs.addTab(tab_inference, 'Inference')
 
-        ##
-        ## Show Widget
-        ##
+        # Show Widget
         self.setGeometry(self.left, self.top, self.width, self.height)
         self.setWindowTitle(self.title)
         self.setWindowIcon(QIcon(path.join(icon_dir, 'Mojo2_16.png')))

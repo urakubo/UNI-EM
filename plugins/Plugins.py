@@ -18,7 +18,6 @@ from Dialog_3D_Filters import Dialog_3D_Filters
 from Dialog_2D_Filters import Dialog_2D_Filters
 from Dialog_Template   import Dialog_Template
 
-# import wxglade_superpixel
 
 class Plugins():
 

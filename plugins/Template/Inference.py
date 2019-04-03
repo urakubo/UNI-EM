@@ -13,20 +13,20 @@ icon_dir = path.join(main_dir, "icons")
 
 #######
 exec_dir = os.path.join(main_dir, 'plugins','Template')
-exec_inference = 'python ' +  os.path.join(exec_dir, 'run_example.py')
+exec_template = 'python ' +  os.path.join(exec_dir, 'run_example.py')
 
 class Inference(MiscellaneousTemplate):
 
     def _Run(self, params, comm_title):
         ##
-        comm_inference = exec_inference + ' ' \
+        comm_run = exec_template + ' ' \
                     + ' --test_image_folder '   + params['Test image folder'] + ' ' \
                     + ' --inferred_segmentation_folder '     + params['Inferred segmentation folder'] + ' ' \
                     + ' --tensorflow_model_file ' + params['Tensorflow model file']  + ' ' \
         ##
-        print(comm_inference)
+        print(comm_run)
         print('')
-        s.run(comm_inference.split())
+        s.run(comm_run.split())
         print(comm_title, 'was finished.\n')
         return True
 

@@ -12,10 +12,10 @@ main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
 icon_dir = path.join(main_dir, "icons")
 
-###
+##
 exec_dir = os.path.join(main_dir, 'plugins','Template')
-exec_train = 'python ' +  os.path.join(exec_dir, 'run_example.py')
-###
+exec_template = 'python ' +  os.path.join(exec_dir, 'run_example.py')
+##
 
 class Training(MiscellaneousTemplate):
     def _Run(self, params, comm_title):
@@ -27,14 +27,14 @@ class Training(MiscellaneousTemplate):
         print('Checkpoint Interval: ', params['Checkpoint Interval'])
         print('Mode               : ', params['Mode'])
         ##
-        comm_train = exec_train + ' ' \
+        comm_run = exec_template + ' ' \
                      + ' --training_image_folder '    + params['Training image folder'] + ' ' \
                      + ' --ground_truth_folder '      + params['Ground truth folder'] + ' ' \
                      + ' --tensorflow_model_folder ' + params['Tensorflow model folder']  + ' ' \
         ##
-        print(comm_train)
+        print(comm_run)
         print('')
-        s.run(comm_train.split())
+        s.run(comm_run.split())
         print(comm_title, 'was finished.\n')
         return True
 
@@ -65,4 +65,4 @@ class Training(MiscellaneousTemplate):
                         ['Ground truth folder'     , 'LineEdit', ground_truth_path     , 'BrowseDirImg'],
                         ['Tensorflow model folder' , 'LineEdit', tensorflow_file_path  , 'BrowseDir'],
             ]
-        ##
+
