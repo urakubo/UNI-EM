@@ -21,7 +21,7 @@ UNI-EMでは、ご自身のPythonプログラムを容易にUNI-EMのプラグ�
 },
 }
 ```
-ここで、最上位のkey (e.g., "2D/3D Filters") はPluginsのドロップダウンメニューの項目です。key "Sub" の数字は指定回数ドロップダウン階層を一段落とすことを示し、key "Func" は UNI_EM\plugins\Plugin.py にて呼び出される関数名を指定します。次に、UNI_EM\plugins\Plugin.py の内容を確認します。
+ここで、最上位のkey (e.g., "2D/3D Filters") はPluginsのドロップダウンメニューの項目です。key "Sub" はドロップダウン階層を指定回数一段落とすことを示し、key "Func" は UNI_EM\plugins\Plugin.py にて呼び出される関数名を指定します。次に、UNI_EM\plugins\Plugin.py の内容を確認します。
 ```python
 sys.path.append(path.join(plugins_dir, "Template"))
 from Dialog_Template   import Dialog_Template
