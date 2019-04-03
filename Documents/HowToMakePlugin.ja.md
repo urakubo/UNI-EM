@@ -1,4 +1,6 @@
-プラグインの書き方
+[English version here](HowToMakePlugin.md)
+
+## 使い方：プラグインの書き方
 
 UNI-EMでは、ご自身のPythonプログラムを容易にUNI-EMのプラグインとして導入することができます。ここでは、テンプレートプラグイン Templete がどのように導入されているか確認します。まず、UNI_EM\plugins\menu.json を開いて Plugin ドロップダウンメニューの内容を確認します。
 ```json
@@ -84,6 +86,6 @@ class Training(MiscellaneousTemplate):
                         ['Tensorflow model folder' , 'LineEdit', tensorflow_file_path  , 'BrowseDir'],
             ]
 ```
-
+exec_train にて実行する外部プログラムを指定します。
 
 
