@@ -86,7 +86,7 @@ class Training(MiscellaneousTemplate):
             ]
 ```
 where the global variable exec_template holds the name of the target external program, i.e.,  
-exec_template="python UNI_EM\plugins\Template\run_example.py." The function _Run associates its arguments and executes run_example.py (s.run). The arguments are set through a control panel (GUI) that is spcified by the variable self.arg. For example, in the first line, self.arg generates QSpinBox for setting a parameter entitled "Checkpoint Interval" under min=100, max=100, and the default value=1800. Here, self.tips denote the tool tips that appear when the cursor point is located at the titles. If the Training class is successfully read by the subsequent GenerateTabWidget, the control panel appears shown as below. Users can set parameters through this control panel, and execute it by pressing the execute button.
+exec_template="python UNI_EM\plugins\Template\run_example.py." The function _Run associates exec_template.py with arguments and executes it (s.run). The arguments are set through a control panel (Widget) that is spcified by the variable self.arg. For example, in the first line, self.arg generates QSpinBox for setting a parameter entitled "Checkpoint Interval" under min=100, max=100, and the default value=1800. The variable self.tips denotes the tool tips that appear when the cursor point is located at the titles. If the Training class is successfully read by the subsequent GenerateTabWidget, the control panel appears shown as below. Users can set parameters through the control panel, and execute it simply by pressing the execute button.
 
 <BR>
 <p align="center">
