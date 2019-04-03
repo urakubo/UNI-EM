@@ -32,7 +32,7 @@ class Plugins():
     def Template(self):
         self.tmp = Dialog_Template(self)
 ```
-一行目では UNI_EM\plugins\Template フォルダを参照することを指定し、二行目では Dialog_Template.py ファイルの Dialog_Templateクラスを読み込むことを指定し、def Template(self) にて Dialog_Template を呼び出します。そこで、UNI_EM\plugins\Template\Dialog_Template.pyを確認します（抜粋）。Dialog_Template.py はダイアログ(Control panel)本体を作成するプログラムです。
+一行目では UNI_EM\plugins\Template フォルダを参照することを指定し、二行目では Dialog_Template.py ファイルの Dialog_Templateクラスを読み込むことを指定し、def Template(self) にて Dialog_Template を呼び出します。そこで、UNI_EM\plugins\Template\Dialog_Template.pyを確認します（抜粋）。Dialog_Template.py はControl panel (Widget)本体を作成するプログラムです。
 ```python
 from Training   import Training
 from Inference  import Inference
