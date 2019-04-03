@@ -2,7 +2,7 @@
 
 ## プラグインの作り方
 
-UNI-EMでは、ご自身のPythonプログラムを容易にプラグインにすることができます。ここでは、テンプレートプラグイン Templete がどのように導入されているか確認します。まず、UNI_EM\plugins\menu.json を開いて Plugin ドロップダウンメニューの内容を確認します。
+UNI-EMでは、ご自身のPythonプログラムを容易にプラグインにすることができます。ここでは、テンプレートプラグイン Templete がどのように導入されているか確認します。まず、UNI_EM\plugins\menu.json を開いてください。menu.json は Plugin ドロップダウンメニューの内容を決定します。
 ```json
 {
 "2D/3D Filters": {
@@ -23,7 +23,7 @@ UNI-EMでは、ご自身のPythonプログラムを容易にプラグインに�
 },
 }
 ```
-ここで、最上位のkey (e.g., "2D/3D Filters") はPluginsのドロップダウンメニューの項目です。key "Sub" はドロップダウン階層を指定回数一段落とすことを示し、key "Func" は UNI_EM\plugins\Plugin.py にて呼び出される関数名を指定します。次に、UNI_EM\plugins\Plugin.py の内容を確認します。
+ここで、最上位のkey (e.g., "2D/3D Filters") はPluginsのドロップダウンメニューの項目です。key "Sub" はドロップダウン階層を指定回数一段落とすことを示し、key "Func" は UNI_EM\plugins\Plugin.py にて呼び出される関数名を指定します。次に、ドロップダウンメニューより呼び出される UNI_EM\plugins\Plugin.py の内容を確認します。
 ```python
 sys.path.append(path.join(plugins_dir, "Template"))
 from Dialog_Template   import Dialog_Template
@@ -32,7 +32,7 @@ class Plugins():
     def Template(self):
         self.tmp = Dialog_Template(self)
 ```
-一行目では UNI_EM\plugins\Template フォルダを参照することを指定し、二行目では Dialog_Template.py ファイルの Dialog_Templateクラスを読み込むことを指定し、def Template(self) 内で Dialog_Template を呼び出しています。さらに、UNI_EM\plugins\Template\Dialog_Template.pyを確認します。
+一行目では UNI_EM\plugins\Template フォルダを参照することを指定し、二行目では Dialog_Template.py ファイルの Dialog_Templateクラスを読み込むことを指定し、def Template(self) 内で Dialog_Template を呼び出しています。さらに、ダイアログ本体を作成する UNI_EM\plugins\Template\Dialog_Template.pyを確認します。
 ```python
 from Training   import Training
 from Inference  import Inference
@@ -49,7 +49,7 @@ class Dialog_Template(QWidget, MiscellaneousTemplate):
         tab_inference    = self.GenerateTabWidget(inference)
         tabs.addTab(tab_inference, 'Inference')
 ```
-最初の二行で Training.py および Inference.py 読み込み、initUI 内にて、Training tab と Inference tab を読み込みます。さらに、UNI_EM\plugins\Template\Training.py を確認します。
+最初の二行で Training.py および Inference.py 読み込み、initUI 内にて、Training tab と Inference tab を読み込みます。そこで、UNI_EM\plugins\Template\Training.py を確認します。
 ```python
 ##
 exec_dir = os.path.join(main_dir, 'plugins','Template')
