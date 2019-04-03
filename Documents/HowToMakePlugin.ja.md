@@ -2,7 +2,7 @@
 
 ## プラグインの作り方
 
-UNI-EMでは、ご自身のPythonプログラムを容易にUNI-EMのプラグインにすることができます。ここでは、テンプレートプラグイン Templete がどのように導入されているか確認します。まず、UNI_EM\plugins\menu.json を開いて Plugin ドロップダウンメニューの内容を確認します。
+UNI-EMでは、ご自身のPythonプログラムを容易にプラグインにすることができます。ここでは、テンプレートプラグイン Templete がどのように導入されているか確認します。まず、UNI_EM\plugins\menu.json を開いて Plugin ドロップダウンメニューの内容を確認します。
 ```json
 {
 "2D/3D Filters": {
