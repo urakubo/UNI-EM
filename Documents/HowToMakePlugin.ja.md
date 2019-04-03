@@ -30,7 +30,7 @@ class Plugins():
     def Template(self):
         self.tmp = Dialog_Template(self)
 ```
-一行目では UNI_EM\plugins\Template フォルダを参照することを指定し、二行目では Dialog_Template.py ファイルのクラス Dialog_Templateクラスを読み込むことを指定し、def Template(self) 内で Dialog_Template を呼び出しています。さらに、UNI_EM\plugins\Template\Dialog_Template.pyを確認します。
+一行目では UNI_EM\plugins\Template フォルダを参照することを指定し、二行目では Dialog_Template.py ファイルの Dialog_Templateクラスを読み込むことを指定し、def Template(self) 内で Dialog_Template を呼び出しています。さらに、UNI_EM\plugins\Template\Dialog_Template.pyを確認します。
 ```python
 from Training   import Training
 from Inference  import Inference
@@ -48,7 +48,42 @@ class Dialog_Template(QWidget, MiscellaneousTemplate):
         tabs.addTab(tab_inference, 'Inference')
 ```
 最初の二行で Training.py および Inference.py 読み込み、initUI 内にて、Training tab と Inference tab を読み込みます。さらに、UNI_EM\plugins\Template\Training.py を確認します。
+```python
+##
+exec_dir = os.path.join(main_dir, 'plugins','Template')
+exec_train = 'python ' +  os.path.join(exec_dir, 'run_example.py')
+##
 
+class Training(MiscellaneousTemplate):
+    def _Run(self, params, comm_title):
+        ##
+        comm_train = exec_train + ' ' \
+                     + ' --training_image_folder '    + params['Training image folder'] + ' ' \
+                     + ' --ground_truth_folder '      + params['Ground truth folder'] + ' ' \
+                     + ' --tensorflow_model_folder ' + params['Tensorflow model folder']  + ' ' \
+        s.run(comm_train.split())
+
+    def __init__(self, u_info):
+    	##
+        self.name = 'Training'
+        self.tips = [
+                        'Checkpoint Interval',
+                        'Sparse Z',
+                        'Mode',
+                        'Input : Training image folder',
+                        'Input : Ground truth folder',
+                        'Input/Output: Tensorlflow Model Folder'
+                        ]
+
+        self.args = [
+                        ['Checkpoint Interval', 'SpinBox', [100, 1800, 65535]],
+                        ['Sparse Z', 'CheckBox', False],
+                        ['Mode', 'ComboBox', ['a','b','c']],
+                        ['Training image folder'   , 'LineEdit', training_image_path   , 'BrowseDirImg'],
+                        ['Ground truth folder'     , 'LineEdit', ground_truth_path     , 'BrowseDirImg'],
+                        ['Tensorflow model folder' , 'LineEdit', tensorflow_file_path  , 'BrowseDir'],
+            ]
+```
 
 
 
