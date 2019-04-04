@@ -22,7 +22,7 @@ Users can easily embed their own executable program (including a Python program)
 },
 }
 ```
-Where the keys at a highest level (e.g., "2D/3D Filters") corresnpond the contents of the dropdown menu, and the key "sub" denotes the numbers of lower-level contents that are generated afterwards. The keys "Func" specify the functions that are called in UNI_EM\plugins\Plugin.py. Here, check the content of Plugin.py:
+Where the keys at a highest level (e.g., "2D/3D Filters") corresnpond to the contents of the dropdown menu, and the key "sub" denotes the numbers of lower-level contents that are generated afterwards. The keys "Func" specify the functions that are called in UNI_EM\plugins\Plugin.py. Here, check the content of Plugin.py:
 ```python
 sys.path.append(path.join(plugins_dir, "Template"))
 from Dialog_Template   import Dialog_Template
