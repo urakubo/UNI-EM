@@ -4,7 +4,7 @@
 - [How to use: 3D annotator](HowToUse.md#3D-annotator)
 - [How to use: 2D DNN](HowToUse.md#2D-DNN)
 - [How to use: 3D FFN](HowToUse.md#3D-FFN)
-- [How to use: 2D and 3D filters](HowToUse.md#2D-and-3D-filters)
+- [How to use: 2D and 3D filters](HowToUse.md#2D/3D-Filters)
 - [Example workflow1: Mitochondria segmentation using 2D DNN](Workflow1.md)
 - [Example workflow2: Membrane segmentation using 3D FFN](Workflow2.md) 
 
