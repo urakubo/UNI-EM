@@ -108,7 +108,7 @@ Michał Januszewski 博士らが開発した、Flood filling network (FFN)に基
 4. "Obtain sample output" ボタンをクリックすると、"Filter Application"各フィルタを適用し、結果を右の"Sample output image" 表示します。所望の結果が得られるまで、フィルタの組み合わせおよびパラメータを変更すると共に、サンプル画像を確認する操作を繰り返してください。
 5. 満足のいくフィルタが得られたら、"Execute" ボタンをクリックしてください。"Target Folder"中の各画像に同フィルタを適用して、出力を"Output Folder"に保存します。
 6. フィルタ設定を保存したい場合は"Save Parameters"ボタンを、保存したフィルタを読みだしたい場合は"Load Parameters"ボタンをクリックしてください。
-7. Normalized ボタンをチェックすると、表示画像の強度を規格化して見やすくします。
+7. Normalized ボタンをチェックすると、表示画像の強度が規格化された見やすくなります。
 
 <BR>
 <p align="center">
