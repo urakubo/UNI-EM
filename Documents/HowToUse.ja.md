@@ -110,3 +110,9 @@ Michał Januszewski 博士らが開発した、Flood filling network (FFN)に基
 6. フィルタ設定を保存したい場合は"Save Parameters"ボタンを、保存したフィルタを読みだしたい場合は"Load Parameters"ボタンをクリックしてください。
 7. Normalized ボタンをチェックすると、表示画像の強度を規格化して見やすくします。
 
+<BR>
+<p align="center">
+  <img src="Images/Filter.png" alt="Filter" width="800">
+</p>
+<BR>
+
