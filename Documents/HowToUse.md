@@ -142,6 +142,20 @@ The VAST Lite is recommended for the ground truth generation (https://software.r
 10. Check the quality of segmentation (inference) by use of colored images or Dojo proofreader.
 
 
-### 2D and 3D filters
-We equipped a variety of 2D and 3D image filters. Select Plugins → 2D/3D Filters. Those filters are intended to use a postprocessing of 2D DNN segmentation. I will soon describe how to use them.
+### 2D/3D Filters
+UNI-EM has a variety of 2D and 3D image filters. Select Plugins → 2D/3D Filters in the dropdown menu of UNI-EM. The dialog of 2D/3D Filters will appear.
+
+1.	Specify "Target Folder" and "Output Folder" at the bottom of the Dialog. The target folder contains target images applied to filters, and the filtered images are stored in the output folder. Confirm that the target images appear in the area "Target Image."
+2.	Drug a filter from "2D Filter" or "3D Filter" and drop it in "Filter Application". If users apply multiple filters, drug and drop them to "Filter Application".
+3.	Specify filter parameters. Parameter setting widget appears if users click the parameter in "Filter Application".
+4.	Click "Obtain sample output" to obtain a sample output image after the filter application. Repeat trial-and-error until obtaining a required image.
+5.	Click "Execute". The filter(s) are applied to the images in "Target Folder", and the outputs are stored in "Output Folder."
+6.	Click "Save Parameters" and "Load Paraemters" to save and load the parameter setting.
+7.	Check "Normalized" then image intensity is normalized for visibility.
+
+<BR>
+<p align="center">
+  <img src="Images/Filter.png" alt="Filter" width="800">
+</p>
+<BR>
 
