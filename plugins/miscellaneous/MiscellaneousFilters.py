@@ -2,7 +2,6 @@
 ##
 ##
 
-import dill
 import sys, os, time, errno
 import h5py
 import cv2
