@@ -2,7 +2,7 @@
 
 - [How to use: Dojo proofreader](HowToUse.md#Dojo-proofreader)
 - [How to use: 3D annotator](HowToUse.md#3D-annotator)
-- [How to use: 2D DNN](HowToUse.md#2D-DNN)
+- [How to use: 2D CNN](HowToUse.md#2D-CNN)
 - [How to use: 3D FFN](HowToUse.md#3D-FFN)
 - [How to use: 2D and 3D filters](HowToUse.md#2D3D-Filters)
 - [Example workflow1: Mitochondria segmentation using 2D DNN](Workflow1.md)
@@ -49,8 +49,8 @@ Click the "Save image" button at the right side. A screenshot of the scene will 
 </p>
 <BR>
 
-### 2D DNN
-We implemented 2D CNN (Resnet/U-net/Highwaynet/Densenet)-based segmentation programs on Tensorflow V1.12. Programmed by Dr. Torsten Bullmann.
+### 2D CNN
+We implemented 2C CNN (Resnet/U-net/Highwaynet/Densenet)-based segmentation programs on Tensorflow V1.12. Programmed by Dr. Torsten Bullmann.
 
 	- https://github.com/tbullmann/imagetranslation-tensorflow
 
