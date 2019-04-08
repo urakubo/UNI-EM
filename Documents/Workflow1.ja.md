@@ -21,7 +21,7 @@ UNI-EMによる2D CNNセグメンテーションの一例として、ATUM/SEMに
 
 1. 下の Example2DNN.zip をダウンロードして展開してください。dataフォルダの中身をUNI-EMフォルダ（[UNI-EM]）中のdataフォルダの中身と入れ替えてください。"[UNI-EM]/data/DNN_training_images" にトレーニング画像、"[UNI-EM]/data/DNN_ground_truth" に教師セグメンテーションが入っています(**Fig. 1.1**)。この教師セグメンテーション用いて、2. 2次元CNNのトレーニングと推論から始めても構いませんし、次の手順に従ってDojoを用いて教師セグメンテーションを作成することもできます。
 
-	- "Example2DNN.zip": https://www.dropbox.com/s/k1baokh6yz1ucjk/Example2DNN.zip?dl=0
+- "Example2DNN.zip": https://www.dropbox.com/s/k1baokh6yz1ucjk/Example2DNN.zip?dl=0
 <BR>
 <p align="center">
   <img src="Images/Training_GroundTruth.png" alt="2D DNN Training" width="600">
@@ -30,11 +30,11 @@ UNI-EMによる2D CNNセグメンテーションの一例として、ATUM/SEMに
   <font size="5"> <b>Figure 1.1. Training EM image and mitochondria ground truth segmentation</b> </font>
 </p>
 <BR>
-	1. UNI-EMを起動してください。
-	1. UNI-EM上端のドロップダウンメニューより Dojo → Import EM Stack/Segmentation を選択して、Import Images & Segments ダイアログを起動してください(**Fig. 1.2**)。
-	- Source Image Folder を **"[UNI-EM]/data/DNN_trainig _images"** に設定してください。
-	- Use blank segmentationをチェックして Segmentation folderを無効にしてください。
-	- Destination Dojo Folderに分かりやすい場所のフォルダを指定してください。フォルダ中にDojo形式でファイルが保存されます。
+	* UNI-EMを起動してください。
+	* UNI-EM上端のドロップダウンメニューより Dojo → Import EM Stack/Segmentation を選択して、Import Images & Segments ダイアログを起動してください(**Fig. 1.2**)。
+		- Source Image Folder を **"[UNI-EM]/data/DNN_trainig _images"** に設定してください。
+		- Use blank segmentationをチェックして Segmentation folderを無効にしてください。
+		- Destination Dojo Folderに分かりやすい場所のフォルダを指定してください。フォルダ中にDojo形式でファイルが保存されます。
 	1. Import Images & Segments ダイアログ最下段の OK をクリックして、Dojoファイルの生成を行ってください。ファイル作成後、Dojo が起動します (**Fig. 1.3**)。
 	1. 下段のSliceバー(**Fig. 1.3a**)、上段のZoomバー(**Fig. 1.3b**)を動かして、Dojoの動作を確認してください。 
 	1. ひょうたん形状のAdjustボタンをクリックして(**Fig. 1.3c**)、AdjustモードにしてくださいPaintID (既定ID[255]のままで) 下の色パネルをクリックしてください。ID 255のペイントモードになり、カーソル円が現れます ([=/-] で拡縮可)。ミトコンドリア部分をペイントしてセグメンテーション像を作成してください(**Fig. 1.3** 赤矢印)。Tabボタンを押すとペイントが反映されます。Escボタンを押すとキャンセルになります。また、消しゴムをクリックしたのち、余分な部分をドラッグして余分な部分を削ってください。Tabボタンで消去を反映し、Escボタンで消去をキャンセルします。
