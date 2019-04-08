@@ -130,16 +130,10 @@ Download "Example2DNN.zip" from the link below and unzip it on your UNI-EM insta
 	- Confirm that the thumbnail image of the images in "Target Folder" appears in the area "Target image" (**Fig. 3d**). Press the Obtain sample output button (**Fig. 3e**), then see an example output after passing those two image filters (**Fig. 3f**).
 
 9. Click the Execute button, then the filters "binarization → 3D labeling" will be applied (**Fig. 3g**). Users will see the following progress messages, and the processed images will be stored in "Output Folder" .
-```2D Binarization
-        Target Folder:  [UNI-EM]/data/_2DNN_inference
-        Output Folder:  [UNI-EM]/data/_2DNN_segmentation
-        No: 0
-        No: 1
-        ...
-        ...
-        No: 98
-        No: 99
-        Binary was executed!
+```
+	Loading images ...
+	Saving images ...
+	2D/3D filters were applied!
 ```
 
 <p align="center">
