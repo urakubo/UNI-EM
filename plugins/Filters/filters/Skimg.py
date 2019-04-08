@@ -24,30 +24,15 @@ class Skimg():
         return labels
 
 
-    def __init__(self, u_info):
-
-        datadir =  u_info.data_path
-        imgpath =  os.path.join(datadir, "DNN_segmentation")
-        outpath =  os.path.join(datadir, "DNN_segmentation")
-        self.paramfile = os.path.join(datadir, "parameters","Watershed2D_Skimg.pickle")
-
-        self.filter_name = 'Watershed2D'
-
+    def __init__(self):
         self.tips = [
-                        'Binarization threshold to obtain isolated peaks'
-                        'Minimum number of pixels separating peaks'
-                        'Path to folder containing images',
-                        'Path to folder for storing results'
+                        'Binarization threshold to obtain isolated peaks',
+                        'Minimum number of pixels separating peaks',
                         ]
-
 
         self.args = [
                         ['Binarization threshold', 'SpinBox', [1, 8, 256]],
                         ['Min distance', 'SpinBox', [1, 10, 256]],
-                        ['Target Folder',    'LineEdit', imgpath, 'Browsedir'],
-                        ['Output Folder',   'LineEdit', outpath, 'Browsedir']
             ]
-
-        self.output_bitdepth = '16'
 
 

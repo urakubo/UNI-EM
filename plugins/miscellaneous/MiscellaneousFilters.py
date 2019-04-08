@@ -2,13 +2,14 @@
 ##
 ##
 
-
+import dill
 import sys, os, time, errno
 import h5py
 import cv2
 import png
 from itertools import product
 import glob
+import copy
 
 import numpy as np
 import copy
@@ -28,8 +29,10 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 icon_dir = path.join(main_dir, "icons")
 segmentation_dir = path.join(main_dir, "segment")
+sys.path.append(main_dir)
 sys.path.append(segmentation_dir)
 
+import miscellaneous.Miscellaneous as m
 
 class _MyListModel(QAbstractListModel):
     def __init__(self, datain, parent=None, *args):
@@ -149,8 +152,7 @@ class _Dialog_ImageFolder():
         return self.newdir
 
 
-
-class MiscellaneousPlugins():
+class MiscellaneousFilters():
     ##
     def browse_dir_img(self, lineedit_obj):
         currentdir = lineedit_obj.text()
@@ -183,99 +185,82 @@ class MiscellaneousPlugins():
         return True
 
 
-    def print_current_states(self, obj_args, args, args_title):
-        for i, arg in enumerate(args_title):
-            if   args[i][1] == 'LineEdit':
-                param = obj_args[i].text()
-                print("{0:>20} : {1:s}".format(arg, param))
-            elif args[i][1] == 'SpinBox':
-                param = obj_args[i].value()
-                print("{0:>20} : {1:d}".format(arg, param))
-            elif args[i][1] == 'ComboBox':
-                param = obj_args[i].currentText()
-                print("{0:>20} : {1:s}".format(arg, param))
-            elif args[i][1] == 'Tab':
-                param = obj_args[i].currentIndex()
-                print("{0:>20} : {1:s}".format(arg, obj_args[i].tabText(param)))
-            elif args[i][1] == 'CheckBox':
-                param = obj_args[i].checkState()
-                print("{0:>20} : {1:d}".format(arg, param))
-
-
-    def save_params(self, obj_args, args, filter_name):
+    def save_params(self, args, obj_args):
         #
         args_header = [args[i][0] for i in range(len(args))]
         id = args_header.index('Save Parameters')
         filename = obj_args[id].text()
-        params = self.ObtainParams(obj_args, args)
+        print('\nSave file : ', filename)
+        print()
 
-        print('')
-        print('Save file : ', filename)
-        self.print_current_states(obj_args, args, args_header)
-        print('')
+        # Obtain paraems for save
+        w = self.parent.targetWidget
+        texts = []
+        instances = []
+        for i in range(w.count()):
+            item = w.item(i)
+            texts.append( item.text() )
+            instances.append( item.data(Qt.UserRole) )
+        print('Texts: ', texts)
+        print('Instances: ', instances)
         try:
             with open(filename, mode='wb') as f:
-                pickle.dump(params, f)
-            print(filter_name, ': Parameter file was saved.')
+                pickle.dump([texts, instances], f)
+            print(filename, ': Parameter file was saved.')
         except :
-            print(filter_name, ': Parameter file could not be saved.')
+            print(filename, ': Parameter file could not be saved.')
             return False
 
         return True
 
 
-
-
-    def load_params(self, obj_args, args, filter_name):
+    def load_params(self, args, obj_args):
         #
         args_header = [args[i][0] for i in range(len(args))]
         id = args_header.index('Load Parameters')
         filename = obj_args[id].text()
-        print('')
-        print('Load file : ', filename)
+        print('\nLoad file : ', filename)
+        print()
         try:
             with open(filename, mode='rb') as f:
-                params = pickle.load(f)
-        except :  # parent of IOError, OSError *and* WindowsError where available
-            print(filter_name, ': Parameter file cannot be open.')
+                [texts, instances] = pickle.load(f)
+        except :
+            print(filename, ': Parameter file cannot be open.')
             return False
 
-        for i, arg in enumerate(args_header):
-            if   args[i][1] == 'LineEdit':
-                obj_args[i].setText( params[args_header[i]] )
-            elif args[i][1] == 'SpinBox':
-                obj_args[i].setValue( params[args_header[i]] )
-            elif args[i][1] == 'ComboBox':
-                id = obj_args[i].findText( params[args_header[i]] )
-                obj_args[i].setCurrentIndex( id )
-            elif args[i][1] == 'Tab':
-                obj_args[i].setCurrentIndex( params[args_header[i]] )
-            elif args[i][1] == 'CheckBox':
-                obj_args[i].setCheckState( params[args_header[i]] )
+        for text, instance in zip(texts, instances):
+            print('Loaded', text, instance)
 
-        self.print_current_states(obj_args, args, args_header)
+        # w = self.parent.listManager
+        # for instance in instances:
+        #    w.addFilter(instance)
+
         return True
 
     ##
     ##
     ##
-    def ObtainParams(self, obj_args, args):
-
+    def ObtainParams(self, args):
         args_header = [args[i][0] for i in range(len(args))]
         params = {}
         for i, arg in enumerate(args):
-            param = {}
             if   args[i][1] == 'LineEdit':
-                param = obj_args[i].text()
+                param = args[i][2][1]
             elif args[i][1] == 'SpinBox':
-                param = obj_args[i].value()
+                param = args[i][2][1]
             elif args[i][1] == 'ComboBox':
-                param = obj_args[i].currentText()
-            elif args[i][1] == 'Tab':
-                param = obj_args[i].currentIndex()
+                param = args[i][2][0]
             elif args[i][1] == 'CheckBox':
-                param = obj_args[i].checkState()
+                param = args[i][2]
             params[args_header[i]] = param
+        return params
+
+
+    def ObtainParamsBottomTable(self, obj_args, args):
+        args_header = [args[i][0] for i in range(len(args))]
+        params = {}
+        for i, arg in enumerate(args):
+            params[args_header[i]] = obj_args[i].text()
         return params
 
 
@@ -284,7 +269,7 @@ class MiscellaneousPlugins():
 
         ## Obtain parameters
 
-        params = self.ObtainParams(self.obj_args, self.args)
+        params = self.ObtainParamsBottomTable(self.obj_args, self.args)
         #
         input_path = params['Target Folder']
         #
@@ -295,5 +280,97 @@ class MiscellaneousPlugins():
         filestack.extend(sorted(glob.glob(search2)))
         filestack.extend(sorted(glob.glob(search3)))
         return filestack
+
+
+    def Execute3D(self, w):
+        ##
+        ## Load image
+        ##
+        filestack = self.ObtainTarget()
+        params = self.ObtainParamsBottomTable(self.obj_args, self.args)
+        output_path = params['Output Folder']
+        numz = len(filestack)
+        size = cv2.imread(filestack[0], cv2.IMREAD_GRAYSCALE).shape
+        input_volume = np.zeros([size[0], size[1], numz], np.uint16)
+
+        print('Loading images ...')
+        for zi, filename in enumerate(filestack):
+            input_volume[:, :, zi] = cv2.imread(filename, cv2.IMREAD_GRAYSCALE).astype(np.uint16)
+        ##
+        ## 2D/3D filter application
+        ##
+        for i in range(w.count()):
+            item = w.item(i)
+            text = item.text()
+            instance = item.data(Qt.UserRole)
+            params = self.ObtainParams(instance.args)
+            type = self.fi.get_type(text)
+            cls = self.fi.get_class(text)
+
+            if type == '2d':
+                for zi in range(numz):
+                    input_image = input_volume[:, :, zi]
+                    output_image = cls.Filter(self, input_image, params)
+                    input_volume[:, :, zi] = output_image.astype(np.uint16)
+            elif type == '3d':
+                tmp = cls.Filter(self, input_volume, params)
+                input_volume = tmp.astype(np.uint16)
+
+        # Save segmentation
+        print('Saving images ...')
+        for zi, filename in enumerate(filestack):
+            output_name = os.path.basename(filename)
+            savename = os.path.join(output_path, output_name)
+            root, ext = os.path.splitext(savename)
+            if ext == ".tif" or ext == ".tiff" or ext == ".TIF" or ext == ".TIFF":
+                m.save_tif16(input_volume[:, :, zi], savename)
+            elif ext == ".png" or ext == ".PNG":
+                m.save_png16(input_volume[:, :, zi], savename)
+        print('2D/3D filters were applied!')
+
+    def Execute2D(self, w):
+        ##
+        ## Input files /Output folder
+        ##
+        self.filestack = self.ObtainTarget()
+        params = self.ObtainParamsBottomTable(self.obj_args, self.args)
+        output_path = params['Output Folder']
+        for filename in self.filestack:
+            output_name = os.path.basename(filename)
+            print(output_name)
+            input_image = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
+            output_image = self.FilterApplication2D(w, input_image)
+            output_dtype = output_image.dtype
+            savename = os.path.join(output_path, output_name)
+            root, ext = os.path.splitext(savename)
+            if ext == ".tif" or ext == ".tiff" or ext == ".TIF" or ext == ".TIFF":
+                if output_dtype == 'uint16':
+                    m.save_tif16(output_image, savename)
+                elif output_dtype == 'uint8':
+                    m.save_tif8(output_image, savename)
+                else:
+                    print('dtype mismatch: ', output_dtype)
+            elif ext == ".png" or ext == ".PNG":
+                if output_dtype == 'uint16':
+                    m.save_png16(output_image, savename)
+                elif output_dtype == 'uint8':
+                    m.save_png8(output_image, savename)
+                else:
+                    print('dtype mismatch: ', output_dtype)
+        print('2D filters were applied!')
+
+
+
+    def FilterApplication2D(self, w, image):
+        for i in range(w.count()):
+            item = w.item(i)
+            text = item.text()
+            instance = item.data(Qt.UserRole)
+            params   = self.ObtainParams(instance.args)
+            type = self.fi.get_type(text)
+            # print( text, params, type )
+            cls = self.fi.get_class(text)
+            image = cls.Filter( self, image, params )
+        return image
 
     ##

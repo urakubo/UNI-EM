@@ -11,21 +11,16 @@ sys.path.append(plugins_dir)
 # Also edit "menu.json" for a plugins pulldown menu.
 # ------------------------------------------------------------
 
-sys.path.append(path.join(plugins_dir, "_3D_filters"))
-sys.path.append(path.join(plugins_dir, "_2D_filters"))
+sys.path.append(path.join(plugins_dir, "Filters"))
 sys.path.append(path.join(plugins_dir, "Template"))
-from Dialog_3D_Filters import Dialog_3D_Filters
-from Dialog_2D_Filters import Dialog_2D_Filters
-from Dialog_Template   import Dialog_Template
+from Dialog_Filters  import Dialog_Filters
+from Dialog_Template import Dialog_Template
 
 
 class Plugins():
 
-    def _2D_Filters(self):
-        self.tmp = Dialog_2D_Filters(self)
-
-    def _3D_Filters(self):
-        self.tmp = Dialog_3D_Filters(self)
+    def Filters(self):
+        self.tmp = Dialog_Filters(self)
 
     def Template(self):
         self.tmp = Dialog_Template(self)

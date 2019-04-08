@@ -11,6 +11,7 @@ import cv2
 class Binary():
 
     def Filter(self, input_image, params):
+        input_image = input_image.astype(np.uint8)
         if params['Invert'] == Qt.Checked:
             ret,processed_image = cv2.threshold(input_image, params['Threshold'], params['Max value'], cv2.THRESH_BINARY_INV)
         else :
@@ -19,21 +20,11 @@ class Binary():
         return processed_image
 
 
-    def __init__(self, u_info):
-
-        datadir =  u_info.data_path
-        imgpath =  os.path.join(datadir, "DNN_segmentation")
-        outpath =  os.path.join(datadir, "DNN_segmentation")
-        self.paramfile = os.path.join(datadir, "parameters", "Binary_2D.pickle")
-
-        self.filter_name = 'Binary'
-
+    def __init__(self):
         self.tips = [
                         'Threshold of separation',
                         'Maximum value',
                         'Inverse step',
-                        'Path to folder containing images',
-                        'Path to folder for storing results'
                         ]
 
 
@@ -41,8 +32,6 @@ class Binary():
                         ['Threshold', 'SpinBox', [0, 127, 255]],
                         ['Max value', 'SpinBox', [0, 255, 255]],
                         ['Invert', 'CheckBox', False ],
-                        ['Target Folder', 'LineEdit', imgpath, 'Browsedir'],
-                        ['Output Folder', 'LineEdit', outpath, 'Browsedir']
             ]
 
         self.output_bitdepth = '8'

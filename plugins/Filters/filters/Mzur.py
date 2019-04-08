@@ -24,25 +24,10 @@ class Mzur():
         return labels
 
 
-    def __init__(self, u_info):
+    def __init__(self):
+        self.tips = []
 
-        datadir =  u_info.data_path
-        imgpath =  os.path.join(datadir, "_2DNN_inference")
-        outpath =  os.path.join(datadir, "_2DNN_segmentation")
-        self.paramfile = os.path.join(datadir, "parameters", "Watershed2D_Mzur.pickle")
-
-        self.filter_name = 'Mzur'
-
-        self.tips = [
-                        'Path to folder containing images',
-                        'Path to folder for storing results'
-                        ]
-
-
-        self.args = [
-                        ['Target Folder',    'LineEdit', imgpath, 'Browsedir'],
-                        ['Output Folder',   'LineEdit', outpath, 'Browsedir']
-            ]
+        self.args = []
 
         self.output_bitdepth = '16'
 
