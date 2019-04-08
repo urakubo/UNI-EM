@@ -41,12 +41,13 @@ UNI-EMによる2D CNNセグメンテーションの一例として、ATUM/SEMに
 - Destination Dojo Folderに分かりやすい場所のフォルダを指定してください。フォルダ中にDojo形式でファイルが保存されます。
 <BR>
 <p align="center">
-  <img src="Images/GT_import.png" alt="Import a training image" width="400">
+  <img src="Images/GT_import.png" alt="Import a training image" width="500">
 </p>
 <p align="center">
   <font size="5"> <b>Figure 1.2. Importing a training image to Dojo</b> </font>
 </p>
 <BR>
+
 - Import Images & Segments ダイアログ最下段の OK をクリックして、Dojoファイルの生成を行ってください。ファイル作成後、Dojo が起動します (**Fig. 1.3**)。
 - 下段のSliceバー(**Fig. 1.3a**)、上段のZoomバー(**Fig. 1.3b**)を動かして、Dojoの動作を確認してください。 
 - ひょうたん形状のAdjustボタンをクリックして(**Fig. 1.3c**)、AdjustモードにしてくださいPaintID (既定ID[255]のままで) 下の色パネルをクリックしてください。ID 255のペイントモードになり、カーソル円が現れます ([=/-] で拡縮可)。ミトコンドリア部分をペイントしてセグメンテーション像を作成してください(**Fig. 1.3** 赤矢印)。Tabボタンを押すとペイントが反映されます。Escボタンを押すとキャンセルになります。また、消しゴムをクリックしたのち、余分な部分をドラッグして余分な部分を削ってください。Tabボタンで消去を反映し、Escボタンで消去をキャンセルします。
