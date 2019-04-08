@@ -21,7 +21,7 @@ UNI-EMによる2D CNNセグメンテーションの一例として、ATUM/SEMに
 
 1. 下の Example2DNN.zip をダウンロードして展開してください。dataフォルダの中身をUNI-EMフォルダ（[UNI-EM]）中のdataフォルダの中身と入れ替えてください。"[UNI-EM]/data/DNN_training_images" にトレーニング画像、"[UNI-EM]/data/DNN_ground_truth" に教師セグメンテーションが入っています(**Fig. 1.1**)。この教師セグメンテーション用いて、2. 2次元CNNのトレーニングと推論から始めても構いませんし、次の手順に従ってDojoを用いて教師セグメンテーションを作成することもできます。
 
-- "Example2DNN.zip": https://www.dropbox.com/s/k1baokh6yz1ucjk/Example2DNN.zip?dl=0
+	- "Example2DNN.zip": https://www.dropbox.com/s/k1baokh6yz1ucjk/Example2DNN.zip?dl=0
 <BR>
 <p align="center">
   <img src="Images/Training_GroundTruth.png" alt="2D DNN Training" width="600">
@@ -30,7 +30,6 @@ UNI-EMによる2D CNNセグメンテーションの一例として、ATUM/SEMに
   <font size="5"> <b>Figure 1.1. Training EM image and mitochondria ground truth segmentation</b> </font>
 </p>
 <BR>
-
 	- UNI-EMを起動してください。
 	* UNI-EM上端のドロップダウンメニューより Dojo → Import EM Stack/Segmentation を選択して、Import Images & Segments ダイアログを起動してください(**Fig. 1.2**)。
 		- Source Image Folder を **"[UNI-EM]/data/DNN_trainig _images"** に設定してください。
