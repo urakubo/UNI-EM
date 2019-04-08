@@ -130,13 +130,13 @@ Select "Plugins → 2D Filters" from the UNI-EM dropdown menu to launch the dial
 
 #### Postprocessing: Binarization and 3D labeling
 
-8. Select Plugins → 2D/3D Filters from the dropdown menu. The 2D/3D filters dialog will appear (**Fig. 3**)。
+8. Select "Plugins → 2D/3D Filters" from the dropdown menu. The 2D/3D filters dialog will appear (**Fig. 3**)。
 	- Drag Binary and 3D Label to the area of "Filter Application" (**Fig. 3a**).
-	- Confirm that "Target Folder" targets [UNI-EM]/data/DNN_ segmentation (**Fig. 3b**).
-	- Confirm that "Output Folder" targets [UNI-EM]/data/DNN_segmentation (**Fig. 3c**).
-	- Confirm that the thumbnail image of images in "Target Folder" appears in the area "Target image" (**Fig. 3d**). Press the Obtain sample output button (**Fig. 3e**), then see an example output image after passing those two filters (**Fig. 3f**).
+	- Confirm that "Target Folder" shows [UNI-EM]/data/DNN_ segmentation (**Fig. 3b**).
+	- Confirm that "Output Folder" shows [UNI-EM]/data/DNN_segmentation (**Fig. 3c**).
+	- Confirm that the thumbnail image of the images in "Target Folder" appears in the area "Target image" (**Fig. 3d**). Press the Obtain sample output button (**Fig. 3e**), then see an example output after passing those two image filters (**Fig. 3f**).
 
-9. Click the Execute button, then the filters binarization → 3D labeling will be applied (**Fig. 3g**). Users will see the following progress messages, and the processed images will be stored in "Output Folder" .
+9. Click the Execute button, then the filters "binarization → 3D labeling" will be applied (**Fig. 3g**). Users will see the following progress messages, and the processed images will be stored in "Output Folder" .
 ```2D Binarization
         Target Folder:  [UNI-EM]/data/_2DNN_inference
         Output Folder:  [UNI-EM]/data/_2DNN_segmentation
