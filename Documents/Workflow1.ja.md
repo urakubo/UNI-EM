@@ -41,7 +41,7 @@ UNI-EMによる2D CNNセグメンテーションの一例として、ATUM/SEMに
 - Destination Dojo Folderに分かりやすい場所のフォルダを指定してください。フォルダ中にDojo形式でファイルが保存されます。
 <BR>
 <p align="center">
-  <img src="Images/GT_import.png" alt="Import a training image" width="500">
+  <img src="Images/GT_import.png" alt="Import a training image" width="00">
 </p>
 <p align="center">
   <font size="5"> <b>Figure 1.2. Importing a training image to Dojo</b> </font>
