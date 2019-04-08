@@ -77,18 +77,18 @@ Download "Example2DNN.zip" from the link below and unzip it on your UNI-EM insta
 
 4. Start Res-net training by clicking the Execute button (**Fig. 2h**). Users will see initial and progress messages in the console window (shown below). It takes 6-min for a desktop PC equipped with a NIVIDA GTX1070 GPU. The console window shows a message "saving model" when the training is finished. During and after the training period, users can visually inspect its progression through Tensorboad by selecting "Segmentation → Tensorboard".
 ```2D DNN Training
-        progress  epoch 49  step 1  image/sec 5.2  remaining 6m
+        progress  epoch 49  step 1  image/sec 5.2  remaining 6 min
         discrim_loss 0.49639216
         gen_loss_GAN 0.41848987
         gen_loss_classic 0.13485438
         recording summary
-        progress  epoch 99  step 1  image/sec 5.5  remaining 5m
+        progress  epoch 99  step 1  image/sec 5.5  remaining 5 min
         discrim_loss 0.69121116
         gen_loss_GAN 0.73412275
         gen_loss_classic 0.13613938
         ...
         ...
-        progress  epoch 1999  step 1  image/sec 7.3  remaining 0m
+        progress  epoch 1999  step 1  image/sec 7.3  remaining 0 min
         discrim_loss 0.715416
         gen_loss_GAN 2.1579466
         gen_loss_classic 0.04729831
