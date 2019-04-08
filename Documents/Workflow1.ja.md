@@ -30,16 +30,19 @@ UNI-EMによる2D CNNセグメンテーションの一例として、ATUM/SEMに
   <font size="5"> <b>Figure 1.1. Training EM image and mitochondria ground truth segmentation</b> </font>
 </p>
 <BR>
-	- UNI-EMを起動してください。
-	- UNI-EM上端のドロップダウンメニューより Dojo → Import EM Stack/Segmentation を選択して、Import Images & Segments ダイアログを起動してください(**Fig. 1.2**)。
-		- Source Image Folder を **"[UNI-EM]/data/DNN_trainig _images"** に設定してください。
-		- Use blank segmentationをチェックして Segmentation folderを無効にしてください。
-		- Destination Dojo Folderに分かりやすい場所のフォルダを指定してください。フォルダ中にDojo形式でファイルが保存されます。
-	* Import Images & Segments ダイアログ最下段の OK をクリックして、Dojoファイルの生成を行ってください。ファイル作成後、Dojo が起動します (**Fig. 1.3**)。
-	* 下段のSliceバー(**Fig. 1.3a**)、上段のZoomバー(**Fig. 1.3b**)を動かして、Dojoの動作を確認してください。 
-	1. ひょうたん形状のAdjustボタンをクリックして(**Fig. 1.3c**)、AdjustモードにしてくださいPaintID (既定ID[255]のままで) 下の色パネルをクリックしてください。ID 255のペイントモードになり、カーソル円が現れます ([=/-] で拡縮可)。ミトコンドリア部分をペイントしてセグメンテーション像を作成してください(**Fig. 1.3** 赤矢印)。Tabボタンを押すとペイントが反映されます。Escボタンを押すとキャンセルになります。また、消しゴムをクリックしたのち、余分な部分をドラッグして余分な部分を削ってください。Tabボタンで消去を反映し、Escボタンで消去をキャンセルします。
-	1. ミトコンドリアのペイントが終了したら、ドロップダウンメニューより Dojo →Save Dojo Folderとしてペイント結果を保存してください。
-	1. ドロップダウンメニューより Dojo →Export Segmentationとして、ペイント結果を保存します。Formatを"PNG, 8bit, Grayscale" としてくださいFilenameは空欄で結構です。OKをクリックしてダイアログより保存先フォルダを指定すると、ペイント結果（教師セグメンテーション像）が0000.pngとして保存されます。同教師セグメンテーション像を"[UNI-EM]/data/DNN_ground_truth"に置いてください。
+- UNI-EMを起動してください。
+
+- UNI-EM上端のドロップダウンメニューより Dojo → Import EM Stack/Segmentation を選択して、Import Images & Segments ダイアログを起動してください(**Fig. 1.2**)。
+
+- Source Image Folder を **"[UNI-EM]/data/DNN_trainig _images"** に設定してください。
+	
+- Use blank segmentationをチェックして Segmentation folderを無効にしてください。
+- Destination Dojo Folderに分かりやすい場所のフォルダを指定してください。フォルダ中にDojo形式でファイルが保存されます。
+- Import Images & Segments ダイアログ最下段の OK をクリックして、Dojoファイルの生成を行ってください。ファイル作成後、Dojo が起動します (**Fig. 1.3**)。
+- 下段のSliceバー(**Fig. 1.3a**)、上段のZoomバー(**Fig. 1.3b**)を動かして、Dojoの動作を確認してください。 
+- ひょうたん形状のAdjustボタンをクリックして(**Fig. 1.3c**)、AdjustモードにしてくださいPaintID (既定ID[255]のままで) 下の色パネルをクリックしてください。ID 255のペイントモードになり、カーソル円が現れます ([=/-] で拡縮可)。ミトコンドリア部分をペイントしてセグメンテーション像を作成してください(**Fig. 1.3** 赤矢印)。Tabボタンを押すとペイントが反映されます。Escボタンを押すとキャンセルになります。また、消しゴムをクリックしたのち、余分な部分をドラッグして余分な部分を削ってください。Tabボタンで消去を反映し、Escボタンで消去をキャンセルします。
+- ミトコンドリアのペイントが終了したら、ドロップダウンメニューより Dojo →Save Dojo Folderとしてペイント結果を保存してください。
+- ドロップダウンメニューより Dojo →Export Segmentationとして、ペイント結果を保存します。Formatを"PNG, 8bit, Grayscale" としてくださいFilenameは空欄で結構です。OKをクリックしてダイアログより保存先フォルダを指定すると、ペイント結果（教師セグメンテーション像）が0000.pngとして保存されます。同教師セグメンテーション像を"[UNI-EM]/data/DNN_ground_truth"に置いてください。
 
 
 <BR>
