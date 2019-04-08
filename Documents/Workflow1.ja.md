@@ -31,9 +31,9 @@ UNI-EMによる2D CNNセグメンテーションの一例として、ATUM/SEMに
 </p>
 <BR>
 	
-	1. UNI-EMを起動してください。
+* UNI-EMを起動してください。
 	
-	1. UNI-EM上端のドロップダウンメニューより Dojo → Import EM Stack/Segmentation を選択して、Import Images & Segments ダイアログを起動してください(**Fig. 1.2**)。
+* UNI-EM上端のドロップダウンメニューより Dojo → Import EM Stack/Segmentation を選択して、Import Images & Segments ダイアログを起動してください(**Fig. 1.2**)。
 
 	- Source Image Folder を **"[UNI-EM]/data/DNN_trainig _images"** に設定してください。
 	- Use blank segmentationをチェックして Segmentation folderを無効にしてください。
@@ -49,7 +49,7 @@ UNI-EMによる2D CNNセグメンテーションの一例として、ATUM/SEMに
 </p>
 <BR>
 
-	1. Import Images & Segments ダイアログ最下段の OK をクリックして、Dojoファイルの生成を行ってください。ファイル作成後、Dojo が起動します (**Fig. 1.3**)。
+* Import Images & Segments ダイアログ最下段の OK をクリックして、Dojoファイルの生成を行ってください。ファイル作成後、Dojo が起動します (**Fig. 1.3**)。
 
 	1. 下段のSliceバー(**Fig. 1.3a**)、上段のZoomバー(**Fig. 1.3b**)を動かして、Dojoの動作を確認してください。 
 
