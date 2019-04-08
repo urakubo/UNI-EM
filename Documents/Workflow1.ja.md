@@ -2,7 +2,7 @@
 
 - [使い方：校正ソフトウェアDojo](HowToUse.ja.md#校正ソフトウェアDojo)
 - [使い方：3D Annotator](HowToUse.ja.md#3D-Annotator)
-- [使い方：2次元DNNを用いたセグメンテーション](HowToUse.ja.md#2次元DNNを用いたセグメンテーション)
+- [使い方：2次元CNNを用いたセグメンテーション](HowToUse.ja.md#2次元CNNを用いたセグメンテーション)
 - [使い方：3次元FFNを用いたセグメンテーション](HowToUse.ja.md#3次元FFNを用いたセグメンテーション)
 - [使い方：2D/3Dフィルタ](HowToUse.ja.md#2D3Dフィルタ)
 - [適用事例1：2次元DNNによるミトコンドリアのセグメンテーション](Workflow1.ja.md)
@@ -31,6 +31,7 @@ UNI-EMによる2D CNNセグメンテーションの一例として、ATUM/SEMに
 </p>
 <BR>
 1.2 . UNI-EMを起動してください。
+	
 1.3 . UNI-EM上端のドロップダウンメニューより Dojo → Import EM Stack/Segmentation を選択して、Import Images & Segments ダイアログを起動してください(**Fig. 1.2**)。
 	- Source Image Folder を **"[UNI-EM]/data/DNN_trainig _images"** に設定してください。
 	- Use blank segmentationをチェックして Segmentation folderを無効にしてください。
@@ -42,15 +43,15 @@ UNI-EMによる2D CNNセグメンテーションの一例として、ATUM/SEMに
   <img src="Images/GT_import.png" alt="Import a training image" width="600">
 </p>
 <p align="center">
-  <font size="5"> <b>Figure 1.2. Import a training image to Dojo</b> </font>
+  <font size="5"> <b>Figure 1.2. Importing a training image to Dojo</b> </font>
 </p>
 <BR>
 
 1.4 . Import Images & Segments ダイアログ最下段の OK をクリックして、Dojoファイルの生成を行ってください。ファイル作成後、Dojo が起動します (**Fig. 1.3**)。
 
-1.5. 下段のSliceバー(**Fig. 4a**)、上段のZoomバー(**Fig. 4b**)を動かして、Dojoの動作を確認してください。 
+1.5. 下段のSliceバー(**Fig. 1.3a**)、上段のZoomバー(**Fig. 1.3b**)を動かして、Dojoの動作を確認してください。 
 
-1.6. ひょうたん形状のAdjustボタンをクリックして(**Fig. 1.3c**)、AdjustモードにしてくださいPaintID (既定ID[255]のままで) 下の色パネルをクリックしてください。ID 255のペイントモードになり、カーソル円が現れます ([=/-] で拡縮可)。ミトコンドリア部分をペイントしてセグメンテーション像を作成してください(**Fig. 1.3** 赤矢印)。ペイント結果は、Tabボタンを押すとペイントが反映されます。Escボタンを押すとキャンセルになります。また、消しゴムをクリックしたのち、余分な部分をドラッグして余分な部分を削ってください。Tabボタンで消去を反映し、Escボタンで消去をキャンセルします。
+1.6. ひょうたん形状のAdjustボタンをクリックして(**Fig. 1.3c**)、AdjustモードにしてくださいPaintID (既定ID[255]のままで) 下の色パネルをクリックしてください。ID 255のペイントモードになり、カーソル円が現れます ([=/-] で拡縮可)。ミトコンドリア部分をペイントしてセグメンテーション像を作成してください(**Fig. 1.3** 赤矢印)。Tabボタンを押すとペイントが反映されます。Escボタンを押すとキャンセルになります。また、消しゴムをクリックしたのち、余分な部分をドラッグして余分な部分を削ってください。Tabボタンで消去を反映し、Escボタンで消去をキャンセルします。
 
 1.7. ミトコンドリアのペイントが終了したら、ドロップダウンメニューより Dojo →Save Dojo Folderとしてペイント結果を保存してください。
 
@@ -61,7 +62,7 @@ UNI-EMによる2D CNNセグメンテーションの一例として、ATUM/SEMに
   <img src="Images/GT_Draw.png" alt="Drawing ground truth segmentation" width="600">
 </p>
 <p align="center">
-  <font size="5"> <b>Figure 1.3. Draw ground truth segmentation</b> </font>
+  <font size="5"> <b>Figure 1.3. Drawing ground truth segmentation</b> </font>
 </p>
 <BR>
 	
