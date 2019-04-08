@@ -121,15 +121,22 @@ Download "Example2DNN.zip" from the link below and unzip it on your UNI-EM insta
 <BR>
 
 
-#### Postprocessing: binarization and labeling
-
-8. Select "Plugins → 2D Filters" from the UNI-EM dropdown menu to launch the dialogue "2D Filters" (**Fig. 3**).
+Select "Plugins → 2D Filters" from the UNI-EM dropdown menu to launch the dialogue "2D Filters" (**Fig. 3**).
 	- Select the Binary tab (**Fig. 3a**).
 	- Confirm that "Target Folder" targets [UNI-EM]/data/_2DNN_inference (**Fig. 3b**).
 	- Confirm that "Output Folder" targets [UNI-EM]/data/_2DNN_segmentation (**Fig. 3c**)。
 	- Users will see a thumbnail image in the "Target image" space and manipulate it by the slide bars of Target X, Target Y, and Target Z (**Fig. 3d**). Users will see an example result of binarization by clicking "Obtain sample output" (**Fig. 3e**).
 
-9. Start binarization by clicking the "Execute" button (**Fig. 3f**). Users will see progress messages in the console window as follows.
+
+#### Postprocessing: Binarization and 3D labeling
+
+8. Select Plugins → 2D/3D Filters from the dropdown menu. The 2D/3D filters dialog will appear (**Fig. 3**)。
+	- Drag Binary and 3D Label to the area of "Filter Application" (**Fig. 3a**).
+	- Confirm that "Target Folder" targets [UNI-EM]/data/DNN_ segmentation (**Fig. 3b**).
+	- Confirm that "Output Folder" targets [UNI-EM]/data/DNN_segmentation (**Fig. 3c**).
+	- Confirm that the thumbnail image of images in "Target Folder" appears in the area "Target image" (**Fig. 3d**). Press the Obtain sample output button (**Fig. 3e**), then see an example output image after passing those two filters (**Fig. 3f**).
+
+9. Click the Execute button, then the filters binarization → 3D labeling will be applied (**Fig. 3g**). Users will see the following progress messages, and the processed images will be stored in "Output Folder" .
 ```2D Binarization
         Target Folder:  [UNI-EM]/data/_2DNN_inference
         Output Folder:  [UNI-EM]/data/_2DNN_segmentation
@@ -142,44 +149,31 @@ Download "Example2DNN.zip" from the link below and unzip it on your UNI-EM insta
         Binary was executed!
 ```
 
-10. Select "Plugins → 3D Filters" from the UNI-EM dropdown menu to launch the dialogue "3D Filters".
-	- Select the Label tab.
-	- Set "Target Folder" as **[UNI-EM]/data/_2DNN_segmentation** . 
-	- Set "Output Folder" as **[UNI-EM]/data/_2DNN_segmentation2** .
-
-11. Start labeling by clicking the "Execute" button. Users will see progress messages as follows.
-```3D Labeling
-        Target Folder:  [UNI-EM]/data/_2DNN_segmentation
-        Output Folder:  [UNI-EM]/data/_2DNN_segmentation2
-        Loading images ...
-        Saving images ...
-        Label was executed!
-```
-
 <p align="center">
-  <img src="Images/2D_Binary.png" alt="Dialog for binarization" width="600">
+  <img src="Images/2D_Postprocessing.png" alt="Dialog for binarization" width="600">
 </p>
 <p align="center">
-  <font size="5"> <b>Figure 3. Dialog for binarization</b> </font>
+  <font size="5"> <b>Figure 3. 2D/3D Filters</b> </font>
 </p>
 <BR>
 
+
 #### Proofreading, annotation, and visualization
 
-12. Select "Dojo → Import EM Stack/Segmentation" from the UNI-EM dropdown menu to launch the dialogue "Import Images & Segments".
+10. Select "Dojo → Import EM Stack/Segmentation" from the UNI-EM dropdown menu to launch the dialogue "Import Images & Segments".
 	- Set "Source Image Folder" as **[UNI-EM]/data/_2DNN_test_images** .
 	- Set "Source Segmentation Folder" as **[UNI-EM]/data/_2DNN_segmentation2** .
 	- Create a file folder and set it as "Destination Dojo Folder". Dojo style files will be generated in this folder.
 
-13. Generate the Dojo style files by clicking the "OK" button. The software Dojo will be launched after the file generation (**Fig. 4a**).
+11. Generate the Dojo style files by clicking the "OK" button. The software Dojo will be launched after the file generation (**Fig. 4a**).
 
-14. Inspect successful segmentation visually through manipulating the bottom slice bar (**Fig. 4b**), top Zoom bar (**Fig. 4c**), and top Opacity bar (**Fig. 4d**).
+12. Inspect successful segmentation visually through manipulating the bottom slice bar (**Fig. 4b**), top Zoom bar (**Fig. 4c**), and top Opacity bar (**Fig. 4d**).
 
-15. Correct erroneous segmentation by entering the mode "Adjust". Click an icon whose shape has a fused two area (**Fig. 4e**). In the adjust mode, users can fill voids by dragging the circled cursor from a filled area. The +/- keys change its radius. Press the Tab key to verify the change, or the Esc key to cancel the change. Users can erase unnecessary areas by dragging the circled cursor after clicking the eraser icon (**Fig. 4f**).
+13. Correct erroneous segmentation by entering the mode "Adjust". Click an icon whose shape has a fused two area (**Fig. 4e**). In the adjust mode, users can fill voids by dragging the circled cursor from a filled area. The +/- keys change its radius. Press the Tab key to verify the change, or the Esc key to cancel the change. Users can erase unnecessary areas by dragging the circled cursor after clicking the eraser icon (**Fig. 4f**).
 
-16. Save the segmentation after proofreading. Users can also export the segmentation by selecting "Dojo → Export Segmentation" from the UNI-EM dropdown menu. The export file style is sequential png/tiff images.
+14. Save the segmentation after proofreading. Users can also export the segmentation by selecting "Dojo → Export Segmentation" from the UNI-EM dropdown menu. The export file style is sequential png/tiff images.
 
-17. Select "Annotator → Open" from the UNI-EM dropdown menu to launch the 3D Annotator. Users can visually inspect the 3D shapes of target objects, save 3D images, annotate the target objects, and locate markers (**Fig. 4g**). Refer [3D Annotator](../README.md#3D-Annotator) for detail.
+15. Select "Annotator → Open" from the UNI-EM dropdown menu to launch the 3D Annotator. Users can visually inspect the 3D shapes of target objects, save 3D images, annotate the target objects, and locate markers (**Fig. 4g**). Refer [3D Annotator](../README.md#3D-Annotator) for detail.
 
 <p align="center">
   <img src="Images/Proof_Annotation.png" alt="Proofreader Dojo and 3D Annotator" width="1000">
