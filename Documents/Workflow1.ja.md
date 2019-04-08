@@ -119,15 +119,16 @@ UNI-EMによる2D CNNセグメンテーションの一例として、ATUM/SEMに
 <BR>
 
 
+
 #### ● 推論結果の後処理 [二値化およびラベル化]
 
-8. UNI-EM上端のドロップダウンメニューより Plugins → 2D Filters を選択して、2D Filters ダイアログを起動してください(**Fig. 3**)。
-	- Binary (二値化) タブを選択してください(**Fig. 3a**)。
-	- Target Folder が "[UNI-EM]/data/DNN_inference" であることを確認してください(**Fig. 3b**)。
+8. UNI-EM上端のドロップダウンメニューより Plugins → 2D/3D Filters を選択して、Filters ダイアログを起動してください(**Fig. 3**)。
+	- Binary (二値化) および3D Label （3次元ラベル）をFilter Application 欄にドラッグ＆ドロップしてください(**Fig. 3a**)。
+	- Target Folder が "[UNI-EM]/data/DNN_ segmentation " であることを確認してください(**Fig. 3b**)。
 	- Output Folder が "[UNI-EM]/data/DNN_segmentation" であることを確認してください(**Fig. 3c**)。
-	- Target X, Target Y, Target Z を動かすと Target Folder内画像のサムネイルが Target image に表示されます(**Fig. 3d**)。"Obtain sample output"ボタンをクリックすると、二値化結果が表示されます(**Fig. 3e**)。
+	- Target Folder内画像のサムネイルが Target image に表示されていることを確認してください(**Fig. 3d**)。"Obtain sample output"ボタンをクリックすると、二値化・3次元ラベルフィルタの処理結果が表示されます(**Fig. 3e**)。
 
-9. Binary タブ最下段の Execute をクリックして、二値化を行ってください(**Fig. 3f**)。コンソールに次の様なプログレスメッセージが現れます。
+9. Execute ボタンをクリックして、二値化を行ってください(**Fig. 3f**)。コンソールに次の様なプログレスメッセージが現れ、フィルタ処理後の画像がOutput Folder中に保存されます。
 ```2D Binarization
         Target Folder:  [UNI-EM]/data/_2DNN_inference
         Output Folder:  [UNI-EM]/data/_2DNN_segmentation
@@ -140,44 +141,31 @@ UNI-EMによる2D CNNセグメンテーションの一例として、ATUM/SEMに
         Binary was executed!
 ```
 
-10. UNI-EM上端のドロップダウンメニューより Plugins → 3D Filters を選択して、3D Filters ダイアログを起動してください。
-	- Label (ラベルづけ) タブを選択してください。
-	- Target Folder を **"[UNI-EM]/data/DNN_segmentation"** に設定してください。
-	- Output Folder を **"[UNI-EM]/data/DNN_segmentation2"** に設定してください。
-
-11. Label タブ最下段の Execute をクリックして、ラベルづけを行ってください。コンソールに次の様なプログレスメッセージが現れます。
-```3D Labeling
-        Target Folder:  [UNI-EM]/data/DNN_segmentation
-        Output Folder:  [UNI-EM]/data/DNN_segmentation2
-        Loading images ...
-        Saving images ...
-        Label was executed!
-```
-
 <p align="center">
-  <img src="Images/2D_Binary.png" alt="Dialog for binarization" width="600">
+  <img src="Images/_2D_Postprocessing.png" alt="Dialog for binarization" width="600">
 </p>
 <p align="center">
-  <font size="5"> <b>Figure 3. Dialog for binarization</b> </font>
+  <font size="5"> <b>Figure 3. 2D/3D Filters</b> </font>
 </p>
 <BR>
 
+
 #### ● 推論結果のプルーフリード、視覚化、アノテーション
 
-12. UNI-EM上端のドロップダウンメニューより Dojo → Import EM Stack/Segmentation を選択して、Import Images & Segments ダイアログを起動してください。
+10. UNI-EM上端のドロップダウンメニューより Dojo → Import EM Stack/Segmentation を選択して、Import Images & Segments ダイアログを起動してください。
 	- Source Image Folder を **"[UNI-EM]/data/DNN_test_images"** に設定してください。
 	- Source Segmentation Folder を **"[UNI-EM]/data/DNN_segmentation"** に設定してください。
 	- 分かりやすい場所にフォルダを作成して Destination Dojo Folder に指定してください。フォルダ中にDojo形式でファイルが保存されます。
 
-13. Import Images & Segments ダイアログ最下段の OK をクリックして、Dojoファイルの生成を行ってください。ファイル作成後、Dojo が起動します(**Fig. 4a**)。
+11. Import Images & Segments ダイアログ最下段の OK をクリックして、Dojoファイルの生成を行ってください。ファイル作成後、Dojo が起動します(**Fig. 4a**)。
 
-14. 下段のSliceバー(**Fig. 4b**)、上段のZoomバー(**Fig. 4c**)、Opacityバー(**Fig. 4d**)を動かしつつ、セグメンテーションの正確さを視覚的に確認してください。 
+12. 下段のSliceバー(**Fig. 4b**)、上段のZoomバー(**Fig. 4c**)、Opacityバー(**Fig. 4d**)を動かしつつ、セグメンテーションの正確さを視覚的に確認してください。 
 
-15. 不正確なセグメンテーションを校正する場合は、ひょうたん形状のAdjustボタンをクリックして(**Fig. 4e**)、Adjustモードにしてください。欠損がある部分に向かってカーソル円(+/-で拡縮)をドラッグすると欠損を埋めることができます。欠損を埋めたのち、Tabボタンを押して変更反映してください。Escボタンを押すとキャンセルになります。また、消しゴムをクリックしたのち(**Fig. 4f**）、余分な部分をドラッグして余分な部分を削ってください。Tabボタンで消去を反映し、Escボタンでキャンセルします。
+13. 不正確なセグメンテーションを校正する場合は、ひょうたん形状のAdjustボタンをクリックして(**Fig. 4e**)、Adjustモードにしてください。欠損がある部分に向かってカーソル円(+/-で拡縮)をドラッグすると欠損を埋めることができます。欠損を埋めたのち、Tabボタンを押して変更反映してください。Escボタンを押すとキャンセルになります。また、消しゴムをクリックしたのち(**Fig. 4f**）、余分な部分をドラッグして余分な部分を削ってください。Tabボタンで消去を反映し、Escボタンでキャンセルします。
 
-16. 十分に校正ができたら、セグメンテーションを保存してください。また、UNI-EM上端のドロップダウンメニューより Dojo → Export Segmentation を選択することにより、校正したセグメンテーションファイルをpng/tiff形式で保存することができます。 
+14. 十分に校正ができたら、セグメンテーションを保存してください。また、UNI-EM上端のドロップダウンメニューより Dojo → Export Segmentation を選択することにより、校正したセグメンテーションファイルをpng/tiff形式で保存することができます。 
 
-17. UNI-EM上端のドロップダウンメニューより Annotator → Open を選択して3D Annotatorを開いてください。セグメンテーションしたミトコンドリアの3次元形状の視覚化・保存、名前づけ（アノテーション）、Markerの設置ができます(**Fig. 4g**)。詳細な使い方は[使い方：3D Annotator](../README.ja.md#3D-Annotator)をご覧ください。
+15. UNI-EM上端のドロップダウンメニューより Annotator → Open を選択して3D Annotatorを開いてください。セグメンテーションしたミトコンドリアの3次元形状の視覚化・保存、名前づけ（アノテーション）、Markerの設置ができます(**Fig. 4g**)。詳細な使い方は[使い方：3D Annotator](../README.ja.md#3D-Annotator)をご覧ください。
 
 <p align="center">
   <img src="Images/Proof_Annotation.png" alt="Proofreader Dojo and 3D Annotator" width="1000">
