@@ -71,11 +71,11 @@ Download "Example2DNN.zip" from the link below and unzip it on your UNI-EM insta
 
 3. Select "Segmentation → 2DNN" from a UNI-EM dropdown menu to launch a dialogue that is named as 2D DNN (**Fig. 2a**).
 	- Select Training tab (**Fig. 2b**).
-	- Confirm that "Image Folder" targets [UNI-EM]/data/_2DNN_training_images (**Fig. 2c**), "Segmentation Folder" targets [UNI-EM]/data/_2DNN_ground_truth (**Fig. 2d**), and "Checkpoint Folder" targets [UNI-EM]/data/_2DNN_model_tensorflow (**Fig. 2e**).
+	- Confirm that "Image Folder" targets [UNI-EM]/data/DNN_training_images (**Fig. 2c**), "Segmentation Folder" targets [UNI-EM]/data/DNN_ground_truth (**Fig. 2d**), and "Checkpoint Folder" targets [UNI-EM]/data/DNN_model_tensorflow (**Fig. 2e**).
 	- Select "resnet" from the tab menu in the middle (**Fig. 2f**), and set "N res blocks" as 16 (**Fig. 2g**). This is because Resnet is one of the best network topologies for mitochondria segmentation (Ref 1).
 	- Save all parameters by clicking "Save Parameters". The saved parameters are loaded by clicking "Load Parameters".
 
-4. Start Res-net training by clicking the "Execute" button (**Fig. 2h**). Users will see initial and progress messages in the console window (shown below). It takes 6-min for a desktop PC equipped with a NIVIDA GTX1070 GPU. The console window shows a message "saving model" when the training is finished. During and after the training period, users can visually inspect its progression through Tensorboad by selecting "Segmentation → Tensorboard".
+4. Start Res-net training by clicking the Execute button (**Fig. 2h**). Users will see initial and progress messages in the console window (shown below). It takes 6-min for a desktop PC equipped with a NIVIDA GTX1070 GPU. The console window shows a message "saving model" when the training is finished. During and after the training period, users can visually inspect its progression through Tensorboad by selecting "Segmentation → Tensorboard".
 ```2D DNN Training
         progress  epoch 49  step 1  image/sec 5.2  remaining 6m
         discrim_loss 0.49639216
@@ -95,7 +95,7 @@ Download "Example2DNN.zip" from the link below and unzip it on your UNI-EM insta
         saving model
 ```
 5. Select the inference tab in the 2D DNN dialogue (**Fig. 2b**).
-	- Confirm that "Image Folder " targets [UNI-EM]/data/_2DNN_test_images, "Output Segmentation Folder" targets [UNI-EM]/data/_2DNN_inference, and "Checkpoint Folder" targets [UNI-EM]/data/_2DNN_model_tensorflow.
+	- Confirm that "Image Folder " targets [UNI-EM]/data/DNN_test_images, "Output Segmentation Folder" targets [UNI-EM]/data/DNN_segmentation, and "Checkpoint Folder" targets [UNI-EM]/data/DNN_model_tensorflow.
 
 6. Start inference by clicking the "Execute" button in the Inference tab. Users will see initial and progress messages in the console window (shown below). Users will see "evaluated image 0099" when Inference is finished.
 ```2D DNN Inference
@@ -110,7 +110,7 @@ Download "Example2DNN.zip" from the link below and unzip it on your UNI-EM insta
         evaluated image 0098
         evaluated image 0099
 ```
-7. Confirm that the "Output Segmentation Folder" ( [UNI-EM]/data/_2DNN_inference ) contains 0000.png, 0001.png, ..., 0099.png .
+7. Confirm that the "Output Segmentation Folder" ( [UNI-EM]/data/DNN_segmentation ) contains 0000.png, 0001.png, ..., 0099.png .
 
 <p align="center">
   <img src="Images/2DNN_Training.png" alt="2D DNN dialog for training" width="600">
@@ -119,13 +119,6 @@ Download "Example2DNN.zip" from the link below and unzip it on your UNI-EM insta
   <font size="5"> <b>Figure 2. 2D DNN training dialog</b> </font>
 </p>
 <BR>
-
-
-Select "Plugins → 2D Filters" from the UNI-EM dropdown menu to launch the dialogue "2D Filters" (**Fig. 3**).
-	- Select the Binary tab (**Fig. 3a**).
-	- Confirm that "Target Folder" targets [UNI-EM]/data/_2DNN_inference (**Fig. 3b**).
-	- Confirm that "Output Folder" targets [UNI-EM]/data/_2DNN_segmentation (**Fig. 3c**)。
-	- Users will see a thumbnail image in the "Target image" space and manipulate it by the slide bars of Target X, Target Y, and Target Z (**Fig. 3d**). Users will see an example result of binarization by clicking "Obtain sample output" (**Fig. 3e**).
 
 
 #### Postprocessing: Binarization and 3D labeling
@@ -161,8 +154,8 @@ Select "Plugins → 2D Filters" from the UNI-EM dropdown menu to launch the dial
 #### Proofreading, annotation, and visualization
 
 10. Select "Dojo → Import EM Stack/Segmentation" from the UNI-EM dropdown menu to launch the dialogue "Import Images & Segments".
-	- Set "Source Image Folder" as **[UNI-EM]/data/_2DNN_test_images** .
-	- Set "Source Segmentation Folder" as **[UNI-EM]/data/_2DNN_segmentation2** .
+	- Set "Source Image Folder" as **[UNI-EM]/data/DNN_test_images** .
+	- Set "Source Segmentation Folder" as **[UNI-EM]/data/DNN_segmentation** .
 	- Create a file folder and set it as "Destination Dojo Folder". Dojo style files will be generated in this folder.
 
 11. Generate the Dojo style files by clicking the "OK" button. The software Dojo will be launched after the file generation (**Fig. 4a**).
