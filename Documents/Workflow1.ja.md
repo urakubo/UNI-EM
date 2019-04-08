@@ -19,7 +19,7 @@ UNI-EMによる2D CNNセグメンテーションの一例として、ATUM/SEMに
 
 #### ● 教師セグメンテーションの作成
 
-1. 下の Example2DNN.zip をダウンロードして展開してください。dataフォルダの中身をUNI-EMフォルダ（[UNI-EM]）中のdataフォルダの中身と入れ替えてください。"[UNI-EM]/data/DNN_training_images" にトレーニング画像、"[UNI-EM]/data/DNN_ground_truth" に教師セグメンテーションが入っています(**Fig. 1.1**)。この教師セグメンテーション用いて、(2) CNNのトレーニングから始めても構いませんし、次の手順の通りにDojoを用いて教師セグメンテーションを作成することもできます。
+1. 下の Example2DNN.zip をダウンロードして展開してください。dataフォルダの中身をUNI-EMフォルダ（[UNI-EM]）中のdataフォルダの中身と入れ替えてください。"[UNI-EM]/data/DNN_training_images" にトレーニング画像、"[UNI-EM]/data/DNN_ground_truth" に教師セグメンテーションが入っています(**Fig. 1.1**)。この教師セグメンテーション用いて、2. 2次元CNNのトレーニングと推論から始めても構いませんし、次の手順に従ってDojoを用いて教師セグメンテーションを作成することもできます。
 
 	- "Example2DNN.zip": https://www.dropbox.com/s/k1baokh6yz1ucjk/Example2DNN.zip?dl=0
 <BR>
@@ -33,6 +33,7 @@ UNI-EMによる2D CNNセグメンテーションの一例として、ATUM/SEMに
 1.2 . UNI-EMを起動してください。
 	
 1.3 . UNI-EM上端のドロップダウンメニューより Dojo → Import EM Stack/Segmentation を選択して、Import Images & Segments ダイアログを起動してください(**Fig. 1.2**)。
+
 	- Source Image Folder を **"[UNI-EM]/data/DNN_trainig _images"** に設定してください。
 	- Use blank segmentationをチェックして Segmentation folderを無効にしてください。
 	- Destination Dojo Folderに分かりやすい場所のフォルダを指定してください。フォルダ中にDojo形式でファイルが保存されます。
@@ -66,7 +67,7 @@ UNI-EMによる2D CNNセグメンテーションの一例として、ATUM/SEMに
 </p>
 <BR>
 	
-#### ● 2次元DNNのトレーニングと推論
+#### ● 2次元CNNのトレーニングと推論
 
 2. UNI-EMを起動してください。
 
