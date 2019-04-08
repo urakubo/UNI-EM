@@ -120,25 +120,19 @@ UNI-EMによる2D CNNセグメンテーションの一例として、ATUM/SEMに
 
 
 
-#### ● 推論結果の後処理 [二値化およびラベル化]
+#### ● 推論結果の後処理 [二値化およびラベリング]
 
 8. UNI-EM上端のドロップダウンメニューより Plugins → 2D/3D Filters を選択して、Filters ダイアログを起動してください(**Fig. 3**)。
 	- Binary (二値化) および3D Label （3次元ラベル）をFilter Application 欄にドラッグ＆ドロップしてください(**Fig. 3a**)。
 	- Target Folder が "[UNI-EM]/data/DNN_ segmentation " であることを確認してください(**Fig. 3b**)。
 	- Output Folder が "[UNI-EM]/data/DNN_segmentation" であることを確認してください(**Fig. 3c**)。
-	- Target Folder内画像のサムネイルが Target image に表示されていることを確認してください(**Fig. 3d**)。"Obtain sample output"ボタンをクリックすると(**Fig. 3e**)、二値化・3次元ラベルフィルタの処理結果が表示されます(**Fig. 3f**)。
+	- Target Folder内画像のサムネイルが Target image に表示されていることを確認してください(**Fig. 3d**)。"Obtain sample output"ボタンをクリックすると(**Fig. 3e**)、二値化・3次元ラベリングフィルタの処理結果が表示されます(**Fig. 3f**)。
 
-9. Execute ボタンをクリックして、二値化 → 3次元ラベルの適用を行ってください(**Fig. 3g**)。コンソールに次の様なプログレスメッセージが現れ、フィルタ処理後の画像がOutput Folder中に保存されます。
-```2D Binarization
-        Target Folder:  [UNI-EM]/data/_2DNN_inference
-        Output Folder:  [UNI-EM]/data/_2DNN_segmentation
-        No: 0
-        No: 1
-        ...
-        ...
-        No: 98
-        No: 99
-        Binary was executed!
+9. Execute ボタンをクリックして、二値化 → 3次元ラベリングの適用を行ってください(**Fig. 3g**)。コンソールに次の様なプログレスメッセージが現れ、フィルタ処理後の画像がOutput Folder中に保存されます。
+```
+	Loading images ...
+	Saving images ...
+	2D/3D filters were applied!
 ```
 
 <p align="center">
