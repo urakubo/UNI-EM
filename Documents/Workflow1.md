@@ -21,7 +21,8 @@ Here we try automated mitochondria segmentation of a stack of EM images by use o
 #### Preparation of ground truth
 
 Download "Example2DNN.zip" from the link below and unzip it on your UNI-EM installed PC. Replace the unzipped folders with the contents of the "data" folder in UNI-EM ([UNI-EM]). Here  the folder "[UNI-EM]/data/DNN_training_images" contains a training image, and the folder "[UNI-EM]/data/DNN_ground_truth" contains ground truth segmentation (**Fig. 1.1**).  Users can use the ground truth segmentation (see from No. 2), or draw the ground truth using Dojo as stated below.
-	- "Example2DNN.zip": https://www.dropbox.com/s/k1baokh6yz1ucjk/Example2DNN.zip?dl=0
+
+- "Example2DNN.zip": https://www.dropbox.com/s/k1baokh6yz1ucjk/Example2DNN.zip?dl=0
 
 <BR>
 <p align="center">
