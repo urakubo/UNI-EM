@@ -48,8 +48,7 @@ UNI-EMによる2D CNNセグメンテーションの一例として、ATUM/SEMに
   <font size="5"> <b>Figure 1.2. Importing a training image to Dojo</b> </font>
 </p>
 <BR>
-
-* Import Images & Segments ダイアログ最下段の OK をクリックして、Dojoファイルの生成を行ってください。ファイル作成後、Dojo が起動します (**Fig. 1.3**)。
+	1. Import Images & Segments ダイアログ最下段の OK をクリックして、Dojoファイルの生成を行ってください。ファイル作成後、Dojo が起動します (**Fig. 1.3**)。
 
 	1. 下段のSliceバー(**Fig. 1.3a**)、上段のZoomバー(**Fig. 1.3b**)を動かして、Dojoの動作を確認してください。 
 
