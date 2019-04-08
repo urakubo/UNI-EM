@@ -30,6 +30,7 @@ UNI-EMによる2D CNNセグメンテーションの一例として、ATUM/SEMに
   <font size="5"> <b>Figure 1.1. Training EM image and mitochondria ground truth segmentation</b> </font>
 </p>
 <BR>
+	
 	1. UNI-EMを起動してください。
 	
 	2. UNI-EM上端のドロップダウンメニューより Dojo → Import EM Stack/Segmentation を選択して、Import Images & Segments ダイアログを起動してください(**Fig. 1.2**)。
