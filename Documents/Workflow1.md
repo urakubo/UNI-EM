@@ -38,7 +38,7 @@ Download "Example2DNN.zip" from the link below and unzip it on your UNI-EM insta
 - Select Dojo → Import EM Stack/Segmentation from the dropdown menu. The dialog "Import Images & Segments" will appear (**Fig. 1.2**)。
 
 - Set the Source Image Folder as **"[UNI-EM]/data/DNN_trainig _images"**.
-- Check the Use blank segmentation box. The section "Segmentation folder" will be disabled.
+- Check the Use blank segmentation box. The section "Source Segmentation Folder" will be disabled.
 - Specify the Destination Dojo Folder. Dojo style files will be stored in this folder.
 <BR>
 <p align="center">
