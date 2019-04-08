@@ -5,7 +5,7 @@
 - [使い方：2次元CNNを用いたセグメンテーション](HowToUse.ja.md#2次元CNNを用いたセグメンテーション)
 - [使い方：3次元FFNを用いたセグメンテーション](HowToUse.ja.md#3次元FFNを用いたセグメンテーション)
 - [使い方：2D/3Dフィルタ](HowToUse.ja.md#2D3Dフィルタ)
-- [適用事例1：2次元DNNによるミトコンドリアのセグメンテーション](Workflow1.ja.md)
+- [適用事例1：2次元CNNによるミトコンドリアのセグメンテーション](Workflow1.ja.md)
 - [適用事例2：3次元FFNによる細胞膜のセグメンテーション](Workflow2.ja.md)
 
 
@@ -120,29 +120,23 @@ UNI-EMによる2D CNNセグメンテーションの一例として、ATUM/SEMに
 
 
 
-#### ● 推論結果の後処理 [二値化およびラベル化]
+#### ● 推論結果の後処理 [二値化およびラベリング]
 
 8. UNI-EM上端のドロップダウンメニューより Plugins → 2D/3D Filters を選択して、Filters ダイアログを起動してください(**Fig. 3**)。
 	- Binary (二値化) および3D Label （3次元ラベル）をFilter Application 欄にドラッグ＆ドロップしてください(**Fig. 3a**)。
 	- Target Folder が "[UNI-EM]/data/DNN_ segmentation " であることを確認してください(**Fig. 3b**)。
 	- Output Folder が "[UNI-EM]/data/DNN_segmentation" であることを確認してください(**Fig. 3c**)。
-	- Target Folder内画像のサムネイルが Target image に表示されていることを確認してください(**Fig. 3d**)。"Obtain sample output"ボタンをクリックすると、二値化・3次元ラベルフィルタの処理結果が表示されます(**Fig. 3e**)。
+	- Target Folder内画像のサムネイルが Target image に表示されていることを確認してください(**Fig. 3d**)。"Obtain sample output"ボタンをクリックすると(**Fig. 3e**)、二値化・3次元ラベリングフィルタの処理結果が表示されます(**Fig. 3f**)。
 
-9. Execute ボタンをクリックして、二値化を行ってください(**Fig. 3f**)。コンソールに次の様なプログレスメッセージが現れ、フィルタ処理後の画像がOutput Folder中に保存されます。
-```2D Binarization
-        Target Folder:  [UNI-EM]/data/_2DNN_inference
-        Output Folder:  [UNI-EM]/data/_2DNN_segmentation
-        No: 0
-        No: 1
-        ...
-        ...
-        No: 98
-        No: 99
-        Binary was executed!
+9. Execute ボタンをクリックして、二値化 → 3次元ラベリングの適用を行ってください(**Fig. 3g**)。コンソールに次の様なプログレスメッセージが現れ、フィルタ処理後の画像がOutput Folder中に保存されます。
+```
+	Loading images ...
+	Saving images ...
+	2D/3D filters were applied!
 ```
 
 <p align="center">
-  <img src="Images/_2D_Postprocessing.png" alt="Dialog for binarization" width="600">
+  <img src="Images/2D_Postprocessing.png" alt="Dialog for binarization" width="600">
 </p>
 <p align="center">
   <font size="5"> <b>Figure 3. 2D/3D Filters</b> </font>
