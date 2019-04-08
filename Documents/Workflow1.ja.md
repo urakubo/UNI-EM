@@ -128,7 +128,7 @@ UNI-EMによる2D CNNセグメンテーションの一例として、ATUM/SEMに
 	- Output Folder が "[UNI-EM]/data/DNN_segmentation" であることを確認してください(**Fig. 3c**)。
 	- Target Folder内画像のサムネイルが Target image に表示されていることを確認してください(**Fig. 3d**)。"Obtain sample output"ボタンをクリックすると(**Fig. 3e**)、二値化・3次元ラベルフィルタの処理結果が表示されます(**Fig. 3f**)。
 
-9. Execute ボタンをクリックして、二値化を行ってください(**Fig. 3g**)。コンソールに次の様なプログレスメッセージが現れ、フィルタ処理後の画像がOutput Folder中に保存されます。
+9. Execute ボタンをクリックして、二値化 → 3次元ラベルの適用を行ってください(**Fig. 3g**)。コンソールに次の様なプログレスメッセージが現れ、フィルタ処理後の画像がOutput Folder中に保存されます。
 ```2D Binarization
         Target Folder:  [UNI-EM]/data/_2DNN_inference
         Output Folder:  [UNI-EM]/data/_2DNN_segmentation
