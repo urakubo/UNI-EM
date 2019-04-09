@@ -69,8 +69,8 @@ class Dialog_Filters(QWidget, MiscellaneousFilters):
         thumb1 = ThumbnailGenerator(self)
         widget_top_right = thumb1.GenerateThumbnailObject(obj_args, args)  # Widget
 
-        filter_list = FilterlistGenerator(self)
-        widget_top_left  = filter_list.GenerateFilterlistObject()  # Widget
+        self.filter_list = FilterlistGenerator(self)
+        widget_top_left  = self.filter_list.GenerateFilterlistObject()  # Widget
 
         widget_top = QWidget()
         widget_top.layout = QHBoxLayout(widget_top)

@@ -17,7 +17,7 @@ import pickle
 from PyQt5.QtWidgets import QMainWindow, qApp, QApplication, QWidget, QTabWidget, QSizePolicy, QInputDialog, \
     QLineEdit, QComboBox, QDialog, QDialogButtonBox, QFormLayout, QGridLayout, QMessageBox, QSpinBox, QCheckBox, \
     QGroupBox, QHBoxLayout, QLabel, QLineEdit, QMenu, QMenuBar, QPushButton, QFileDialog, QTextEdit, QVBoxLayout, \
-    QTreeView, QFileSystemModel, QListView, QTableView, QAbstractItemView
+    QTreeView, QFileSystemModel, QListView, QTableView, QAbstractItemView, QListWidgetItem
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt, pyqtSlot,  QAbstractListModel, QModelIndex, QVariant, QDir, QSize
 import PyQt5.QtGui as QtGui
@@ -200,14 +200,14 @@ class MiscellaneousFilters():
             item = w.item(i)
             texts.append( item.text() )
             instances.append( item.data(Qt.UserRole) )
-        print('Texts: ', texts)
-        print('Instances: ', instances)
+        #print('Texts: ', texts)
+        #print('Instances: ', instances)
         try:
             with open(filename, mode='wb') as f:
                 pickle.dump([texts, instances], f)
-            print(filename, ': Parameter file was saved.')
+            print('Parameters were saved.')
         except :
-            print(filename, ': Parameter file could not be saved.')
+            print('Parameters could not be saved.')
             return False
 
         return True
@@ -227,13 +227,14 @@ class MiscellaneousFilters():
             print(filename, ': Parameter file cannot be open.')
             return False
 
+        targetWidget = self.parent.filter_list.listManager.widgets[2]
+        targetWidget.clear()
         for text, instance in zip(texts, instances):
-            print('Loaded', text, instance)
-
-        # w = self.parent.listManager
-        # for instance in instances:
-        #    w.addFilter(instance)
-
+            item = QListWidgetItem(text)
+            item.setData(Qt.UserRole, instance)
+            targetWidget.addItem(item)
+            #print('Loaded', text, instance)
+        print('Parameters were loaded.')
         return True
 
     ##
@@ -335,8 +336,8 @@ class MiscellaneousFilters():
         params = self.ObtainParamsBottomTable(self.obj_args, self.args)
         output_path = params['Output Folder']
         for filename in self.filestack:
+            # print(filename)
             output_name = os.path.basename(filename)
-            print(output_name)
             input_image = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
             output_image = self.FilterApplication2D(w, input_image)
             output_dtype = output_image.dtype
