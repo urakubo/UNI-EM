@@ -37,7 +37,7 @@ sys.path.append(plugins_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
 sys.path.append(os.path.join(main_dir, "gui"))
 from ExportImgSeg import ExportImgSeg
-
+from SaveChanges import SaveChanges
 
 class ExportIdDialog(QWidget):
     def __init__(self, u_info, parent):
@@ -152,6 +152,11 @@ class ExportIdDialog(QWidget):
         print('Filetype:   ', ftype )
         print('Init ID:    ', startid )
         print('Num Digits: ', numdigit )
+
+        # Save changes
+        self.SaveC = SaveChanges()
+        self.SaveC.run(self.u_info)
+        #
 
         exports = ExportImgSeg()
         exports.run(self.u_info, dir, fname, ftype, startid, numdigit, self.flag)
