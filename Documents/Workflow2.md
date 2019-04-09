@@ -38,7 +38,7 @@ Here we try automated membrane segmentation of a stack of EM images from mouse s
 
 3. Select "Segmentation → 3D FFN" from a UNI-EM dropdown menu to launch the dialogue, 3D FFN.
 	- Select Preprocessing tab (**Fig. 2a**).
-	- Confirm that "Training Image Folder" ( [UNI-EM]/data/_3DNN_training_images ) has the training EM images (**Fig. 2b**), "Ground Truth Folder" ( [UNI-EM]/data/_3DNN_ground_truth ) has the ground truth images (**Fig. 2c**), and the empty "FFN File Folder" ( [UNI-EM]/data/ffn ) exists (**Fig. 2d**). The training EM images are shown in the left thumbnail, and the ground truth are shown in the right thumbnail (**Fig. 2e**).
+	- Confirm that "Training Image Folder" ( [UNI-EM]/data/_3DNN_training_images ) contains the training EM images (**Fig. 2b**), "Ground Truth Folder" ( [UNI-EM]/data/_3DNN_ground_truth ) contains the ground truth images (**Fig. 2c**), and the empty "FFN File Folder" ( [UNI-EM]/data/ffn ) exists (**Fig. 2d**).
 
 4. Start preprocessing by clicking the "Execute" button (**Fig. 2f**). Four intermediate files are generated in the FFN File Folder. It takes 6-60 min, depending mainly on image volume. Users will see progress messages in the console window (shown below).
 	- "grayscale_maps.h5: a hdf5 file of training EM images
