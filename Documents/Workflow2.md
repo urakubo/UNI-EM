@@ -20,12 +20,12 @@ Here we try automated membrane segmentation of a stack of EM images from mouse s
 
 #### Target EM images and ground truth
 
-1. Download the file "ExampleFFN.zip" from the link below and unzip it on your UNI-EM installed PC. Copy and paste the unzipped contents to the "data" folder of UNI-EM ([UNI-EM]). Here the training image is stored in "[UNI-EM]/data/_3DNN_training_images" (0000.png, ..., 0099.png; 8bit, grayscale png), and the ground truth segmentation is stored in "[UNI-EM]/data/_3DNN_ground_truth"  (0000.png, ..., 0099.png; 16bit, grayscale png; **Fig. 1**). The software Vast lite is recommend to make such ground truth segmentation ( https://software.rc.fas.harvard.edu/lichtman/vast/ ).
+1. Download the file "ExampleFFN.zip" from the link below and unzip it on your UNI-EM installed PC. Copy and paste the unzipped contents to the "data" folder of UNI-EM ([UNI-EM]). Here the training image is stored in "[UNI-EM]/data/DNN_training_images" (0000.png, ..., 0099.png; 8bit, grayscale png), and the ground truth segmentation is stored in "[UNI-EM]/data/DNN_ground_truth"  (0000.png, ..., 0099.png; 16bit, grayscale png; **Fig. 1**). The software Vast lite is recommend to make such ground truth segmentation ( https://software.rc.fas.harvard.edu/lichtman/vast/ ).
 
 - ExampleFFN.zip 522MB: https://www.dropbox.com/s/cztcf8w0ywj1pmz/ExampleFFN.zip?dl=0
 <BR>
 <p align="center">
-  <img src="Images/FFN_GT.png" alt="2D DNN Training" width="600">
+  <img src="Images/FFN_GT.png" alt="3D FFN Ground truth" width="600">
 </p>
 <p align="center">
   <font size="5"> <b>Figure 1. Training EM image and membrane ground truth segmentation</b> </font>
@@ -38,7 +38,7 @@ Here we try automated membrane segmentation of a stack of EM images from mouse s
 
 3. Select "Segmentation → 3D FFN" from a UNI-EM dropdown menu to launch the dialogue, 3D FFN.
 	- Select Preprocessing tab (**Fig. 2a**).
-	- Confirm that "Training Image Folder" ( [UNI-EM]/data/_3DNN_training_images ) has the training EM images (**Fig. 2b**), "Ground Truth Folder" ( [UNI-EM]/data/_3DNN_ground_truth ) has the ground truth images (**Fig. 2c**), and the empty "FFN File Folder" ( [UNI-EM]/data/ffn ) exists (**Fig. 2d**). The training EM images are shown in the left thumbnail, and the ground truth are shown in the right thumbnail (**Fig. 2e**).
+	- Confirm that "Training Image Folder" ( [UNI-EM]/data/DNN_training_images ) contains the training EM images (**Fig. 2b**), "Ground Truth Folder" ( [UNI-EM]/data/DNN_ground_truth ) contains the ground truth images (**Fig. 2c**), and the empty "FFN File Folder" ( [UNI-EM]/data/ffn ) exists (**Fig. 2d**).
 
 4. Start preprocessing by clicking the "Execute" button (**Fig. 2f**). Four intermediate files are generated in the FFN File Folder. It takes 6-60 min, depending mainly on image volume. Users will see progress messages in the console window (shown below).
 	- "grayscale_maps.h5: a hdf5 file of training EM images
@@ -140,8 +140,8 @@ I0217 23:14:48.805234  2272 train.py:699]
 #### Proofreading, annotation, and visualization
 
 13. Select "Dojo → Import EM Stack/Segmentation" from the UNI-EM dropdown menu to launch the dialogue "Import Images & Segments".
-	- Set "Source Image Folder" as **[UNI-EM]/data/_3DNN_test_images** .
-	- Set "Source Segmentation Folder" as **[UNI-EM]/data/_3DNN_inference** .
+	- Set "Source Image Folder" as **[UNI-EM]/data/DNN_test_images** .
+	- Set "Source Segmentation Folder" as **[UNI-EM]/data/DNN_segmentation** .
 	- Create a file folder and set it as "Destination Dojo Folder". Dojo style files will be generated in this folder.
 
 14. Generate the Dojo style files by clicking the "OK" button. The software Dojo will be launched after the file generation (**Fig. 3a**).
