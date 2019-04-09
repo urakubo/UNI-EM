@@ -40,7 +40,7 @@ UNI-EMによる3D FFNセグメンテーションの一例として、ATUM/SEMに
 
 3. UNI-EM上端のドロップダウンメニューより Segmentation → 3D FFN を選択して、3D FFN ダイアログを起動してください。
 	- Preprocessing タブを選択してください(**Fig. 2a**)。
-	- Training Image Folder "[UNI-EM]/data/_3DNN_training_images" にEM画像が存在すること(**Fig. 2b**)、Ground Truth Folder "[UNI-EM]/data/_3DNN_ground_truth"に教師セグメンテーション画像が存在することを確認してください(**Fig. 2c**)。同様にFFN File Folder ("[UNI-EM]/data/ffn") が存在することを確認してください(**Fig. 2d**)。左側のサムネイルにTraining Imageが、右側にGround Truthが表示されます(**Fig. 2e**)。
+	- Browse... をクリックして Training Image Folder "[UNI-EM]/data/_3DNN_training_images" にEM画像が存在すること(**Fig. 2b**)、Ground Truth Folder "[UNI-EM]/data/_3DNN_ground_truth"に教師セグメンテーション画像が存在することを確認してください(**Fig. 2c**)。同様にFFN File Folder ("[UNI-EM]/data/ffn") が存在することを確認してください(**Fig. 2d**)。
 
 4. Preprocessing タブ最下段の Execute をクリックして、前処理ファイルの作成を開始してください(**Fig. 2f**)。FFN File Folderに次の４つのファイルが作成されます。作成時間は6-60分です。コンソールに下の様なプログレスメッセージが現れます。
 	- EM画像のhdf5ファイル"grayscale_maps.h5"
