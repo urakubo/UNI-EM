@@ -352,7 +352,6 @@ class MiscellaneousSegment():
 
 
     def Cancel2D(self):  # wxGlade: ImportImagesSegments.<event_handler>
-        print('2D DNN was not executed.')
         self.parent.close()
         return False
 
