@@ -81,8 +81,8 @@ class ExecuteTraining(MiscellaneousSegment):
         ##
         ## Check and change filetype of input segmentation
         ##
-        input_files = glob.glob(os.path.join(params['Image Folder'], "*.jpg"))
-        tmp = glob.glob(os.path.join(params['Image Folder'], "*.png"))
+        input_files = glob.glob(os.path.join(params['Segmentation Folder'], "*.jpg"))
+        tmp = glob.glob(os.path.join(params['Segmentation Folder'], "*.png"))
         input_files.extend(tmp)
         im = cv2.imread(input_files[0], cv2.IMREAD_UNCHANGED)
         print('Target file to check color type : ', input_files[0])
