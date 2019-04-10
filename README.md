@@ -66,7 +66,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 1. Install Python 3.5 or 3.6 in a Microsoft Windows PC, 64 bit.
 2. Install cuda 9.0 and cuDNN v7 for Tensorflow 1.12 (latest combination on 2018/12/20) if your PC has a NVIDIA-GPU.
 3. Download the source codes from the github site:
-   	- git clone https://github.com/urakubo/Dojo-standalone
+   	- git clone https://github.com/urakubo/UNI-EM
 4. Install the following modules of Python: Tensorflow-gpu, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl. Check also "requirements.txt". 
 5. Copy Dojo_StandaloneX.XX/Marching_cube/marching_cubes.cp3X-win_amd64.pyd and paste it to {$INSTALL_PYTHON}\Lib\site-packages.
 
