@@ -68,7 +68,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 3. Download the source codes from the github site:
    	- git clone https://github.com/urakubo/UNI-EM
 4. Install the following modules of Python: Tensorflow-gpu, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl. Check also "requirements.txt". 
-5. Copy Dojo_StandaloneX.XX/Marching_cube/marching_cubes.cp3X-win_amd64.pyd and paste it to {$INSTALL_PYTHON}\Lib\site-packages.
+5. Copy [UNI-EM]/Marching_cube/marching_cubes.cp3X-win_amd64.pyd and paste it to {$INSTALL_PYTHON}\Lib\site-packages.
 
 	- This marching cube program is obtained from the ilastik: https://github.com/ilastik/marching_cubes
 
@@ -77,7 +77,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
    	- https://www.dropbox.com/s/pxds28wdckmnpe8/ac3x75.zip?dl=0
 	- https://www.dropbox.com/s/6nvu8o6she6rx9v/ISBI_Dojo.zip?dl=0
 
-7. Execute "python main.py" in the Dojo_StandaloneX.XX/ folder. The control panel will appear.
+7. Execute "python main.py" in the [UNI-EM] folder. The control panel will appear.
 
 8.	Select Dojo → Open Dojo Folder from the dropdown menu, and specify the folder of the sample EM/segmentation dojo files. Dojo will be launched as a web application.
 
