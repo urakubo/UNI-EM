@@ -61,7 +61,7 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 1. Windows10 において、 Python3.5-3.6 をインストールしてください。
 2. Tensorflow 1.12 のためにGPUを利用する場合はcuda 9.0, cuDNN v7をインスト―ルしてください **[参考1]** 。
 3. 次の命令を実行してGithubより必要プログラムをダウンロードしてください。
-	 - git clone https://github.com/urakubo/Dojo-standalone
+	 - git clone https://github.com/urakubo/UNI-EM
 4. requirements.txtを参考、Pythonに必要モジュール「Tensorflow-gpu 1.12, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl」を にpip install -r requirements.txt (あるいはconda）などのコマンドを用いてインストールしてください。
 5. Dojo_StandaloneX.XX/Marching_cube/marching_cubes.cp3X-win_amd64.pyd を {$INSTALL_PYTHON}\Lib\site-packages へコピーしてください。{$INSTALL_PYTHON} は例えばAnacondaであれば、conda info -e コマンドにより分かります。
 6. コマンドププロンプトにてDojo_StandaloneX.XXフォルダへ移動して、 python main.py と実行してコントロールパネルを起動してください。
