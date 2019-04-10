@@ -11,7 +11,7 @@
 ## How to use
 
 ### Dojo proofreader
-This is a proofreading software as a part of Rhoana pipeline (Copyright, Lichtman/Pfister lab, Harvard, USA).
+This is a proofreading software as a part of Rhoana pipeline (Copyright, Lichtman/Pfister lab, Harvard, USA). We extend Dojo for wider use.
 
 	- https://www.rhoana.org/dojo/
 
@@ -66,17 +66,15 @@ The VAST Lite is recommended for the ground truth generation (https://software.r
 2.	Select the training tab and specify parameters:
 	- Image Folder:	Folder containing EM images (tiff/png images).
 	- Segmentation Folder: Folder containing ground truth segmentation (tiff/png images).
-	- Checkpoint:	DNN connectivity will be stored.
-	- X loss:	"hinge", "square", "softmax", "approx", "dice", "logistic"
-	- Y loss:	"hinge", "square", "softmax", "approx", "dice", "logistic"
-	- Model:	"pix2pix", "pix2pix2", "CycleGAN"
+	- Checkpoint folder: The CNN model will be stored.
 	- Generator:	"unet", "resnet", "highwaynet", "densenet"
+	- Loss function:"hinge", "square", "softmax", "approx", "dice", "logistic"
 	- Augmentation:	{fliplr  ,flipud, transpose} 
 	- Maximal epochs
 	- Display Frequency
 	- Save Parameters
 	- Load Parameters
-3. Execute training. The default parameters target a sample EM image "Dojo_Standalone/data/_2DNN_ground_truth/0049.png" and segmentation image "Dojo_Standalone/data/_2DNN_training_images/49_memb.png".
+3. Execute training. The default parameters target a sample EM image "[UNI-EM]/data/DNN_ground_truth/49.png" and segmentation image "[UNI-EM]/data/DNN_training_images/49.png".
 4. Select Segmentation → Tensorboard to inspect the progression of training. It took 5 min for the training of sample data by use of NVIDIA GeForce GTX 1070.
 5. The console window shows the end of training as "saving model".
 6. Confirm the connectivity file "model-XXXXX.data-XXXXX-of-XXXXX" (800 MB) in the checkpoint folder. 
@@ -85,7 +83,7 @@ The VAST Lite is recommended for the ground truth generation (https://software.r
    	- Output Segmentation Folder 
 	- Checkpoint 
 10. Execute inference.
-11. Check that the inference results are stored in the Output Segmentation Folder (Dojo_Standalone/data/_2DNN_inference by default).
+11. Check that the inference results are stored in the Output Segmentation Folder (Dojo_Standalone/data/DNN_segmentation by default).
 
 <BR>
 <p align="center">
@@ -112,7 +110,11 @@ The VAST Lite is recommended for the ground truth generation (https://software.r
 	- Save Parameters
 	- Load Parameters
 
-	By default, users will see an example EM image volume and their segmentation (kasthuri15) those of which are stored in Dojo-standalone/data/_3DNN_training_images and Dojo-standalone/data/_3DNN_ground_truth, respectively.
+	By default, "Image Folder" indicates [UNI-EM
+	]/data/DNN_training_images, and "Ground Truth Folder" indicates [UNI-EM]/data/DNN_ground_truth.
+	Users will see an example EM image volume and their segmentation (kasthuri15) by downloading the following example data.
+	- ExampleFFN.zip 522MB: https://www.dropbox.com/s/cztcf8w0ywj1pmz/ExampleFFN.zip?dl=0
+
 3.	Execute the preprocessing. It takes 5 to 60 min depending on the target image volume and machine speed. It produces the three files in the FFN file folder: af.h5, groundtruth.h5, and tf_record_file .
 4.	Select the training tab and specify parameters:
 	- Max Training Steps: 	The number of training FFN, a key parameter.
