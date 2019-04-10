@@ -59,27 +59,26 @@ Dojoファイルを開いた状態で、 上端のドロップダウンメニュ
 	- Image Folder 入力EM画像のtiff/png連続番号ファイルの入ったフォルダ
 	- Segmentation Folder 正解セグメンテーション画像のtiff/png連続番号ファイルの入ったフォルダ
 	- Checkpoint	トレーニングしたDNNの結合強度を保存するフォルダ
-	- X loss		損失関数　"hinge", "square", "softmax", "approx", "dice", "logistic"
-	- Y loss		損失関数　"hinge", "square", "softmax", "approx", "dice", "logistic"
 	- Model		学習モデルの指定 "pix2pix", "pix2pix2", "CycleGAN"
 	- Generator	DNNトポロジの指定 "unet", "resnet", "highwaynet", "densenet"
+	- Loss function	損失関数　"hinge", "square", "softmax", "approx", "dice", "logistic"
 	- Augmentation	トレーニングデータ水増し方向の設定 {fliplr  ,flipud, transpose} 
 	- Maximal epochs	トレーニング回数	
 	- Display Frequency 	指定回数に一度Inferenceを行い、結果をCheckpointにhtml形式で出力する。
 	- Save Parameters	上記パラメータを指定ファイルに保存します。
 	- Load Parameters	上記パラメータを指定ファイルから読み出します。
 
-4. Executeボタンをクリックしてトレーニングを開始します。既定パラメータにて、サンプルEM画像データDojo_Standalone/data/_2DNN_training_images および サンプルSegmentation画像Dojo_Standalone/data/_2DNN_ground_truth/49_memb.png を対象にトレーニングを行います。
+4. Executeボタンをクリックしてトレーニングを開始します。既定パラメータにて、サンプルEM画像データ[UNI-EM]/data/DNN_training_images および サンプルSegmentation画像[UNI-EM]/data/DNN_ground_truth/49.png を対象にトレーニングを行います。
 5. プルダウンメニューよりSegmentation → Tensorboradを選択して、トレーニングの進捗を確認してください。既定パラメータにてサンプルEM/Segmentation画像のトレーニングを行った場合、NVIDIA GeForce GTX 1070 で5分程度かかりました。
 6. コマンドプロンプトに"saving model"と表示されたらトレーニング終了です。
 7. Checkpointフォルダに "model-XXXXX.data-XXXXX-of-XXXXX" (800 MB) が出力されていることを確認してください。このファイルにトレーニング結果が保存されています。
-8. Segmentation → ２DNNを選択して、さらにInferenceタブを選択し各パラメータを設定してください。
+8. Segmentation → 2DNNを選択して、さらにInferenceタブを選択し各パラメータを設定してください。
 	- Image Folder	入力EM画像のtiff/png連続番号ファイルの入ったフォルダ
 	- Output Segmentation Folder 出力セグメンテーション画像を保存するフォルダの指定
 	- Checkpoint トレーニングしたDNNの結合強度ファイル"model.ckpt-XXXX.data-YYYY-of-ZZZZ" の指定 (X,Y,Zは数字）。ファイル名が指定されない場合は、指定フォルダ内でもっとも大きな番号をもつ"model.ckpt "が選択されます。
 
 9. Executeボタンをクリックして推定を開始します。
-10. 推定結果はデフォルトでDojo_Standalone/data/_2DNN_inferenceに保存されます 。
+10. 推定結果はデフォルトでDojo_Standalone/data/DNN_segmentationに保存されます 。
 
 <BR>
 <p align="center">
@@ -96,7 +95,7 @@ Michał Januszewski 博士らが開発した、Flood filling network (FFN)に基
 
 同手法により、これまで最も性能が出る方法とされた 二次元 U-Net によるセグメンテーションと GALAの組み合わせより、はるかに高い正確さでセグメンテーションを行うことができるようになりました。ただし、3次元のお手本を準備する必要があります。また、長いトレーニング期間が必要です。例えば、NVIDIA GeForce GTX 1080 ti使用した場合で約2週間かかります。
 
-1. Vast liteを利用するなどして ( https://software.rc.fas.harvard.edu/lichtman/vast/ )、EMスタック画像から正解セグメンテーション（ground truth）を作成してください。EM連番スタック画像、Segmentation連番スタック画像のペアとして、Dojo-standalone/data/_3DNN_training_imagesおよびDojo-standalone/data/ _3DNN_ground_truthフォルダに保存してください。画像フォーマットはどちらもgray scale png, tiffとしてください。
+1. Vast liteを利用するなどして ( https://software.rc.fas.harvard.edu/lichtman/vast/ )、EMスタック画像から正解セグメンテーション（ground truth）を作成してください。EM連番スタック画像、Segmentation連番スタック画像のペアとして、Dojo-standalone/data/DNN_training_imagesおよびDojo-standalone/data/DNN_ground_truthフォルダに保存してください。画像フォーマットはどちらもgray scale png, tiffとしてください。
 2. コントロールパネル上端のドロップダウンメニューよりSegmentation → 2D FFNを選択して、Preprocessing, Training, Inference, Postprocessingの4つのタブを持つダイアログを起動してください。
 
 
