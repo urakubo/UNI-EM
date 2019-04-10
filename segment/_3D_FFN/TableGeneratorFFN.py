@@ -133,6 +133,5 @@ class TableGeneratorFFN(MiscellaneousSegment):
 
     def Cancel(self):  # wxGlade: ImportImagesSegments.<event_handler>
         self.parent.close()
-        print('3D FFN was not executed.')
         return False
 
