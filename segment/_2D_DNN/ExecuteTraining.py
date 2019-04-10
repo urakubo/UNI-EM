@@ -55,12 +55,12 @@ class ExecuteTraining(MiscellaneousSegment):
         params  = self.ObtainParams(obj_args, args)
         datadir = parent.u_info.data_path
 
-        ##
+        ##   
         ## Check and change filetype of input images
         ##
         input_files = glob.glob(os.path.join(params['Image Folder'], "*.jpg"))
-        if len(input_paths) == 0:
-            input_files = glob.glob(os.path.join(params['Image Folder'], "*.png"))
+        tmp = glob.glob(os.path.join(params['Image Folder'], "*.png"))
+        input_files.extend(tmp)
         im = cv2.imread(input_files[0], cv2.IMREAD_UNCHANGED)
         print('Target file to check color type : ', input_files[0])
         print('Image dimensions                : ', im.shape)

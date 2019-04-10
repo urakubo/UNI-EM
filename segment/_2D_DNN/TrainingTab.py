@@ -43,7 +43,7 @@ class TrainingTab(MiscellaneousSegment):
                         'Path to folder containing images',
                         'Number of images in batch',
                         'Path to folder containing segmentation',
-                        'Output Filetype',
+                        'Output Filetype of sample images',
                         'Directory with checkpoint to resume training from or use for testing',
                         'Loss Function',
                         'Number of training epochs',
