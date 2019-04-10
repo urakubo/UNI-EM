@@ -47,8 +47,8 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 
 ### Pyinstaller version 
 1.	Download one of the following two versions, and unzip it:
-	- CPU version (Ver0.62: 340 MB): https://www.dropbox.com/s/a8aepoikrpsmgob/UNI_EM0.62_Pyinstaller.zip?dl=0
-   	- GPU version (Ver0.62: XXX MB): Under construction.
+	- CPU version (Ver0.70; 370 MB): https://www.dropbox.com/s/1jc9uh9bt7radnd/UNI-EM0.7_Pyinstaller_Light.zip?dl=0
+   	- GPU version (Ver0.70: XXX MB): Under construction.
 
 	The GPU version can be used if the PC-equipped NVIDIA GPU has over 3.5 compute capability:
 

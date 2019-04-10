@@ -45,9 +45,8 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 
 ### Pyinstaller版：
 1. Tensorflow-GPU 版(498 MB)とTensorflow-CPU版(XXX MB, 作成中)を用意しました。いずれかをダウンロードして展開してください。
-	- CPU版 (340 MB; Ver 0.62): https://www.dropbox.com/s/a8aepoikrpsmgob/UNI_EM0.62_Pyinstaller.zip?dl=0
-	
-	- GPU版 (Ver0.62: XXX MB): Under construction.
+	- CPU version (Ver0.70; 370 MB): https://www.dropbox.com/s/1jc9uh9bt7radnd/UNI-EM0.7_Pyinstaller_Light.zip?dl=0
+   	- GPU version (Ver0.70: XXX MB): Under construction.
 
 2. 公開サンプルデータkasthuri15をダウンロードして適当なフォルダに展開してください。
 	- https://www.dropbox.com/s/pxds28wdckmnpe8/ac3x75.zip?dl=0
