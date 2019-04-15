@@ -32,7 +32,7 @@ Recent years have seen a rapid expansion in the field of micro-connectomics, whi
 
 1.	We built a desktop version of the proofreading software Dojo (IEEE Trans. Vis. Comput. Graph. 20, 2466–2475) on Microsoft Windows 10, 64 bit.
 2.	We merged it with a DNN framework: Google Tensorflow/tensorboard. 
-3.	We then incorporated two types of DNN-based segmentation programs: 2D U-net/Resnet (https://github.com/tbullmann/imagetranslation-tensorflow) and flood-filling networks (https://github.com/google/ffn).
+3.	We then incorporated four types of DNN-based segmentation programs: 2D U-Net, ResNet, DenseNet, and HighwayNet. (https://github.com/tbullmann/imagetranslation-tensorflow) and flood-filling networks (https://github.com/google/ffn).
 4.	A 3D annotator was equipped for visual inspection and annotation (based on Three.js).
 5.	2D/3D filtration functions were equipped for pre/postprocessing of the segmented images (based on skimage and opencv3).
 
