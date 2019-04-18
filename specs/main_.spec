@@ -30,11 +30,7 @@ a = Analysis(['./../main.py'],
                       ( '../plugins/menu.json', './plugins/' ),
                       ( '../icons/*', './icons/' ),
                       ( '../icons/Disabled/*', './icons/Disabled/' ),
-                      ( '../../tensorflow/python/*', './tensorflow/python/' ),
-                      ( '../../tensorflow/contrib/*', './tensorflow/contrib/' ),
-                      ( '../../tensorflow/contrib/layers/*', './tensorflow/contrib/layers/' ),
-                      ( '../segment/menu.json', './segment/' ),
-                      ( '../../tensorboard/*', './tensorboard/' )
+                      ( '../segment/menu.json', './segment/' )
                     ],
              hiddenimports=['scipy._lib.messagestream',
                       'pywt._extensions._cwt',
