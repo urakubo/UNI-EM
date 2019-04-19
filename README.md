@@ -58,7 +58,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
    	- https://www.dropbox.com/s/pxds28wdckmnpe8/ac3x75.zip?dl=0
 	- https://www.dropbox.com/s/6nvu8o6she6rx9v/ISBI_Dojo.zip?dl=0
 
-3.	Please click the link "main.exe" in Dojo_StandaloneX.XX to launch the control panel.
+3.	Please click the link "main.exe" in [UNI-EM] to launch the control panel.
 
 4.	Select Dojo → Open Dojo Folder from the dropdown menu, and specify the folder of the sample EM/segmentation dojo files. Dojo will be launched as a web application.
 
