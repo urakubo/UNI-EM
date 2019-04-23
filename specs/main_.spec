@@ -4,9 +4,6 @@ from os import path, pardir
 main_dir = os.path.abspath(SPECPATH)
 main_dir = os.path.dirname(main_dir)
 
-import tensorboard as _
-WEBFILES = os.path.join(_.__path__[0], "webfiles.zip")
-
 block_cipher = None
 
 pathex=[
@@ -34,8 +31,7 @@ a = Analysis(['./../main.py'],
                       ( '../plugins/menu.json', './plugins/' ),
                       ( '../icons/*', './icons/' ),
                       ( '../icons/Disabled/*', './icons/Disabled/' ),
-                      ( '../segment/menu.json', './segment/' ),
-                      ( WEBFILES, './tensorboard/' )
+                      ( '../segment/menu.json', './segment/' )
                     ],
              hiddenimports=['scipy._lib.messagestream',
                       'pywt._extensions._cwt',

@@ -23,36 +23,24 @@ sys.path.append(os.path.join(main_dir, "filesystem"))
 
 from MiscellaneousSegment import MiscellaneousSegment
 
-if getattr(sys, 'frozen', False):
-    #print('Run on pyinstaller.')
-    exec_compute_partition = os.path.join(main_dir, 'compute_partitions.exe')
-    exec_build_coordinates = os.path.join(main_dir, 'build_coordinates.exe')
-# running in a bundle
-else:
-    #print('Run on live python.')
-    exec_dir = os.path.join(main_dir, 'segment', '_3D_FFN', 'ffn')
-    exec_compute_partition = 'python ' +  os.path.join(exec_dir, 'compute_partitions.py')
-    exec_build_coordinates = 'python ' +  os.path.join(exec_dir, 'build_coordinates.py')
-# running live
-
-
 class FFNPrepTraining(MiscellaneousSegment):
 
     def _Run(self, parent, params, comm_title):
         ##
-        comm_compute_partition = exec_compute_partition +' ' \
+        comm_compute_partition = parent.u_info.exec_compute_partition +' ' \
                 + ' --input_volume '  + os.path.join(params['FFN File Folder'], "groundtruth.h5@stack")  + ' ' \
                 + ' --output_volume ' + os.path.join(params['FFN File Folder'], "af.h5@af") + ' ' \
                 + ' --thresholds 0.025,0.05,0.075,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9 ' \
                 + ' --lom_radius 24,24,24 ' \
                 + ' --min_size 10000 '
 
-        comm_build_coordinates = exec_build_coordinates +' ' \
+        comm_build_coordinates = parent.u_info.exec_build_coordinates +' ' \
                 + ' --partition_volumes validation1@'  +  os.path.join(params['FFN File Folder'], "af.h5@af")  + ' ' \
                 + ' --coordinate_output ' + os.path.join(params['FFN File Folder'], "tf_record_file") + ' ' \
                 + ' --margin 24,24,24 '
         ##
         # try:
+        ##
         training_image_files = self.ObtainImageFiles(params['Training Image Folder'])
         images = [cv2.imread(i, cv2.IMREAD_GRAYSCALE) for i in training_image_files]
         images = np.array(images)

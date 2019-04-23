@@ -1,11 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 #
-
-
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QAction, QMessageBox
-from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtWidgets import QApplication
 import sys
 import os
 from os import path, pardir
@@ -16,10 +12,10 @@ sys.path.append(Plugins_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
 sys.path.append(os.path.join(main_dir, "gui"))
 
-# from filesystem import *
-# from gui import *
-# from _dojo import *
-# print(' global:', globals())
+##
+## External programs
+##
+
 
 from MainWindow import MainWindow
 

@@ -27,14 +27,6 @@ sys.path.append(os.path.join(main_dir, "filesystem"))
 
 from MiscellaneousSegment import MiscellaneousSegment
 
-if getattr(sys, 'frozen', False):
-    exec_run_translate = os.path.join(main_dir, 'translate.exe')
-# running in a bundle
-else:
-    _2D_DNN_dir = os.path.join(main_dir, 'segment', '_2D_DNN')
-    exec_run_translate = 'python ' + os.path.join(_2D_DNN_dir, 'translate.py')
-
-
 class ExecuteInference(MiscellaneousSegment):
 
     def __init__(self, obj_args, args, parent):  # wxGlade: ImportImagesSegments.<event_handler>
@@ -73,7 +65,7 @@ class ExecuteInference(MiscellaneousSegment):
             print('Filetype of images was changed to RGB 8bit, and stored in ', tmpdir)
 
 
-        comm = exec_run_translate +' ' \
+        comm = parent.u_info.exec_translate +' ' \
                 + ' --mode predict ' \
                 + ' --save_freq 0 ' \
                 + ' --input_dir ' + params['Image Folder'] + ' ' \

@@ -29,16 +29,6 @@ sys.path.append(os.path.join(main_dir, "filesystem"))
 
 from MiscellaneousSegment import MiscellaneousSegment
 
-if getattr(sys, 'frozen', False):
-    exec_run_translate = os.path.join(main_dir, 'translate.exe')
-# running in a bundle
-else:
-    _2D_DNN_dir = os.path.join(main_dir, 'segment', '_2D_DNN')
-    exec_run_translate = 'python ' + os.path.join(_2D_DNN_dir, 'translate.py')
-
-
-# running live
-
 class ExecuteTraining(MiscellaneousSegment):
 
     def __init__(self, obj_args, args, parent):  # wxGlade: ImportImagesSegments.<event_handler>
@@ -125,7 +115,7 @@ class ExecuteTraining(MiscellaneousSegment):
         #   ' --model ' + params['Model'] + ' '
         #
 
-        comm = exec_run_translate +' ' \
+        comm = parent.u_info.exec_translate +' ' \
                 + ' --mode train ' \
                 + ' --input_dir ' + params['Image Folder'] + ' ' \
                 + ' --target_dir ' + params['Segmentation Folder'] + ' ' \

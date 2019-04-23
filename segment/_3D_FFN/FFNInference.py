@@ -30,18 +30,6 @@ import Miscellaneous as m
 
 from MiscellaneousSegment import MiscellaneousSegment
 
-if getattr(sys, 'frozen', False):
-    #print('Run on pyinstaller.')
-    exec_run_inference = os.path.join(main_dir, 'run_inference_win.exe')
-#
-else:
-    #print('Run on live python.')
-    exec_dir = os.path.join(main_dir, 'segment', '_3D_FFN', 'ffn')
-    exec_run_inference = 'python ' + os.path.join(exec_dir, 'run_inference_win.py')
-
-# running live
-
-
 class FFNInference(MiscellaneousSegment):
 
     def write_text(self, f, key, value, t):
@@ -126,7 +114,7 @@ class FFNInference(MiscellaneousSegment):
         ##
         m.mkdir_safe(os.path.join( params['Output Inference Folder'] ,'0','0' ) )
         ##
-        comm_inference = exec_run_inference + ' ' \
+        comm_inference = parent.u_info.exec_run_inference + ' ' \
                     + ' --image_size_x '  + np.str( image_x ) \
                     + ' --image_size_y '  + np.str( image_y ) \
                     + ' --image_size_z '  + np.str( image_z ) \

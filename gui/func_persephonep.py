@@ -39,13 +39,12 @@ QProgressBar::chunk {
 '''
 class PersephonepWindow(QWidget):
     
-    def __init__(self, url, parent = None ):
+    def __init__(self):
         super(PersephonepWindow, self).__init__()
 
-        self.initurl = url
-        self.initUI(parent = parent)
+    def Generate(self, url):
 
-    def initUI(self, parent = None):
+        self.initurl = url
 
         # config
         # initurl = 'https://www.google.co.jp'
@@ -115,25 +114,20 @@ class PersephonepWindow(QWidget):
 
 
         # setting layout
-        grid = QGridLayout()
-        grid.setSpacing(0)
+        tab = QWidget()
+        tab.layout = QGridLayout(tab)
+        tab.layout.setSpacing(0)
         #grid.addWidget(self.back_button, 1, 0)
         #grid.addWidget(self.forward_button, 1, 1)
-        grid.addWidget(self.reload_button, 1, 2)
-        grid.addWidget(self.url_edit, 1, 3, 1, 10)
+        tab.layout.addWidget(self.reload_button, 1, 2)
+        tab.layout.addWidget(self.url_edit, 1, 3, 1, 10)
         #grid.addWidget(self.move_button, 1, 14)
         #grid.addWidget(self.home_button, 1, 15)
-        grid.addWidget(self.window,2, 0, 5, 16)
-        grid.addWidget(self.progress, 7, 0, 1, 3) #### Download
-        self.setLayout(grid) 
-        
-        
-        if parent == None:
-            self.resize(1200, 800)
-            self.center()
-            self.setWindowTitle(__program__)
-            self.show()
-            
+        tab.layout.addWidget(self.window,2, 0, 5, 16)
+        tab.layout.addWidget(self.progress, 7, 0, 1, 3) #### Download
+        tab.setLayout(tab.layout)
+        return tab
+
     
     def center(self):
         ''' centering widget
@@ -142,28 +136,6 @@ class PersephonepWindow(QWidget):
         cp = QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
-        
-    def loadPage(self):
-        ''' move web page which is set at url_edit
-        '''
-        move_url = self.url_edit.text()
-        '''check url
-        If the head of move_url equals 'http://' or 'https://', query to google search form.
-        If the head of move_url doed not include above protocol but the style of *.*.*.*, add http:// to its_head
-        '''
-        if self.check_url_protocol_ipv4(move_url):
-            move_url = 'http://' + move_url
-        elif not self.check_url_protocol(move_url):
-            search_word = move_url.replace(' ', '+').replace('　', '+')
-            google_search_url = 'https://www.google.co.jp/search?ie=utf-8&oe=utf-8&q={}&hl=ja&btnG=search'.format(search_word)
-            move_url = google_search_url
-        # move_url = QUrl(move_url)
-        # move_url = QUrl(self.initurl)
-        move_url = QtCore.QUrl(move_url)
-
-        self.window.load(move_url)
-        self.updateCurrentUrl()
-        
 
     def check_url_protocol(self, move_url):
         if (move_url[0:7] == 'http://' or
@@ -198,10 +170,6 @@ class PersephonepWindow(QWidget):
 
     def saveFile(self):
         print('download')
-
-#    def _downloadRequested(self, item): # QWebEnginDownloadItem
-#        # print('downloading to', item.path)
-#        item.accept()
 
 
     @QtCore.pyqtSlot(QWebEngineDownloadItem)

@@ -13,6 +13,8 @@ from PyQt5.QtCore import Qt, pyqtSlot
 import socket
 import sys
 import os
+import subprocess as s
+import time
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 segmentation_dir = path.join(main_dir, "segment")
@@ -27,9 +29,7 @@ sys.path.append(segmentation_dir)
 
 sys.path.append(path.join(segmentation_dir, "_2D_DNN"))
 sys.path.append(path.join(segmentation_dir, "_3D_FFN"))
-sys.path.append(path.join(segmentation_dir, "tensorboard"))
 
-from Tensorboard import Tensorboard
 from Dialog_2D_DNN import Dialog_2D_DNN
 from Dialog_3D_FFN import Dialog_3D_FFN
 
@@ -56,18 +56,30 @@ class Segment():
             return
         self.u_info.tensorboard_path = newdir
 
-
         ## Tensorboard launch.
-        tmp = Tensorboard(self)
-        self.table_widget.addTab(1, 'Tensorboard', 'http://' + socket.gethostbyname(socket.gethostname()) + ':6006' )
+        self.StartTensorboard()
 
-    def SuperPixel_(self):
-        #import wx
-        # self.superpix = wxglade_superpixel.SuperPixel(self, wx.ID_ANY, "",sim_name=[self, self.UserInfo])
-    	#self.superpix = wxglade_superpixel.SuperPixel(self, wx.ID_ANY, "")
-        #self.superpix.Show()
-        #event.Skip()
-        pass
+
+    def StartTensorboard(self):
+
+        comm = self.u_info.exec_tensorboard   + ' ' \
+                + ' --logdir ' + self.u_info.tensorboard_path + ' ' \
+                + ' --host ' + socket.gethostbyname(socket.gethostname())
+        try:
+            self.p = s.Popen(comm.split(), stdout=s.PIPE)
+            time.sleep(1)
+            self.table_widget.addTab('tensorboard', 'Tensorboard',
+                                     'http://' + socket.gethostbyname(socket.gethostname()) + ':6006')
+            print("Start tensorboard")
+            return
+        except s.CalledProcessError as e:
+            print("Error ocurrs in tensorboard")
+            return
+
+    def CloseTensorboard(self):
+        self.p.terminate()
+        print("Stop tensorboard")
+
 
 
 # ----------------------------------------------------------------------

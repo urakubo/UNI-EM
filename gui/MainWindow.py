@@ -211,32 +211,13 @@ class PersephonepTableWidget(QWidget):
             self.appl = [] # Store application ID
             self.tabs.resize(1200, 800)
 
-            # Add Tabs
-            # self._addTab(len(self.tab),'Google')  # len(self.tab) => 0
-
-            # self.add_button = QPushButton('+')
-            # self.add_button.setStyleSheet('background-color:gray')
-            # self.add_button.clicked.connect(lambda: self._addTab(len(self.tab)))  # add tab to last of index
-
-
             # define the delete tab process
             self.tabs.setTabsClosable(True)
             self.tabs.tabCloseRequested.connect(self.closeTab)
 
             #
             self.tabs.setUsesScrollButtons(True)
-            ########## Create first tab
-            # self.tab[0].layout = QVBoxLayout(self)
-            # self.pushButton1 = QPushButton('PyQt5 button')
-            # self.tab[0].layout.addWidget(self.pushButton1)
-            # self.tab[0].setLayout(self.tab[0].layout)
-
-            # Add tabs to widget
-            # self.layout.addWidget(self.add_button)
             self.layout.addWidget(self.tabs)
-
-            # self.app_info = QLabel( 'This is a Web Browser based on Python 3 and PyQt5.' )
-            # self.layout.addWidget(self.app_info)
             self.setLayout(self.layout)
 
 
@@ -244,7 +225,8 @@ class PersephonepTableWidget(QWidget):
             ''' add Tab
             '''
             # print(index)
-            self.tab.append(PersephonepWindow( url, parent=self ))
+            browser = PersephonepWindow()
+            self.tab.append(browser.Generate(url))
             self.appl.append(appl_id)
             self.tabs.addTab(self.tab[-1], '')  # do not match tab index & tab num
             # self.tabs.setTabText(index, title)
@@ -265,6 +247,11 @@ class PersephonepTableWidget(QWidget):
             ###
             if ('annotator' == self.appl[index]):
                 fail = self.parent.CloseStlViewer()
+                if (fail == 1):
+                    return
+            ###
+            if ('tensorboard' == self.appl[index]):
+                fail = self.parent.CloseTensorboard()
                 if (fail == 1):
                     return
             ###

@@ -23,19 +23,8 @@ sys.path.append(segmentation_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
 from MiscellaneousSegment import MiscellaneousSegment
 
-if getattr(sys, 'frozen', False):
-    #print('Run on pyinstaller.')
-    exec_train = os.path.join(main_dir, 'train.exe')
-# running in a bundle
-else:
-    #print('Run on live python.')
-    exec_dir = os.path.join(main_dir, 'segment', '_3D_FFN', 'ffn')
-    exec_train = 'python ' +  os.path.join(exec_dir, 'train.py')
-# running live
-
-
 class FFNTraining(MiscellaneousSegment):
-    def _Run(self, params, comm_title):
+    def _Run(self, parent, params, comm_title):
         ##
         #try:
 
@@ -55,7 +44,7 @@ class FFNTraining(MiscellaneousSegment):
             arg = ' {"depth":12,"fov_size":[33,33,33],"deltas":[8,8,8]} '
 
         ##
-        comm_train = exec_train + ' ' \
+        comm_train = parent.u_info.exec_train + ' ' \
                     + ' --train_coords ' + params['Tensorflow Record File'] + ' ' \
                     + ' --data_volumes validation1@' + params['Training Image h5 File'] + '@raw ' \
                     + ' --label_volumes validation1@'+ params['Ground Truth h5 File']  + '@stack ' \
@@ -112,7 +101,7 @@ class FFNTraining(MiscellaneousSegment):
 
     def Execute(self, parent, comm_title, obj_args, args):
         params = self.ObtainParams(obj_args, args)
-        thread = threading.Thread(target=self._Run, args=( params, comm_title ) )
+        thread = threading.Thread(target=self._Run, args=( parent, params, comm_title ) )
         thread.daemon = True
         thread.start()
         QMessageBox.about(parent, 'FFN',  comm_title + ' runs on a different process.')

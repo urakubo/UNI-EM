@@ -25,16 +25,14 @@ class Params:
             mydocument_path = '~/Documents'
             user_path = '~'
 
-        ###
         user_path = main_dir
-        ###C:\Users\urakubo\Desktop\ffn\180620Laxmi
-        ### C:\Users\urakubo\Desktop\dojo180721
 
         ## Server infos of Dojo and 3D Annotator
         self.ip = socket.gethostbyname(socket.gethostname())
         self.configured = True
         self.port = 8887
         self.dojo_thread = None
+        self.tensorboard_thread = None
         self.url  = 'http://' + self.ip + ':' + str(self.port) + '/dojo/'
         self.port_stl = 3000
         self.url_stl  = 'http://' + self.ip + ':' + str(self.port_stl) + '/'
@@ -81,15 +79,29 @@ class Params:
         self.flag_redo   = 0
 
         # Segmentation data path
-
-
         if getattr(sys, 'frozen', False):
             # print('Run on pyinstaller.')
             self.data_path = os.path.normpath( path.join(main_dir, "../..","data") )
-        # running in a bundle
+
+            self.exec_run_translate = os.path.join(main_dir, 'translate.exe')
+            self.exec_run_inference = os.path.join(main_dir, 'run_inference_win.exe')
+            self.exec_compute_partition = os.path.join(main_dir, 'compute_partitions.exe')
+            self.exec_build_coordinates = os.path.join(main_dir, 'build_coordinates.exe')
+            self.exec_train = os.path.join(main_dir, 'train.exe')
+            self.exec_tensorboard = os.path.join(main_dir, 'tensorb.exe')
+
         else:
             # print('Run on live python.')
             self.data_path = path.join(main_dir, "data")
+
+            _2D_DNN_dir = os.path.join(main_dir, 'segment', '_2D_DNN')
+            _3D_FFN_dir = os.path.join(main_dir, 'segment', '_3D_FFN', 'ffn')
+            self.exec_translate = 'python ' + os.path.join(_2D_DNN_dir, 'translate.py')
+            self.exec_run_inference = 'python ' + os.path.join(_3D_FFN_dir, 'run_inference_win.py')
+            self.exec_compute_partition = 'python ' + os.path.join(_3D_FFN_dir, 'compute_partitions.py')
+            self.exec_build_coordinates = 'python ' + os.path.join(_3D_FFN_dir, 'build_coordinates.py')
+            self.exec_train = 'python ' + os.path.join(_3D_FFN_dir, 'train.py')
+            self.exec_tensorboard = 'tensorboard '
 
         self.tensorboard_path = os.path.normpath( path.join(self.data_path, "DNN_model_tensorflow") )
 
