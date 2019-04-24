@@ -14,7 +14,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineProfile, QWebEngineDownloadItem, QWebEnginePage
 from PyQt5 import QtNetwork
 
-__program__ = 'PERSEPHONEP'
+__program__ = 'UNI-EM'
 
 
 PROGRESS_STYLE = """
@@ -39,10 +39,10 @@ QProgressBar::chunk {
 '''
 class PersephonepWindow(QWidget):
     
-    def __init__(self):
+    def __init__(self, url):
         super(PersephonepWindow, self).__init__()
 
-    def Generate(self, url):
+#    def Generate(self, url):
 
         self.initurl = url
 
@@ -54,24 +54,13 @@ class PersephonepWindow(QWidget):
 
         proxy = QtNetwork.QNetworkProxy()
         proxy.setType(QtNetwork.QNetworkProxy.NoProxy)
-        #proxy.setHostName("10.232.11.28")
-        #proxy.setPort(6666)
         QtNetwork.QNetworkProxy.setApplicationProxy(proxy)
    
         # condig url
-        ###self.window.load(QUrl(self.initurl))
         self.window.load(QtCore.QUrl(self.initurl))
-        #self.window.resize(1000,600)
-        #self.window.move(200,200)
-        #self.window.setWindowTitle(__program__)
+        self.window.setWindowTitle(__program__)
 
         # setting button
-        #self.back_button = QPushButton('back')
-        #self.back_button.setToolTip('Go back to previous page.')
-        #self.back_button.clicked.connect(self.window.back)
-        #self.forward_button = QPushButton('forward')
-        #self.forward_button.setToolTip('Go to the next page.')
-        #self.forward_button.clicked.connect(self.window.forward)
         self.reload_button = QPushButton('reload')
         self.reload_button.setToolTip('Reload this page.')
         self.reload_button.clicked.connect(self.window.reload)
@@ -91,12 +80,7 @@ class PersephonepWindow(QWidget):
         self.url_edit = QLineEdit()
         self.url_edit.setText( self.initurl )
         self.url_edit.setReadOnly(True)
-        #self.url_edit.setEnabled(False)
         self.url_edit.setToolTip('URL box')
-        #self.move_button = QPushButton('move')
-        #self.move_button.setToolTip('Move to the page set at URL box.')
-        #self.move_button.clicked.connect(self.loadPage)
-        #self.url_edit.returnPressed.connect(self.loadPage)
         self.home_button = QPushButton('home')
         self.home_button.setToolTip('Move to the home page.')
         self.home_button.clicked.connect(self.loadHomePage)
@@ -108,25 +92,26 @@ class PersephonepWindow(QWidget):
         ## Download dialog
         ##
         self.window.urlChanged.connect(self.updateCurrentUrl)
-        # self.window.page().profile().downloadRequested.connect(self._downloadRequested)
         self.window.page().profile().downloadRequested.connect(self.on_download_requested)
         ##
 
+        self.tab = QGridLayout()
+        self.tab.setSpacing(0)
+        self.tab.addWidget(self.reload_button, 1, 2)
+        self.tab.addWidget(self.url_edit, 1, 3, 1, 10)
+        self.tab.addWidget(self.window,2, 0, 5, 16)
+        self.tab.addWidget(self.progress, 7, 0, 1, 3) #### Download
+        self.setLayout(self.tab)
 
-        # setting layout
-        tab = QWidget()
-        tab.layout = QGridLayout(tab)
-        tab.layout.setSpacing(0)
-        #grid.addWidget(self.back_button, 1, 0)
-        #grid.addWidget(self.forward_button, 1, 1)
-        tab.layout.addWidget(self.reload_button, 1, 2)
-        tab.layout.addWidget(self.url_edit, 1, 3, 1, 10)
-        #grid.addWidget(self.move_button, 1, 14)
-        #grid.addWidget(self.home_button, 1, 15)
-        tab.layout.addWidget(self.window,2, 0, 5, 16)
-        tab.layout.addWidget(self.progress, 7, 0, 1, 3) #### Download
-        tab.setLayout(tab.layout)
-        return tab
+        #tab = QWidget()
+        #tab.layout = QGridLayout(tab)
+        #tab.layout.setSpacing(0)
+        #tab.layout.addWidget(self.reload_button, 1, 2)
+        #tab.layout.addWidget(self.url_edit, 1, 3, 1, 10)
+        #tab.layout.addWidget(self.window,2, 0, 5, 16)
+        #tab.layout.addWidget(self.progress, 7, 0, 1, 3) #### Download
+        #tab.setLayout(tab.layout)
+        #return tab
 
     
     def center(self):
@@ -174,7 +159,7 @@ class PersephonepWindow(QWidget):
 
     @QtCore.pyqtSlot(QWebEngineDownloadItem)
     def on_download_requested(self, download):
-        #print('{} downloading to {}'.format(download.url(), download.path()))
+        # print('{} downloading to {}'.format(download.url(), download.path()))
         self.downloading_filename = QtCore.QFileInfo(download.path()).fileName()
         self.progress.setValue(0)
         self.progress.show()
@@ -187,21 +172,20 @@ class PersephonepWindow(QWidget):
         self.progress.setValue((total/read)*100)
         self.progress.setFormat('{} : {}%'.format(self.downloading_filename, (total/read)*100))
 
+
     def on_download_state(self, state):
         if state == QWebEngineDownloadItem.DownloadRequested:
             print('requested')
         elif state == QWebEngineDownloadItem.DownloadInProgress:
-            print('progress')
+            print('Download')
         elif state == QWebEngineDownloadItem.DownloadCompleted:
-            print('Download complete')
+            #print('Download complete')
             sleep(1)    ################ Download
             self.progress.hide()
         elif state == QWebEngineDownloadItem.DownloadCancelled:
             print('cancel')
         elif state == QWebEngineDownloadItem.DownloadInterrupted:
             print('interrupt')
-
-
 
 
 

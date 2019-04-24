@@ -221,8 +221,24 @@ class PersephonepTableWidget(QWidget):
             ''' add Tab
             '''
             # print(index)
-            browser = PersephonepWindow()
-            self.tab.append(browser.Generate(url))
+            #browser = PersephonepWindow(url)
+            
+            #
+            # The following tab browser launch
+            # (func_persephonep)
+            # should generate a widget something like
+            #
+            # browser = PersephonepWindow(url)
+            # widget = browser.Generate
+            # self.tab.append(widget)
+            #
+            # The following is wrong.
+            # The class object declaration (PersephonepWindow)
+            # should not have any return.
+            # but I keep it only for download indicator.
+            # It should be revised in future.
+            #
+            self.tab.append(PersephonepWindow(url))
             self.appl.append(appl_id)
             self.tabs.addTab(self.tab[-1], '')  # do not match tab index & tab num
             # self.tabs.setTabText(index, title)

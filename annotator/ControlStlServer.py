@@ -50,7 +50,7 @@ import time
 if getattr(sys, 'frozen', False):
     stldata_dir = os.path.normpath(os.path.join(main_dir, "../..", "data", "stlviewer"))
 else:
-    stldata_dir = os.path.normpath(os.path.join(main_dir, "../data", "stlviewer"))
+    stldata_dir = os.path.normpath(os.path.join(main_dir, "data", "stlviewer"))
 
 if os.path.isdir(stldata_dir) == False:
     os.makedirs(stldata_dir)
