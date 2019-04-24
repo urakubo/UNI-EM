@@ -1,31 +1,28 @@
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import sys
 import os
 import json
 from  collections import OrderedDict
 
 from os import path, pardir
-from PyQt5.QtWidgets import QMainWindow, QTabWidget, QApplication, qApp, QWidget, QHBoxLayout, QVBoxLayout, QLabel, \
+from PyQt5.QtWidgets import QMainWindow, QTabWidget, QApplication, \
+    qApp, QWidget, QHBoxLayout, QVBoxLayout, QLabel, \
     QPushButton, QAction, QMessageBox, QMenu
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import pyqtSlot
 
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
-icon_dir          = path.join(main_dir, "icons")
-icon_disabled_dir = path.join(icon_dir, "Disabled")
+icon_dir            = path.join(main_dir, "icons")
+icon_disabled_dir   = path.join(icon_dir, "Disabled")
+plugins_dir         = path.join(main_dir, "plugins")
+segmentation_dir    = path.join(main_dir, "segment")
+annotator_dir       = path.join(main_dir, "annotator")
+
 sys.path.append(path.join(main_dir, "plugins"))
 sys.path.append(os.path.join(main_dir, "filesystem"))
 sys.path.append(os.path.join(main_dir, "gui"))
 sys.path.append(os.path.join(main_dir, "segment"))
 sys.path.append(os.path.join(main_dir, "plugins"))
-plugins_dir = path.join(main_dir, "plugins")
-segmentation_dir = path.join(main_dir, "segment")
 sys.path.append(os.path.join(main_dir, "annotator"))
-annotator_dir = path.join(main_dir, "annotator")
 
 
 from Params  import Params
@@ -35,13 +32,13 @@ from Plugins import Plugins
 from Segment import Segment
 from FileIO  import FileIO
 
-from FileMenu  import FileMenu
+from DojoMenu  import DojoMenu
 from Credit  import Credit
 from ExportImageDialog import ExportImageDialog
 from ExportIdDialog import ExportIdDialog
 from func_persephonep import *
 
-class MainWindow(QMainWindow, FileMenu, Credit, Annotator, Plugins, Segment, FileIO, Script):
+class MainWindow(QMainWindow, DojoMenu, Credit, Annotator, Plugins, Segment, FileIO, Script):
 # class MainWindow(QMainWindow, Credit, Plugins):
 
     def __init__(self):
@@ -74,10 +71,9 @@ class MainWindow(QMainWindow, FileMenu, Credit, Annotator, Plugins, Segment, Fil
         ## File menu
         ##
 
-        file_folder = main_menu.addMenu('Dojo')
-        self.file_id = self.InitialzeFileMenu( file_folder )
-        self.InitModeFileMenu(self.file_id)
-
+        dojo_folder = main_menu.addMenu('Dojo')
+        self.dojo_icon_open_close = self.DojoDropdownMenu( dojo_folder )
+        self.InitModeFileMenu(self.dojo_icon_open_close)
 
         ##
         ## Annotator menu

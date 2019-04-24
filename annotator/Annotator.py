@@ -1,8 +1,4 @@
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 
 from PyQt5.QtWidgets import QMainWindow, qApp, QApplication, QWidget, QSizePolicy, QInputDialog, \
     QLineEdit, QComboBox, QDialog, QDialogButtonBox, QFormLayout, QGridLayout, QMessageBox, QSpinBox,  \
@@ -17,6 +13,7 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 plugins_dir = path.join(main_dir, "plugins")
 sys.path.append(plugins_dir)
+from ServerAnnotator import StlServerLogic
 from ControlStlServer import ControlStlServer
 
 #sys.path.append(path.join(plugins_dir, "superpixel"))

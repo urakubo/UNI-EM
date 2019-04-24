@@ -31,8 +31,7 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 plugins_dir = path.join(main_dir, "annotator")
 sys.path.append(plugins_dir)
-sys.path.append(main_dir)
-from StlServer import StlServerLogic
+from ServerAnnotator import StlServerLogic
 sys.path.append(os.path.join(main_dir, "filesystem"))
 sys.path.append(os.path.join(main_dir, "gui"))
 
@@ -51,7 +50,7 @@ import time
 if getattr(sys, 'frozen', False):
     stldata_dir = os.path.normpath(os.path.join(main_dir, "../..", "data", "stlviewer"))
 else:
-    stldata_dir = os.path.normpath(os.path.join(main_dir, "data", "stlviewer"))
+    stldata_dir = os.path.normpath(os.path.join(main_dir, "../data", "stlviewer"))
 
 if os.path.isdir(stldata_dir) == False:
     os.makedirs(stldata_dir)

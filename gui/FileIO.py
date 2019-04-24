@@ -1,10 +1,6 @@
 ###
 ###
 ###
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import sys, os, time, errno
 
 
@@ -31,6 +27,7 @@ from PyQt5.QtCore import Qt, pyqtSlot
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
+sys.path.append(path.join(main_dir, "dojo"))
 sys.path.append(path.join(main_dir, "plugins"))
 sys.path.append(path.join(main_dir, "segment"))
 sys.path.append(os.path.join(main_dir, "filesystem"))
@@ -42,10 +39,8 @@ from Credit  import Credit
 from Plugins import Plugins
 from Segment import Segment
 
-
-# from ExportDialog import ExportDialog
+from MainDojo import ServerLogic
 from ImportDialog import ImportDialog
-from DojoStandalone import ServerLogic
 from SaveChanges import SaveChanges
 from ExportImageDialog import ExportImageDialog
 from ExportIdDialog import ExportIdDialog
@@ -110,7 +105,7 @@ class FileIO():
         self.u_info.dojo_thread = None
         self.u_info.files_found = False
         self.setWindowTitle(self.title)
-        self.InitModeFileMenu(self.file_id)
+        self.InitModeFileMenu(self.dojo_icon_open_close)
 
 
     def LaunchDojo(self):  # wxGlade: ControlPanel.<event_handler>
@@ -132,7 +127,7 @@ class FileIO():
         # self.DojoHTTP.SetLabel(self.u_info.url)
         # self.DojoHTTP.SetLabel('Please click here!')
         # self.panel_URL.Show()
-        self.ActiveModeFileMenu(self.file_id)
+        self.ActiveModeFileMenu(self.dojo_icon_open_close)
         # time.sleep(10)
         self.u_info.url = 'http://' + self.u_info.ip + ':' + str(self.u_info.port) + '/dojo/'
         self.table_widget.addTab('dojo', 'Dojo', self.u_info.url) # ID, Title, URL
