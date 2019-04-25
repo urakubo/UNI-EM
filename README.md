@@ -40,6 +40,7 @@ Multiple users can simultaneously use it through web browsers. The goal is to de
 
 ## System requirements
 Operating system: Microsoft Windows 10 (64 bit). Linux and macOS versions will be built in future.
+
 Recommendation: High-performance NVIDIA graphics card such as GeForce GTX 1080ti.
 
 ## Installation
