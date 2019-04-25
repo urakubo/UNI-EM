@@ -9,7 +9,7 @@ block_cipher = None
 pathex=[
 				main_dir,
 				path.join(main_dir, "filesystem"),
-				path.join(main_dir, "_dojo"),
+				path.join(main_dir, "dojo"),
 				path.join(main_dir, "annotator"),
 				path.join(main_dir, "gui"),
 				path.join(main_dir, "plugins"),
