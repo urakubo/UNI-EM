@@ -95,7 +95,7 @@ class FFNPostprocessing(MiscellaneousSegment):
                         ]
 
         self.args = [
-                        ['Target Inference File',  'LineEdit', target_inference_file, 'BrowseFile'],
+                        ['Target Sementation File (npz)',  'LineEdit', target_inference_file, 'BrowseFile'],
                         ['Output Segmentation Folder',   'LineEdit', output_segmentation_path, 'BrowseDirImg'],
                         ['Output Filetype', 'ComboBox', ["8-bit color PNG", "16-bit gray scale PNG", "8-bit gray scale PNG", 
                                                          "8-bit color TIFF", "16-bit gray scale TIFF", "8-bit gray scale TIFF"]],

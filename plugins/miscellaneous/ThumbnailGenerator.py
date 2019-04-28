@@ -116,6 +116,9 @@ class ThumbnailGenerator(MiscellaneousFilters):
                 self.canvas1.setPixmap(pixmap1)
 
         def Execute():
+            self.filestack = self.ObtainTarget()
+            if self.filestack == [] :
+                return False
             w = self.parent.targetWidget
             if w.count() == 0:
                 print('No filter.')
@@ -139,10 +142,13 @@ class ThumbnailGenerator(MiscellaneousFilters):
 
         def Cancel():  # wxGlade: ImportImagesSegments.<event_handler>
             self.parent.close()
-            print('Filter was not executed.')
+            print('Filter was not applied.')
             return False
 
         def _ObtainSample():
+            self.filestack = self.ObtainTarget()
+            if self.filestack == [] :
+                return False
             w = self.parent.targetWidget
             if w.count() == 0:
                 print('No filter.')
