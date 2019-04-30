@@ -50,7 +50,7 @@ Click the "Save image" button at the right side. A screenshot of the scene will 
 <BR>
 
 ### 2D CNN
-We implemented 2C CNN (Resnet/U-net/Highwaynet/Densenet)-based segmentation programs on Tensorflow V1.12. Programmed by Dr. Torsten Bullmann.
+We implemented 2D CNN (Resnet/U-net/Highwaynet/Densenet)-based segmentation programs.
 
 	- https://github.com/tbullmann/imagetranslation-tensorflow
 
