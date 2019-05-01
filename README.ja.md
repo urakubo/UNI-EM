@@ -12,14 +12,14 @@
 
 ---
 インストール後は下のページを参照してください。
-- [使い方：校正ソフトウェアDojo](Documents/HowToUse.ja.md#校正ソフトウェアDojo)
-- [使い方：3D Annotator](Documents/HowToUse.ja.md#3D-Annotator)
-- [使い方：2次元DNNを用いたセグメンテーション](Documents/HowToUse.ja.md#2次元DNNを用いたセグメンテーション)
-- [使い方：3次元FFNを用いたセグメンテーション](Documents/HowToUse.ja.md#3次元FFNを用いたセグメンテーション)
-- [使い方：2D/3Dフィルタ](Documents/HowToUse.ja.md#2D3Dフィルタ)
-- [適用事例1：2次元DNNによるミトコンドリアのセグメンテーション](Documents/Workflow1.ja.md)
-- [適用事例2：3次元FFNによる細胞膜のセグメンテーション](Documents/Workflow2.ja.md)
-- [プラグインの作り方](Documents/HowToMakePlugin.ja.md) 
+- [使い方：校正ソフトウェアDojo](docs/HowToUse.ja.md#校正ソフトウェアDojo)
+- [使い方：3D Annotator](docs/HowToUse.ja.md#3D-Annotator)
+- [使い方：2次元DNNを用いたセグメンテーション](docs/HowToUse.ja.md#2次元DNNを用いたセグメンテーション)
+- [使い方：3次元FFNを用いたセグメンテーション](docs/HowToUse.ja.md#3次元FFNを用いたセグメンテーション)
+- [使い方：2D/3Dフィルタ](docs/HowToUse.ja.md#2D3Dフィルタ)
+- [適用事例1：2次元DNNによるミトコンドリアのセグメンテーション](docs/Workflow1.ja.md)
+- [適用事例2：3次元FFNによる細胞膜のセグメンテーション](docs/Workflow2.ja.md)
+- [プラグインの作り方](docs/HowToMakePlugin.ja.md) 
 ---
 
 ## はじめに：

@@ -16,14 +16,14 @@ This software is under development!
 
 ---
 Check the following pages after installation.
-- [How to use: Dojo proofreader](Documents/HowToUse.md#Dojo-proofreader)
-- [How to use: 3D annotator](Documents/HowToUse.md#3D-annotator)
-- [How to use: 2D CNN](Documents/HowToUse.md#2D-CNN)
-- [How to use: 3D FFN](Documents/HowToUse.md#3D-FFN)
-- [How to use: 2D and 3D filters](Documents/HowToUse.md#2D-and-3D-filters)
-- [Example workflow1: Mitochondria segmentation using 2D CNN](Documents/Workflow1.md)
-- [Example workflow2: Membrane segmentation using 3D FFN](Documents/Workflow2.md) 
-- [How to make a plugin](Documents/HowToMakePlugin.md) 
+- [How to use: Dojo proofreader](docs/HowToUse.md#Dojo-proofreader)
+- [How to use: 3D annotator](docs/HowToUse.md#3D-annotator)
+- [How to use: 2D CNN](docs/HowToUse.md#2D-CNN)
+- [How to use: 3D FFN](docs/HowToUse.md#3D-FFN)
+- [How to use: 2D and 3D filters](docs/HowToUse.md#2D-and-3D-filters)
+- [Example workflow1: Mitochondria segmentation using 2D CNN](docs/Workflow1.md)
+- [Example workflow2: Membrane segmentation using 3D FFN](docs/Workflow2.md) 
+- [How to make a plugin](docs/HowToMakePlugin.md) 
 ---
 
 ## Introduction
