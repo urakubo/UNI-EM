@@ -75,35 +75,15 @@ class MainWindow(QMainWindow, DojoMenu, Credit, Annotator, Plugins, Segment, Fil
         self.dojo_icon_open_close = self.DojoDropdownMenu( dojo_folder )
         self.InitModeFileMenu(self.dojo_icon_open_close)
 
+
         ##
         ## Annotator menu
         ##
 
         annotator_folder = main_menu.addMenu('Annotator')
-
-        # Parse the json file "plugin/menu.json"
         with open( path.join(annotator_dir, self.u_info.fname_menu) , 'r' ) as fp:
             e = json.load(fp, object_pairs_hook=OrderedDict)
-        annotator_stack = [annotator_folder]
-        snum_stack   = [0]
-        items = e.items()    # python3
-
-        for key, val in items:
-            if val['Sub'] > 0:
-                annotator_stack.append(QMenu(key, self))
-                snum_stack = snum_stack + [ val['Sub'] ]
-            else:
-                id = QAction( key, self)
-                id.triggered.connect( getattr(self, val['Func']) )
-                annotator_stack[-1].addAction(id)
-            while(len(annotator_stack) >= 2 and snum_stack[-1] <= 0):
-                annotator_stack[-2].addMenu(annotator_stack[-1])
-                annotator_stack.pop()
-                snum_stack.pop()
-            if snum_stack and (snum_stack[-1] > 0):
-                snum_stack[-1] = snum_stack[-1] - 1
-
-
+        self.GeneratePulldownMenu(annotator_folder, e)
 
 
         ##
@@ -111,57 +91,19 @@ class MainWindow(QMainWindow, DojoMenu, Credit, Annotator, Plugins, Segment, Fil
         ##
 
         segmentation_folder = main_menu.addMenu('Segmentation')
-
-        # Parse the json file "plugin/menu.json"
         with open( path.join(segmentation_dir, self.u_info.fname_menu) , 'r' ) as fp:
             e = json.load(fp, object_pairs_hook=OrderedDict)
-        segmentation_stack = [segmentation_folder]
-        snum_stack   = [0]
-        items = e.items()    # python3
+        self.GeneratePulldownMenu(segmentation_folder, e)
 
-        for key, val in items:
-            if val['Sub'] > 0:
-                segmentation_stack.append(QMenu(key, self))
-                snum_stack = snum_stack + [ val['Sub'] ]
-            else:
-                id = QAction( key, self)
-                id.triggered.connect( getattr(self, val['Func']) )
-                segmentation_stack[-1].addAction(id)
-            while(len(segmentation_stack) >= 2 and snum_stack[-1] <= 0):
-                segmentation_stack[-2].addMenu(segmentation_stack[-1])
-                segmentation_stack.pop()
-                snum_stack.pop()
-            if snum_stack and (snum_stack[-1] > 0):
-                snum_stack[-1] = snum_stack[-1] - 1
 
         ##
         ## Plugin menu
         ##
 
         plugin_folder = main_menu.addMenu('Plugins')
-
-        # Parse the json file "plugin/menu.json"
         with open( path.join(plugins_dir, self.u_info.fname_menu) , 'r' ) as fp:
             e = json.load(fp, object_pairs_hook=OrderedDict)
-        plugin_stack = [plugin_folder]
-        snum_stack   = [0]
-        items = e.items()    # python3
-
-        for key, val in items:
-            if val['Sub'] > 0:
-                plugin_stack.append(QMenu(key, self))
-                snum_stack = snum_stack + [ val['Sub'] ]
-            else:
-                id = QAction( key, self)
-                id.triggered.connect( getattr(self, val['Func']) )
-                plugin_stack[-1].addAction(id)
-            while(len(plugin_stack) >= 2 and snum_stack[-1] <= 0):
-                plugin_stack[-2].addMenu(plugin_stack[-1])
-                plugin_stack.pop()
-                snum_stack.pop()
-            if snum_stack and (snum_stack[-1] > 0):
-                snum_stack[-1] = snum_stack[-1] - 1
-
+        self.GeneratePulldownMenu(plugin_folder, e)
 
 
         ##
@@ -192,6 +134,27 @@ class MainWindow(QMainWindow, DojoMenu, Credit, Annotator, Plugins, Segment, Fil
         self.table_widget = PersephonepTableWidget(self)
         self.setCentralWidget(self.table_widget)
         self.show()
+
+
+    def GeneratePulldownMenu(self, folder, e):
+        plugin_stack = [folder]
+        snum_stack   = [0]
+        items = e.items()
+        for key, val in items:
+            if val['Sub'] > 0:
+                plugin_stack.append(QMenu(key, self))
+                snum_stack = snum_stack + [ val['Sub'] ]
+            else:
+                id = QAction( key, self)
+                id.triggered.connect( getattr(self, val['Func']) )
+                plugin_stack[-1].addAction(id)
+            while(len(plugin_stack) >= 2 and snum_stack[-1] <= 0):
+                plugin_stack[-2].addMenu(plugin_stack[-1])
+                plugin_stack.pop()
+                snum_stack.pop()
+            if snum_stack and (snum_stack[-1] > 0):
+                snum_stack[-1] = snum_stack[-1] - 1
+
 
 
 class PersephonepTableWidget(QWidget):
