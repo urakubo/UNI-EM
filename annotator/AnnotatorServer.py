@@ -15,8 +15,7 @@ import lxml
 import lxml.etree
 from itertools import chain, product
 from skimage import measure
-#from distutils.dir_util import copy_tree
-#import pickle
+
 
 from marching_cubes import march
 from stl import mesh
@@ -45,11 +44,11 @@ else:
   stldata_dir = os.path.normpath(path.join(main_dir, "data","stlviewer"))
   main_dir_   = main_dir
 
-class StlWebSocket(tornado.websocket.WebSocketHandler):
+class AnnotatorWebSocket(tornado.websocket.WebSocketHandler):
   ###
   def __init__(self, *args, **kwargs):
     self.small_ids = kwargs.pop('player')
-    super(StlWebSocket, self).__init__(*args, **kwargs)
+    super(AnnotatorWebSocket, self).__init__(*args, **kwargs)
   ###
   def on_message(self, message):
     id = int(message)
@@ -77,11 +76,11 @@ class StlWebSocket(tornado.websocket.WebSocketHandler):
     return True
   ###
 
-class StlHandler(tornado.web.RequestHandler):
+class AnnotatorHandler(tornado.web.RequestHandler):
   def get(self):
     self.render('index.html')
 
-class StlServerLogic:
+class AnnotatorServerLogic:
   def __init__( self, u_info  ):
     ## User info
     self.u_info = u_info
@@ -131,15 +130,15 @@ class StlServerLogic:
     ####
     asyncio.set_event_loop(self.u_info.worker_loop_stl)
 
-    stlviewer = tornado.web.Application([
+    annotator = tornado.web.Application([
       (r'/css/(.*)', tornado.web.StaticFileHandler, {'path': path_css}),
       (r'/js/(.*)', tornado.web.StaticFileHandler, {'path': path_js}),
       (r'/data/(.*)', tornado.web.StaticFileHandler, {'path': stldata_dir}),
-      (r'/ws/display', StlWebSocket, {'player': self.small_ids}),
+      (r'/ws/display', AnnotatorWebSocket, {'player': self.small_ids}),
       (r'/(.*)', tornado.web.StaticFileHandler, {'path': path_main})
     ],debug=True,autoreload=True)
 
-    server = tornado.httpserver.HTTPServer(stlviewer)
+    server = tornado.httpserver.HTTPServer(annotator)
     server.listen(self.u_info.port_stl)
     print('stldata_dir: ',stldata_dir)
     print('*'*80)

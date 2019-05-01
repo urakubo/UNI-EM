@@ -31,7 +31,7 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 plugins_dir = path.join(main_dir, "annotator")
 sys.path.append(plugins_dir)
-from ServerAnnotator import StlServerLogic
+from AnnotatorServer import AnnotatorServerLogic
 sys.path.append(os.path.join(main_dir, "filesystem"))
 sys.path.append(os.path.join(main_dir, "gui"))
 
@@ -56,7 +56,7 @@ if os.path.isdir(stldata_dir) == False:
     os.makedirs(stldata_dir)
 ###
 ###
-class ControlStlServer:
+class ControlAnnotatorServer:
 
     ###
     def __init__(self, u_info):
@@ -97,18 +97,18 @@ class ControlStlServer:
             json.dump(data_dict, f, indent=2, ensure_ascii=False)
 
 
-    def StartThreadStlServer(self):
-        logic = StlServerLogic(self.u_info)
+    def StartThreadAnnotatorServer(self):
+        logic = AnnotatorServerLogic(self.u_info)
         logic.run()
 
-    def LaunchStlViewer(self):
+    def LaunchAnnotator(self):
         self.u_info.worker_loop_stl = asyncio.new_event_loop()
-        self.u_info.stl_thread = threading.Thread(target=self.StartThreadStlServer)
+        self.u_info.stl_thread = threading.Thread(target=self.StartThreadAnnotatorServer)
         self.u_info.stl_thread.setDaemon(True) # Stops if control-C
         self.u_info.stl_thread.start()
 
-    def TerminateStlViewer(self):
-        print('TerminateStlViewer')
+    def TerminateAnnotator(self):
+        print('TerminateAnnotator')
         if self.u_info.stl_thread == None:
             print("3D Annotator is not open\n")
             return False

@@ -32,7 +32,7 @@ parent_dir  = path.abspath(path.join(current_dir, pardir))  # Parent dir of scri
 
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(os.path.join(main_dir, "dojo"))
-import MainDojo
+import DojoServer
 
 #import h5py
 #import lxml

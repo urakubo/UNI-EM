@@ -39,7 +39,7 @@ from Credit  import Credit
 from Plugins import Plugins
 from Segment import Segment
 
-from MainDojo import ServerLogic
+from DojoServer import ServerLogic
 from ImportDialog import ImportDialog
 from SaveChanges import SaveChanges
 from ExportImageDialog import ExportImageDialog

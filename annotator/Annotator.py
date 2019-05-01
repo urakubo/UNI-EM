@@ -13,8 +13,8 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 plugins_dir = path.join(main_dir, "plugins")
 sys.path.append(plugins_dir)
-from ServerAnnotator import StlServerLogic
-from ControlStlServer import ControlStlServer
+from AnnotatorServer import AnnotatorServerLogic
+from ControlAnnotatorServer import ControlAnnotatorServer
 
 #sys.path.append(path.join(plugins_dir, "superpixel"))
 
@@ -36,17 +36,17 @@ class Annotator():
             return
 
         ## Initialize
-        self.u_info.annotator = ControlStlServer(self.u_info)
+        self.u_info.annotator = ControlAnnotatorServer(self.u_info)
 
         ## Start StlServer
-        self.u_info.annotator.LaunchStlViewer()
+        self.u_info.annotator.LaunchAnnotator()
 
         ## Call StlViewer
         self.table_widget.addTab('annotator', '3D Annotator', self.u_info.url_stl+'index.html' )
 
-    def CloseStlViewer(self):
+    def CloseAnnotator(self):
         ## Start StlServer
         print('Close 3D Annotator')
-        self.u_info.annotator.TerminateStlViewer()
+        self.u_info.annotator.TerminateAnnotator()
 
 
