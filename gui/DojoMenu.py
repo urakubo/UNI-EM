@@ -1,8 +1,4 @@
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import sys
 import os
 
@@ -36,7 +32,7 @@ class DojoMenu():
                    'Export Dojo Folder',
                    'Export EM Stack',
                    'Export Segmentation',
-                   'Exit']
+                   'Exit from UNI-EM']
 
         self.file_icon = ['Photo_Import_16.png',
                   'Folder_16.png',

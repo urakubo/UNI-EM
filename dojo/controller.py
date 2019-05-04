@@ -1,9 +1,4 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import time
-
 import cv2
 import glob
 import h5py
@@ -17,8 +12,9 @@ import shutil
 from scipy import ndimage        ################## Unnecessary?!
 from skimage import exposure     ################## Unnecessary?!
 import skimage
-
 from PIL import Image as PILImage
+
+
 
 import tempfile ####  <=================== HU: 180626
 
@@ -32,6 +28,7 @@ sys.path.append(path.join(main_dir, "Filesystem"))
 from DB import DB
 from Params import Params
 import Miscellaneous as m
+from SaveChanges import SaveChanges
 
 class Controller(object):
 
@@ -271,7 +268,9 @@ class Controller(object):
       input['name'] = 'SAVING'
       input['origin'] = 'SERVER'
       self.__websocket.send(json.dumps(input))
-      self.save(input)
+      self.save(input)  ### Dojo save routine
+      self.SaveChanges = SaveChanges()  ### System save routine in UNI-EM
+      self.SaveChanges.run(self.__u_info) ### System save routine run
 
     elif input['name'] == 'ACTION':
       self.add_action(input)
@@ -382,22 +381,23 @@ class Controller(object):
     value = input['value']
     username = input['origin']
 
-    if username in self.__actions:
-      # actions available
-      action = self.__actions[username][value-1]
+    if username not in self.__actions:
+      return
 
-      #
-      # undo merge and split
-      #
-      if action['type'] == 'MERGE_GROUP':
-        self._undo_merge(action)
+    action = self.__actions[username][value-1]
 
-      # undo split
-      elif action['type'] == 'SPLIT':
-        self._undo_split(action)
+    #
+    # undo merge and split
+    #
+    if action['type'] == 'MERGE_GROUP':
+      self._undo_merge(action)
 
-      # decrease value
-      value = max(0, value-1)
+    # undo split
+    elif action['type'] == 'SPLIT':
+      self._undo_split(action)
+
+    # decrease value
+    value = max(0, value-1)
 
     #
     # send the action index
@@ -408,83 +408,86 @@ class Controller(object):
     output['value'] = [value, len(self.__actions[username])]
     self.__websocket.send(json.dumps(output))
 
+
   def redo_action(self, input):
 
     value = input['value']
     username = input['origin']
+
+    if username not in self.__actions:
+      return
+
     # increase value
-    value = min(len(self.__actions[username]), value+1)
+    value = min(len(self.__actions[username]), value + 1)
 
-    if username in self.__actions:
+    # actions available
+    action = self.__actions[username][value-1]
 
-      # actions available
-      action = self.__actions[username][value-1]
+    #
+    # redo merge
+    #
+    if action['type'] == 'MERGE_GROUP':
+
+      ids = action['value'][0]
+
+      for i in ids:
+
+        if i == action['value'][1]:
+          # avoid GPU crash
+          continue
+
+        key = str(i)
+
+        self.__new_merge_table[key] = action['value'][1]
+
+      self.send_redo_merge('SERVER', action['value'])
+      self.send_redraw('SERVER')
+
+    elif action['type'] == 'SPLIT':
+
+      self.z = action['value'][0]
+      bb = action['value'][1]
+      new_area = action['value'][3]
+
+      self.x_tiles = range((bb[0]//self.__u_info.tile_num_pixels_x), (((bb[2]-1)//self.__u_info.tile_num_pixels_x) + 1))
+      self.y_tiles = range((bb[1]//self.__u_info.tile_num_pixels_y), (((bb[3]-1)//self.__u_info.tile_num_pixels_y) + 1))
+      self.x_tiles = list(self.x_tiles)
+      self.y_tiles = list(self.y_tiles)
+
+      tile_dict = {} # here this is the segmentation
+
+      # Load segmentation data
+      tile_dict = self.file_iter(tile_dict)[0]
+      # go through rows of each tile and segmentation
+      row_val = self.tile_iter(tile_dict)[0]
+
+      # Temporarily harden new merges
+      new_merges = self.__new_merge_table
+      for k,v in new_merges.items():
+        while str(v) in new_merges: v = new_merges[str(v)]
+        row_val[np.where(row_val==float(k))] = v
 
       #
-      # redo merge
+      # NOW REPLACE THE PIXEL DATA
+      # but take offset of tile into account
       #
-      if action['type'] == 'MERGE_GROUP':
+      offset_x = self.x_tiles[0]*512
+      offset_y = self.y_tiles[0]*512
 
-        ids = action['value'][0]
+      bb_relative = np.array(bb) - [offset_x, offset_y, offset_x , offset_y]
 
-        for i in ids:
+      row_val[bb_relative[1]:bb_relative[3],bb_relative[0]:bb_relative[2]] = new_area
 
-          if i == action['value'][1]:
-            # avoid GPU crash
-            continue
+      # Save all the splits
+      self.save_iter(row_val)
 
-          key = str(i)
-
-          self.__new_merge_table[key] = action['value'][1]
-
-        self.send_redo_merge('SERVER', action['value'])
-        self.send_redraw('SERVER')
-
-      elif action['type'] == 'SPLIT':
-
-        self.z = action['value'][0]
-        bb = action['value'][1]
-        new_area = action['value'][3]
-
-        self.x_tiles = range((bb[0]//self.__u_info.tile_num_pixels_x), (((bb[2]-1)//self.__u_info.tile_num_pixels_x) + 1))
-        self.y_tiles = range((bb[1]//self.__u_info.tile_num_pixels_y), (((bb[3]-1)//self.__u_info.tile_num_pixels_y) + 1))
-        self.x_tiles = list(self.x_tiles)
-        self.y_tiles = list(self.y_tiles)
-
-        tile_dict = {} # here this is the segmentation
-
-        # Load segmentation data
-        tile_dict = self.file_iter(tile_dict)[0]
-        # go through rows of each tile and segmentation
-        row_val = self.tile_iter(tile_dict)[0]
-
-        # Temporarily harden new merges
-        new_merges = self.__new_merge_table
-        for k,v in new_merges.items():
-          while str(v) in new_merges: v = new_merges[str(v)]
-          row_val[np.where(row_val==float(k))] = v
-
-        #
-        # NOW REPLACE THE PIXEL DATA
-        # but take offset of tile into account
-        #
-        offset_x = self.x_tiles[0]*512
-        offset_y = self.y_tiles[0]*512
-
-        bb_relative = np.array(bb) - [offset_x, offset_y, offset_x , offset_y]
-
-        row_val[bb_relative[1]:bb_relative[3],bb_relative[0]:bb_relative[2]] = new_area
-
-        # Save all the splits
-        self.save_iter(row_val)
-
-        # send reload event
-        output = {}
-        output['name'] = 'HARD_RELOAD'
-        output['origin'] = 'SERVER'
-        output['value'] = {'z':self.z, 'full_bbox':str(bb)}
-        # print output
-        self.__websocket.send(json.dumps(output))
+      # send reload event
+      output = {}
+      output['name'] = 'HARD_RELOAD'
+      output['origin'] = 'SERVER'
+      output['value'] = {'z':self.z, 'full_bbox':str(bb)}
+      # print output
+      self.__websocket.send(json.dumps(output))
 
     #
     # send the action index
@@ -528,7 +531,7 @@ class Controller(object):
         continue
       self.__database.remove_lock(i)
 
-    print('STORED LOCK TABLE')
+    # print('STORED LOCK TABLE')
 
     self.__database.store()
 
@@ -539,7 +542,7 @@ class Controller(object):
     self.__hard_merge_table = self.__database._merge_table
 
     print('Splits', self.__split_count)
-    print('All saved! Yahoo!')
+    print('All buffers were saved.')
 
     z = 0
     bb = [0, 0, 512, 512]
@@ -667,7 +670,7 @@ class Controller(object):
 
     self.add_action(action)
     print('split done\n')
-    print(action)
+    #print(action)
 
     # Save all the splits, yielding offsets
     offsets = self.save_iter(tile)
@@ -946,12 +949,16 @@ class Controller(object):
     # full_bbox = [min(full_coords[1]), min(full_coords[0]), max(full_coords[1]), max(full_coords[0])]
 
 
-
-
+    #
+    # No undo for adjust
+    #
+    # input['name'] = 'SAVING'
+    # input['origin'] = 'SERVER'
+    # self.__websocket.send(json.dumps(input))
+    self.save(input)
     #
     # this is for undo
     #
-
 
     #old_area = old_tile[bb[1]:bb[3],bb[0]:bb[2]]
     #new_area = tile[bb[1]:bb[3],bb[0]:bb[2]]

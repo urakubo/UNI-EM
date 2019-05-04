@@ -251,5 +251,16 @@ class FileIO():
 
         # ----------------------------------------------------------------------
 
-    def Exit(self):  # wxGlade: MojoControlPanel.<event_handler>
-        self.Close()
+#    def Exit(self):  # wxGlade: MojoControlPanel.<event_handler>
+#        self.Close()
+
+
+    def ExitUniEm(self):  # wxGlade: ControlPanel.<event_handler>
+        buttonReply = QMessageBox.question(self, 'Exit UNI-EM', "Do you really exit UNI-EM?",
+                                           QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.Cancel)
+        if buttonReply == QMessageBox.Yes:
+            qApp.quit
+        elif buttonReply == QMessageBox.No:
+            return(0)
+        else:
+            return(1)
