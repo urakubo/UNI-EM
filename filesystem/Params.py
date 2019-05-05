@@ -83,7 +83,7 @@ class Params:
             # print('Run on pyinstaller.')
             self.data_path = os.path.normpath( path.join(main_dir, "../..","data") )
 
-            self.exec_run_translate = os.path.join(main_dir, 'translate.exe')
+            self.exec_translate = os.path.join(main_dir, 'translate.exe')
             self.exec_run_inference = os.path.join(main_dir, 'run_inference_win.exe')
             self.exec_compute_partition = os.path.join(main_dir, 'compute_partitions.exe')
             self.exec_build_coordinates = os.path.join(main_dir, 'build_coordinates.exe')
