@@ -955,7 +955,8 @@ class Controller(object):
     # input['name'] = 'SAVING'
     # input['origin'] = 'SERVER'
     # self.__websocket.send(json.dumps(input))
-    self.save(input)
+    if not self.__actions == {}:
+      self.save(input)
     #
     # this is for undo
     #
