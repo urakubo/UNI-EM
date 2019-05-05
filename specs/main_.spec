@@ -153,7 +153,7 @@ translate=[path.join(main_dir, "segment","_2D_DNN","translate.py")]
 
 hiddenimports=['scipy._lib.messagestream','pywt._extensions._cwt','tensorflow.contrib']
 
-coll += analysis(tensorb, pathex, [], hiddenimports, 'translate')
+coll += analysis(translate, pathex, [], hiddenimports, 'translate')
 
 
 
