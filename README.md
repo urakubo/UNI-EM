@@ -52,7 +52,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
    	- GPU version (Ver0.71: 955 MB): https://www.dropbox.com/s/54v38te0rvtopr6/UNI_EM0.71_GPU3.zip?dl=0
 	- GPU version (Ver0.75: 723 MB): https://www.dropbox.com/s/13wybq7jgh6vdks/UNI-EM0.75_GPU.zip?dl=0 (Not yet validated)
 
-	The GPU version is experimental (huge), and it requires NVIDIA GPU over 3.5 compute capability.
+	The GPU version is huge, and it requires NVIDIA GPU over 3.5 compute capability.
 
 	- https://developer.nvidia.com/cuda-gpus
 
