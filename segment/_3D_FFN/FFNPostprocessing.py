@@ -32,7 +32,7 @@ class FFNPostprocessing(MiscellaneousSegment):
         print('Start postprocesing.')
         print(params['Output Filetype'])
 
-        data = np.load(params['Target Inference File'])
+        data = np.load(params['Target Sementation File (npz)'])
         print('File contents :', data.files)
         segmentation = data['segmentation']
         print('Segmentation image size: ', segmentation.shape)
