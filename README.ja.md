@@ -45,12 +45,13 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 
 ### Pyinstaller版：
 1. Tensorflow-GPU 版(498 MB)とTensorflow-CPU版(XXX MB, 作成中)を用意しました。いずれかをダウンロードして展開してください。
-	- CPU version (Ver0.75; 290 MB): https://www.dropbox.com/s/4cp8l076fw5y418/UNI-EM0.75_CPU.zip?dl=0
+
 	- CPU version (Ver0.76; 290 MB): https://www.dropbox.com/s/ivs5aftzxigvpyx/UNI-EM0.76_CPU.zip?dl=0
+	- GPU version (Ver0.76: 715 MB): https://www.dropbox.com/s/vb9d4yd6ueoo3fc/UNI-EM0.76_GPU.zip?dl=0
+
+	- CPU version (Ver0.75; 290 MB): https://www.dropbox.com/s/4cp8l076fw5y418/UNI-EM0.75_CPU.zip?dl=0
 	- GPU version (Ver0.75: 706 MB): https://www.dropbox.com/s/13wybq7jgh6vdks/UNI-EM0.75_GPU.zip?dl=0
-	<!-- 
-	- GPU version (Ver0.71: 955 MB): https://www.dropbox.com/s/54v38te0rvtopr6/UNI_EM0.71_GPU3.zip?dl=0
-	-->
+
 2. 公開サンプルデータkasthuri15をダウンロードして適当なフォルダに展開してください。
 	- https://www.dropbox.com/s/pxds28wdckmnpe8/ac3x75.zip?dl=0
 	- https://www.dropbox.com/s/6nvu8o6she6rx9v/ISBI_Dojo.zip?dl=0
