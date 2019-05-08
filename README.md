@@ -50,7 +50,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 1.	Download one of the following two versions, and unzip it:
 
 	- CPU version (Ver0.76; 290 MB): https://www.dropbox.com/s/ivs5aftzxigvpyx/UNI-EM0.76_CPU.zip?dl=0
-	- GPU version (Ver0.75: 715 MB): https://www.dropbox.com/s/vb9d4yd6ueoo3fc/UNI-EM0.76_GPU.zip?dl=0
+	- GPU version (Ver0.76: 715 MB): https://www.dropbox.com/s/vb9d4yd6ueoo3fc/UNI-EM0.76_GPU.zip?dl=0
 
 	- CPU version (Ver0.75; 290 MB): https://www.dropbox.com/s/4cp8l076fw5y418/UNI-EM0.75_CPU.zip?dl=0
 	- GPU version (Ver0.75: 706 MB): https://www.dropbox.com/s/13wybq7jgh6vdks/UNI-EM0.75_GPU.zip?dl=0
