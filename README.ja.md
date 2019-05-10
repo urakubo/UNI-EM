@@ -44,7 +44,7 @@ OSはMicrosoft Windows 10 (64 bit) です。メインメモリ8GB以上のPCで�
 Pythonのインストールの必要のないPyinstaller版とPythonソースコードの両方を提供します。
 
 ### Pyinstaller版：
-1. Tensorflow-GPU 版(498 MB)とTensorflow-CPU版(XXX MB, 作成中)を用意しました。いずれかをダウンロードして展開してください。
+1. GPU 版とCPU版を用意しました。いずれかをダウンロードして展開してください。
 
 	- CPU version (Ver0.76; 290 MB): https://www.bit.ly/2H8WsHb
 	- GPU version (Ver0.76: 715 MB): https://www.bit.ly/2H8kpQo
