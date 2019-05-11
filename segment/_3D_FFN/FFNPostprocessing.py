@@ -44,8 +44,6 @@ class FFNPostprocessing(MiscellaneousSegment):
             print('Max segmentation ID: ', ids)
             colormap = np.random.randint(255, size=(ids+1, 3), dtype=np.uint64)
             colormap[0,:] = 0
-
-
         ##
         ##
         for idz in range(segmentation.shape[0]):
