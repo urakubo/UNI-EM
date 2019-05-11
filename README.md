@@ -36,7 +36,7 @@ Recent years have seen a rapid expansion in the field of micro-connectomics, whi
 4.	A 3D annotator was equipped for visual inspection and annotation (based on Three.js).
 5.	2D/3D filtration functions were equipped for pre/postprocessing of the segmented images (based on skimage and opencv3).
 
-Multiple users can simultaneously use it through web browsers. The goal is to develop a unified software environment for DNN-based segmentation, ground truth segmentation, pre/postprocessing, proofreading, annotation, and visualization. The VAST Lite is recommended for 3D ground truth generation (https://software.rc.fas.harvard.edu/lichtman/vast/ ).
+Multiple users can simultaneously use it through web browsers. The goal is to develop a unified software environment for  ground truth preparation, DNN-based segmentation, pre/postprocessing, proofreading, annotation, and visualization. The VAST Lite is recommended for 3D ground truth generation (https://software.rc.fas.harvard.edu/lichtman/vast/ ).
 
 ## System requirements
 Operating system: Microsoft Windows 10 (64 bit). Linux and macOS versions will be built in future.
@@ -48,12 +48,10 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 
 ### Pyinstaller version 
 1.	Download one of the following two versions, and unzip it:
-	- CPU version (Ver0.75; 290 MB): https://www.dropbox.com/s/4cp8l076fw5y418/UNI-EM0.75_CPU.zip?dl=0
 
-	- GPU version (Ver0.75: 706 MB): https://www.dropbox.com/s/13wybq7jgh6vdks/UNI-EM0.75_GPU.zip?dl=0
-	<!-- 
-	- GPU version (Ver0.71: 955 MB): https://www.dropbox.com/s/54v38te0rvtopr6/UNI_EM0.71_GPU3.zip?dl=0
-	-->
+	- CPU version (Ver0.76; 290 MB): https://www.bit.ly/2H8WsHb
+	- GPU version (Ver0.76: 715 MB): https://www.bit.ly/2H8kpQo
+
 	The GPU version is huge, and it requires NVIDIA GPU over 3.5 compute capability.
 
 	- https://developer.nvidia.com/cuda-gpus
@@ -72,9 +70,12 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 3. Download the source codes from the github site:
    	- git clone https://github.com/urakubo/UNI-EM
 4. Install the following modules of Python: Tensorflow-gpu, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl. Check also "requirements.txt". 
-5. Copy [UNI-EM]\Marching_cube\marching_cubes.cp3X-win_amd64.pyd and paste it to {$INSTALL_PYTHON}\Lib\site-packages.
+5. **Copy [UNI-EM]\marching_cubes\marching_cubes.cp3X-win_amd64.pyd and paste it to {$INSTALL_PYTHON}\Lib\site-packages.**
 
-	- This marching cube program is obtained from the ilastik: https://github.com/ilastik/marching_cubes
+	- **Execute the Python command "import site; site.getsitepackages()" to find {$INSTALL_PYTHON}.**
+	
+	
+	The marching cube program is obtained from the ilastik: https://github.com/ilastik/marching_cubes
 
 
 6. Download sample EM/segmentation dojo files from the following website, and unzip it:
