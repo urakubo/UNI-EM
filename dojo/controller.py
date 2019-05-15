@@ -934,6 +934,8 @@ class Controller(object):
 
     paint_area = np.zeros_like(row_val, dtype=np.uint8)
     for (brush_size, i_j) in zip(brush_sizes, i_js):
+      if i_j is None:
+        continue
       i_j = i_j[np.all(i_j > 0, axis=1), :]  # Remove negative location
       i_j = i_j - np.array([offset_x, offset_y])
       i_j = np.array(i_j, np.int32) + np.array(brush_size / 2, dtype='int32') # Shift location
