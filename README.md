@@ -89,9 +89,10 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 ## Authors
 
 * [**Hidetoshi Urakubo**](https://researchmap.jp/urakubo/?lang=english) - *Initial work* - 
-* [**Ryoji Miyamoto**](https://polygonpla.net/) - *Frontend programming* - 
+* [**Ryoji Miyamoto**](https://polygonpla.net/) - *Frontend GUI* - 
 * [**Torsten Bullmann**](https://www.cb.hs-mittweida.de/en/mitarbeiterinnen-mitarbeiter-in-ihren-fachgruppen/bullmann-torsten.html) - *2D convolutional neural networks* -
 * [**Naoki Tamura**](https://github.com/tamutamu) - *Deployment using pyinstaller* - 
+* [**Ryoya Kamikawa**](https://ryoka.in) - *GUI for classic image filters* - 
 
 
 ## License
