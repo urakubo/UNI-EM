@@ -24,6 +24,7 @@ numpy-stl==2.9.0
 opencv-python==4.0.0.21
 pefile==2018.8.8
 Pillow==5.4.1
+protobuf==3.6.1
 PyInstaller==3.4
 pypiwin32==223
 pypng==0.0.19
