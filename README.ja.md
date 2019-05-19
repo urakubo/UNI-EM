@@ -38,7 +38,7 @@
 
 
 ## 動作条件：
-OSはMicrosoft Windows 10 (64 bit) です。メインメモリ8GB以上のPCで動きます。深層学習を行う場合は、NVIDIA社のグラフィックスカードを搭載したPCを使用することを推奨します。GeForce GTX 1080tiなどの高性能なGPUを搭載したグラフィックスカードの使用を推奨します。ユーザの希望がありましたらLinuxやmacOSに移植します。
+OSはMicrosoft Windows 10 (64 bit) です。Linux (Ubuntu 18.04) バージョンを開発中です。深層学習を行う場合は、NVIDIA社のグラフィックスカードを搭載したPCを使用することを推奨します。GeForce GTX 1080tiなどの高性能なGPUを搭載したグラフィックスカードの使用を推奨します。
 
 ## インストール方法：
 Pythonのインストールの必要のないPyinstaller版とPythonソースコードの両方を提供します。
