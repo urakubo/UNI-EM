@@ -40,7 +40,7 @@ Multiple users can simultaneously use it through web browsers. The goal is to de
 
 ## System requirements
 Operating system: Microsoft Windows 10 (64 bit).
-Linux version is under development.
+Linux version (Ubuntu 18.04) is under development.
 
 Recommendation: High-performance NVIDIA graphics card such as GeForce GTX 1080ti.
 
