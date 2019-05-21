@@ -71,6 +71,10 @@ class MainWindow(QMainWindow, DojoMenu, Credit, Annotator, Plugins, Segment, Fil
         ## File menu
         ##
 
+        ##
+        ## Dojo menu
+        ##
+
         dojo_folder = main_menu.addMenu('Dojo')
         self.dojo_icon_open_close = self.DojoDropdownMenu( dojo_folder )
         self.InitModeFileMenu(self.dojo_icon_open_close)
@@ -83,7 +87,7 @@ class MainWindow(QMainWindow, DojoMenu, Credit, Annotator, Plugins, Segment, Fil
         annotator_folder = main_menu.addMenu('Annotator')
         with open( path.join(annotator_dir, self.u_info.fname_menu) , 'r' ) as fp:
             e = json.load(fp, object_pairs_hook=OrderedDict)
-        self.GeneratePulldownMenu(annotator_folder, e)
+        self.GenerateDropdownMenu(annotator_folder, e)
 
 
         ##
@@ -93,7 +97,7 @@ class MainWindow(QMainWindow, DojoMenu, Credit, Annotator, Plugins, Segment, Fil
         segmentation_folder = main_menu.addMenu('Segmentation')
         with open( path.join(segmentation_dir, self.u_info.fname_menu) , 'r' ) as fp:
             e = json.load(fp, object_pairs_hook=OrderedDict)
-        self.GeneratePulldownMenu(segmentation_folder, e)
+        self.GenerateDropdownMenu(segmentation_folder, e)
 
 
         ##
@@ -103,7 +107,7 @@ class MainWindow(QMainWindow, DojoMenu, Credit, Annotator, Plugins, Segment, Fil
         plugin_folder = main_menu.addMenu('Plugins')
         with open( path.join(plugins_dir, self.u_info.fname_menu) , 'r' ) as fp:
             e = json.load(fp, object_pairs_hook=OrderedDict)
-        self.GeneratePulldownMenu(plugin_folder, e)
+        self.GenerateDropdownMenu(plugin_folder, e)
 
 
         ##
@@ -136,7 +140,7 @@ class MainWindow(QMainWindow, DojoMenu, Credit, Annotator, Plugins, Segment, Fil
         self.show()
 
 
-    def GeneratePulldownMenu(self, folder, e):
+    def GenerateDropdownMenu(self, folder, e):
         plugin_stack = [folder]
         snum_stack   = [0]
         items = e.items()
