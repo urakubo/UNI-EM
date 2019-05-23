@@ -49,13 +49,15 @@ class ExecuteTraining(MiscellaneousSegment):
         ## Check and change filetype of input images
         ##
         input_files = glob.glob(os.path.join(params['Image Folder'], "*.jpg"))
-        tmp = glob.glob(os.path.join(params['Image Folder'], "*.png"))
-        input_files.extend(tmp)
+        input_png = glob.glob(os.path.join(params['Image Folder'], "*.png"))
+        input_tif = glob.glob(os.path.join(params['Image Folder'], "*.tif"))
+        input_files.extend(input_png)
+        input_files.extend(input_tif)
         im = cv2.imread(input_files[0], cv2.IMREAD_UNCHANGED)
         print('Target file to check color type : ', input_files[0])
         print('Image dimensions                : ', im.shape)
         print('Image filetype                  : ', im.dtype)
-        if not (im.dtype == "uint8" and len(im.shape) == 3) :
+        if not (im.dtype == "uint8" and len(im.shape) == 3 and input_tif == []) :
             tmpdir = os.path.join(datadir, "tmp", "DNN_training_images")
             if os.path.exists(tmpdir) :
                 shutil.rmtree(tmpdir)
@@ -63,6 +65,7 @@ class ExecuteTraining(MiscellaneousSegment):
             for input_file in input_files:
                 im_col = cv2.imread(input_file)
                 filename = os.path.basename(input_file)
+                filename = filename.replace('.tif', '.png')
                 converted_input_file = os.path.join( tmpdir, filename )
                 cv2.imwrite(converted_input_file, im_col)
             params['Image Folder'] = tmpdir
@@ -72,13 +75,16 @@ class ExecuteTraining(MiscellaneousSegment):
         ## Check and change filetype of input segmentation
         ##
         input_files = glob.glob(os.path.join(params['Segmentation Folder'], "*.jpg"))
-        tmp = glob.glob(os.path.join(params['Segmentation Folder'], "*.png"))
-        input_files.extend(tmp)
+        input_png = glob.glob(os.path.join(params['Segmentation Folder'], "*.png"))
+        input_tif = glob.glob(os.path.join(params['Segmentation Folder'], "*.tif"))
+        input_files.extend(input_png)
+        input_files.extend(input_tif)
+
         im = cv2.imread(input_files[0], cv2.IMREAD_UNCHANGED)
         print('Target file to check color type : ', input_files[0])
         print('Segmentation image dimensions   : ', im.shape)
         print('Segmentation filetype           : ', im.dtype)
-        if not (im.dtype == "uint8" and len(im.shape) == 3) :
+        if not (im.dtype == "uint8" and len(im.shape) == 3 and tmp2 == []) :
             tmpdir = os.path.join(datadir, "tmp", "DNN_ground_truth")
             if os.path.exists(tmpdir) :
                 shutil.rmtree(tmpdir)
@@ -86,6 +92,7 @@ class ExecuteTraining(MiscellaneousSegment):
             for input_file in input_files:
                 im_col = cv2.imread(input_file)
                 filename = os.path.basename(input_file)
+                filename = filename.replace('.tif', '.png')
                 converted_input_file = os.path.join( tmpdir, filename )
                 cv2.imwrite(converted_input_file, im_col)
             params['Segmentation Folder'] = tmpdir
