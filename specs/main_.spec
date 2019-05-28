@@ -18,7 +18,7 @@ def analysis(_spec_path_list, _pathex, _datas, _hiddenimports, _name):
                  binaries=[],
                  datas=_datas,
                  hiddenimports=_hiddenimports,
-                 hookspath=[],
+                 hookspath=['./hooks'],
                  runtime_hooks=[],
                  excludes=[],
                  win_no_prefer_redirects=False,
