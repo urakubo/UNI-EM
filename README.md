@@ -1,7 +1,7 @@
 [Japanese version here](README.ja.md)
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-![System requirements](https://img.shields.io/badge/platform-win64,%20linux64-red.svg)
+![System requirements](https://img.shields.io/badge/platform-win%2064,%20linux%2064-green.svg)
 
 This software is under development!
 
