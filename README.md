@@ -46,7 +46,7 @@ Recommendation: High-performance NVIDIA graphics card such as GeForce GTX 1080ti
 ## Installation
 We provide standalone versions (pyinstaller version) and Python source codes.
 
-### Pyinstaller version 
+### Pyinstaller version (Only Microsoft Windows 10)
 1.	Download one of the following two versions, and unzip it:
 
 	- CPU version (Ver0.76; 290 MB): https://www.bit.ly/2H8WsHb
@@ -65,7 +65,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 4.	Select Dojo → Open Dojo Folder from the dropdown menu, and specify the folder of the sample EM/segmentation dojo files. Dojo will be launched as a web application.
 
 ### Python version 
-1. Install Python 3.5 or 3.6 in a Microsoft Windows PC, 64 bit.
+1. Install Python 3.5 or later (3.6 recommended) in a Microsoft Windows PC (64 bit) or Linux PC (Ubuntu 18.04 confirmed).
 2. Install cuda 9.0 and cuDNN 7.4.2 (or later) for Tensorflow 1.12 (latest combination on 2018/12/20) if your PC has a NVIDIA-GPU.
 3. Download the source codes from the github site:
    	- git clone https://github.com/urakubo/UNI-EM
