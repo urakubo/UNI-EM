@@ -29,7 +29,7 @@
 
 　そこで、私たちはパイプライン上のソフトウェアのいくつかを実験研究者にも簡単に使えるように統合する作業を始めました。
 
-* まずHarvard 大学、Lichtman 研が開発した Rhoana パイプラインのDojoという校正ソフトウェア（サーバ＆クライアントシステム）に注目し、原作者(Daniel Haehn)の許可のもと改変してWindows　PCデスクトップアプリとしました。
+* まずHarvard 大学、Lichtman 研が開発した Rhoana パイプラインのDojoという校正ソフトウェア（サーバ＆クライアントシステム）に注目し、原作者(Daniel Haehn)の許可のもと改変してデスクトップアプリとしました。
 * さらに、同アプリに深層学習の基盤ソフトウェアであるTensorflow/ Tensorboard (Google) および深層学習に基づいた二種類のセグメンテーションソフトウェア"2D DNN (Resnetほか)", "3D FFN" を統合しました。
 * セグメンテーション結果を3Dで確認・アノテーションすることができるようにするために、3D annotatorを作成しました。
 * 推定画像の操作を行うために2D/3D フィルタを作成しました。
@@ -38,12 +38,16 @@
 
 
 ## 動作条件：
-OSはMicrosoft Windows 10 (64 bit) です。Linux (Ubuntu 18.04) バージョンを開発中です。深層学習を行う場合は、NVIDIA社のグラフィックスカードを搭載したPCを使用することを推奨します。GeForce GTX 1080tiなどの高性能なGPUを搭載したグラフィックスカードの使用を推奨します。
+OS：　Microsoft Windows 10 (64 bit) または Linux (Ubuntu 18.04にて動作確認済) 
+
+推奨：NVIDIA社の高性能GPUを搭載したグラフィックスカード (Compute capability 3.5 以上のGPU搭載のもの。GeForce GTX 1080tiなど)。
+
+- https://developer.nvidia.com/cuda-gpus
 
 ## インストール方法：
 Pythonのインストールの必要のないPyinstaller版とPythonソースコードの両方を提供します。
 
-### Pyinstaller版：
+### Pyinstaller版 (Windows10のみ)：
 1. GPU 版とCPU版を用意しました。いずれかをダウンロードして展開してください。
 
 	- CPU version (Ver0.76; 290 MB): https://www.bit.ly/2H8WsHb
@@ -58,12 +62,12 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 4. 上端のドロップダウンメニューより一番左のDojo → Open Dojo Folderを選択して、ダイアログよりkasthuri15フォルダ下のmojoを指定してください。サンプルデータがダウンロードされてDojoが起動します。
 
 ### Python版：
-1. Windows10 において、 Python3.5-3.6 をインストールしてください。
+1. Windows10またはLinux (Ubuntu18.04 にて動作確認済)にて Python3.5-3.6 をインストールしてください。
 2. Tensorflow 1.12 のためにGPUを利用する場合はcuda 9.0, cuda 9.0 and cuDNN 7.4.2 (or later)をインスト―ルしてください **[参考1]** 。
 3. 次の命令を実行してGithubより必要プログラムをダウンロードしてください。
 	 - git clone https://github.com/urakubo/UNI-EM
-4. requirements-[os]-[cpu or gpu].txtを参考、Pythonに必要モジュール「Tensorflow-gpu 1.12, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl」を pip install -r requirements.txt (または conda）などのコマンドを用いてインストールしてください。
-5. **[UNI-EM]\marching_cubes\marching_cubes.cp3X-win_amd64.pyd を {$INSTALL_PYTHON}\Lib\site-packages へコピーしてください。**{$INSTALL_PYTHON} は、Python コマンド "import site; site.getsitepackages()" により分かります。
+4. requirements-[os]-[cpu or gpu].txtを参考、Pythonに必要モジュール「Tensorflow-gpu 1.12, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl」を pip install -r requirements-[os]-[cpu or gpu].txt などのコマンドを用いてインストールしてください。
+5. **[UNI-EM]\marching_cubes\marching_cubes* を {$INSTALL_PYTHON}\Lib\site-packages へコピーしてください。**{$INSTALL_PYTHON} は、Python コマンド "import site; site.getsitepackages()" により分かります。
 
 6. コマンドププロンプトにて[UNI-EM]フォルダへ移動して、 python main.py と実行してコントロールパネルを起動してください。
 7. 公開サンプルデータkasthuri15をダウンロードして適当なフォルダに展開してください。

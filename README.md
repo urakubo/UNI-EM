@@ -30,7 +30,7 @@ Check the following pages after installation.
 Recent years have seen a rapid expansion in the field of micro-connectomics, which targets 3D reconstruction of neuronal networks from a stack of 2D electron microscopic (EM). The spatial scale of the 3D reconstruction grows rapidly over 1 mm3, thank to deep neural networks (DNN) that enable automated neuronal segmentation. Advanced research teams have developed their own pipelines for the DNN-based large-scale segmentation (Informatics 2017, 4:3, 29). Those pipelines are typically a series of client-server software for alignment, segmentation, proofreading, etc., each of which requires specific PC configuration. Because of such complexity, it is difficult even for computer experts to use them, and impossible for experimentalists. This makes a serious divide between the advanced and general experimental laboratories.
    To bridge this divide, we are now trying to unify pieces of software for automated EM segmentation.
 
-1.	We built a desktop version of the proofreading software Dojo (IEEE Trans. Vis. Comput. Graph. 20, 2466–2475) on Microsoft Windows 10, 64 bit.
+1.	We built a desktop version of the proofreading software Dojo (IEEE Trans. Vis. Comput. Graph. 20, 2466–2475).
 2.	We merged it with a DNN framework: Google Tensorflow/tensorboard. 
 3.	We then incorporated four types of DNN-based segmentation programs: 2D U-Net, ResNet, DenseNet, and HighwayNet. (https://github.com/tbullmann/imagetranslation-tensorflow) and flood-filling networks (https://github.com/google/ffn).
 4.	A 3D annotator was equipped for visual inspection and annotation (based on Three.js).
@@ -39,23 +39,23 @@ Recent years have seen a rapid expansion in the field of micro-connectomics, whi
 Multiple users can simultaneously use it through web browsers. The goal is to develop a unified software environment for  ground truth preparation, DNN-based segmentation, pre/postprocessing, proofreading, annotation, and visualization. The VAST Lite is recommended for 3D ground truth generation (https://software.rc.fas.harvard.edu/lichtman/vast/ ).
 
 ## System requirements
-Operating system: Microsoft Windows 10 (64 bit).
-Linux version (Ubuntu 18.04) is under development.
+Operating system: Microsoft Windows 10 (64 bit) or Linux (Ubuntu 18.04).
 
-Recommendation: High-performance NVIDIA graphics card such as GeForce GTX 1080ti.
+Recommendation: High-performance NVIDIA graphics card whose GPU has over 3.5 compute capability.
+
+- https://developer.nvidia.com/cuda-gpus
+
 
 ## Installation
 We provide standalone versions (pyinstaller version) and Python source codes.
 
-### Pyinstaller version 
+### Pyinstaller version (Microsoft Windows 10 Only)
 1.	Download one of the following two versions, and unzip it:
 
 	- CPU version (Ver0.76; 290 MB): https://www.bit.ly/2H8WsHb
 	- GPU version (Ver0.76: 715 MB): https://www.bit.ly/2H8kpQo
 
-	The GPU version is huge, and it requires NVIDIA GPU over 3.5 compute capability.
 
-	- https://developer.nvidia.com/cuda-gpus
 
 2.	Download sample EM/segmentation dojo files from the following website, and unzip it:
    	- https://www.dropbox.com/s/pxds28wdckmnpe8/ac3x75.zip?dl=0
@@ -66,12 +66,12 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 4.	Select Dojo → Open Dojo Folder from the dropdown menu, and specify the folder of the sample EM/segmentation dojo files. Dojo will be launched as a web application.
 
 ### Python version 
-1. Install Python 3.5 or 3.6 in a Microsoft Windows PC, 64 bit.
+1. Install Python 3.5 or 3.6 in a Microsoft Windows PC (64 bit) or Linux PC (Ubuntu 18.04 confirmed).
 2. Install cuda 9.0 and cuDNN 7.4.2 (or later) for Tensorflow 1.12 (latest combination on 2018/12/20) if your PC has a NVIDIA-GPU.
 3. Download the source codes from the github site:
    	- git clone https://github.com/urakubo/UNI-EM
 4. Install the following modules of Python: Tensorflow-gpu, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl. Check also "requirements-[os]-[cpu or gpu].txt". 
-5. **Copy [UNI-EM]\marching_cubes\marching_cubes.cp3X-win_amd64.pyd and paste it to {$INSTALL_PYTHON}\Lib\site-packages.**
+5. **Copy [UNI-EM]\marching_cubes\marching_cubes* and paste it to {$INSTALL_PYTHON}\Lib\site-packages.**
 
 	- **Execute the Python command "import site; site.getsitepackages()" to find {$INSTALL_PYTHON}.**
 	
