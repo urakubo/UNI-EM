@@ -46,7 +46,7 @@ Recommendation: High-performance NVIDIA graphics card such as GeForce GTX 1080ti
 ## Installation
 We provide standalone versions (pyinstaller version) and Python source codes.
 
-### Pyinstaller version (Only Microsoft Windows 10)
+### Pyinstaller version (Microsoft Windows 10 Only)
 1.	Download one of the following two versions, and unzip it:
 
 	- CPU version (Ver0.76; 290 MB): https://www.bit.ly/2H8WsHb
