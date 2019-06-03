@@ -42,7 +42,7 @@ OS：　Microsoft Windows 10 (64 bit) または Linux (Ubuntu 18.04にて動作�
 
 推奨：NVIDIA社の高性能GPUを搭載したグラフィックスカード (Compute capability 3.5 以上のGPU搭載のもの。GeForce GTX 1080tiなど)。
 
--- https://developer.nvidia.com/cuda-gpus
+- https://developer.nvidia.com/cuda-gpus
 
 ## インストール方法：
 Pythonのインストールの必要のないPyinstaller版とPythonソースコードの両方を提供します。
@@ -62,7 +62,7 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 4. 上端のドロップダウンメニューより一番左のDojo → Open Dojo Folderを選択して、ダイアログよりkasthuri15フォルダ下のmojoを指定してください。サンプルデータがダウンロードされてDojoが起動します。
 
 ### Python版：
-1. Windows10またはLinux (Ubuntu18.04 動作確認済)にて Python3.5-3.6 をインストールしてください。
+1. Windows10またはLinux (Ubuntu18.04 にて動作確認済)にて Python3.5-3.6 をインストールしてください。
 2. Tensorflow 1.12 のためにGPUを利用する場合はcuda 9.0, cuda 9.0 and cuDNN 7.4.2 (or later)をインスト―ルしてください **[参考1]** 。
 3. 次の命令を実行してGithubより必要プログラムをダウンロードしてください。
 	 - git clone https://github.com/urakubo/UNI-EM
