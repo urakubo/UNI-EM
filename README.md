@@ -41,9 +41,9 @@ Multiple users can simultaneously use it through web browsers. The goal is to de
 ## System requirements
 Operating system: Microsoft Windows 10 (64 bit) or Linux (Ubuntu 18.04).
 
-Recommendation: High-performance NVIDIA graphics card whose GPU has over 3.5 compute capability (e.g., GeForce GTX 1080ti).
+Recommendation: High-performance NVIDIA graphics card whose GPU has over 3.5 compute capability.
 
-	- https://developer.nvidia.com/cuda-gpus
+- https://developer.nvidia.com/cuda-gpus
 
 
 ## Installation
