@@ -114,11 +114,16 @@ class FFNInference(MiscellaneousSegment):
         ##
         m.mkdir_safe(os.path.join( params['Output Inference Folder'] ,'0','0' ) )
         ##
-        comm_inference = parent.u_info.exec_run_inference + ' ' \
-                    + ' --image_size_x '  + np.str( image_x ) \
-                    + ' --image_size_y '  + np.str( image_y ) \
-                    + ' --image_size_z '  + np.str( image_z ) \
-                    + ' --parameter_file ' + config_file
+        comm_inference = parent.u_info.exec_run_inference
+        comm_inference = comm_inference.split(' ')
+
+        params = ['--image_size_x', np.str( image_x ), 
+                 '--image_size_y', np.str( image_y ),
+                 '--image_size_z',  np.str( image_z ),
+                 '--parameter_file', config_file
+                ]
+
+        comm_inference += params
 
         print(comm_title)
         print(comm_inference)
