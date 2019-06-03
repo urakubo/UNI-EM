@@ -62,7 +62,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 
 3.	Please click the link "main.exe" in [UNI-EM] to launch the control panel.
 
-4.	Select Dojo → Open Dojo Folder from the dropdown menu, and specify the folder of the sample EM/segmentation dojo files. Dojo will be launched as a web application.
+4.	Select Dojo → Open Dojo Folder from the dropdown menu, and specify the folder of the sample EM/segmentation dojo files.  The proofreading software Dojo will be launched.
 
 ### Python version 
 1. Install Python 3.5 or 3.6 in a Microsoft Windows PC (64 bit) or Linux PC (Ubuntu 18.04 confirmed).
@@ -84,7 +84,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 
 7. Execute "python main.py" in the [UNI-EM] folder. The control panel will appear.
 
-8.	Select Dojo → Open Dojo Folder from the dropdown menu, and specify the folder of the sample EM/segmentation dojo files. Dojo -a web application- will be launched.
+8.	Select Dojo → Open Dojo Folder from the dropdown menu, and specify the folder of the sample EM/segmentation dojo files. The proofreading software Dojo will be launched.
 
 ## Authors
 
