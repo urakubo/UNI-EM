@@ -1,7 +1,7 @@
 [English version here](README.md)
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-![System requirements](https://img.shields.io/badge/platform-win%2064,%20linux%2064-green.svg)
+![System requirements](https://img.shields.io/badge/Platform-win%2064,%20linux%2064-green.svg)
 
 # DNNを用いた神経EM画像セグメンテーションのための統合環境（UNI-EM）
 
