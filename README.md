@@ -5,7 +5,7 @@
 
 # A unified environment for DNN-based automated segmentation of neuronal EM images
 
-### table of contents
+### Table of contents
 - [Introduction](#Introduction)
 - [System requirements](#System-requirements)
 - [Installation](#Installation)
