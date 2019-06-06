@@ -33,7 +33,7 @@ Recent years have seen a rapid expansion in the field of micro-connectomics, whi
 2.	We merged it with a DNN framework: Google Tensorflow/tensorboard. 
 3.	We then incorporated four types of DNN-based segmentation programs: 2D U-Net, ResNet, DenseNet, and HighwayNet. (https://github.com/tbullmann/imagetranslation-tensorflow) and flood-filling networks (https://github.com/google/ffn).
 4.	A 3D annotator was equipped for visual inspection and annotation.
-5.	2D/3D filtration functions were equipped for pre/postprocessing of the segmented images (based on skimage and opencv3).
+5.	2D/3D filtration functions were equipped for pre/postprocessing of the segmented images.
 
 Multiple users can simultaneously use it through web browsers. The goal is to develop a unified software environment for  ground truth preparation, DNN-based segmentation, pre/postprocessing, proofreading, annotation, and visualization. The VAST Lite is recommended for 3D ground truth generation (https://software.rc.fas.harvard.edu/lichtman/vast/ ).
 
