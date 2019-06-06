@@ -35,7 +35,7 @@ Recent years have seen a rapid expansion in the field of micro-connectomics, whi
 4.	A 3D annotator was equipped for visual inspection and annotation.
 5.	2D/3D filtration functions were equipped for pre/postprocessing of the segmented images.
 
-Multiple users can simultaneously use it through web browsers. The goal is to develop a unified software environment for  ground truth preparation, DNN-based segmentation, pre/postprocessing, proofreading, annotation, and visualization. The VAST Lite is recommended for 3D ground truth generation (https://software.rc.fas.harvard.edu/lichtman/vast/ ).
+Multiple users can simultaneously use it through web browsers. The goal is to develop a unified software environment for  ground truth preparation, DNN-based segmentation, pre/postprocessing, proofreading, annotation, and visualization. 
 
 ## System requirements
 Operating system: Microsoft Windows 10 (64 bit) or Linux (Ubuntu 18.04).
