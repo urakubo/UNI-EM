@@ -11,7 +11,7 @@
 
 ## Example workflow 1: Mitochondria segmentation using 2D DNN
 
-Here we try automated mitochondria segmentation of a stack of EM images by use of a 2-dimentional deep neural network (2D DNN). The target EM stack was obtained by Kasthuri et al. ( Cell 162(3):648-61, 2015 ). The target brain region is mouse somatosensory cortex, and they used an automatic tape-collecting ultra-microtome system (ATUM) for SEM imaging (ATUM/SEM).  The EM stack was originally arranged for ISBI 2013 challenge ([SNEMI3D](http://brainiac2.mit.edu/SNEMI3D/)), and we here reuse it. The EM images are open to public under Open Data Commons Attribution License (ODC-By) v1.0. The original images were passed through the Contrast Limited Adaptive Histogram Equalization filter (CLAHE; blocksize 127,　Histogram bins 256, max slope 1.50).
+Here we try automated mitochondria segmentation of a stack of EM images using a 2-dimentional deep neural network (2D DNN). The target EM stack was obtained by Kasthuri et al. ( Cell 162(3):648-61, 2015 ). The target brain region is mouse somatosensory cortex, and they were obtained by use of an automatic tape-collecting ultra-microtome system (ATUM) for SEM imaging (ATUM/SEM).  The EM stack was originally arranged for ISBI 2013 challenge ([SNEMI3D](http://brainiac2.mit.edu/SNEMI3D/)). The EM images are open to public under Open Data Commons Attribution License (ODC-By) v1.0. The original images were passed through the Contrast Limited Adaptive Histogram Equalization filter (CLAHE; blocksize 127,　Histogram bins 256, max slope 1.50).
 
 - https://neurodata.io/data/kasthuri15/
 - https://opendatacommons.org/licenses/by/1-0/
@@ -20,7 +20,7 @@ Here we try automated mitochondria segmentation of a stack of EM images by use o
 
 #### Preparation of ground truth
 
-Download "Example2DNN.zip" from the link below and unzip it on your UNI-EM installed PC. Replace the unzipped folders with the contents of the "data" folder in UNI-EM ([UNI-EM]). Here  the folder "[UNI-EM]/data/DNN_training_images" contains a training image, and the folder "[UNI-EM]/data/DNN_ground_truth" contains ground truth segmentation (**Fig. 1.1**).  Users can use the ground truth segmentation (see from No. 2), or draw the ground truth using Dojo as stated below.
+Download "Example2DNN.zip" from the link below and unzip it on your UNI-EM installed PC. Replace the unzipped folders with the contents of the "data" folder in UNI-EM ([UNI-EM]/data). The folder "[UNI-EM]/data/DNN_training_images" contains a training image, and the folder "[UNI-EM]/data/DNN_ground_truth" contains a ground truth segmentation (**Fig. 1.1**).  Users can use this ground truth image (see from No. 2), or draw the ground truth using Dojo by themselves as stated below.
 
 - "Example2DNN.zip": https://www.dropbox.com/s/k1baokh6yz1ucjk/Example2DNN.zip?dl=0
 
@@ -39,7 +39,7 @@ Download "Example2DNN.zip" from the link below and unzip it on your UNI-EM insta
 
 - Set the Source Image Folder as **"[UNI-EM]/data/DNN_trainig _images"**.
 - Check the Use blank segmentation box. The section "Source Segmentation Folder" will be disabled.
-- Specify the Destination Dojo Folder. Dojo style files will be stored in this folder.
+- Specify the Destination Dojo Folder. Generated Dojo files will be stored in this folder.
 <BR>
 <p align="center">
   <img src="Images/GT_import.png" alt="Import a training image" width="600">
@@ -49,11 +49,11 @@ Download "Example2DNN.zip" from the link below and unzip it on your UNI-EM insta
 </p>
 <BR>
 
-- Click the OK button. Dojo style files will be generated, then Dojo will be launched (**Fig. 1.3**).
-- Check how to use Dojo by controlling the Slice bar (**Fig. 1.3a**) and Zoom bar (**Fig. 1.3b**).
-- Click the Adjust button whose shape has a fused two area (**Fig. 1.3c**). A control panel will appear. Keep the number of PaintID as 255, and click the color panel below. The circular cursor will appear, and its radius will be changed by pressing the [=/-] key. Paint mitochondria using this cursor (**Fig. 1.3** red arrow). Press the Tab key to complete the drawing, or discard it by pressing the Esc key. Users can erase mis-painting by dragging the cursor after clicking the eraser icon. Also press the Tab key to complete the erasure and press the Esc key to discard it.
+- Click the OK button. Dojo files will be generated, then Dojo will be launched (**Fig. 1.3**).
+- Confirm the usage of Dojo by controlling the Slice bar (**Fig. 1.3a**) and Zoom bar (**Fig. 1.3b**), etc.
+- Click the Adjust button whose shape has a fused two area (**Fig. 1.3c**). A control panel will appear. Keep the number of PaintID as 255, and click the color panel below. The circular cursor will appear. Its radius can be changed by pressing the [=/-] key. Paint mitochondria using this cursor (**Fig. 1.3** red arrow). Press Tab key to accept the drawing, or discard it by pressing the Esc key. Users can erase mis-painting by dragging the cursor after clicking the eraser icon. Press Tab key to accept the erasure, or press Esc key to discard it.
 - Save the mitochondria painting by selecting Dojo →Save Dojo Folder.
-- Export the mitochondria painting by selecting Dojo →Export Segmentation in the dropdown menu. In the export dialog, select the file format "PNG, 8bit, Grayscale." Users can also input Filename. After pressing the OK button, users further specify the saving folder. The painting image will be stored with the filename 0000.png. The painting image can be used for ground truth segmentation. Put this image at "[UNI-EM]/data/DNN_ground_truth".
+- Export the mitochondria painting by selecting Dojo →Export Segmentation in the dropdown menu. In the export dialog, select the file format "PNG, 8bit, Grayscale." Users can also input Filename. After pressing the OK button, users are requested to specify the saving folder. The painting segmentation image will be stored with the filename 0000.png. The painting image will be used for ground truth. Put this image at "[UNI-EM]/data/DNN_ground_truth".
 
 <BR>
 <p align="center">
