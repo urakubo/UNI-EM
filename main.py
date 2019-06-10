@@ -20,13 +20,6 @@ sys.path.append(os.path.join(main_dir, "gui"))
 from MainWindow import MainWindow
 
 
-if os.name == 'nt':
-  try:
-    import win32api
-  except Exception:
-    print('No win32api module.')
-
-
 # end of class MyApp
 
 if __name__ == '__main__':
