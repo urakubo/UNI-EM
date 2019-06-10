@@ -34,8 +34,6 @@ from FileIO  import FileIO
 
 from DojoMenu  import DojoMenu
 from Credit  import Credit
-from ExportImageDialog import ExportImageDialog
-from ExportIdDialog import ExportIdDialog
 from func_persephonep import *
 
 class MainWindow(QMainWindow, DojoMenu, Credit, Annotator, Plugins, Segment, FileIO, Script):
