@@ -52,10 +52,14 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 ### Pyinstaller version (Microsoft Windows 10 Only)
 1.	Download one of the following two versions, and unzip it:
 
+- [New feature: Folder management system](docs/HowToUse.md#Folder-management-system)
+
+	- [CPU version (Ver0.80; XXX MB)] Under construction
+	- [GPU version (Ver0.80: XXX MB)] Under construction
+
+- Previous version
 	- [CPU version (Ver0.78; 290 MB)](http://bit.ly/2IwquWk)
 	- [GPU version (Ver0.78: 715 MB)](http://bit.ly/2wNKm1G)
-
-- [New feature: Folder management system](docs/HowToUse.md#Folder-management-system)
 
 2.	Download sample EM/segmentation dojo files from the following website, and unzip it:
    	- https://www.dropbox.com/s/pxds28wdckmnpe8/ac3x75.zip?dl=0
