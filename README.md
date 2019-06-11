@@ -76,7 +76,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 3. Download the source codes from the github site:
 
 
-	- [New feature: Folder management system](docs/HowToUse.md#Folder-management-system)
+	[New feature: Folder management system](docs/HowToUse.md#Folder-management-system)
 
    		- git clone https://github.com/urakubo/UNI-EM.git
 
