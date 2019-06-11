@@ -55,7 +55,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 	- [GPU version (Ver0.78: 715 MB)](http://bit.ly/2wNKm1G)
 
 
-	Ver0.78 is the last release of this line. We will soon release the new version with a new feature "folder manager".
+	** Ver0.78 is the last release of this line. We will soon release the new version with a new feature "folder manager". **
 
 
 2.	Download sample EM/segmentation dojo files from the following website, and unzip it:
