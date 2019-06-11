@@ -20,7 +20,7 @@ UNI-EMによる2D CNNセグメンテーションの一例として、ATUM/SEMに
 
 #### ● 教師セグメンテーションの作成
 
-- 下の ExampleCNN.zip をダウンロードして展開してください。"TrainingImages" にトレーニング画像が、"GroundTruth" に教師セグメンテーションが入っています(**Fig. 1.1**)。ほか "TestImages" に推論用の画像が入っています。"GT_annotation", "Proofread"は空フォルダです。提供された教師セグメンテーション用いて、2. 2次元CNNのトレーニングと推論から始めても構いませんし、下の手順に従ってDojoを用いて教師セグメンテーションを作成することもできます。
+下の ExampleCNN.zip をダウンロードして展開してください。"TrainingImages" にトレーニング画像が、"GroundTruth" に教師セグメンテーションが入っています(**Fig. 1.1**)。ほか "TestImages" に推論用の画像が入っています。"GT_annotation", "Proofread"は空フォルダです。提供された教師セグメンテーション用いて、次セクション「2次元CNNのトレーニングと推論」から始めても構いませんし、下の手順に従ってDojoを用いて教師セグメンテーションを作成することもできます。
 
 	- "Example2CNN.zip": https://www.dropbox.com/s/k73vlvyru1p3qei/Example2CNN.zip?dl=0
 <BR>
