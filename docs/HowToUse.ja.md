@@ -93,7 +93,7 @@ Dojoファイルを開いた状態で、 上端のドロップダウンメニュ
 
 <BR>
 <p align="center">
-  <img src="Images/2DNN_0.png" alt="2D DNN" width="800">
+  <img src="Images/2DNN_0.png" alt="2D DNN" width="600">
 </p>
 <BR>
 
