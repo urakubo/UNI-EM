@@ -74,7 +74,11 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 1. Windows10またはLinux (Ubuntu18.04 にて動作確認済)にて Python3.5-3.6 をインストールしてください。
 2. Tensorflow 1.12 のためにGPUを利用する場合はcuda 9.0, cuda 9.0 and cuDNN 7.4.2 (or later)をインスト―ルしてください **[参考1]** 。
 3. 次の命令を実行してGithubより必要プログラムをダウンロードしてください。
-	 - git clone https://github.com/urakubo/UNI-EM
+
+	- [新機能：フォルダ管理システム](docs/HowToUse.ja.md#フォルダ管理システム)
+		- git clone https://github.com/urakubo/UNI-EM
+
+
 4. requirements-[os]-[cpu or gpu].txtを参考、Pythonに必要モジュール「Tensorflow-gpu 1.12, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl」を pip install -r requirements-[os]-[cpu or gpu].txt などのコマンドを用いてインストールしてください。
 5. **[UNI-EM]\marching_cubes\marching_cubes* を {$INSTALL_PYTHON}\Lib\site-packages へコピーしてください。**{$INSTALL_PYTHON} は、Python コマンド "import site; site.getsitepackages()" により分かります。
 
