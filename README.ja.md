@@ -76,7 +76,7 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 3. 次の命令を実行してGithubより必要プログラムをダウンロードしてください。
 
 	- [新機能：フォルダ管理システム](docs/HowToUse.ja.md#フォルダ管理システム)
-		- git clone https://github.com/urakubo/UNI-EM
+		- git clone https://github.com/urakubo/UNI-EM.git
 
 
 4. requirements-[os]-[cpu or gpu].txtを参考、Pythonに必要モジュール「Tensorflow-gpu 1.12, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl」を pip install -r requirements-[os]-[cpu or gpu].txt などのコマンドを用いてインストールしてください。
