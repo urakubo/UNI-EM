@@ -1,5 +1,6 @@
 [English version here](HowToUse.md)
 
+- [使い方：フォルダ管理システム](HowToUse.ja.md#フォルダ管理システム)
 - [使い方：校正ソフトウェアDojo](HowToUse.ja.md#校正ソフトウェアDojo)
 - [使い方：3D Annotator](HowToUse.ja.md#3D-Annotator)
 - [使い方：2次元DNNを用いたセグメンテーション](HowToUse.ja.md#2次元DNNを用いたセグメンテーション)
@@ -12,12 +13,22 @@
 
 ## 使い方：
 
+### フォルダ管理システム：
+UNI-EMでは、連続ファイル名の画像群が入ったフォルダ（画像フォルダ）を開くことができます。下図のように、画像フォルダ、Dojoフォルダ、空フォルダをUNI-EM上にドラッグ＆ドロップしてください（下図(a)）。各フォルダが開かれ、上端のFileドロップダウンメニューのOpen欄に表示されます（下図(b)）。同時に開くことのできるフォルダ数の上限は６つです。フォルダを閉じる場合は、Open欄中で右クリックしてCloseしてください。
+
+<BR>
+<p align="center">
+  <img src="Images/DragDropFolders.png" alt="Dojo Proofreading software" width="600">
+</p>
+<BR>
+
+
 ### 校正ソフトウェアDojo：
 自動セグメンテーション結果を確認・校正するためのツールです。Lichtman/Pfister 研が開発した Rhoana piplineの一部です。
 
 	- https://www.rhoana.org/dojo/
 
-1. 上端のドロップダウンメニューより一番左のDojo → Open Dojo Folderを選択して、ダイアログよりkasthuri15フォルダ下のmojoを指定してください。サンプルデータがダウンロードされてDojoが起動します。
+1. 上端のドロップダウンメニューよりDojo → Open Dojo Folderを選択して、ダイアログよりkasthuri15フォルダ下のmojoを指定してください。サンプルデータがダウンロードされてDojoが起動します。
 2. Dojoはコントロールパネル内のWebブラウザ (Chromium/PyQt5) で動作します。動作がおかしいと思ったら、Reloadボタンを押してWebブラウザをリフレッシュしてださい。上部URL [ http://X.X.X.X:8888/dojo/ ] をコピーして、Chromeなどの他のWebブラウザのアドレスバーにペーストすると、そこでDojoが起動します。同じLAN内の他のPCにおいてもWebブラウザ上でDojoが起動するはずです。起動しない場合は、ファイアウォールを停止してみてください。
 3. Dojoの使い方は基本的にはDojoオリジナルページ [ http://www.rhoana.org/dojo/ ]に従います。例えばw/sキーでzレイヤ間を移動し、e/dキーでセグメンテーションの透過度を変更します。
 4. 新しいEM画像を編集する場合は、ドロップダウンメニュー Dojo → Import EM stackを選択して、tiff/pngの連続番号EM画像・Segmentation画像ファイルが入ったフォルダを指定してください **[実装予定；マルチページtiff画像読込 19/2/1]** 。
@@ -25,7 +36,7 @@
 
 <BR>
 <p align="center">
-  <img src="Images/Dojo.png" alt="Dojo Proofreading software" width="800">
+  <img src="Images/Dojo.png" alt="Dojo Proofreading software" width="600">
 </p>
 <BR>
 
@@ -82,7 +93,7 @@ Dojoファイルを開いた状態で、 上端のドロップダウンメニュ
 
 <BR>
 <p align="center">
-  <img src="Images/_2DNN.png" alt="2D DNN" width="800">
+  <img src="Images/2DNN_0.png" alt="2D DNN" width="800">
 </p>
 <BR>
 
