@@ -18,54 +18,51 @@ sys.path.append(plugins_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
 sys.path.append(os.path.join(main_dir, "gui"))
 
+from DojoFileIO import DojoFileIO
 
-class DojoMenu():
+class DojoMenu( DojoFileIO ):
 # class MainWindow(QMainWindow, Credit, Plugins):
 
     def __init__(self):
-
+        # super(DojoMenu, self).__init__()
+        DojoFileIO.__init__(self)
         # File menu
-        self.file_menu_ = ['Import EM Stack/Segmentation',
-                   'Open Dojo Folder',
+        self.dojo_menu = ['Open Dojo Folder',
                    'Close Dojo Folder',
                    'Save Dojo Folder',
                    'Export Dojo Folder',
                    'Export EM Stack',
-                   'Export Segmentation',
-                   'Exit from UNI-EM']
+                   'Export Segmentation']
 
-        self.file_icon = ['Photo_Import_16.png',
-                  'Folder_16.png',
+        self.dojo_icon = ['Folder_16.png',
                   'Close_16.png',
                   'Save_16.png',
                   'Folder_Right_16.png',
                   'Photo_Right_16.png',
-                  'Object_Right_16.png',
-                  'Power_Off_16.png']
+                  'Object_Right_16.png']
 
-        self.file_icon_diabled = ['Photo16.png',
-                          'Folder16.png',
+        self.dojo_icon_diabled = ['Folder16.png',
                           'Close16.png',
                           'Save16.png',
                           'Folder16.png',
                           'Photo16.png',
-                          'Object16.png',
-                          'PowerOff16.png']
-        self.act_file_icon_init = [1, 1, 0, 0, 0, 0, 0, 1]
-        self.act_file_icon_open = [0, 0, 1, 1, 1, 1, 1, 1]
+                          'Object16.png']
+        self.act_dojo_icon_init = [1, 0, 0, 0, 0, 0]
+        self.act_dojo_icon_open = [0, 1, 1, 1, 1, 1]
 
-        self.file_action = [self.Import,
-                          self.SelectDojoFile,
+        self.dojo_action = [self.SelectDojoFile,
                           self.CloseDojoFiles,
                           self.SaveDojoFiles,
                           self.ExportDojoFiles,
                           self.ExportImages,
-                          self.ExportSegmentation,
-                          qApp.quit]
+                          self.ExportSegmentation]
 
     def DojoDropdownMenu(self, dojo_folder):
+
+        # File menu
+
         file_id = []
-        for menu, icon, icon_diabled, action in zip(self.file_menu_, self.file_icon, self.file_icon_diabled, self.file_action) :
+        for menu, icon, icon_diabled, action in zip(self.dojo_menu, self.dojo_icon, self.dojo_icon_diabled, self.dojo_action) :
             ii = QIcon()
             ii.addPixmap(QPixmap(path.join(icon_dir, icon)), QIcon.Normal, QIcon.On)
             ii.addPixmap(QPixmap(path.join(icon_disabled_dir, icon_diabled)), QIcon.Disabled)
@@ -78,12 +75,12 @@ class DojoMenu():
             dojo_folder.addAction(id)
         return file_id
 
-    def InitModeFileMenu(self, file_id):
+    def InitModeDojoMenu(self, file_id):
         for i, id in enumerate(file_id) :
-            id.setEnabled(self.act_file_icon_init[i])
-            id.setDisabled(1-self.act_file_icon_init[i])
+            id.setEnabled(self.act_dojo_icon_init[i])
+            id.setDisabled(1-self.act_dojo_icon_init[i])
 
-    def ActiveModeFileMenu(self, file_id):
+    def ActiveModeDojoMenu(self, file_id):
         for i, id in enumerate(file_id) :
-            id.setEnabled(self.act_file_icon_open[i])
-            id.setDisabled(1-self.act_file_icon_open[i])
+            id.setEnabled(self.act_dojo_icon_open[i])
+            id.setDisabled(1-self.act_dojo_icon_open[i])

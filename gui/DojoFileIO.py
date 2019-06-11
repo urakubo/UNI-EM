@@ -28,46 +28,38 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
 sys.path.append(path.join(main_dir, "dojo"))
-sys.path.append(path.join(main_dir, "plugins"))
-sys.path.append(path.join(main_dir, "segment"))
+#sys.path.append(path.join(main_dir, "plugins"))
+#sys.path.append(path.join(main_dir, "segment"))
 sys.path.append(os.path.join(main_dir, "filesystem"))
 sys.path.append(os.path.join(main_dir, "gui"))
-plugins_dir = path.join(main_dir, "plugins")
+#plugins_dir = path.join(main_dir, "plugins")
 
 from Params  import Params
-from Credit  import Credit
-from Plugins import Plugins
-from Segment import Segment
+#from Credit  import Credit
+#from Plugins import Plugins
+#from Segment import Segment
 
 from DojoServer import ServerLogic
-from ImportDialog import ImportDialog
 from SaveChanges import SaveChanges
 from ExportImageDialog import ExportImageDialog
 from ExportIdDialog import ExportIdDialog
 
+from DialogOpenDojoFolder import *
+import miscellaneous.Miscellaneous as m
+
 import ExportImgSeg
 import asyncio
 
-class FileIO():
-
-#    def StartThreadDojo(self):
-#
-#        self.p = s.Popen('python -u DojoStandalone.py u_info.pickle', stdout=s.PIPE, stderr=s.PIPE)
-#
-#        self.sentinel = True
-#        while self.sentinel:
-#            line = self.p.stdout.readline()
-#            if line.strip() == "":
-#                pass
-#            else:
-#                sys.stdout.write(line)
-#                sys.stdout.flush()
-
+class DojoFileIO():
 
     def StartThreadDojo(self):
         logic = ServerLogic()
         logic.run(self.u_info)
 
+
+    def SelectDojoFile(self):
+        tmp = DialogOpenDojoFolder(self)
+        return True
 
     def RestartDojo(self):
 
@@ -89,8 +81,8 @@ class FileIO():
         self.u_info.url = 'http://' + self.u_info.ip + ':' + str(self.u_info.port) + '/dojo/'
         self.table_widget.addTab('dojo', 'Dojo', self.u_info.url) # ID, Title, URL
 
-    def TerminateDojo(self):
 
+    def TerminateDojo(self):
         print("Asked tornado to exit\n")
         # Python3
         self.u_info.worker_loop.stop()
@@ -101,19 +93,17 @@ class FileIO():
         #self.u_info.dojo_thread.join()
 
         # if self.u_info.dojo_thread != None:
-
+        m.LockFolder(self.u_info, self.u_info.files_path)
         self.u_info.dojo_thread = None
         self.u_info.files_found = False
         self.setWindowTitle(self.title)
-        self.InitModeFileMenu(self.dojo_icon_open_close)
+        self.InitModeDojoMenu(self.dojo_icon_open_close)
 
 
     def LaunchDojo(self):  # wxGlade: ControlPanel.<event_handler>
 
-        # Launch Dojo server as subprocess.
-        #with open(path.join(main_dir, "u_info.pickle"), 'wb') as f:
-        #    pickle.dump(self.u_info, f,protocol=2)
-
+        # Unlock Folder
+        m.UnlockFolder(self.u_info, self.u_info.files_path)
 
         # Python3
         self.u_info.port = self.u_info.port + 1
@@ -127,59 +117,11 @@ class FileIO():
         # self.DojoHTTP.SetLabel(self.u_info.url)
         # self.DojoHTTP.SetLabel('Please click here!')
         # self.panel_URL.Show()
-        self.ActiveModeFileMenu(self.dojo_icon_open_close)
+        self.ActiveModeDojoMenu(self.dojo_icon_open_close)
         # time.sleep(10)
         self.u_info.url = 'http://' + self.u_info.ip + ':' + str(self.u_info.port) + '/dojo/'
         self.table_widget.addTab('dojo', 'Dojo', self.u_info.url) # ID, Title, URL
 
-
-    def Import(self):  # wxGlade: ControlPanel.<event_handler>
-        self.ImportImagesSegments = ImportDialog(self.u_info, self)
-
-
-    def SelectDojoFile(self):
-        dpath = self.u_info.files_path
-        fname = QFileDialog.getExistingDirectory(self, "Select Dojo folder", dpath)
-        if len(fname) == 0:
-            print('No folder was selected.')
-            return
-
-        # tmp_info = copy.deepcopy(self.u_info)
-        tmp_info = Params()
-        tmp_info.SetUserInfo(fname)
-
-        # Check file existence
-        if os.path.exists(tmp_info.files_path) and \
-            os.path.exists(tmp_info.ids_path) and \
-            os.path.exists(tmp_info.tile_ids_path) and \
-            os.path.isfile(tmp_info.tile_ids_volume_file) and \
-            os.path.isfile(tmp_info.color_map_file) and \
-            os.path.isfile(tmp_info.segment_info_db_file) and \
-            os.path.exists(tmp_info.images_path) and \
-            os.path.exists(tmp_info.tile_images_path) and \
-            os.path.isfile(tmp_info.tile_images_volume_file) :
-            print('All Dojo files are found. Applying..')
-            self.u_info.files_found = True
-            self.u_info.SetUserInfo(fname)
-        else:
-            print('Some Dojo files are missing.')
-            return
-
-        # Change statusbar
-        frame_statusbar_fields = "Dojo: " + self.u_info.files_path
-        self.setWindowTitle(frame_statusbar_fields)
-
-        print(self.u_info.files_path)
-        print(self.u_info.ids_path)
-        print(self.u_info.tile_ids_path)
-        print(self.u_info.tile_ids_volume_file)
-        print(self.u_info.color_map_file)
-        print(self.u_info.segment_info_db_file)
-        print(self.u_info.images_path)
-        print(self.u_info.tile_images_path)
-        print(self.u_info.tile_images_volume_file)
-
-        self.LaunchDojo()
 
     def CloseDojoFiles2(self):  # wxGlade: ControlPanel.<event_handler>
         buttonReply = QMessageBox.question(self, 'Closing Dojo File', "Do you want to save changes?",
@@ -251,16 +193,13 @@ class FileIO():
 
         # ----------------------------------------------------------------------
 
-#    def Exit(self):  # wxGlade: MojoControlPanel.<event_handler>
-#        self.Close()
 
-
-    def ExitUniEm(self):  # wxGlade: ControlPanel.<event_handler>
-        buttonReply = QMessageBox.question(self, 'Exit UNI-EM', "Do you really exit UNI-EM?",
-                                           QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.Cancel)
-        if buttonReply == QMessageBox.Yes:
-            qApp.quit
-        elif buttonReply == QMessageBox.No:
-            return(0)
-        else:
-            return(1)
+#    def ExitUniEm(self):  # wxGlade: ControlPanel.<event_handler>
+#        buttonReply = QMessageBox.question(self, 'Exit UNI-EM', "Do you really exit UNI-EM?",
+#                                           QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.Cancel)
+#        if buttonReply == QMessageBox.Yes:
+#            qApp.quit
+#        elif buttonReply == QMessageBox.No:
+#            return(0)
+#        else:
+#            return(1)

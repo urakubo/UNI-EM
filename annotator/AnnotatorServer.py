@@ -27,7 +27,7 @@ sys.path.append(main_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
 from Params import Params
 from DB import DB
-import Miscellaneous as m
+import miscellaneous.Miscellaneous as m
 
 plugins_dir = path.join(main_dir, "plugins")
 sys.path.append(plugins_dir)

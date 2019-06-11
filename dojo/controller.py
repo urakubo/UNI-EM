@@ -24,11 +24,12 @@ import sys
 from os import path, pardir
 
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
-sys.path.append(path.join(main_dir, "Filesystem"))
+sys.path.append(path.join(main_dir, "filesystem"))
 from DB import DB
 from Params import Params
-import Miscellaneous as m
 from SaveChanges import SaveChanges
+
+import miscellaneous.Miscellaneous as m
 
 class Controller(object):
 

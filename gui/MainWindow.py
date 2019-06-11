@@ -3,6 +3,7 @@ import os
 import json
 from  collections import OrderedDict
 
+
 from os import path, pardir
 from PyQt5.QtWidgets import QMainWindow, QTabWidget, QApplication, \
     qApp, QWidget, QHBoxLayout, QVBoxLayout, QLabel, \
@@ -11,6 +12,7 @@ from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import pyqtSlot
 
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
+
 icon_dir            = path.join(main_dir, "icons")
 icon_disabled_dir   = path.join(icon_dir, "Disabled")
 plugins_dir         = path.join(main_dir, "plugins")
@@ -25,19 +27,30 @@ sys.path.append(os.path.join(main_dir, "plugins"))
 sys.path.append(os.path.join(main_dir, "annotator"))
 
 
+
 from Params  import Params
 from Script  import Script
 from Annotator import Annotator
 from Plugins import Plugins
 from Segment import Segment
-from FileIO  import FileIO
+from DojoFileIO  import DojoFileIO
+from FileMenu  import FileMenu
 
 from DojoMenu  import DojoMenu
 from Credit  import Credit
 from func_persephonep import *
 
-class MainWindow(QMainWindow, DojoMenu, Credit, Annotator, Plugins, Segment, FileIO, Script):
-# class MainWindow(QMainWindow, Credit, Plugins):
+class MainWindow(QMainWindow, FileMenu, DojoMenu, Annotator, Segment, Plugins, Credit, DojoFileIO, Script):
+
+    def __del__(self):
+        for ofile in self.u_info.open_files4lock.values():
+            if type(ofile) == dict :
+                for ofileobj in ofile.values():
+                    ofileobj.close()
+            else :
+                ofile.close()
+        self.u_info.open_files4lock.clear()
+
 
     def __init__(self):
 
@@ -46,10 +59,14 @@ class MainWindow(QMainWindow, DojoMenu, Credit, Annotator, Plugins, Segment, Fil
         #
         self.u_info = Params()
 
+        super(MainWindow, self).__init__()
+        FileMenu.__init__(self)
+        DojoMenu.__init__(self) # ???
+
         #
         # Prepare the main window
         #
-        super().__init__()
+
         self.title = 'UNI-EM'
         self.left = 200
         self.top  = 200
@@ -69,13 +86,18 @@ class MainWindow(QMainWindow, DojoMenu, Credit, Annotator, Plugins, Segment, Fil
         ## File menu
         ##
 
+        self.setAcceptDrops(True)
+        file_menu = main_menu.addMenu('File')
+        self.GenerateFileDropdownMenu( file_menu )
+
+
         ##
         ## Dojo menu
         ##
 
         dojo_folder = main_menu.addMenu('Dojo')
         self.dojo_icon_open_close = self.DojoDropdownMenu( dojo_folder )
-        self.InitModeFileMenu(self.dojo_icon_open_close)
+        self.InitModeDojoMenu(self.dojo_icon_open_close)
 
 
         ##
@@ -91,7 +113,6 @@ class MainWindow(QMainWindow, DojoMenu, Credit, Annotator, Plugins, Segment, Fil
         ##
         ## Segmentation menu
         ##
-
         segmentation_folder = main_menu.addMenu('Segmentation')
         with open( path.join(segmentation_dir, self.u_info.fname_menu) , 'r' ) as fp:
             e = json.load(fp, object_pairs_hook=OrderedDict)
@@ -101,7 +122,6 @@ class MainWindow(QMainWindow, DojoMenu, Credit, Annotator, Plugins, Segment, Fil
         ##
         ## Plugin menu
         ##
-
         plugin_folder = main_menu.addMenu('Plugins')
         with open( path.join(plugins_dir, self.u_info.fname_menu) , 'r' ) as fp:
             e = json.load(fp, object_pairs_hook=OrderedDict)
@@ -111,10 +131,8 @@ class MainWindow(QMainWindow, DojoMenu, Credit, Annotator, Plugins, Segment, Fil
         ##
         ## Script menu
         ##
-
         help_id  = QAction('Run Script', self)
         help_id.triggered.connect(self.Script)
-
         help_folder = main_menu.addMenu('Script')
         help_folder.addAction(help_id)
 
@@ -122,17 +140,15 @@ class MainWindow(QMainWindow, DojoMenu, Credit, Annotator, Plugins, Segment, Fil
         ##
         ## Help menu
         ##
-
         help_id  = QAction('About UNI-EM', self)
         help_id.triggered.connect(self.Credit)
-
         help_folder = main_menu.addMenu('Help')
         help_folder.addAction(help_id)
+
 
         ##
         ## Web browser
         ##
-
         self.table_widget = PersephonepTableWidget(self)
         self.setCentralWidget(self.table_widget)
         self.show()
@@ -157,105 +173,106 @@ class MainWindow(QMainWindow, DojoMenu, Credit, Annotator, Plugins, Segment, Fil
             if snum_stack and (snum_stack[-1] > 0):
                 snum_stack[-1] = snum_stack[-1] - 1
 
-
+##
+## Web browser
+##
 
 class PersephonepTableWidget(QWidget):
 
-        def __init__(self, parent):
-            super(QWidget, self).__init__(parent)
-            self.layout = QVBoxLayout(self)
-            self.parent = parent
+    def __init__(self, parent):
+        super(QWidget, self).__init__(parent)
+        self.layout = QVBoxLayout(self)
+        self.parent = parent
 
-            # initialize tab screen
-            self.tabs = QTabWidget()
-            self.tab  = [] # Store the PersephonepWindow Class
-            self.appl = [] # Store application ID
-            self.tabs.resize(1200, 800)
+        # initialize tab screen
+        self.tabs = QTabWidget()
+        self.tab = []  # Store the PersephonepWindow Class
+        self.appl = []  # Store application ID
+        self.tabs.resize(1200, 800)
 
-            # define the delete tab process
-            self.tabs.setTabsClosable(True)
-            self.tabs.tabCloseRequested.connect(self.closeTab)
+        # define the delete tab process
+        self.tabs.setTabsClosable(True)
+        self.tabs.tabCloseRequested.connect(self.closeTab)
 
-            #
-            self.tabs.setUsesScrollButtons(True)
-            self.layout.addWidget(self.tabs)
-            self.setLayout(self.layout)
+        #
+        self.tabs.setUsesScrollButtons(True)
+        self.layout.addWidget(self.tabs)
+        self.setLayout(self.layout)
 
+    def addTab(self, appl_id, title, url):
+        ''' add Tab
+        '''
+        # print(index)
+        # browser = PersephonepWindow(url)
 
-        def addTab(self, appl_id, title, url):
-            ''' add Tab
-            '''
-            # print(index)
-            #browser = PersephonepWindow(url)
-            
-            #
-            # The following tab browser launch
-            # (func_persephonep)
-            # should generate a widget something like
-            #
-            # browser = PersephonepWindow(url)
-            # widget = browser.Generate
-            # self.tab.append(widget)
-            #
-            # The following is wrong.
-            # The class object declaration (PersephonepWindow)
-            # should not have any return.
-            # but I keep it only for download indicator.
-            # It should be revised in future.
-            #
-            self.tab.append(PersephonepWindow(url))
-            self.appl.append(appl_id)
-            self.tabs.addTab(self.tab[-1], '')  # do not match tab index & tab num
-            # self.tabs.setTabText(index, title)
-            # self.tabs.setCurrentIndex(index)
-            self.tabs.setTabText(len(self.tab)-1, title)
-            self.tabs.setCurrentIndex(len(self.tab)-1)
-            #self.tab[-1].window.titleChanged.connect(self.updateTabName)
+        #
+        # The following tab browser launch
+        # (func_persephonep)
+        # should generate a widget something like
+        #
+        # browser = PersephonepWindow(url)
+        # widget = browser.Generate
+        # self.tab.append(widget)
+        #
+        # The following is wrong.
+        # The class object declaration (PersephonepWindow)
+        # should not have any return.
+        # but I keep it only for download indicator.
+        # It should be revised in future.
+        #
+        self.tab.append(PersephonepWindow(url))
+        self.appl.append(appl_id)
+        self.tabs.addTab(self.tab[-1], '')  # do not match tab index & tab num
+        # self.tabs.setTabText(index, title)
+        # self.tabs.setCurrentIndex(index)
+        self.tabs.setTabText(len(self.tab) - 1, title)
+        self.tabs.setCurrentIndex(len(self.tab) - 1)
+        # self.tab[-1].window.titleChanged.connect(self.updateTabName)
 
+    def closeTab(self, index):
+        ''' close Tab.
+        '''
+        ###
+        if ('dojo' == self.appl[index]):
+            fail = self.parent.CloseDojoFiles2()
+            if (fail == 1):
+                return
+        ###
+        if ('annotator' == self.appl[index]):
+            fail = self.parent.CloseAnnotator()
+            if (fail == 1):
+                return
+        ###
+        if ('tensorboard' == self.appl[index]):
+            fail = self.parent.CloseTensorboard()
+            if (fail == 1):
+                return
+        ###
+        self.tab.pop(index)
+        appl = self.appl.pop(index)
+        self.tabs.removeTab(index)
 
-        def closeTab(self, index):
-            ''' close Tab.
-            '''
-            ###
-            if ('dojo' == self.appl[index]):
-                fail = self.parent.CloseDojoFiles2()
-                if (fail == 1):
-                    return
-            ###
-            if ('annotator' == self.appl[index]):
-                fail = self.parent.CloseAnnotator()
-                if (fail == 1):
-                    return
-            ###
-            if ('tensorboard' == self.appl[index]):
-                fail = self.parent.CloseTensorboard()
-                if (fail == 1):
-                    return
-            ###
-            self.tab.pop(index)
-            appl = self.appl.pop(index)
-            self.tabs.removeTab(index)
+    def updateTabName(self):
+        ''' re-set tab name
+        '''
+        self.tabs.setTabText(self.tabs.currentIndex(), self.tab[self.tabs.currentIndex()].window.title())
 
-        def updateTabName(self):
-            ''' re-set tab name
-            '''
-            self.tabs.setTabText(self.tabs.currentIndex(), self.tab[self.tabs.currentIndex()].window.title())
+    def center(self):
+        ''' centering widget
+        '''
+        qr = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())
 
-        def center(self):
-            ''' centering widget
-            '''
-            qr = self.frameGeometry()
-            cp = QDesktopWidget().availableGeometry().center()
-            qr.moveCenter(cp)
-            self.move(qr.topLeft())
-
-        @pyqtSlot()
-        def on_click(self):
-            print("\n")
-            for currentQTableWidgetItem in self.tableWidget.selectedItems():
-                print(currentQTableWidgetItem.row(), currentQTableWidgetItem.column(), currentQTableWidgetItem.text())
+    @pyqtSlot()
+    def on_click(self):
+        print("\n")
+        for currentQTableWidgetItem in self.tableWidget.selectedItems():
+            print(currentQTableWidgetItem.row(), currentQTableWidgetItem.column(), currentQTableWidgetItem.text())
 
 
+###
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

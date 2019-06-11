@@ -15,6 +15,7 @@
 
 ---
 Check the following pages after installation.
+- [How to use: Folder management system](docs/HowToUse.md#Folder-management-system)
 - [How to use: Dojo proofreader](docs/HowToUse.md#Dojo-proofreader)
 - [How to use: 3D annotator](docs/HowToUse.md#3D-annotator)
 - [How to use: 2D CNN](docs/HowToUse.md#2D-CNN)
@@ -51,12 +52,24 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 ### Pyinstaller version (Microsoft Windows 10 Only)
 1.	Download one of the following two versions, and unzip it:
 
+<<<<<<< HEAD
 	- [CPU version (Ver0.78; 290 MB)](http://bit.ly/2IwquWk)
 	- [GPU version (Ver0.78: 715 MB)](http://bit.ly/2wNKm1G)
+=======
+- [New feature: Folder management system](docs/HowToUse.md#Folder-management-system)
+>>>>>>> filesystem
 
+	- [CPU version (Ver0.80; XXX MB)] Under construction
+	- [GPU version (Ver0.80: XXX MB)] Under construction
 
+<<<<<<< HEAD
 	**Ver0.78 is the last release of this line. We will soon release the new version with a new feature "folder manager".**
 
+=======
+- Previous version
+	- [CPU version (Ver0.78; 290 MB)](http://bit.ly/2IwquWk)
+	- [GPU version (Ver0.78: 715 MB)](http://bit.ly/2wNKm1G)
+>>>>>>> filesystem
 
 2.	Download sample EM/segmentation dojo files from the following website, and unzip it:
    	- https://www.dropbox.com/s/pxds28wdckmnpe8/ac3x75.zip?dl=0

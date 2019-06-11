@@ -94,8 +94,8 @@ class FFNPrepTraining(MiscellaneousSegment):
 
 
         self.args = [
-                        ['Training Image Folder',  'LineEdit', training_image_path, 'BrowseDirImg'],
-                        ['Ground Truth Folder',     'LineEdit', ground_truth_path, 'BrowseDirImg'],
+                        ['Training Image Folder',    'SelectOpenImage', 'OpenImage'],
+                        ['Ground Truth Folder',    'SelectOpenImage', 'OpenImage'],
                         ['FFN File Folder',   'LineEdit', processed_file_path, 'BrowseDir'],
             ]
 

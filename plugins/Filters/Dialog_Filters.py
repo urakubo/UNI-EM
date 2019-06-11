@@ -27,7 +27,8 @@ main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
 icon_dir = path.join(main_dir, "icons")
 sys.path.append(os.path.join(main_dir, "plugins", "miscellaneous"))
-
+import miscellaneous.Miscellaneous as m
+from miscellaneous.SyncFileListQComboBoxHolder import *
 
 from miscellaneous.MiscellaneousFilters  import MiscellaneousFilters
 from miscellaneous.ThumbnailGenerator    import ThumbnailGenerator
@@ -72,6 +73,12 @@ class Dialog_Filters(QWidget, MiscellaneousFilters):
         self.filter_list = FilterlistGenerator(self)
         widget_top_left  = self.filter_list.GenerateFilterlistObject()  # Widget
 
+
+        self.targ_image_folder_qcombo.activated.connect( self.ChangeZ )
+        # self.targ_image_folder_qcomboは
+        # サムネイル画像アップデート用。同コンボボックスの変更に併せて呼び出されるようにしたいが、
+        # 上手く動かない。
+
         widget_top = QWidget()
         widget_top.layout = QHBoxLayout(widget_top)
         widget_top.layout.addWidget(widget_top_left)
@@ -101,44 +108,38 @@ class TableGenerator(MiscellaneousFilters):
     def __init__(self, parent):
         self.parent = parent
 
+
     def GenerateTableObject(self):
-        filter_name = '2D/3D filter'
         datadir =  self.parent.u_info.data_path
-        imgpath =  os.path.join(datadir, "DNN_segmentation")
-        outpath =  os.path.join(datadir, "DNN_segmentation")
         paramfile = os.path.join(datadir, "parameters", "Filters.pickle")
 
         args = [
-                        ['Target Folder',   imgpath, 'Browsedirimg'],
-                        ['Output Folder',   outpath, 'Browsedirimg'],
-                        ['Save Parameters', paramfile, 'Browsefile'],
-                        ['Load Parameters', paramfile, 'Browsefile']
+                        'Target Folder',
+                        'Output Folder',
+                        'Save Parameters',
+                        'Load Parameters',
                     ]
-        tips = [
-                        'Path to folder containing images',
-                        'Path to folder for storing results'
-                        'Save Parameters ',
-                        'Load Parameters '
-                    ]
-
-
         lbl      = []
         obj_args = []
-        for i in range(len(args)):
-            obj_args.append( QLineEdit() )
-            obj_args[-1].setText( args[i][1] )
-            arg = args[i][0]
-            if arg == 'Save Parameters':
-                lbl.append(QPushButton(arg))
-                lbl[-1].clicked.connect(lambda: self.save_params(args, obj_args))
-            elif arg == 'Load Parameters':
-                lbl.append(QPushButton(arg))
-                lbl[-1].clicked.connect(lambda: self.load_params(args, obj_args))
-            else :
-                lbl.append(QLabel(args[i][0] + ' :'))
-                lbl[-1].setToolTip(tips[i])
 
+        lbl.append(QLabel('Target Folder:'))
+        lbl[-1].setToolTip('Path to folder containing images')
+        self.parent.targ_image_folder_qcombo = SyncFileListQComboBoxHolder.create(self, 1)
+        obj_args.append( self.parent.targ_image_folder_qcombo )
 
+        lbl.append(QLabel('Output Folder:'))
+        lbl[-1].setToolTip('Path to folder containing images')
+        obj_args.append( SyncFileListQComboBoxHolder.create(self, 2) )
+
+        lbl.append(QPushButton('Save Parameters'))
+        lbl[-1].clicked.connect(lambda: self.save_params(args, obj_args))
+        obj_args.append(QLineEdit())
+        obj_args[-1].setText(paramfile)
+
+        lbl.append(QPushButton('Load Parameters'))
+        lbl[-1].clicked.connect(lambda: self.load_params(args, obj_args))
+        obj_args.append(QLineEdit())
+        obj_args[-1].setText(paramfile)
 
         table = QWidget()
         table.layout = QGridLayout(table)
@@ -148,17 +149,12 @@ class TableGenerator(MiscellaneousFilters):
             table.layout.addWidget(lbl[id], id + 1, 0, alignment=Qt.AlignRight)  # (Qt.AlignRight | Qt.AlignTop)
             table.layout.addWidget(obj_args[id], id + 1, 1, 1, ncol - 1)
 
-            if args[id][2] == 'Browsedir':
-                browse_button.append(QPushButton("Browse..."))
-                browse_button[-1].clicked.connect(lambda state, x=id: self.browse_dir(obj_args[x]))
+            if id in [0,1]: # require_browse_open_img
+                browse_button.append(QPushButton("Open..."))
+                browse_button[-1].clicked.connect(lambda state, z=id: self.browse_OpenImageFolder(obj_args[z]))
                 table.layout.addWidget(browse_button[-1], id + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
 
-            if args[id][2] == 'Browsedirimg':
-                browse_button.append(QPushButton("Browse..."))
-                browse_button[-1].clicked.connect(lambda state, x=id: self.browse_dir_img(obj_args[x]))
-                table.layout.addWidget(browse_button[-1], id + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
-
-            elif args[id][2] == 'Browsefile':
+            elif id in [2,3] : # 'Browsefile'
                 browse_button.append(QPushButton("Browse..."))
                 browse_button[-1].clicked.connect(lambda state, x=id: self.browse_file(obj_args[x]))
                 table.layout.addWidget(browse_button[-1], id + 1, ncol, 1, 1, alignment=(Qt.AlignRight))

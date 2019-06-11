@@ -64,11 +64,17 @@ class ThumbnailGenerator(MiscellaneousFilters):
         ##
         def _ChangeZ():
             self.filestack = self.ObtainTarget()
+            # print("self.filestack: ", self.filestack)
+            #if self.filestack == [] :
+            #    print("No image files")
+            #    return False
+
             sz = self.control_thumbnail[0].value()  # Z 0:99
             if len(self.filestack) > 0:
                 znum = len(self.filestack)
                 id = np.floor(znum * sz / MAXSLIDER).astype(np.uint16)
-                self.target_image = cv2.imread(self.filestack[id], cv2.IMREAD_GRAYSCALE).astype(np.uint8)
+                #self.target_image = cv2.imread(self.filestack[id], cv2.IMREAD_GRAYSCALE).astype(np.uint8)
+                self.target_image = m.imread(self.filestack[id], flags=cv2.IMREAD_GRAYSCALE, dtype=np.uint8)
                 _ChangeXY()
 
         def _ChangeXY():
@@ -79,6 +85,7 @@ class ThumbnailGenerator(MiscellaneousFilters):
                 sx = 0
                 sy = 0
             _ChangeXYImpl(sx, sy)
+
         def _ChangeXYImpl(sx, sy):
             self.currentX += sx
             self.currentY += sy
@@ -105,8 +112,9 @@ class ThumbnailGenerator(MiscellaneousFilters):
                 self.image_cropped = np.zeros((H, W), dtype=np.uint8)
                 self.image_cropped = self.target_image[onset_y: onset_y + H, onset_x: onset_x + W].copy()
 
-                if self.norm_sample.isChecked() == True:
-                    normal_factor = (255 / np.max(self.image_cropped)).astype(np.float)
+                maxvalue = np.max(self.image_cropped)
+                if (self.norm_sample.isChecked() == True) and maxvalue > 0 :
+                    normal_factor = (255 / maxvalue).astype(np.float)
                     cropped_normalized = (self.image_cropped * normal_factor).astype(np.uint8)
                 else:
                     cropped_normalized = self.image_cropped
@@ -234,6 +242,7 @@ class ThumbnailGenerator(MiscellaneousFilters):
         cl_import.clicked.connect(Cancel)
 
         self.parent.obtainSample = _ObtainSample
+        self.parent.ChangeZ = _ChangeZ # サムネイル画像アップデート用
 
         ### Initial sample image
         _ChangeZ()

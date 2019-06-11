@@ -21,7 +21,7 @@ icon_dir = path.join(main_dir, "icons")
 segmentation_dir = path.join(main_dir, "segment")
 sys.path.append(segmentation_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
-import Miscellaneous as m
+import miscellaneous.Miscellaneous as m
 from MiscellaneousSegment import MiscellaneousSegment
 
 class FFNPostprocessing(MiscellaneousSegment):
@@ -42,9 +42,10 @@ class FFNPostprocessing(MiscellaneousSegment):
         if (filetype == '8-bit color PNG') or (filetype == '8-bit color TIFF'):
             ids = np.max(segmentation)
             print('Max segmentation ID: ', ids)
-            colormap = np.random.randint(255, size=(ids+1, 3), dtype=np.uint64)
+            colormap = np.random.randint(255, size=(ids+2, 3), dtype=np.uint64)
             colormap[0,:] = 0
         ##
+        m.UnlockFolder(parent.u_info, params['Output Segmentation Folder'])
         ##
         for idz in range(segmentation.shape[0]):
             image2d = segmentation[idz, :, :]
@@ -72,6 +73,7 @@ class FFNPostprocessing(MiscellaneousSegment):
                 print('Data was not saved.')
         ##
         print(comm_title, 'was finished.')
+        m.LockFolder(parent.u_info, params['Output Segmentation Folder'])
         return True
         ##
 
@@ -94,7 +96,7 @@ class FFNPostprocessing(MiscellaneousSegment):
 
         self.args = [
                         ['Target Sementation File (npz)',  'LineEdit', target_inference_file, 'BrowseFile'],
-                        ['Output Segmentation Folder',   'LineEdit', output_segmentation_path, 'BrowseDirImg'],
+                        ['Output Segmentation Folder',   'SelectOpenImage', 'OpenImage'],
                         ['Output Filetype', 'ComboBox', ["8-bit color PNG", "16-bit gray scale PNG", "8-bit gray scale PNG", 
                                                          "8-bit color TIFF", "16-bit gray scale TIFF", "8-bit gray scale TIFF"]],
             ]

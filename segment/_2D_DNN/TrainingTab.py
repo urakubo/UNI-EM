@@ -1,10 +1,6 @@
 ###
 ###
 ###
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import sys, os, time, errno
 
 import numpy as np
@@ -34,6 +30,7 @@ sys.path.append(segmentation_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
 from MiscellaneousSegment import MiscellaneousSegment
 from ExecuteTraining import ExecuteTraining
+from miscellaneous.SyncFileListQComboBoxHolder import *
 
 class TrainingTab(MiscellaneousSegment):
     def __init__(self, parent):
@@ -41,10 +38,9 @@ class TrainingTab(MiscellaneousSegment):
         u_info = parent.u_info
         self.tips = [
                         'Path to folder containing images',
-                        'Number of images in batch',
                         'Path to folder containing segmentation',
-                        'Output Filetype of sample images',
                         'Directory with checkpoint to resume training from or use for testing',
+                        'Number of images in batch',
                         'Loss Function',
                         'Number of training epochs',
                         'Write current training images every display frequency steps',
@@ -65,11 +61,10 @@ class TrainingTab(MiscellaneousSegment):
         modelpath =  os.path.join(datadir, "DNN_model_tensorflow")
         paramfile = os.path.join(datadir, "parameters", "Training_2D.pickle")
         self.args = [
-                        ['Image Folder',    'LineEdit', imgpath, 'BrowseDirImg'],
-                        ['Batch Size',      'SpinBox', [1,1, 65535]],
-                        ['Segmentation Folder',   'LineEdit', segpath, 'BrowseDirImg'],
-                        ['Output Filetype', 'ComboBox', ['png','jpeg']],
+                        ['Image Folder',    'SelectOpenImage', 'OpenImage'],
+                        ['Segmentation Folder',   'SelectOpenImage', 'OpenImage'],
                         ['Checkpoint Folder',      'LineEdit', modelpath, 'BrowseDir'],
+                        ['Batch Size', 'SpinBox', [1, 1, 65535]],
                         ['Loss Function', 'ComboBox', ["softmax", "hinge", "square", "approx", "dice", "logistic"]],
                         ['Maximal Epochs', 'SpinBox', [1, 2000, 65535]],
                         ['Display Frequency', 'SpinBox', [0, 200, 65535]],
@@ -87,30 +82,31 @@ class TrainingTab(MiscellaneousSegment):
         #                         'Model',
         #  ['Model', 'ComboBox',   ['pix2pix','pix2pix2','CycleGAN']]
 
-        self.display_order = [0, 1, 2, 3, 4,  -1, 5, 6, 7, 8, 9, 10]
+        self.display_order = [0, 1, 2, -1, 3, 4, 5, 6, 7, 8, 9]
         self.args_header   = [self.args[i][0] for i in range(len(self.args))]
         self.obj_args = []
 
     def Generate(self):
 
         ## Labels
-        lbl   = []
+        self.lbl   = []
         require_browse_dir = []
         require_browse_dir_img = []
         require_browse_file = []
+        require_browse_open_img = []
         ##
         for i in range(len(self.args)):
         ##
             arg = self.args[i][0]
             if arg == 'Save Parameters':
-                lbl.append(QPushButton(arg))
-                lbl[-1].clicked.connect(self.SaveParams2D)
+                self.lbl.append(QPushButton(arg))
+                self.lbl[-1].clicked.connect(self.SaveParams2D)
             elif arg == 'Load Parameters':
-                lbl.append(QPushButton(arg))
-                lbl[-1].clicked.connect(self.LoadParams2D)
+                self.lbl.append(QPushButton(arg))
+                self.lbl[-1].clicked.connect(self.LoadParams2D)
             else :
-                lbl.append(QLabel(self.args[i][0] + ' :'))
-                lbl[-1].setToolTip(self.tips[i])
+                self.lbl.append(QLabel(self.args[i][0] + ' :'))
+                self.lbl[-1].setToolTip(self.tips[i])
         ##
         for i in range(len(self.args)):
         ##
@@ -140,17 +136,23 @@ class TrainingTab(MiscellaneousSegment):
                 for ttab_title in self.args[i][2]:
                     ttab.append( QWidget() )
                     self.obj_args[-1].addTab(ttab[-1], ttab_title)
-                self._Training2D_Unet(ttab[0], lbl)
-                self._Training2D_Resnet(ttab[1], lbl)
-                self._Training2D_Highwaynet(ttab[2], lbl)
-                self._Training2D_Densenet(ttab[3], lbl)
-
+                self._Training2D_Unet(ttab[0], self.lbl)
+                self._Training2D_Resnet(ttab[1], self.lbl)
+                self._Training2D_Highwaynet(ttab[2], self.lbl)
+                self._Training2D_Densenet(ttab[3], self.lbl)
+            elif self.args[i][1] == 'SelectOpenImage':
+                self.obj_args.append(SyncFileListQComboBoxHolder.create(self, i))
+                #for item in self.parent.u_info.open_files:
+                #    if self.parent.u_info.open_files_type[item] != 'Dojo':
+                #       self.obj_args[-1].addItem(item)
+                if self.args[i][2] == 'OpenImage':
+                    require_browse_open_img.append(i)
             else:
                 print('Internal error. No fucntion.')
 
-
         # Organize tab widget
-        tab = self.OrganizeTab2DNN(lbl, self.obj_args, self.display_order, require_browse_dir, require_browse_dir_img, require_browse_file, self._ExecuteTraining)
+        tab = self.OrganizeTab2DNN(require_browse_dir, require_browse_dir_img,
+                                   require_browse_file, require_browse_open_img,  self._ExecuteTraining)
         return tab
 
     def _Training2D_Unet(self, ttab, lbl):

@@ -5,6 +5,7 @@ import sys, os
 import numpy as np
 import subprocess as s
 from MiscellaneousTemplate import MiscellaneousTemplate
+import miscellaneous.Miscellaneous as m
 
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
@@ -22,19 +23,21 @@ class Inference(MiscellaneousTemplate):
         comm_run = exec_template + ' ' \
                     + ' --test_image_folder '   + params['Test image folder'] + ' ' \
                     + ' --inferred_segmentation_folder '     + params['Inferred segmentation folder'] + ' ' \
-                    + ' --tensorflow_model_file ' + params['Tensorflow model file']  + ' ' \
-        ##
+                    + ' --tensorflow_model_file ' + params['Tensorflow model file']  + ' '
         print(comm_run)
         print('')
+        ##
+        m.UnlockFolder(self.u_info, params['Inferred segmentation folder']) # Only for shared folder/file
         s.run(comm_run.split())
+        m.LockFolder(self.u_info, params['Inferred segmentation folder'])
         print(comm_title, 'was finished.\n')
+        ##
         return True
 
     def __init__(self, u_info):
         ##
+        self.u_info = u_info
         datadir = u_info.data_path
-        test_image_path      = os.path.join(datadir, "DNN_test_images")
-        inferred_seg_path    = os.path.join(datadir, "DNN_segmentation")
         tensorflow_file      = os.path.join(datadir, "DNN_model_tensorflow","model.tf")
         self.paramfile = os.path.join(datadir, "parameters", "Inference.pickle")
 
@@ -47,8 +50,8 @@ class Inference(MiscellaneousTemplate):
                     ]
 
         self.args = [
-                        ['Test image folder'   , 'LineEdit', test_image_path  , 'BrowseDirImg'],
-                        ['Inferred segmentation folder'     , 'LineEdit', inferred_seg_path    , 'BrowseDir'],
+                        ['Test image folder', 'SelectOpenImage', 'OpenImage'],
+                        ['Inferred segmentation folder', 'SelectOpenImage', 'OpenImage'],
                         ['Tensorflow model file' , 'LineEdit', tensorflow_file , 'BrowseFile'],
                     ]
 
