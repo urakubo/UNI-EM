@@ -34,7 +34,7 @@ This is a proofreading software as a part of Rhoana pipeline (Copyright, Lichtma
 
 <BR>
 <p align="center">
-  <img src="Images/Dojo.png" alt="Dojo Proofreading software" width="800">
+  <img src="Images/Dojo.png" alt="Dojo Proofreading software" width="700">
 </p>
 <BR>
 
