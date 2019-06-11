@@ -171,7 +171,7 @@ class MiscellaneousFilters(SharedFileDialogs):
         print('Loading images ...')
         for zi, filename in enumerate(filestack):
             # input_volume[:, :, zi] = cv2.imread(filename, cv2.IMREAD_GRAYSCALE).astype(tdtype)
-            input_volume[:, :, zi] = m.imread(filestack[0], flags=cv2.IMREAD_GRAYSCALE)
+            input_volume[:, :, zi] = m.imread(filename, flags=cv2.IMREAD_GRAYSCALE)
         ##
         ## 2D/3D filter application
         ##
