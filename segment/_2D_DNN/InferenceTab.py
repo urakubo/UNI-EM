@@ -32,7 +32,7 @@ sys.path.append(os.path.join(main_dir, "filesystem"))
 
 from MiscellaneousSegment import MiscellaneousSegment
 from ExecuteInference import ExecuteInference
-from miscellaneous.SyncFileListQComboBoxHolder import *
+from miscellaneous.SyncListQComboBoxManager import *
 
 class InferenceTab(MiscellaneousSegment):
     def __init__(self, parent):
@@ -109,7 +109,7 @@ class InferenceTab(MiscellaneousSegment):
                 for item in items:
                     self.obj_args[-1].addItem(item)
             elif self.args[i][1] == 'SelectOpenImage':
-                self.obj_args.append(SyncFileListQComboBoxHolder.create(self, i))
+                self.obj_args.append(SyncListQComboBoxExcludeDjojMtifManager.get().create(self, i))
                 #for item in self.parent.u_info.open_files:
                 #    if self.parent.u_info.open_files_type[item] != 'Dojo':
                 #        self.obj_args[-1].addItem(item)

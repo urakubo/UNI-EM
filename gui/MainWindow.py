@@ -40,6 +40,8 @@ from DojoMenu  import DojoMenu
 from Credit  import Credit
 from func_persephonep import *
 
+from miscellaneous.SyncListQComboBoxManager import *
+
 class MainWindow(QMainWindow, FileMenu, DojoMenu, Annotator, Segment, Plugins, Credit, DojoFileIO, Script):
 
     def __del__(self):
@@ -72,6 +74,9 @@ class MainWindow(QMainWindow, FileMenu, DojoMenu, Annotator, Segment, Plugins, C
         self.top  = 200
         self.width = 1200
         self.height = 800
+
+        SyncListQComboBoxExcludeDjojMtifManager.build(self.u_info)
+        SyncListQComboBoxOnlyDojoManager.build(self.u_info)
 
         self.initUI()
 

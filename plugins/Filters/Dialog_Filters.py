@@ -27,9 +27,9 @@ main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
 icon_dir = path.join(main_dir, "icons")
 sys.path.append(os.path.join(main_dir, "plugins", "miscellaneous"))
-import miscellaneous.Miscellaneous as m
-from miscellaneous.SyncFileListQComboBoxHolder import *
 
+import miscellaneous.Miscellaneous as m
+from miscellaneous.SyncListQComboBoxManager import *
 from miscellaneous.MiscellaneousFilters  import MiscellaneousFilters
 from miscellaneous.ThumbnailGenerator    import ThumbnailGenerator
 from miscellaneous.FilterlistGenerator   import FilterlistGenerator
@@ -124,12 +124,12 @@ class TableGenerator(MiscellaneousFilters):
 
         lbl.append(QLabel('Target Folder:'))
         lbl[-1].setToolTip('Path to folder containing images')
-        self.parent.targ_image_folder_qcombo = SyncFileListQComboBoxHolder.create(self, 1)
+        self.parent.targ_image_folder_qcombo = SyncListQComboBoxExcludeDjojMtifManager.get().create(self, 1)
         obj_args.append( self.parent.targ_image_folder_qcombo )
 
         lbl.append(QLabel('Output Folder:'))
         lbl[-1].setToolTip('Path to folder containing images')
-        obj_args.append( SyncFileListQComboBoxHolder.create(self, 2) )
+        obj_args.append( SyncListQComboBoxExcludeDjojMtifManager.get().create(self, 2) )
 
         lbl.append(QPushButton('Save Parameters'))
         lbl[-1].clicked.connect(lambda: self.save_params(args, obj_args))

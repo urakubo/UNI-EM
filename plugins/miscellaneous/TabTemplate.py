@@ -7,8 +7,7 @@ from PyQt5.QtCore import Qt, pyqtSlot,  QAbstractListModel, QModelIndex, QVarian
 import PyQt5.QtGui as QtGui
 
 from MiscellaneousTemplate import MiscellaneousTemplate
-
-from miscellaneous.SyncFileListQComboBoxHolder import *
+from miscellaneous.SyncListQComboBoxManager import *
 
 class TabTemplate(MiscellaneousTemplate):
 
@@ -78,7 +77,7 @@ class TabTemplate(MiscellaneousTemplate):
                 obj_args.append(QCheckBox(''))
                 obj_args[-1].setChecked( args[i][2] )
             elif args[i][1] == 'SelectOpenImage':
-                obj_args.append(SyncFileListQComboBoxHolder.create(filter, i))
+                obj_args.append(SyncListQComboBoxExcludeDjojMtifManager.get().create(filter, i))
                 #for item in self.parent.u_info.open_files:
                 #    if self.parent.u_info.open_files_type[item] != 'Dojo' :
                 #        obj_args[-1].addItem(item)

@@ -65,9 +65,9 @@ class ThumbnailGenerator(MiscellaneousFilters):
         def _ChangeZ():
             self.filestack = self.ObtainTarget()
             # print("self.filestack: ", self.filestack)
-            #if self.filestack == [] :
-            #    print("No image files")
-            #    return False
+            #if len(self.filestack) == 0 :
+            #   print("No image files")
+            #   return False
 
             sz = self.control_thumbnail[0].value()  # Z 0:99
             if len(self.filestack) > 0:

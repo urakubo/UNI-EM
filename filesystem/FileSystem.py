@@ -20,7 +20,7 @@ from PyQt5.QtCore import QFile, QFileInfo, QSettings, Qt
 from PyQt5.QtWidgets import (QFileDialog, qApp, QMessageBox)
 from Params import Params
 
-from miscellaneous.SyncFileListQComboBoxHolder import *
+from miscellaneous.SyncListQComboBoxManager import *
 
 class FileSystem():
 
@@ -189,7 +189,8 @@ class FileSystem():
         self.UpdateOpenFileMenu()
 
         #### Synchronize between dropdown menu and combo boxes
-        SyncFileListQComboBoxHolder.addModel(fileName)
+        SyncListQComboBoxExcludeDjojMtifManager.get().addModel(fileName)
+        SyncListQComboBoxOnlyDojoManager.get().addModel(fileName)
 
         #### Manage open file history
         settings = QSettings('Trolltech', 'Recent Files Example')

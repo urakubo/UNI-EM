@@ -30,7 +30,7 @@ sys.path.append(segmentation_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
 from MiscellaneousSegment import MiscellaneousSegment
 from ExecuteTraining import ExecuteTraining
-from miscellaneous.SyncFileListQComboBoxHolder import *
+from miscellaneous.SyncListQComboBoxManager import *
 
 class TrainingTab(MiscellaneousSegment):
     def __init__(self, parent):
@@ -141,7 +141,7 @@ class TrainingTab(MiscellaneousSegment):
                 self._Training2D_Highwaynet(ttab[2], self.lbl)
                 self._Training2D_Densenet(ttab[3], self.lbl)
             elif self.args[i][1] == 'SelectOpenImage':
-                self.obj_args.append(SyncFileListQComboBoxHolder.create(self, i))
+                self.obj_args.append(SyncListQComboBoxExcludeDjojMtifManager.get().create(self, i))
                 #for item in self.parent.u_info.open_files:
                 #    if self.parent.u_info.open_files_type[item] != 'Dojo':
                 #       self.obj_args[-1].addItem(item)

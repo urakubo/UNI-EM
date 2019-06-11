@@ -33,7 +33,7 @@ sys.path.append(os.path.join(main_dir, "filesystem"))
 from Params import Params
 from ImportImgSeg import ImportImgSeg
 from miscellaneous.SharedFileDialogs import SharedFileDialogs
-from miscellaneous.SyncFileListQComboBoxHolder import *
+from miscellaneous.SyncListQComboBoxManager import *
 
 class _GenerateContents(SharedFileDialogs):
 
@@ -42,7 +42,7 @@ class _GenerateContents(SharedFileDialogs):
 
     def generate(self):
         lbl   = QLabel('Select Dojo Folder.')
-        edit  = SyncFileListQComboBoxHolder.create(self, 0)
+        edit  = SyncListQComboBoxOnlyDojoManager.get().create(self, 0)
         btn   = QPushButton("Open...")
         btn.clicked.connect(lambda state : self.browse_OpenDojoFolder(edit) )
         return lbl, edit, btn

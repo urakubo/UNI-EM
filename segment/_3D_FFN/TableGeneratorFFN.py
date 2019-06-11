@@ -24,7 +24,7 @@ segmentation_dir = path.join(main_dir, "segment")
 sys.path.append(segmentation_dir)
 
 from MiscellaneousSegment import MiscellaneousSegment
-from miscellaneous.SyncFileListQComboBoxHolder import *
+from miscellaneous.SyncListQComboBoxManager import *
 
 class TableGeneratorFFN(MiscellaneousSegment):
 
@@ -94,7 +94,7 @@ class TableGeneratorFFN(MiscellaneousSegment):
                 obj_args.append(QCheckBox(''))
                 obj_args[-1].setChecked( args[i][2] )
             elif args[i][1] == 'SelectOpenImage':
-                obj_args.append(SyncFileListQComboBoxHolder.create(filter, i))
+                obj_args.append(SyncListQComboBoxExcludeDjojMtifManager.get().create(filter, i))
                 #for item in self.parent.u_info.open_files:
                 #   if self.parent.u_info.open_files_type[item] != 'Dojo':
                 #        obj_args[-1].addItem(item)

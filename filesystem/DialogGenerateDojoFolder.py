@@ -35,8 +35,7 @@ sys.path.append(os.path.join(main_dir, "filesystem"))
 from Params import Params
 from ImportImgSeg import ImportImgSeg
 from miscellaneous.SharedFileDialogs import SharedFileDialogs
-from miscellaneous.SyncFileListQComboBoxHolder import *
-
+from miscellaneous.SyncListQComboBoxManager import *
 
 class _GenerateContents(SharedFileDialogs):
 
@@ -50,7 +49,7 @@ class _GenerateContents(SharedFileDialogs):
 
     def generate(self, i):
         lbl   = QLabel(self.args[i])
-        edit  = SyncFileListQComboBoxHolder.create(self, i)
+        edit  = SyncListQComboBoxExcludeDjojMtifManager.get().create(self, i)
         btn   = QPushButton("Open...")
         btn.clicked.connect(lambda state : self.browse_OpenImageFolder(edit) )
         return lbl, edit, btn
