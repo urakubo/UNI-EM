@@ -26,7 +26,7 @@ This is a proofreading software as a part of Rhoana pipeline (Copyright, Lichtma
 
 	- https://www.rhoana.org/dojo/
 
-1. Select Dojo → Open Dojo Folder from the dropdown menu, and specify the folder of the sample EM/segmentation dojo files. Dojo will be launched as a web application.
+1. Select Dojo → Open Dojo Folder from the dropdown menu, and specify the folder of sample EM/segmentation dojo files. Dojo will be launched as a web application.
 2. Please push the "Reload" button first if the Dojo seems to be in trouble. The Dojo can also be seen in the other web browser if users copy and paste the URL [ http://X.X.X.X:8888/dojo/ ] . Users can also use Dojo through the web browsers of other PCs within the same LAN.
 3.	The usage of Dojo is described in the original web page [ https://www.rhoana.org/dojo/ ] . For example, users can move between layers by pressing w/s keys, and change the opacity of segmentation by pressing c/d keys.
 4.	Users can import pairs of new EM images and segmentation by selecting Dojo → Import EM Stack/Segmentation. Specify the folders containing a stack of EM images and a stack of segmentation images through the dialog (sequentially numbered, gray-scale png/tiff files). 
