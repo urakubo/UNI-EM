@@ -160,7 +160,7 @@ class MiscellaneousFilters(SharedFileDialogs):
         if len(output_path) == 0:
             print('Output folder unspecified.')
             return False
-
+        #
         numz = len(filestack)
         # size = cv2.imread(filestack[0], cv2.IMREAD_GRAYSCALE).shape
         check_attribute = m.imread(filestack[0], flags=cv2.IMREAD_GRAYSCALE)
@@ -192,6 +192,8 @@ class MiscellaneousFilters(SharedFileDialogs):
                 tmp = cls.Filter(self, input_volume, params)
                 input_volume = tmp.astype(np.uint16)
 
+        # Unlock Folder
+        m.UnlockFolder(self.parent.u_info, output_path)
         # Save segmentation
         print('Saving images ...')
         for zi, filename in enumerate(filestack):
@@ -203,6 +205,8 @@ class MiscellaneousFilters(SharedFileDialogs):
             elif ext == ".png" or ext == ".PNG":
                 m.save_png16(input_volume[:, :, zi], savename)
         print('2D/3D filters were applied!')
+        # Lock Folder
+        m.LockFolder(self.parent.u_info, output_path)
 
 
     def Execute2D(self, w):
@@ -215,9 +219,11 @@ class MiscellaneousFilters(SharedFileDialogs):
         if len(output_path) == 0:
             print('Output folder unspecified.')
             return False
+        # Unlock Folder
+        m.UnlockFolder(self.parent.u_info, output_path)
 
         for filename in self.filestack:
-            # print(filename)
+            print(filename)
             output_name = os.path.basename(filename)
             # input_image = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
             input_image = m.imread(filename, flags=cv2.IMREAD_GRAYSCALE)
@@ -240,7 +246,8 @@ class MiscellaneousFilters(SharedFileDialogs):
                 else:
                     print('dtype mismatch: ', output_dtype)
         print('2D filters were applied!')
-
+        # Lock Folder
+        m.LockFolder(self.parent.u_info, output_path)
 
 
     def FilterApplication2D(self, w, image):

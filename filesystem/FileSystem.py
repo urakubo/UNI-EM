@@ -172,7 +172,7 @@ class FileSystem():
         if os.path.isdir(fileName):
             lock_result = self.LockFolder(fileName)
             if lock_result == False:
-                return Falese
+                return False
             self.u_info.open_files4lock[fileName] = lock_result
         else:
             try:

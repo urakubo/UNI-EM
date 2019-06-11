@@ -42,9 +42,10 @@ class FFNPostprocessing(MiscellaneousSegment):
         if (filetype == '8-bit color PNG') or (filetype == '8-bit color TIFF'):
             ids = np.max(segmentation)
             print('Max segmentation ID: ', ids)
-            colormap = np.random.randint(255, size=(ids+1, 3), dtype=np.uint64)
+            colormap = np.random.randint(255, size=(ids+2, 3), dtype=np.uint64)
             colormap[0,:] = 0
         ##
+        m.UnlockFolder(parent.u_info, params['Output Segmentation Folder'])
         ##
         for idz in range(segmentation.shape[0]):
             image2d = segmentation[idz, :, :]
@@ -72,6 +73,7 @@ class FFNPostprocessing(MiscellaneousSegment):
                 print('Data was not saved.')
         ##
         print(comm_title, 'was finished.')
+        m.LockFolder(parent.u_info, params['Output Segmentation Folder'])
         return True
         ##
 

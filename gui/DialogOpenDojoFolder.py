@@ -26,17 +26,14 @@ from PyQt5.QtCore import Qt
 
 main_dir    = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 icon_dir    = path.join(main_dir, "icons")
-# plugins_dir = path.join(main_dir, "plugins")
-# sys.path.append(plugins_dir)
 sys.path.append(main_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
-# sys.path.append(os.path.join(main_dir, "gui"))
+
 
 from Params import Params
 from ImportImgSeg import ImportImgSeg
 from miscellaneous.SharedFileDialogs import SharedFileDialogs
 from miscellaneous.SyncFileListQComboBoxHolder import *
-
 
 class _GenerateContents(SharedFileDialogs):
 
@@ -60,8 +57,8 @@ class DialogOpenDojoFolder(QDialog):
         self.title = 'Open Dojo Folder'
         self.left = 200
         self.top = 200
-        self.width = 500
-        self.height = 150
+        self.width = 400
+        self.height = 100
 
         self.initUI()
 
@@ -115,8 +112,8 @@ class DialogOpenDojoFolder(QDialog):
         self.u_info.SetUserInfo(dir_Dojo)
         frame_statusbar_fields = "Dojo: " + self.u_info.files_path
         self.parent.setWindowTitle(frame_statusbar_fields)
+        ##
         self.parent.LaunchDojo()
-
         self.close()
         return False
 
@@ -140,14 +137,4 @@ class DialogOpenDojoFolder(QDialog):
         # Combo box update
         SyncFileListQComboBoxHolder.addModel(dir_dojo)
 
-
-    def CloseFolder(self,  dir_dojo):
-        tmp_open_files4lock = self.u_info.open_files4lock[dir_dojo]
-        for lockfileobj in tmp_open_files4lock.values():
-            # print(lockfileobj)
-            lockfileobj.close()
-        del self.u_info.open_files4lock[dir_dojo]
-
-        self.u_info.open_files.remove(dir_dojo)
-        self.UpdateOpenFileMenu()
 

@@ -110,10 +110,7 @@ class TableGenerator(MiscellaneousFilters):
 
 
     def GenerateTableObject(self):
-        filter_name = '2D/3D filter'
         datadir =  self.parent.u_info.data_path
-        imgpath =  os.path.join(datadir, "DNN_segmentation")
-        outpath =  os.path.join(datadir, "DNN_segmentation")
         paramfile = os.path.join(datadir, "parameters", "Filters.pickle")
 
         args = [

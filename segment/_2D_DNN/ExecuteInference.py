@@ -26,6 +26,7 @@ sys.path.append(os.path.join(main_dir, "segment"))
 sys.path.append(os.path.join(main_dir, "filesystem"))
 
 from MiscellaneousSegment import MiscellaneousSegment
+import miscellaneous.Miscellaneous as m
 
 class ExecuteInference(MiscellaneousSegment):
 
@@ -76,16 +77,16 @@ class ExecuteInference(MiscellaneousSegment):
                 + ' --checkpoint ' + params['Checkpoint Folder'] + ' ' \
                 + ' --image_height ' + str(image_height) + ' ' \
                 + ' --image_width ' + str(image_width)
-        # - -image_height 1024
-        # - -image_width 1024
-
 
         try:
             print(comm)
             print('Start inference.')
+            m.UnlockFolder(parent.u_info, params['Output Segmentation Folder'])  # Only for shared folder/file
             s.Popen(comm.split())
+            m.LockFolder(parent.u_info, params['Output Segmentation Folder'])
         except subprocess.CalledProcessError as e:
             print("Inference was not executed.")
+            m.LockFolder(parent.u_info, params['Output Segmentation Folder'])
             return
-        return
+
 

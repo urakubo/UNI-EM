@@ -23,10 +23,45 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 icon_dir = path.join(main_dir, "icons")
 sys.path.append(main_dir)
-sys.path.append(os.path.join(main_dir, "segment"))
-sys.path.append(os.path.join(main_dir, "filesystem"))
+# sys.path.append(os.path.join(main_dir, "segment"))
+# sys.path.append(os.path.join(main_dir, "filesystem"))
 
-# import Miscellaneous as m
+# import miscellaneous.Miscellaneous as m
+
+def UnlockFolder(u_info, dir):
+    tmp_open_files4lock = u_info.open_files4lock[dir]
+    for lockfileobj in tmp_open_files4lock.values():
+        lockfileobj.close()
+    del u_info.open_files4lock[dir]
+
+
+def LockFolder(u_info, dir):
+    if dir in u_info.open_files4lock :
+        UnlockFolder(u_info, dir)
+    tmp_file4lock = {}
+    for curDir, dirs, files in os.walk(dir):
+        if files:
+            for file in files:
+                ofile = f'{curDir}{os.path.sep}{file}'
+                try:
+                    tmp_file4lock[ofile] = open(ofile, 'r+')
+                except:
+                    print("Cannot lock file.")
+                    for closefile in tmp_file4lock.values():
+                        closefile.close()
+                    return False
+    u_info.open_files4lock[dir] = tmp_file4lock
+
+
+
+def CloseFolder(u_info,  dir):
+    tmp_open_files4lock = u_info.open_files4lock[dir]
+    for lockfileobj in tmp_open_files4lock.values():
+        lockfileobj.close()
+    del u_info.open_files4lock[dir]
+    u_info.open_files.remove(dir)
+
+
 
 # https://qiita.com/SKYS/items/cbde3775e2143cad7455
 
@@ -152,8 +187,8 @@ def gen_col_pil(id_data, colordata):
     ncol = id_data.shape[0]
     nrow = id_data.shape[1]
     imgArray = np.zeros((ncol, nrow, 3), dtype='uint8')
-    for i in range(nrow):
-        for j in range(ncol):
+    for i in range(ncol):
+        for j in range(nrow):
             imgArray[i, j][0] = colordata[id_data[i, j], 0]  # R
             imgArray[i, j][1] = colordata[id_data[i, j], 1]  # G
             imgArray[i, j][2] = colordata[id_data[i, j], 2]  # B

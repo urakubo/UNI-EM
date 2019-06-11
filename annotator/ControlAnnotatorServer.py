@@ -40,7 +40,7 @@ from stl import mesh
 
 from DB import DB
 from Params import Params
-import Miscellaneous as m
+import miscellaneous.Miscellaneous as m
 ##
 import time
 #from pyqtgraph.opengl import GLViewWidget, MeshData
