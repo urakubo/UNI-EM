@@ -55,7 +55,7 @@ Dojoファイルを開いた状態で、 上端のドロップダウンメニュ
 
 <BR>
 <p align="center">
-  <img src="Images/Annotator.png" alt="3D Annotator" width="800">
+  <img src="Images/Annotator.png" alt="3D Annotator" width="700">
 </p>
 <BR>
 
@@ -93,7 +93,7 @@ Dojoファイルを開いた状態で、 上端のドロップダウンメニュ
 
 <BR>
 <p align="center">
-  <img src="Images/2DNN_0.png" alt="2D DNN" width="600">
+  <img src="Images/2DNN_0.png" alt="2D DNN" width="700">
 </p>
 <BR>
 
