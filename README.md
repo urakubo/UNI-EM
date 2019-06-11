@@ -77,7 +77,6 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 
 
 	[New feature: Folder management system](docs/HowToUse.md#Folder-management-system)
-
    		- git clone https://github.com/urakubo/UNI-EM.git
 
 
