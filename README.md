@@ -15,6 +15,7 @@
 
 ---
 Check the following pages after installation.
+- [How to use: Folder management system](HowToUse.md#Folder-management-system)
 - [How to use: Dojo proofreader](docs/HowToUse.md#Dojo-proofreader)
 - [How to use: 3D annotator](docs/HowToUse.md#3D-annotator)
 - [How to use: 2D CNN](docs/HowToUse.md#2D-CNN)
