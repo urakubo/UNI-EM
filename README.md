@@ -75,7 +75,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 2. Install cuda 9.0 and cuDNN 7.4.2 (or later) for Tensorflow 1.12 (latest combination on 2018/12/20) if your PC has a NVIDIA-GPU.
 3. Download the source codes from the github site:
 
-	[New feature: Folder management system](docs/HowToUse.md#Folder-management-system)
+	- [New feature: Folder management system](docs/HowToUse.md#Folder-management-system)
 	
 	- git clone https://github.com/urakubo/UNI-EM.git
 
