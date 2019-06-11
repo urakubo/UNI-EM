@@ -9,7 +9,7 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
 icon_dir = path.join(main_dir, "icons")
-from MiscellaneousTemplate import MiscellaneousTemplate
+from TabTemplate import TabTemplate
 
 # ------------------------------------------------------------
 # Example plugin
@@ -20,9 +20,8 @@ from MiscellaneousTemplate import MiscellaneousTemplate
 from Training   import Training
 from Inference  import Inference
 
-class Dialog_Template(QWidget, MiscellaneousTemplate):
+class Dialog_Template(QWidget):
     def __init__(self, parent):
-        super().__init__()
         self.title  = "Template"
         self.left   = 200
         self.top    = 200
@@ -30,6 +29,7 @@ class Dialog_Template(QWidget, MiscellaneousTemplate):
         self.height = 250
         self.u_info = parent.u_info
         self.parent = parent
+        super().__init__()
         self.initUI()
 
 
@@ -40,15 +40,16 @@ class Dialog_Template(QWidget, MiscellaneousTemplate):
         layout = QVBoxLayout()
         layout.addWidget(tabs)
         self.setLayout(layout)
+        tab = TabTemplate(self)
 
         # Training
         training        = Training(self.u_info)
-        tab_training    = self.GenerateTabWidget(training)
+        tab_training    = tab.GenerateTabWidget(training)
         tabs.addTab(tab_training, 'Training')
 
         # Inferernce
         inference        = Inference(self.u_info)
-        tab_inference    = self.GenerateTabWidget(inference)
+        tab_inference    = tab.GenerateTabWidget(inference)
         tabs.addTab(tab_inference, 'Inference')
 
         # Show Widget
@@ -56,4 +57,7 @@ class Dialog_Template(QWidget, MiscellaneousTemplate):
         self.setWindowTitle(self.title)
         self.setWindowIcon(QIcon(path.join(icon_dir, 'Mojo2_16.png')))
         self.show()
+
+
+
 

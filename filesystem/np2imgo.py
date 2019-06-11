@@ -13,7 +13,7 @@ import lxml.etree
 import numpy as np
 
 from Params import Params
-import Miscellaneous as m
+import miscellaneous.Miscellaneous as m
 
 
 class Imgo:

@@ -27,167 +27,23 @@ from typing import Any
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 icon_dir = path.join(main_dir, "icons")
-segmentation_dir = path.join(main_dir, "segment")
+#segmentation_dir = path.join(main_dir, "segment")
+filesystem_dir = path.join(main_dir, "filesystem")
 sys.path.append(main_dir)
-sys.path.append(segmentation_dir)
+#sys.path.append(segmentation_dir)
+sys.path.append(filesystem_dir)
+#sys.path.append(gui_dir)
 
+from FileSystem import FileSystem
+from miscellaneous.SharedFileDialogs import SharedFileDialogs
 import miscellaneous.Miscellaneous as m
 
-class _MyListModel(QAbstractListModel):
-    def __init__(self, datain, parent=None, *args):
-        """ datain: a list where each item is a row
-        """
-        QAbstractListModel.__init__(self, parent, *args)
-        self.listdata = datain
-
-    def rowCount(self, parent=QModelIndex()):
-        return len(self.listdata)
-
-    def data(self, index, role):
-        if index.isValid() and role == Qt.DecorationRole:
-            return QIcon(QPixmap(self.listdata[index.row()]))
-        if index.isValid() and role == Qt.DisplayRole:
-            return QVariant(os.path.splitext(os.path.split(self.listdata[index.row()])[-1])[0])
-        else:
-            return QVariant()
-
-
-class _Dialog_ImageFolder():
-    def __init__(self, parent, title, init_path):
-        self.w = QDialog(parent)
-
-        self.parent = parent
-        self.left   = 300
-        self.top    = 300
-        self.width  = 600
-        self.height = 400
-        self.title  = title
-
-        # path = QDir.rootPath()
-
-        self.dirModel = QFileSystemModel()
-        self.dirModel.setRootPath(init_path)
-        #==========
-        self.dirModel.setFilter(QDir.NoDotAndDotDot | QDir.AllDirs)
-        self.treeview = QTreeView()
-        #self.dirModel.setFilter(QDir.AllDirs)
-        #self.treeview = QTableView()
-        #==========
-        self.treeview.setModel(self.dirModel)
-        #treeview.setRootIndex(self.dirModel.index(QDir.rootPath()))
-        self.treeview.setRootIndex(self.dirModel.index(""))
-        self.treeview.clicked.connect(self.on_clicked)
-        #--- Hide All Header Sections Except First ----
-        header = self.treeview.header()
-        for sec in range(1, header.count()):
-            header.setSectionHidden(sec, True)
-        #--- ---- ---- ---- ---- ---- ---- ---- ---- --
-
-        focus_index = self.dirModel.index(init_path)
-        self.treeview.setCurrentIndex(focus_index)
-        self.current_row_changed()
-
-        self.listview = QListView()
-        self.listview.setViewMode(QListView.IconMode)
-        self.listview.setIconSize(QSize(192,192))
-
-        targetfiles1 =  glob.glob(os.path.join( init_path, '*.png'))
-        targetfiles2 =  glob.glob(os.path.join( init_path, '*.tif'))
-        targetfiles3 =  glob.glob(os.path.join( init_path, '*.tiff'))
-        targetfiles  = targetfiles1 + targetfiles2 + targetfiles3
-        lm = _MyListModel(targetfiles, self.parent)
-        self.listview.setModel(lm)
-
-        self.sub_layout = QHBoxLayout()
-        self.sub_layout.addWidget(self.treeview)
-        self.sub_layout.addWidget(self.listview)
-
-        self.buttonBox = QDialogButtonBox(QDialogButtonBox.Open | QDialogButtonBox.Cancel)
-        self.buttonBox.accepted.connect(self.accept)
-        self.buttonBox.rejected.connect(self.reject)
-
-        self.main_layout = QVBoxLayout()
-        self.main_layout.addLayout(self.sub_layout)
-        self.main_layout.addWidget(self.buttonBox)
-
-
-        self.w.setGeometry(self.left, self.top, self.width, self.height)
-        self.w.setWindowTitle(self.title)
-        self.w.setWindowIcon(QIcon(os.path.join(icon_dir, 'Mojo2_16.png')))
-        self.w.setLayout(self.main_layout)
-        # self.w.exec_()
-
-    def current_row_changed(self):
-        index = self.treeview.currentIndex()
-        self.treeview.scrollTo(index, QAbstractItemView.EnsureVisible)
-        self.treeview.resizeColumnToContents(0)
-
-    def on_clicked(self, index):
-        path = self.dirModel.fileInfo(index).absoluteFilePath()
-        # self.listview.setRootIndex(self.fileModel.setRootPath(path))
-        # print('Path:   ', path)
-
-        targetfiles1 =  glob.glob(os.path.join( path, '*.png'))
-        targetfiles2 =  glob.glob(os.path.join( path, '*.tif'))
-        targetfiles3 =  glob.glob(os.path.join( path, '*.tiff'))
-        targetfiles  = targetfiles1 + targetfiles2 + targetfiles3
-
-        lm = _MyListModel(targetfiles, self.parent)
-        self.listview.setModel(lm)
-
-    def accept(self):
-        index = self.treeview.currentIndex()
-        self.newdir = self.dirModel.filePath(index)
-        self.w.done(1)
-        #return True
-
-    def reject(self):
-        self.w.done(0)
-        #return False
-
-    def GetValue(self):
-        index = self.treeview.currentIndex()
-        self.newdir = self.dirModel.filePath(index)
-        return self.newdir
-
-
-class MiscellaneousFilters():
+class MiscellaneousFilters(SharedFileDialogs):
     ##
-    def browse_dir_img(self, lineedit_obj):
-        currentdir = lineedit_obj.text()
-        Dialog = _Dialog_ImageFolder(self.parent, "Select Image Folder",  currentdir)
-        return_flag = Dialog.w.exec_()
-        if return_flag == 1:
-            newdir = Dialog.GetValue()
-            lineedit_obj.setText(newdir)
-            return True
-        return False
-
-    def browse_dir(self, lineedit_obj):
-        currentdir = lineedit_obj.text()
-        newdir = QFileDialog.getExistingDirectory(self.parent, "Select Folder", currentdir)
-        if len(newdir) == 0:
-            return False
-        newdir = newdir.replace('/', os.sep)
-        lineedit_obj.setText(newdir)
-        return True
-
-
-    def browse_file(self, lineedit_obj):
-        currentfile = lineedit_obj.text()
-        newfile = QFileDialog.getOpenFileName(self.parent, "Select File", currentfile)
-        newfile = newfile[0]
-        if len(newfile) == 0:
-            return False
-        newfile = newfile.replace('/', os.sep)
-        lineedit_obj.setText(newfile)
-        return True
-
-
+    ##
     def save_params(self, args, obj_args):
         #
-        args_header = [args[i][0] for i in range(len(args))]
-        id = args_header.index('Save Parameters')
+        id = args.index('Save Parameters')
         filename = obj_args[id].text()
         print('\nSave file : ', filename)
         print()
@@ -215,8 +71,7 @@ class MiscellaneousFilters():
 
     def load_params(self, args, obj_args):
         #
-        args_header = [args[i][0] for i in range(len(args))]
-        id = args_header.index('Load Parameters')
+        id = args.index('Load Parameters')
         filename = obj_args[id].text()
         print('\nLoad file : ', filename)
         print()
@@ -240,7 +95,7 @@ class MiscellaneousFilters():
     ##
     ##
     ##
-    def ObtainParams(self, args):
+    def ObtainParamsFilter(self, args):
         args_header = [args[i][0] for i in range(len(args))]
         params = {}
         for i, arg in enumerate(args):
@@ -257,10 +112,15 @@ class MiscellaneousFilters():
 
 
     def ObtainParamsBottomTable(self, obj_args, args):
-        args_header = [args[i][0] for i in range(len(args))]
         params = {}
-        for i, arg in enumerate(args):
-            params[args_header[i]] = obj_args[i].text()
+        #print('args: ', args)
+        for i in range(len(args)):
+            #print(obj_args[i].__class__.__name__)
+            if obj_args[i].__class__.__name__ == 'QLineEdit':
+                params[args[i]] = obj_args[i].text()
+            elif obj_args[i].__class__.__name__ == 'SyncFlileListQComboBox':
+                params[args[i]] = obj_args[i].currentText()
+
         return params
 
 
@@ -268,10 +128,16 @@ class MiscellaneousFilters():
     def ObtainTarget(self):
 
         ## Obtain parameters
-
         params = self.ObtainParamsBottomTable(self.obj_args, self.args)
-        #
         input_path = params['Target Folder']
+        ##
+        ## Free from filelock
+        ##
+        # ofolder = self.parent.u_info.open_files4lock.get(input_path)
+        # if ofolder == None:
+        #    return []
+        # for ofileobj in ofolder.values():
+        #    ofileobj.close()
         #
         search1 = os.path.join(input_path, '*.png')
         search2 = os.path.join(input_path, '*.tif')
@@ -279,6 +145,8 @@ class MiscellaneousFilters():
         filestack = sorted(glob.glob(search1))
         filestack.extend(sorted(glob.glob(search2)))
         filestack.extend(sorted(glob.glob(search3)))
+
+        # print('filestack : ', filestack)
         return filestack
 
 
@@ -289,13 +157,21 @@ class MiscellaneousFilters():
         filestack = self.ObtainTarget()
         params = self.ObtainParamsBottomTable(self.obj_args, self.args)
         output_path = params['Output Folder']
+        if len(output_path) == 0:
+            print('Output folder unspecified.')
+            return False
+
         numz = len(filestack)
-        size = cv2.imread(filestack[0], cv2.IMREAD_GRAYSCALE).shape
-        input_volume = np.zeros([size[0], size[1], numz], np.uint16)
+        # size = cv2.imread(filestack[0], cv2.IMREAD_GRAYSCALE).shape
+        check_attribute = m.imread(filestack[0], flags=cv2.IMREAD_GRAYSCALE)
+        tsize  = check_attribute.shape
+        tdtype = check_attribute.dtype
+        input_volume = np.zeros([tsize[0], tsize[1], numz], tdtype)
 
         print('Loading images ...')
         for zi, filename in enumerate(filestack):
-            input_volume[:, :, zi] = cv2.imread(filename, cv2.IMREAD_GRAYSCALE).astype(np.uint16)
+            # input_volume[:, :, zi] = cv2.imread(filename, cv2.IMREAD_GRAYSCALE).astype(tdtype)
+            input_volume[:, :, zi] = m.imread(filestack[0], flags=cv2.IMREAD_GRAYSCALE)
         ##
         ## 2D/3D filter application
         ##
@@ -303,7 +179,7 @@ class MiscellaneousFilters():
             item = w.item(i)
             text = item.text()
             instance = item.data(Qt.UserRole)
-            params = self.ObtainParams(instance.args)
+            params = self.ObtainParamsFilter(instance.args)
             type = self.fi.get_type(text)
             cls = self.fi.get_class(text)
 
@@ -311,7 +187,7 @@ class MiscellaneousFilters():
                 for zi in range(numz):
                     input_image = input_volume[:, :, zi]
                     output_image = cls.Filter(self, input_image, params)
-                    input_volume[:, :, zi] = output_image.astype(np.uint16)
+                    input_volume[:, :, zi] = output_image
             elif type == '3d':
                 tmp = cls.Filter(self, input_volume, params)
                 input_volume = tmp.astype(np.uint16)
@@ -328,6 +204,7 @@ class MiscellaneousFilters():
                 m.save_png16(input_volume[:, :, zi], savename)
         print('2D/3D filters were applied!')
 
+
     def Execute2D(self, w):
         ##
         ## Input files /Output folder
@@ -335,10 +212,15 @@ class MiscellaneousFilters():
         self.filestack = self.ObtainTarget()
         params = self.ObtainParamsBottomTable(self.obj_args, self.args)
         output_path = params['Output Folder']
+        if len(output_path) == 0:
+            print('Output folder unspecified.')
+            return False
+
         for filename in self.filestack:
             # print(filename)
             output_name = os.path.basename(filename)
-            input_image = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
+            # input_image = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
+            input_image = m.imread(filename, flags=cv2.IMREAD_GRAYSCALE)
             output_image = self.FilterApplication2D(w, input_image)
             output_dtype = output_image.dtype
             savename = os.path.join(output_path, output_name)
@@ -366,7 +248,7 @@ class MiscellaneousFilters():
             item = w.item(i)
             text = item.text()
             instance = item.data(Qt.UserRole)
-            params   = self.ObtainParams(instance.args)
+            params   = self.ObtainParamsFilter(instance.args)
             type = self.fi.get_type(text)
             # print( text, params, type )
             cls = self.fi.get_class(text)

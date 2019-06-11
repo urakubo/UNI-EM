@@ -32,6 +32,7 @@ sys.path.append(os.path.join(main_dir, "filesystem"))
 
 from MiscellaneousSegment import MiscellaneousSegment
 from ExecuteInference import ExecuteInference
+from miscellaneous.SyncFileListQComboBoxHolder import *
 
 class InferenceTab(MiscellaneousSegment):
     def __init__(self, parent):
@@ -51,8 +52,8 @@ class InferenceTab(MiscellaneousSegment):
         modelpath =  os.path.join(datadir, "DNN_model_tensorflow")
         paramfile =  os.path.join(datadir, "parameters", "Inference_2D.pickle")
         self.args = [
-                        ['Image Folder',    'LineEdit', imgpath, 'BrowseDirImg'],
-                        ['Output Segmentation Folder',   'LineEdit', outpath, 'BrowseDirImg'],
+                        ['Image Folder',    'SelectOpenImage', 'OpenImage'],
+                        ['Output Segmentation Folder',   'SelectOpenImage', 'OpenImage'],
                         ['Checkpoint Folder',      'LineEdit', modelpath, 'BrowseDir'],
                         ['Save Parameters', 'LineEdit',paramfile, 'BrowseFile'],
                         ['Load Parameters', 'LineEdit',paramfile, 'BrowseFile']
@@ -64,11 +65,11 @@ class InferenceTab(MiscellaneousSegment):
     def Generate(self):
 
         ## Labels
-        lbl   = []
+        self.lbl   = []
         require_browse_dir = []
         require_browse_dir_img = []
         require_browse_file = []
-
+        require_browse_open_img = []
         ##
         ##
         args = self.args
@@ -76,14 +77,14 @@ class InferenceTab(MiscellaneousSegment):
         ##
             arg = self.args[i][0]
             if arg == 'Save Parameters':
-                lbl.append(QPushButton(arg))
-                lbl[-1].clicked.connect(self.SaveParams2D)
+                self.lbl.append(QPushButton(arg))
+                self.lbl[-1].clicked.connect(self.SaveParams2D)
             elif arg == 'Load Parameters':
-                lbl.append(QPushButton(arg))
-                lbl[-1].clicked.connect(self.LoadParams2D)
+                self.lbl.append(QPushButton(arg))
+                self.lbl[-1].clicked.connect(self.LoadParams2D)
             else :
-                lbl.append(QLabel(args[i][0] + ' :'))
-                lbl[-1].setToolTip(self.tips[i])
+                self.lbl.append(QLabel(args[i][0] + ' :'))
+                self.lbl[-1].setToolTip(self.tips[i])
 
         ##
         for i in range(len(self.args)):
@@ -107,12 +108,20 @@ class InferenceTab(MiscellaneousSegment):
                 items = args[i][2]
                 for item in items:
                     self.obj_args[-1].addItem(item)
+            elif self.args[i][1] == 'SelectOpenImage':
+                self.obj_args.append(SyncFileListQComboBoxHolder.create(self, i))
+                #for item in self.parent.u_info.open_files:
+                #    if self.parent.u_info.open_files_type[item] != 'Dojo':
+                #        self.obj_args[-1].addItem(item)
+                if self.args[i][2] == 'OpenImage':
+                    require_browse_open_img.append(i)
             else:
                 print('Internal error. No fucntion.')
 
         # Organize tab widget
 
-        tab = self.OrganizeTab2DNN(lbl, self.obj_args, self.display_order, require_browse_dir, require_browse_dir_img, require_browse_file, self._ExecuteInference)
+        tab = self.OrganizeTab2DNN(require_browse_dir, require_browse_dir_img, require_browse_file,
+                                   require_browse_open_img, self._ExecuteInference)
         return tab
 
     def _ExecuteInference(self):

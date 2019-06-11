@@ -21,7 +21,7 @@ icon_dir = path.join(main_dir, "icons")
 segmentation_dir = path.join(main_dir, "segment")
 sys.path.append(segmentation_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
-import Miscellaneous as m
+import miscellaneous.Miscellaneous as m
 from MiscellaneousSegment import MiscellaneousSegment
 
 class FFNPostprocessing(MiscellaneousSegment):
@@ -94,7 +94,7 @@ class FFNPostprocessing(MiscellaneousSegment):
 
         self.args = [
                         ['Target Sementation File (npz)',  'LineEdit', target_inference_file, 'BrowseFile'],
-                        ['Output Segmentation Folder',   'LineEdit', output_segmentation_path, 'BrowseDirImg'],
+                        ['Output Segmentation Folder',   'SelectOpenImage', 'OpenImage'],
                         ['Output Filetype', 'ComboBox', ["8-bit color PNG", "16-bit gray scale PNG", "8-bit gray scale PNG", 
                                                          "8-bit color TIFF", "16-bit gray scale TIFF", "8-bit gray scale TIFF"]],
             ]

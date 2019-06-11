@@ -5,10 +5,6 @@
 ####
 
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import os
 import sqlite3
 import pickle
@@ -22,7 +18,7 @@ import lxml.etree
 from itertools import chain
 
 from Params import Params
-import Miscellaneous as m
+import miscellaneous.Miscellaneous as m
 
 class DB :
 

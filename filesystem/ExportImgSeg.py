@@ -1,10 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import os
 import itertools
 import numpy as np
@@ -22,7 +18,7 @@ import sqlite3
 
 from DB import DB
 from Params import Params
-import Miscellaneous as m
+import miscellaneous.Miscellaneous as m
 
 ##
 class ExportImgSeg():

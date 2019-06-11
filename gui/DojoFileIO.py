@@ -28,41 +28,28 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
 sys.path.append(path.join(main_dir, "dojo"))
-sys.path.append(path.join(main_dir, "plugins"))
-sys.path.append(path.join(main_dir, "segment"))
+#sys.path.append(path.join(main_dir, "plugins"))
+#sys.path.append(path.join(main_dir, "segment"))
 sys.path.append(os.path.join(main_dir, "filesystem"))
 sys.path.append(os.path.join(main_dir, "gui"))
-plugins_dir = path.join(main_dir, "plugins")
+#plugins_dir = path.join(main_dir, "plugins")
 
 from Params  import Params
-from Credit  import Credit
-from Plugins import Plugins
-from Segment import Segment
+#from Credit  import Credit
+#from Plugins import Plugins
+#from Segment import Segment
 
 from DojoServer import ServerLogic
-from ImportDialog import ImportDialog
 from SaveChanges import SaveChanges
 from ExportImageDialog import ExportImageDialog
 from ExportIdDialog import ExportIdDialog
 
+from DialogOpenDojoFolder import *
+
 import ExportImgSeg
 import asyncio
 
-class FileIO():
-
-#    def StartThreadDojo(self):
-#
-#        self.p = s.Popen('python -u DojoStandalone.py u_info.pickle', stdout=s.PIPE, stderr=s.PIPE)
-#
-#        self.sentinel = True
-#        while self.sentinel:
-#            line = self.p.stdout.readline()
-#            if line.strip() == "":
-#                pass
-#            else:
-#                sys.stdout.write(line)
-#                sys.stdout.flush()
-
+class DojoFileIO():
 
     def StartThreadDojo(self):
         logic = ServerLogic()
@@ -105,7 +92,7 @@ class FileIO():
         self.u_info.dojo_thread = None
         self.u_info.files_found = False
         self.setWindowTitle(self.title)
-        self.InitModeFileMenu(self.dojo_icon_open_close)
+        self.InitModeDojoMenu(self.dojo_icon_open_close)
 
 
     def LaunchDojo(self):  # wxGlade: ControlPanel.<event_handler>
@@ -127,22 +114,22 @@ class FileIO():
         # self.DojoHTTP.SetLabel(self.u_info.url)
         # self.DojoHTTP.SetLabel('Please click here!')
         # self.panel_URL.Show()
-        self.ActiveModeFileMenu(self.dojo_icon_open_close)
+        self.ActiveModeDojoMenu(self.dojo_icon_open_close)
         # time.sleep(10)
         self.u_info.url = 'http://' + self.u_info.ip + ':' + str(self.u_info.port) + '/dojo/'
         self.table_widget.addTab('dojo', 'Dojo', self.u_info.url) # ID, Title, URL
 
 
-    def Import(self):  # wxGlade: ControlPanel.<event_handler>
-        self.ImportImagesSegments = ImportDialog(self.u_info, self)
-
-
     def SelectDojoFile(self):
-        dpath = self.u_info.files_path
-        fname = QFileDialog.getExistingDirectory(self, "Select Dojo folder", dpath)
-        if len(fname) == 0:
-            print('No folder was selected.')
-            return
+
+        tmp = DialogOpenDojoFolder(self)
+        return False
+
+        #dpath = self.u_info.files_path
+        #fname = QFileDialog.getExistingDirectory(self, "Select Dojo folder", dpath)
+        #if len(fname) == 0:
+        #    print('No folder was selected.')
+        #    return
 
         # tmp_info = copy.deepcopy(self.u_info)
         tmp_info = Params()

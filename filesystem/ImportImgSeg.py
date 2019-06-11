@@ -2,10 +2,6 @@
 # -*- coding: UTF-8 -*-
 #
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import os
 import sys
 import cv2
@@ -19,7 +15,7 @@ import numpy as np
 from os import path, pardir
 current_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of script
 parent_dir  = path.abspath(path.join(current_dir, pardir))  # Parent dir of script
-sys.path.append(path.join(parent_dir, "Filesystem"))
+sys.path.append(path.join(parent_dir, "filesystem"))
 from Params import Params
 from np2imgo import Imgo
 from np2sego import Sego

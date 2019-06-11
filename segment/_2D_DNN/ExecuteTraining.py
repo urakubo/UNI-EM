@@ -84,7 +84,7 @@ class ExecuteTraining(MiscellaneousSegment):
         print('Target file to check color type : ', input_files[0])
         print('Segmentation image dimensions   : ', im.shape)
         print('Segmentation filetype           : ', im.dtype)
-        if not (im.dtype == "uint8" and len(im.shape) == 3 and tmp2 == []) :
+        if not (im.dtype == "uint8" and len(im.shape) == 3 and input_tif == []) :
             tmpdir = os.path.join(datadir, "tmp", "DNN_ground_truth")
             if os.path.exists(tmpdir) :
                 shutil.rmtree(tmpdir)

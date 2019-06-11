@@ -321,6 +321,17 @@
       DOJO.init();
       DojoGUI.init();
     };
+
+
+	// Prohibit file drag & drop.
+	window.addEventListener('dragover', function(ev){
+		ev.preventDefault();
+	}, false);
+	window.addEventListener('drop', function(ev){
+		ev.preventDefault();
+		ev.stopPropagation();
+	}, false);
+	//
   </script>
 </head>
 <body>

@@ -49,20 +49,20 @@ class Training(MiscellaneousTemplate):
         self.name = 'Training'
 
         self.tips = [
-                        'Checkpoint Interval',
-                        'Sparse Z',
-                        'Mode',
                         'Input : Training image folder',
                         'Input : Ground truth folder',
-                        'Input/Output: Tensorlflow Model Folder'
+                        'Input/Output: Tensorlflow Model Folder',
+                        'Checkpoint Interval',
+                        'Sparse Z',
+                        'Mode'
                         ]
 
         self.args = [
+                        ['Training image folder', 'SelectOpenImage', 'OpenImage'],
+                        ['Ground truth folder', 'SelectOpenImage', 'OpenImage'],
+                        ['Tensorflow model folder', 'LineEdit', tensorflow_file_path, 'BrowseDir'],
                         ['Checkpoint Interval', 'SpinBox', [100, 1800, 65535]],
                         ['Sparse Z', 'CheckBox', False],
-                        ['Mode', 'ComboBox', ['a','b','c']],
-                        ['Training image folder'   , 'LineEdit', training_image_path   , 'BrowseDirImg'],
-                        ['Ground truth folder'     , 'LineEdit', ground_truth_path     , 'BrowseDirImg'],
-                        ['Tensorflow model folder' , 'LineEdit', tensorflow_file_path  , 'BrowseDir'],
+                        ['Mode', 'ComboBox', ['a','b','c']]
             ]
 

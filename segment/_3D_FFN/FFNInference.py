@@ -23,7 +23,7 @@ icon_dir = path.join(main_dir, "icons")
 segmentation_dir = path.join(main_dir, "segment")
 sys.path.append(segmentation_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
-import Miscellaneous as m
+import miscellaneous.Miscellaneous as m
 
 #######
 
@@ -153,7 +153,7 @@ class FFNInference(MiscellaneousSegment):
                         ]
 
         self.args = [
-                        ['Target Image Folder',  'LineEdit', Inference_image_path, 'BrowseDirImg'],
+                        ['Target Image Folder',    'SelectOpenImage', 'OpenImage'],
                         ['Output Inference Folder',  'LineEdit', ffn_file_path, 'BrowseDir'],
                         ['Tensorflow Model Files', 'LineEdit', tensorflow_file, 'BrowseFile'],
                         ['Sparse Z', 'CheckBox', False],
