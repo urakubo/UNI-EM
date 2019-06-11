@@ -56,7 +56,7 @@ Click the "Save image" button at the right side. A screenshot of the scene will 
 
 <BR>
 <p align="center">
-  <img src="Images/Annotator.png" alt="3D Annotator" width="800">
+  <img src="Images/Annotator.png" alt="3D Annotator" width="700">
 </p>
 <BR>
 
@@ -98,9 +98,11 @@ The VAST Lite is recommended for the ground truth generation (https://software.r
 
 <BR>
 <p align="center">
-  <img src="Images/_2DNN.png" alt="2D DNN" width="800">
+  <img src="Images/2DNN_0.png" alt="2D DNN" width="700">
 </p>
 <BR>
+
+
 
 ### 3D FFN
 Here, we wrapped an excellent membrane segmentation program that was developed by Dr. Michał Januszewski et al. : flood filling networks (FFN, Nature Methods, vol. 15 (2018), pp. 605-610 ; https://github.com/google/ffn ). The FFN, which is a recurrent 3D convolutional network, directly produce 3D volume segmentation with high precision. 
