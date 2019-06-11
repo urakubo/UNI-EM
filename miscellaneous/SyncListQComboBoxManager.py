@@ -83,6 +83,10 @@ class SyncListQComboBoxManager():
 
 
     def saveSelected(self, origin, idx, key):
+
+        if idx == -1 and key in self.selectedSaveIdx.keys():
+           origin.setCurrentIndex(self.selectedSaveIdx[key])
+           return
         
         if origin.isInit:
             origin.isInit = False
