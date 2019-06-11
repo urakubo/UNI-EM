@@ -12,7 +12,7 @@
 ## How to use
 
 ### Folder management system：
-UNI-EM can open folders that contain tiff/png consecutive image files, Dojo style files, and the other files. Drag and drop target folders (Figure a), then they are open. The opened folders appear in the file dropdown menu (Figure b), which is callable from UNI-EM programs. Users can open only 6 folders simultaneously. Click left mouse button on the dropdown menu to close them (Figure c).
+UNI-EM can open folders that contain tiff/png consecutive image files, Dojo style files, and the other types of files. Drag and drop target folders (Figure a), then they are open. The opened folders appear in the file dropdown menu (Figure b), which is callable from UNI-EM programs. Users can open only 6 folders simultaneously. Click left mouse button on the dropdown menu to close them (Figure c).
 
 <BR>
 <p align="center">
