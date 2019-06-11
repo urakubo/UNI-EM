@@ -4,12 +4,8 @@
 from PyQt5.QtWidgets import QApplication
 import sys
 import os
-from os import path, pardir
+from os import path
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
-icon_dir    = path.join(main_dir, "icons")
-Plugins_dir = path.join(main_dir, "plugins")
-sys.path.append(Plugins_dir)
-sys.path.append(os.path.join(main_dir, "filesystem"))
 sys.path.append(os.path.join(main_dir, "gui"))
 
 ##
