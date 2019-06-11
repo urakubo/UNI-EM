@@ -12,7 +12,7 @@
 
 ## Example workflow 1: Mitochondria segmentation using 2D DNN
 
-Here we try automated mitochondria segmentation of a stack of EM images using a 2-dimentional deep neural network (2D DNN). The target EM stack was obtained by Kasthuri et al. ( Cell 162(3):648-61, 2015 ). The target brain region is mouse somatosensory cortex, and they were obtained by use of an automatic tape-collecting ultra-microtome system (ATUM) for SEM imaging (ATUM/SEM).  The EM stack was originally arranged for ISBI 2013 challenge ([SNEMI3D](http://brainiac2.mit.edu/SNEMI3D/)). The EM images are open to public under Open Data Commons Attribution License (ODC-By) v1.0. The original images were passed through the Contrast Limited Adaptive Histogram Equalization filter (CLAHE; blocksize 127,　Histogram bins 256, max slope 1.50).
+Here we try automated mitochondria segmentation of a stack of EM images using a 2-dimentional deep neural network (2D DNN). The target EM stack was obtained by Kasthuri et al. ( Cell 162(3):648-61, 2015 ). The target brain region is mouse somatosensory cortex. The EM stack was originally arranged for ISBI 2013 challenge ([SNEMI3D](http://brainiac2.mit.edu/SNEMI3D/)), which is open to public under Open Data Commons Attribution License (ODC-By) v1.0. The original images were passed through the Contrast Limited Adaptive Histogram Equalization filter (CLAHE; blocksize 127,　Histogram bins 256, max slope 1.50).
 
 - https://neurodata.io/data/kasthuri15/
 - https://opendatacommons.org/licenses/by/1-0/
@@ -21,9 +21,9 @@ Here we try automated mitochondria segmentation of a stack of EM images using a 
 
 #### Preparation of ground truth
 
-Download "Example2DNN.zip" from the link below and unzip it on your UNI-EM installed PC. Replace the unzipped folders with the contents of the "data" folder in UNI-EM ([UNI-EM]/data). The folder "[UNI-EM]/data/DNN_training_images" contains a training image, and the folder "[UNI-EM]/data/DNN_ground_truth" contains a ground truth segmentation (**Fig. 1.1**).  Users can use this ground truth image (see from No. 2), or draw the ground truth using Dojo by themselves as stated below.
+Download "Example2CNN.zip" from the link below and unzip it on your UNI-EM installed PC. It has the folders "TrainingImages" (training image) and "GroundTruth" (ground truth annotation) (**Fig. 1.1**). The Example2CNN also has "TestImages" (test images), "GT_annotation" (empty), and "Proofreading" (empty). Users can use the provided ground truth image (start from the next section), or draw the ground truth using Dojo by themselves as stated below.
 
-- "Example2DNN.zip": https://www.dropbox.com/s/k1baokh6yz1ucjk/Example2DNN.zip?dl=0
+- "Example2CNN.zip": https://www.dropbox.com/s/k73vlvyru1p3qei/Example2CNN.zip?dl=0
 
 <BR>
 <p align="center">
@@ -36,11 +36,14 @@ Download "Example2DNN.zip" from the link below and unzip it on your UNI-EM insta
 
 - Launch UNI-EM.
 
-- Select Dojo → Import EM Stack/Segmentation from the dropdown menu. The dialog "Import Images & Segments" will appear (**Fig. 1.2**)。
+- Drag and drop the "TrainingImages" and "GT_annotation" folders onto UNI-EM. Open the File dropdown menu, and confirm the opening of those two folders.
 
-- Set the Source Image Folder as **"[UNI-EM]/data/DNN_trainig _images"**.
+Select File → Create Dojo Folder from the dropdown menu. The dialog will appear (**Fig. 1.2**).
+
+- Set the Source Image Folder as **"TrainingImages "**.
 - Check the Use blank segmentation box. The section "Source Segmentation Folder" will be disabled.
-- Specify the Destination Dojo Folder. Generated Dojo files will be stored in this folder.
+- Set the Destination Dojo Folder as **"GT_annotation"**. Generated Dojo files will be stored in this folder.
+
 <BR>
 <p align="center">
   <img src="Images/GT_import.png" alt="Import a training image" width="600">
@@ -50,11 +53,13 @@ Download "Example2DNN.zip" from the link below and unzip it on your UNI-EM insta
 </p>
 <BR>
 
-- Click the OK button. Dojo files will be generated, then Dojo will be launched (**Fig. 1.3**).
-- Confirm the usage of Dojo by controlling the Slice bar (**Fig. 1.3a**) and Zoom bar (**Fig. 1.3b**), etc.
-- Click the Adjust button whose shape has a fused two area (**Fig. 1.3c**). A control panel will appear. Keep the number of PaintID as 255, and click the color panel below. The circular cursor will appear. Its radius can be changed by pressing the [=/-] key. Paint mitochondria using this cursor (**Fig. 1.3** red arrow). Press Tab key to accept the drawing, or discard it by pressing the Esc key. Users can erase mis-painting by dragging the cursor after clicking the eraser icon. Press Tab key to accept the erasure, or press Esc key to discard it.
+- Click the OK button. Dojo files will be generated, 
+- Select Dojo →Open Dojo Folder, and select "GT_annotation".  Dojo will be launched (**Fig. 1.3**).
+- Check the usage of Dojo by controlling the Slice bar (**Fig. 1.3a**) and Zoom bar (**Fig. 1.3b**), etc.
+- Click the Adjust button whose shape has a fused two area (**Fig. 1.3c**). A control panel will appear. Keep PaintID as 255, and click the color panel below. The circular cursor will appear. Its radius can be changed by pressing the [=/-] key. Paint mitochondria using this cursor (**Fig. 1.3** red arrow). Press Tab key to accept the drawing, or discard it by pressing the Esc key. Users can erase mis-painting by dragging the cursor after clicking the eraser icon. Press Tab key to accept the erasure, or press Esc key to discard it.
 - Save the mitochondria painting by selecting Dojo →Save Dojo Folder.
-- Export the mitochondria painting by selecting Dojo →Export Segmentation in the dropdown menu. In the export dialog, select the file format "PNG, 8bit, Grayscale." Users can also input Filename. After pressing the OK button, users are requested to specify the saving folder. The painting segmentation image will be stored with the filename 0000.png. The painting image will be used for ground truth. Put this image at "[UNI-EM]/data/DNN_ground_truth".
+- Export the mitochondria painting by selecting Dojo →Export Segmentation. In the export dialog, select the file format "PNG, 8bit, Grayscale." Users can also input Filename. After pressing the OK button, users are requested to specify the saving folder. The painting segmentation image will be stored with the filename 0000.png. The painting image will be used for ground truth. Put this image in the folder "GroundTruth".
+
 
 <BR>
 <p align="center">
@@ -68,13 +73,15 @@ Download "Example2DNN.zip" from the link below and unzip it on your UNI-EM insta
 
 #### Training and inference
 
-2. Launch UNI-EM.
+1. Launch UNI-EM.
 
-3. Select "Segmentation → 2DNN" from a UNI-EM dropdown menu to launch a dialogue that is named as 2D DNN (**Fig. 2a**).
+2. Drag and drop the folders TrainingImages", "GroundTruth", "TestImages", "TestSegmentation", and "Proofreading" on UNI-EM. Check their successful opening from the File dropdown menu.
+
+3. Select "Segmentation → 2D DNN". The 2D DNN dialogue will appear (**Fig. 2a**).
 	- Select Training tab (**Fig. 2b**).
-	- Confirm that "Image Folder" targets [UNI-EM]/data/DNN_training_images (**Fig. 2c**), "Segmentation Folder" targets [UNI-EM]/data/DNN_ground_truth (**Fig. 2d**), and "Checkpoint Folder" targets [UNI-EM]/data/DNN_model_tensorflow (**Fig. 2e**).
-	- Select "resnet" from the tab menu in the middle (**Fig. 2f**), and set "N res blocks" as 16 (**Fig. 2g**). This is because Resnet is one of the best network topologies for mitochondria segmentation (Ref 1).
-	- Save all parameters by clicking "Save Parameters". The saved parameters are loaded by clicking "Load Parameters".
+	- Select Image Folder as **"TrainingImages"** (**Fig. 2c**), and Segmentation Folder as **"GroundTruth"** (**Fig. 2d**). Confirm "Checkpoint Folder" targets [UNI-EM]/data/DNN_model_tensorflow (**Fig. 2e**).
+	- Select "resnet" from the tab menu in the middle (**Fig. 2f**), and set "N res blocks" as 16 (**Fig. 2g**). This is because Resnet is one of the best networks for mitochondria segmentation (Ref 1).
+	- Users can save all the parameters by clicking "Save Parameters". The saved parameters are loaded by clicking "Load Parameters".
 
 4. Start Res-net training by clicking the Execute button (**Fig. 2h**). Users will see initial and progress messages in the console window (shown below). It takes 6-min for a desktop PC equipped with a NIVIDA GTX1070 GPU. The console window shows a message "saving model" when the training is finished. During and after the training period, users can visually inspect its progression through Tensorboad by selecting "Segmentation → Tensorboard".
 ```2D DNN Training
@@ -96,7 +103,7 @@ Download "Example2DNN.zip" from the link below and unzip it on your UNI-EM insta
         saving model
 ```
 5. Select the inference tab in the 2D DNN dialogue (**Fig. 2b**).
-	- Confirm that "Image Folder " targets [UNI-EM]/data/DNN_test_images, "Output Segmentation Folder" targets [UNI-EM]/data/DNN_segmentation, and "Checkpoint Folder" targets [UNI-EM]/data/DNN_model_tensorflow.
+	- Select "Image Folder " as **"TestImages"**, and "Output Segmentation Folder" as **"TestSegmentation"**. Confirm "Checkpoint Folder" as [UNI-EM]/data/DNN_model_tensorflow.
 
 6. Start inference by clicking the "Execute" button in the Inference tab. Users will see initial and progress messages in the console window (shown below). Users will see "evaluated image 0099" when Inference is finished.
 ```2D DNN Inference
@@ -111,7 +118,8 @@ Download "Example2DNN.zip" from the link below and unzip it on your UNI-EM insta
         evaluated image 0098
         evaluated image 0099
 ```
-7. Confirm that the "Output Segmentation Folder" ( [UNI-EM]/data/DNN_segmentation ) contains 0000.png, 0001.png, ..., 0099.png .
+
+7. Confirm that the Output Segmentation Folder ( **"TestSegmentation"** ) contains 0000.png, 0001.png, ..., 0099.png .
 
 <p align="center">
   <img src="Images/2DNN_Training.png" alt="2D DNN dialog for training" width="600">
