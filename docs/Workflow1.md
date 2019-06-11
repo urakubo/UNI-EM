@@ -103,7 +103,7 @@ Select File → Create Dojo Folder from the dropdown menu. The dialog will appea
         saving model
 ```
 5. Select the inference tab in the 2D DNN dialogue (**Fig. 2b**).
-	- Select "Image Folder " as **"TestImages"**, and "Output Segmentation Folder" as **"TestSegmentation"**. Confirm "Checkpoint Folder" as [UNI-EM]/data/DNN_model_tensorflow.
+	- Select Image Folder as **"TestImages"**, and Output Segmentation Folder as **"TestSegmentation"**. Confirm Checkpoint Folder as [UNI-EM]/data/DNN_model_tensorflow.
 
 6. Start inference by clicking the "Execute" button in the Inference tab. Users will see initial and progress messages in the console window (shown below). Users will see "evaluated image 0099" when Inference is finished.
 ```2D DNN Inference
@@ -132,13 +132,14 @@ Select File → Create Dojo Folder from the dropdown menu. The dialog will appea
 
 #### Postprocessing: Binarization and 3D labeling
 
-8. Select "Plugins → 2D/3D Filters" from the dropdown menu. The 2D/3D filters dialog will appear (**Fig. 3**)。
-	- Drag Binary and 3D Label to the area of "Filter Application" (**Fig. 3a**).
-	- Confirm that "Target Folder" shows [UNI-EM]/data/DNN_ segmentation (**Fig. 3b**).
-	- Confirm that "Output Folder" shows [UNI-EM]/data/DNN_segmentation (**Fig. 3c**).
-	- Confirm that the thumbnail image of the images in "Target Folder" appears in the area "Target image" (**Fig. 3d**). Press the Obtain sample output button (**Fig. 3e**), then see an example output after passing those two image filters (**Fig. 3f**).
+8. Select Plugins → 2D/3D Filters. The 2D/3D filters dialog will appear (**Fig. 3**).
+	- Drag and drop the Binary and 3D Label operators to the area of "Filter Application" (**Fig. 3a**).
+	- Select Target Folder as **"TestSegmentation"** (**Fig. 3b**).
+	- Select also Output Folder as **"TestSegmentation"**  (**Fig. 3c**).
+	- Check that the images in "Target Folder" appear in the area "Target image" (**Fig. 3d**). Click the "Obtain sample output" button (**Fig. 3e**), then see an example output after passing those two image filters (**Fig. 3f**).
 
-9. Click the Execute button, then the filters "binarization → 3D labeling" will be applied (**Fig. 3g**). Users will see the following progress messages, and the processed images will be stored in "Output Folder" .
+9. Click the Execute button, then the "binarization and 3D labeling" filters will be applied (**Fig. 3g**). Users will see the following progress messages, and the processed images will be stored in "Output Folder" .
+
 ```
 	Loading images ...
 	Saving images ...
@@ -156,20 +157,22 @@ Select File → Create Dojo Folder from the dropdown menu. The dialog will appea
 
 #### Proofreading, annotation, and visualization
 
-10. Select "Dojo → Import EM Stack/Segmentation" from the UNI-EM dropdown menu to launch the dialogue "Import Images & Segments".
-	- Set "Source Image Folder" as **[UNI-EM]/data/DNN_test_images** .
-	- Set "Source Segmentation Folder" as **[UNI-EM]/data/DNN_segmentation** .
-	- Create a file folder and set it as "Destination Dojo Folder". Dojo style files will be generated in this folder.
+10. Select "File →Create Dojo Folder". The dialogue will be launched.
+	- Select "Source Image Folder" as **"TestImages"** .
+	- Select "Source Segmentation Folder" as **"TestSegmentation"** .
+	- Select "Destination Dojo Folder" as **"Proofreading"**. Dojo style files will be generated in this folder.
 
-11. Generate the Dojo style files by clicking the "OK" button. The software Dojo will be launched after the file generation (**Fig. 4a**).
+11. Generate Dojo style files by clicking the OK button. 
 
-12. Inspect successful segmentation visually through manipulating the bottom slice bar (**Fig. 4b**), top Zoom bar (**Fig. 4c**), and top Opacity bar (**Fig. 4d**).
+12. Select "Dojo →Open Dojo Folder ". Dojo will be launched (**Fig. 4a**).
 
-13. Correct erroneous segmentation by entering the mode "Adjust". Click an icon whose shape has a fused two area (**Fig. 4e**). In the adjust mode, users can fill voids by dragging the circled cursor from a filled area. The =/- keys change its radius. Press the Tab key to verify the change, or the Esc key to cancel the change. Users can erase unnecessary areas by dragging the circled cursor after clicking the eraser icon (**Fig. 4f**).
+13. Inspect successful segmentation visually through manipulating the bottom slice bar (**Fig. 4b**), top Zoom bar (**Fig. 4c**), and top Opacity bar (**Fig. 4d**).
 
-14. Save the segmentation after proofreading. Users can also export the segmentation by selecting "Dojo → Export Segmentation" from the UNI-EM dropdown menu. The export file style is sequential png/tiff images.
+14. Correct erroneous segmentation by entering the mode "Adjust". Click an icon whose shape has a fused two area (**Fig. 4e**). In the adjust mode, users can fill voids by dragging the circled cursor from a filled area. The =/- keys change its radius. Press the Tab key to verify the change, or the Esc key to cancel the change. Users can erase unnecessary areas by dragging the circled cursor after clicking the eraser icon (**Fig. 4f**).
 
-15. Select "Annotator → Open" from the UNI-EM dropdown menu to launch the 3D Annotator. Users can visually inspect the 3D shapes of target objects, save 3D images, annotate the target objects, and locate markers (**Fig. 4g**). Refer [3D Annotator](../README.md#3D-Annotator) for detail.
+15. Save the segmentation after proofreading. Users can also export the segmentation by selecting "Dojo → Export Segmentation" from the UNI-EM dropdown menu. The export file style is sequential png/tiff images.
+
+16. Select "Annotator → Open" from the UNI-EM dropdown menu to launch the 3D Annotator. Users can visually inspect the 3D shapes of target objects, save 3D images, annotate the target objects, and locate markers (**Fig. 4g**). Refer [3D Annotator](../README.md#3D-Annotator) for detail.
 
 <p align="center">
   <img src="Images/Proof_Annotation.png" alt="Proofreader Dojo and 3D Annotator" width="1000">
