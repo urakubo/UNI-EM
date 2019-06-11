@@ -72,7 +72,7 @@ class FileSystem():
         num_open_files = min(len(self.u_info.open_files), self.u_info.max_num_open_files)
         for i in range(num_open_files):
             ext  = self.u_info.open_files_type[self.u_info.open_files[i]]
-            text = "&{0:<6s}{1}".format(ext, self.strippedName(self.u_info.open_files[i]))
+            text = "{0:<6s}{1}".format(ext, self.strippedName(self.u_info.open_files[i]))
             # text = "& {0}  ({1})".format(self.strippedName(self.open_files[i]), ext)
             self.menu_open_files[i].setText(text)
             self.menu_open_files[i].setData(self.u_info.open_files[i])
