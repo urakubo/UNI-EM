@@ -13,6 +13,8 @@
 
 ---
 インストール後は下のページを参照してください。
+
+- [使い方：フォルダ管理システム](docs/HowToUse.ja.md#フォルダ管理システム)
 - [使い方：校正ソフトウェアDojo](docs/HowToUse.ja.md#校正ソフトウェアDojo)
 - [使い方：3D Annotator](docs/HowToUse.ja.md#3D-Annotator)
 - [使い方：2次元DNNを用いたセグメンテーション](docs/HowToUse.ja.md#2次元DNNを用いたセグメンテーション)
