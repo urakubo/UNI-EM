@@ -55,8 +55,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 	- [CPU version (Ver0.78; 290 MB)](http://bit.ly/2IwquWk)
 	- [GPU version (Ver0.78: 715 MB)](http://bit.ly/2wNKm1G)
 
-
-- [New feature: Folder management system](HowToUse.md#docs/Folder-management-system)
+- [New feature: Folder management system](docs/HowToUse.md#Folder-management-system)
 
 2.	Download sample EM/segmentation dojo files from the following website, and unzip it:
    	- https://www.dropbox.com/s/pxds28wdckmnpe8/ac3x75.zip?dl=0
