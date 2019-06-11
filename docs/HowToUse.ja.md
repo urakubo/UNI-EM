@@ -35,7 +35,7 @@ UNI-EMでは、連続ファイル名の画像群が入ったフォルダ（画�
 
 <BR>
 <p align="center">
-  <img src="Images/Dojo.png" alt="Dojo Proofreading software" width="800">
+  <img src="Images/Dojo.png" alt="Dojo Proofreading software" width="00">
 </p>
 <BR>
 
