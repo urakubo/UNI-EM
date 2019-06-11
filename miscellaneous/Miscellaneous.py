@@ -127,7 +127,7 @@ def ObtainFullSizeIdsPanel(u_info, db, iz):
         ## Load panels
         tile_ids_filename = target_path \
                             + u_info.tile_ids_filename_wzyx.format(iw, iz, iy, ix)
-        tile_ids = m.load_hdf5(tile_ids_filename, u_info.tile_var_name)
+        tile_ids = load_hdf5(tile_ids_filename, u_info.tile_var_name)
 
         ## Obtain merged ids
         y = iy * db.num_voxels_per_tile_y
@@ -180,7 +180,7 @@ def SaveFullSizeIdsPanel(u_info, db, iz, merged_ids):
             # u_info.ids_files_undo.append(current_tile_ids_name)  ## Filename for undo
 
             # Make changes
-            m.save_hdf5(current_tile_ids_name, u_info.tile_var_name, tile_ids)
+            save_hdf5(current_tile_ids_name, u_info.tile_var_name, tile_ids)
 
 
 def gen_col_pil(id_data, colordata):
