@@ -1,5 +1,6 @@
 [Japanese version here](HowToUse.ja.md)
 
+- [How to use: Folder management system](HowToUse.md#Folder management system)
 - [How to use: Dojo proofreader](HowToUse.md#Dojo-proofreader)
 - [How to use: 3D annotator](HowToUse.md#3D-annotator)
 - [How to use: 2D CNN](HowToUse.md#2D-CNN)
@@ -9,6 +10,16 @@
 - [Example workflow2: Membrane segmentation using 3D FFN](Workflow2.md) 
 
 ## How to use
+
+### Folder management system：
+UNI-EM can open folders that contain tiff/png consecutive image files, Dojo style files, and the other files. Drag and drop target folders (Figure a), then the folders are open. The opened folders appear in the file dropdown menu (Figure b), which is callable from UNI-EM programs. Users can open only 6 folders simultaneously. Click left mouse button on the dropdown menu to close them (Figure c).
+
+<BR>
+<p align="center">
+  <img src="Images/DragDropFolders.png" alt="Dojo Proofreading software" width="600">
+</p>
+<BR>
+
 
 ### Dojo proofreader
 This is a proofreading software as a part of Rhoana pipeline (Copyright, Lichtman/Pfister lab, Harvard, USA). We extend Dojo for wider use.
