@@ -55,7 +55,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 
 	- [New feature: Folder management system](docs/HowToUse.md#Folder-management-system)
 		- [CPU version (Ver0.80; 282 MB)](http://bit.ly/2Rdsl6m)
-		- [GPU version (Ver0.80: XXX MB)] Under construction
+		- [GPU version (Ver0.80: 706 MB)](http://bit.ly/2IbI1E8)
 
 	- Previous version
 		- [CPU version (Ver0.78; 290 MB)](http://bit.ly/2IwquWk)
