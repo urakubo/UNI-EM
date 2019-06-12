@@ -34,8 +34,36 @@ class FileSystem():
             print('No folder was selected.')
             return
         open_folder_name = open_folder_name.replace('/', os.sep)
-        self.OpenFileFolder(open_folder_name)
+        flag = self.OpenFileFolder(open_folder_name)
+        if flag == False:
+            return False
         SyncListQComboBoxExcludeDjojMtifManager.get().addModel(open_folder_name)
+        SyncListQComboBoxOnlyDojoManager.get().addModel(open_folder_name)
+
+
+    def OpenRecentFileFolder(self):
+        action = self.sender()
+        if not action:
+            return
+        fileName = action.data()
+        if not os.path.exists( fileName ):
+            QMessageBox.warning(self, "Recent Files",
+                                "Cannot find file: %s" % fileName)
+            return
+        flag = self.OpenFileFolder( fileName )
+        if flag == False:
+            return False
+        SyncListQComboBoxExcludeDjojMtifManager.get().addModel(fileName)
+        SyncListQComboBoxOnlyDojoManager.get().addModel(fileName)
+
+
+    def OpenDropdownFileFolder(self, file_name):
+        flag = self.OpenFileFolder( file_name )
+        if flag == False:
+            return False
+        SyncListQComboBoxExcludeDjojMtifManager.get().addModel(file_name)
+        SyncListQComboBoxOnlyDojoManager.get().addModel(file_name)
+
 
     def OpenMultiTiffFile(self):
         initdir = os.path.normpath( path.join(main_dir, "..") )
@@ -49,19 +77,6 @@ class FileSystem():
 
     def Dummy(self):
         pass
-
-
-    def OpenRecentFileFolder(self):
-        action = self.sender()
-        if not action:
-            return
-        fileName = action.data()
-        if not os.path.exists( fileName ):
-            QMessageBox.warning(self, "Recent Files",
-                                "Cannot find file: %s" % fileName)
-            return
-        self.OpenFileFolder( fileName )
-
 
 
     def UpdateOpenFileMenu(self):
@@ -150,7 +165,6 @@ class FileSystem():
         return self.OpenFileFolder(folder_name)
 
 
-
     def OpenFileFolder(self, fileName):
 
         #### Check open file status
@@ -189,10 +203,6 @@ class FileSystem():
         #### Dropdown menu updated
         self.UpdateOpenFileMenu()
 
-        #### Synchronize between dropdown menu and combo boxes
-        #SyncListQComboBoxExcludeDjojMtifManager.get().addModel(fileName)
-        #SyncListQComboBoxOnlyDojoManager.get().addModel(fileName)
-
         #### Manage open file history
         settings = QSettings('Trolltech', 'Recent Files Example')
         files = settings.value('recentFileList', [])
@@ -207,6 +217,7 @@ class FileSystem():
 
         settings.setValue('recentFileList', files)
         self.UpdateRecentFileMenu()
+
 
     def LockFolder(self, folder_name):
         tmp_file4lock = {}

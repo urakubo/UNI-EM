@@ -148,7 +148,7 @@ class FileMenu(FileSystem):
         files = [str(u.toLocalFile()) for u in event.mimeData().urls()]
         for f in files:
             print('Dropfile: ', f)
-            self.OpenFileFolder(f)
+            self.OpenDropdownFileFolder(f)
 
 
 # For future release
