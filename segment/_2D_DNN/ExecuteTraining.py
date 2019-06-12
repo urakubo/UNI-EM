@@ -126,7 +126,7 @@ class ExecuteTraining(MiscellaneousSegment):
                 + ' --mode train ' \
                 + ' --input_dir ' + params['Image Folder'] + ' ' \
                 + ' --target_dir ' + params['Segmentation Folder'] + ' ' \
-                + ' --output_dir ' + params['Checkpoint Folder'] + ' ' \
+                + ' --output_dir ' + params['Model Folder'] + ' ' \
                 + ' --loss ' + params['Loss Function'] + ' ' \
                 + ' --network ' + params['Network'] + ' ' \
                 + ' ' + augmentation + ' ' \

@@ -74,7 +74,7 @@ class ExecuteInference(MiscellaneousSegment):
                 + ' --save_freq 0 ' \
                 + ' --input_dir ' + params['Image Folder'] + ' ' \
                 + ' --output_dir ' + params['Output Segmentation Folder'] + ' ' \
-                + ' --checkpoint ' + params['Checkpoint Folder'] + ' ' \
+                + ' --checkpoint ' + params['Model Folder'] + ' ' \
                 + ' --image_height ' + str(image_height) + ' ' \
                 + ' --image_width ' + str(image_width)
 
