@@ -74,8 +74,9 @@ class SyncListQComboBoxManager():
 
         stringList = self.model.stringList()
 
-        stringList.remove(elem)
-        self.model.setStringList(stringList)
+        if elem in stringList:
+            stringList.remove(elem)
+            self.model.setStringList(stringList)
 
 
     def create(self, component, idx):
