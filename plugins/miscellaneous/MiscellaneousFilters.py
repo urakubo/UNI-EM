@@ -115,7 +115,7 @@ class MiscellaneousFilters(SharedFileDialogs):
         params = {}
         print('args: ', args)
         for i in range(len(args)):
-            print(obj_args[i].__class__.__name__)
+            # print(obj_args[i].__class__.__name__)
             if obj_args[i].__class__.__name__ == 'QLineEdit':
                 params[args[i]] = obj_args[i].text()
             elif obj_args[i].__class__.__name__ == 'SyncListQComboBox':
