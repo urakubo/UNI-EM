@@ -63,7 +63,7 @@ class SharedFileDialogs():
         if check_sucess == False:
             return False
 
-        #lineedit_obj.addItem(open_folder_name)
+        lineedit_obj.addItem(open_folder_name)
         id = lineedit_obj.findText(open_folder_name)
         lineedit_obj.setCurrentIndex(id)
 
