@@ -130,7 +130,19 @@ class MiscellaneousSegment(SharedFileDialogs):
         tab.setLayout(tab.layout)
 
         return tab
-
+    ##
+    ##
+    def ObtainImageFiles(self, input_path):
+        #
+        search1 = os.path.join(input_path, '*.png')
+        search2 = os.path.join(input_path, '*.tif')
+        search3 = os.path.join(input_path, '*.tiff')
+        filestack = sorted(glob.glob(search1))
+        filestack.extend(sorted(glob.glob(search2)))
+        filestack.extend(sorted(glob.glob(search3)))
+        return filestack
+    ##
+    ##
 
     def Cancel2D(self):  # wxGlade: ImportImagesSegments.<event_handler>
         self.parent.close()

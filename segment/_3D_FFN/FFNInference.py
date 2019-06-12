@@ -126,7 +126,7 @@ class FFNInference(MiscellaneousSegment):
         comm_inference += params
 
         print(comm_title)
-        print(comm_inference)
+        # print(comm_inference)
         print('\n')
         s.call(comm_inference)
         print(comm_title, 'was finished.')
