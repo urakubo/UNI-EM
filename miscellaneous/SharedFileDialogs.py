@@ -74,7 +74,9 @@ class SharedFileDialogs():
         currentdir = lineedit_obj.currentText()
         if len(currentdir) == 0:
             currentdir = os.path.normpath(main_dir)
-        ## Custum image folder
+        else :
+            currentdir = os.path.dirname(currentdir)
+        ## Folder dialog.
         open_folder_name = QFileDialog.getExistingDirectory(self.parent, "Select Folder", currentdir)
 
         ## Check & open folder

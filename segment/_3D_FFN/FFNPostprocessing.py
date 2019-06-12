@@ -73,8 +73,8 @@ class FFNPostprocessing(MiscellaneousSegment):
                 print('Data was not saved.')
         ##
         print(comm_title, 'was finished.')
-        m.LockFolder(parent.u_info, params['Output Segmentation Folder'])
-        return True
+        flag = m.LockFolder(parent.u_info, params['Output Segmentation Folder'])
+        return flag
         ##
 
     def __init__(self, u_info):

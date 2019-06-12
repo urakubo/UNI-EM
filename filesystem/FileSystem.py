@@ -21,6 +21,7 @@ from PyQt5.QtWidgets import (QFileDialog, qApp, QMessageBox)
 from Params import Params
 
 from miscellaneous.SyncListQComboBoxManager import *
+import miscellaneous.Miscellaneous as m
 
 class FileSystem():
 
@@ -125,11 +126,7 @@ class FileSystem():
         fileName = activeAction.data()
 
         if os.path.isdir(fileName):
-            tmp_open_files4lock = self.u_info.open_files4lock[fileName]
-            for lockfileobj in tmp_open_files4lock.values():
-                # print(lockfileobj)
-                lockfileobj.close()
-            del self.u_info.open_files4lock[fileName]
+            m.UnlockFolder(self.u_info, fileName)
         else:
             self.u_info.open_files4lock[fileName].close()
             del self.u_info.open_files4lock[fileName]
@@ -185,10 +182,9 @@ class FileSystem():
 
         #### File open
         if os.path.isdir(fileName):
-            lock_result = self.LockFolder(fileName)
+            lock_result = m.LockFolder(self.u_info, fileName)
             if lock_result == False:
                 return False
-            self.u_info.open_files4lock[fileName] = lock_result
         else:
             try:
                 self.u_info.open_files4lock[fileName] = open(fileName, 'r+')
@@ -217,22 +213,6 @@ class FileSystem():
 
         settings.setValue('recentFileList', files)
         self.UpdateRecentFileMenu()
-
-
-    def LockFolder(self, folder_name):
-        tmp_file4lock = {}
-        for curDir, dirs, files in os.walk(folder_name):
-            if files:
-                for file in files:
-                    ofile = f'{curDir}{os.path.sep}{file}'
-                    try:
-                        tmp_file4lock[ofile] = open(ofile, 'r+')
-                    except:
-                        print("Cannot open folder.")
-                        for closefile in tmp_file4lock.values():
-                            closefile.close()
-                        return False
-        return tmp_file4lock
 
 
     def strippedName(self, fullFileName):

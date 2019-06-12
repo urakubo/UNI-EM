@@ -136,7 +136,6 @@ class FFNInference(MiscellaneousSegment):
     def __init__(self, u_info):
         ##
         datadir = u_info.data_path
-        Inference_image_path = os.path.join(datadir, "DNN_test_images")
         ffn_file_path        = os.path.join(datadir, "ffn")
         tensorflow_file      = os.path.join(datadir, "DNN_model_tensorflow", "model.ckpt-2000000")
         self.paramfile = os.path.join(datadir, "parameters", "FFN_Inference.pickle")

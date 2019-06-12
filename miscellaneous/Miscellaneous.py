@@ -29,13 +29,36 @@ sys.path.append(main_dir)
 # import miscellaneous.Miscellaneous as m
 
 def UnlockFolder(u_info, dir):
-    tmp_open_files4lock = u_info.open_files4lock[dir]
+    tmp_open_files4lock = u_info.open_files4lock.get(dir)
+    if tmp_open_files4lock is None :
+        print('UnlockFolder: folder already closed.')
+        return False
     for lockfileobj in tmp_open_files4lock.values():
         lockfileobj.close()
     del u_info.open_files4lock[dir]
 
 
 def LockFolder(u_info, dir):
+    if dir in u_info.open_files4lock :
+        UnlockFolder(u_info, dir)
+    ##
+    target1 = glob.glob(path.join(dir,'*'))
+    target2 = glob.glob(path.join(dir,'*','*'))
+    target_files = filter(lambda f: os.path.isfile(f), target1 + target2)
+    tmp_file4lock = {}
+    for ofile in target_files:
+        # print(ofile)
+        try:
+            tmp_file4lock[ofile] = open(ofile, 'r+')
+        except:
+            print("Cannot lock file.")
+            for closefile in tmp_file4lock.values():
+                closefile.close()
+            return False
+    u_info.open_files4lock[dir] = tmp_file4lock
+
+
+def _LockFolder(u_info, dir):
     if dir in u_info.open_files4lock :
         UnlockFolder(u_info, dir)
     tmp_file4lock = {}
@@ -51,7 +74,6 @@ def LockFolder(u_info, dir):
                         closefile.close()
                     return False
     u_info.open_files4lock[dir] = tmp_file4lock
-
 
 
 def CloseFolder(u_info,  dir):
