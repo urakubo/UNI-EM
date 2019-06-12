@@ -112,7 +112,7 @@ class Params:
             self.exec_train = 'python ' + os.path.join(_3D_FFN_dir, 'train.py')
             self.exec_tensorboard = 'tensorboard '
 
-        self.tensorboard_path = os.path.normpath( path.join(self.data_path, "DNN_model_tensorflow") )
+        self.tensorflow_model_path = os.path.normpath( path.join(self.data_path, "model_tensorflow") )
 
     def SetUserInfo(self, user_path):
 

@@ -58,12 +58,12 @@ class TrainingTab(MiscellaneousSegment):
         datadir = u_info.data_path
         imgpath =  os.path.join(datadir, "DNN_training_images")
         segpath =  os.path.join(datadir, "DNN_ground_truth")
-        modelpath =  os.path.join(datadir, "DNN_model_tensorflow")
+        modelpath =  u_info.tensorflow_model_path
         paramfile = os.path.join(datadir, "parameters", "Training_2D.pickle")
         self.args = [
                         ['Image Folder',    'SelectOpenImage', 'OpenImage'],
                         ['Segmentation Folder',   'SelectOpenImage', 'OpenImage'],
-                        ['Checkpoint Folder',      'LineEdit', modelpath, 'BrowseDir'],
+                        ['Model Folder',      'LineEdit', modelpath, 'BrowseDir'],
                         ['Batch Size', 'SpinBox', [1, 1, 65535]],
                         ['Loss Function', 'ComboBox', ["softmax", "hinge", "square", "approx", "dice", "logistic"]],
                         ['Maximal Epochs', 'SpinBox', [1, 2000, 65535]],

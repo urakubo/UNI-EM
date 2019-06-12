@@ -42,9 +42,7 @@ class Training(MiscellaneousTemplate):
     def __init__(self, u_info):
         ##
         datadir = u_info.data_path
-        training_image_path  = os.path.join(datadir, "DNN_training_images")
-        ground_truth_path    = os.path.join(datadir, "DNN_ground_truth")
-        tensorflow_file_path = os.path.join(datadir, "DNN_model_tensorflow")
+        tensorflow_path = u_info.tensorflow_model_path
         self.paramfile = os.path.join(datadir, "parameters", "Training.pickle")
 
         self.name = 'Training'
@@ -61,7 +59,7 @@ class Training(MiscellaneousTemplate):
         self.args = [
                         ['Training image folder', 'SelectOpenImage', 'OpenImage'],
                         ['Ground truth folder', 'SelectOpenImage', 'OpenImage'],
-                        ['Tensorflow model folder', 'LineEdit', tensorflow_file_path, 'BrowseDir'],
+                        ['Tensorflow model folder', 'LineEdit', tensorflow_path, 'BrowseDir'],
                         ['Checkpoint Interval', 'SpinBox', [100, 1800, 65535]],
                         ['Sparse Z', 'CheckBox', False],
                         ['Mode', 'ComboBox', ['a','b','c']]

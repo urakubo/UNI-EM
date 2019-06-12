@@ -38,7 +38,7 @@ class Inference(MiscellaneousTemplate):
         ##
         self.u_info = u_info
         datadir = u_info.data_path
-        tensorflow_file      = os.path.join(datadir, "DNN_model_tensorflow","model.tf")
+        tensorflow_file = os.path.join(u_info.tensorflow_model_path,"model.tf")
         self.paramfile = os.path.join(datadir, "parameters", "Inference.pickle")
 
         self.name = 'Inference'

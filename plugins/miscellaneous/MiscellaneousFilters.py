@@ -113,7 +113,7 @@ class MiscellaneousFilters(SharedFileDialogs):
 
     def ObtainParamsBottomTable(self, obj_args, args):
         params = {}
-        print('args: ', args)
+        # print('args: ', args)
         for i in range(len(args)):
             # print(obj_args[i].__class__.__name__)
             if obj_args[i].__class__.__name__ == 'QLineEdit':

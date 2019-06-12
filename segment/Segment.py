@@ -46,11 +46,11 @@ class Segment():
 
         ## Dialog: Is Tensorboard already launched?
         if 1 in self.table_widget.appl:
-            QMessageBox.information(self, "Tensorboard", "Tensorboard Has Already Been Launched!")
+            QMessageBox.information(self, "Tensorboard", "Tensorboard has already been launched!")
             return
 
         ## Select Tensorboard Folder
-        newdir = QFileDialog.getExistingDirectory(self, "Select tensorboard folder", self.u_info.tensorboard_path)
+        newdir = QFileDialog.getExistingDirectory(self, "Select tensorboard folder", self.u_info.tensorflow_model_path)
         if len(newdir) == 0:
             print('No folder was selected.')
             return
