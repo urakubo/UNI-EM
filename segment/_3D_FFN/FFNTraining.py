@@ -59,7 +59,7 @@ class FFNTraining(MiscellaneousSegment):
         try:
         ##
             print(comm_title)
-            print(comm_train)
+            #print(comm_train)
             s.run(comm_train.split())
             print(comm_title, ' was finished.')
         ##
