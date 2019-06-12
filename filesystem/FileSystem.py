@@ -35,6 +35,7 @@ class FileSystem():
             return
         open_folder_name = open_folder_name.replace('/', os.sep)
         self.OpenFileFolder(open_folder_name)
+        # SyncListQComboBoxExcludeDjojMtifManager.get().addModel(open_folder_name)
 
     def OpenMultiTiffFile(self):
         initdir = os.path.normpath( path.join(main_dir, "..") )
