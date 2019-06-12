@@ -1,7 +1,7 @@
 The copyright statements below are applied to the main programs of UNI-EM.
-Some detachable programs such as "Dojo-standalone/segment/_2D_DNN/translate.py"
+Some detachable programs such as "UNI_EM/segment/_2D_DNN/translate.py"
 are maintained under the other copyright licenses. Regarding the "translate.py," 
-please refer the terms of license in "Dojo-standalone/segment/_2D_DNN/LICENSE."
+please refer the terms of license in "UNI_EM/segment/_2D_DNN/LICENSE."
 
 
                     GNU GENERAL PUBLIC LICENSE
