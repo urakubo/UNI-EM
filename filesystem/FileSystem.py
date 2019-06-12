@@ -135,6 +135,8 @@ class FileSystem():
         self.UpdateOpenFileMenu()
 
         SyncListQComboBoxExcludeDjojMtifManager.get().removeModel(fileName)
+        SyncListQComboBoxOnlyDojoManager.get().removeModel(fileName)
+
 
 
     def OpenImageFolder(self, folder_name):
