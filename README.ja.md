@@ -55,8 +55,8 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 
 
 - [新機能：フォルダ管理システム](docs/HowToUse.ja.md#フォルダ管理システム)
-	- [CPU version (Ver0.80; XXX MB)] Under construction
-	- [GPU version (Ver0.80: XXX MB)] Under construction
+	- [CPU version (Ver0.80; 282 MB)](http://bit.ly/2Rdsl6m)
+	- [GPU version (Ver0.80: 706 MB)](http://bit.ly/2IbI1E8)
 
 - Previous version
 	- [CPU version (Ver0.78; 290 MB)](http://bit.ly/2IwquWk)
