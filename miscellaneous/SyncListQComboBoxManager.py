@@ -67,6 +67,17 @@ class SyncListQComboBoxManager():
         self.model.setStringList(stringList)
 
 
+    def removeModel(self, elem):
+        """
+        When want to add file element to model without using QCombobox interface.
+        """
+
+        stringList = self.model.stringList()
+
+        stringList.remove(elem)
+        self.model.setStringList(stringList)
+
+
     def create(self, component, idx):
         """
         Create SyncListQComboBox instance.
@@ -77,7 +88,7 @@ class SyncListQComboBoxManager():
         combo.setModel(self.model)
 
         if key in self.selectedSaveIdx.keys():
-            combo.setCurrentIndex(self.selectedSaveIdx[key])
+            combo.setCurrentIndex(self.selectedSaveIdx[key]['idx'])
         
         return combo
 
@@ -85,7 +96,9 @@ class SyncListQComboBoxManager():
     def saveSelected(self, origin, idx, key):
 
         if idx == -1 and key in self.selectedSaveIdx.keys():
-           origin.setCurrentIndex(self.selectedSaveIdx[key])
+           findIdx = origin.findText(self.selectedSaveIdx[key]['text'])
+           if findIdx > -1:
+               origin.setCurrentIndex(findIdx)
            return
         
         if origin.isInit:
@@ -95,8 +108,8 @@ class SyncListQComboBoxManager():
             
             if (not self.isInclude(origin.currentText())) or self.isExclude(origin.currentText()):
                 origin.removeItem(idx)
-                
-            self.selectedSaveIdx[key] = idx
+
+            self.selectedSaveIdx[key] = {'idx': idx, 'text': origin.currentText()}
 
 
     class SyncListQComboBox(QComboBox):
