@@ -77,7 +77,7 @@ The VAST Lite is recommended for the ground truth generation (https://software.r
 2.	Select the training tab and specify parameters:
 	- Image Folder:	Folder containing EM images (tiff/png images).
 	- Segmentation Folder: Folder containing ground truth segmentation (tiff/png images).
-	- Checkpoint folder: The CNN model will be stored.
+	- Model folder: Tensorflow CNN model will be stored.
 	- Generator:	"unet", "resnet", "highwaynet", "densenet"
 	- Loss function:"hinge", "square", "softmax", "approx", "dice", "logistic"
 	- Augmentation:	{fliplr  ,flipud, transpose} 
