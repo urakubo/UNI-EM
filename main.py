@@ -9,9 +9,8 @@ main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(os.path.join(main_dir, "gui"))
 
 ##
-## External programs
+## Call UNI-EM main window.
 ##
-
 
 from MainWindow import MainWindow
 
