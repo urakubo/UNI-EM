@@ -8,11 +8,11 @@ from time import sleep
 from PyQt5.QtWidgets import (QWidget, QLabel, QLineEdit, QFileDialog, QProgressBar,
                               QTextEdit, QGridLayout, QApplication, QPushButton,  QDesktopWidget)
 
-from PyQt5 import QtCore
+from PyQt5.QtCore import QUrl, Qt, pyqtSlot, QFileInfo
+
 from PyQt5.QtGui import QIcon
-#from PyQt5.QtCore import QUrl
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineProfile, QWebEngineDownloadItem, QWebEnginePage
-from PyQt5 import QtNetwork
+from PyQt5.QtNetwork import QNetworkProxy
 
 __program__ = 'UNI-EM'
 
@@ -52,12 +52,12 @@ class PersephonepWindow(QWidget):
         # setting window
         self.window = QWebEngineView()
 
-        proxy = QtNetwork.QNetworkProxy()
-        proxy.setType(QtNetwork.QNetworkProxy.NoProxy)
-        QtNetwork.QNetworkProxy.setApplicationProxy(proxy)
+        proxy = QNetworkProxy()
+        proxy.setType(QNetworkProxy.NoProxy)
+        QNetworkProxy.setApplicationProxy(proxy)
    
         # condig url
-        self.window.load(QtCore.QUrl(self.initurl))
+        self.window.load(QUrl(self.initurl))
         self.window.setWindowTitle(__program__)
 
         # setting button
@@ -151,16 +151,16 @@ class PersephonepWindow(QWidget):
         '''
         #initurl = 'https://www.google.co.jp'
         #self.window.load(QUrl(initurl))
-        self.window.load(QtCore.QUrl(initurl)) ### Download
+        self.window.load(QUrl(initurl)) ### Download
 
     def saveFile(self):
         print('download')
 
 
-    @QtCore.pyqtSlot(QWebEngineDownloadItem)
+    @pyqtSlot(QWebEngineDownloadItem)
     def on_download_requested(self, download):
         # print('{} downloading to {}'.format(download.url(), download.path()))
-        self.downloading_filename = QtCore.QFileInfo(download.path()).fileName()
+        self.downloading_filename = QFileInfo(download.path()).fileName()
         self.progress.setValue(0)
         self.progress.show()
         download.downloadProgress.connect(self.on_download_progress)
