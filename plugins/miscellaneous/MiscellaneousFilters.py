@@ -20,7 +20,7 @@ from PyQt5.QtWidgets import QMainWindow, qApp, QApplication, QWidget, QTabWidget
     QTreeView, QFileSystemModel, QListView, QTableView, QAbstractItemView, QListWidgetItem
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt, pyqtSlot,  QAbstractListModel, QModelIndex, QVariant, QDir, QSize
-import PyQt5.QtGui as QtGui
+# import PyQt5.QtGui as QtGui
 
 from typing import Any
 
