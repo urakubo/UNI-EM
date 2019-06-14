@@ -17,13 +17,8 @@ from PyQt5.QtWidgets import QMainWindow, qApp, QApplication, QWidget, QTabWidget
     QLineEdit, QComboBox, QDialog, QDialogButtonBox, QFormLayout, QGridLayout, QMessageBox, QSpinBox, QSlider, \
     QGroupBox, QHBoxLayout, QLabel, QLineEdit, QMenu, QMenuBar, QPushButton, QFileDialog, QTextEdit, QVBoxLayout, \
     QLabel, QCheckBox, QFrame
-from PyQt5.QtGui import QIcon, QPixmap, QPainter, QColor, QFont
+from PyQt5.QtGui import QIcon, QPixmap, QPainter, QColor, QFont, QImage
 from PyQt5.QtCore import Qt, pyqtSlot
-
-
-import PyQt5.QtCore as QtCore
-import PyQt5.QtGui as QtGui
-# import PyQt5.QtWidgets as QtWidgets
 
 
 from os import path, pardir
@@ -119,8 +114,8 @@ class ThumbnailGenerator(MiscellaneousFilters):
                 else:
                     cropped_normalized = self.image_cropped
 
-                qimage1 = QtGui.QImage(cropped_normalized, W, H, QtGui.QImage.Format_Grayscale8)
-                pixmap1 = QtGui.QPixmap.fromImage(qimage1)
+                qimage1 = QImage(cropped_normalized, W, H, QImage.Format_Grayscale8)
+                pixmap1 = QPixmap.fromImage(qimage1)
                 self.canvas1.setPixmap(pixmap1)
 
         def Execute():
@@ -173,8 +168,8 @@ class ThumbnailGenerator(MiscellaneousFilters):
                 normal_factor = (255 / np.max(cropped_image)).astype(np.float)
                 cropped_image = (cropped_image * normal_factor).astype(np.uint8)
 
-            qimage2 = QtGui.QImage(cropped_image.data, W, H, QtGui.QImage.Format_Grayscale8)
-            pixmap2 = QtGui.QPixmap.fromImage(qimage2)
+            qimage2 = QImage(cropped_image.data, W, H, QImage.Format_Grayscale8)
+            pixmap2 = QPixmap.fromImage(qimage2)
             self.canvas2.setPixmap(pixmap2)
 
         ##
@@ -189,13 +184,13 @@ class ThumbnailGenerator(MiscellaneousFilters):
         image1 = (np.ones((H, W))*128).astype(np.uint8)
         image2 = (np.ones((H, W))*128).astype(np.uint8)
 
-        qimage1 = QtGui.QImage(image1.data, image1.shape[1], image1.shape[0],
-                              QtGui.QImage.Format_Grayscale8)
-        pixmap1 = QtGui.QPixmap.fromImage(qimage1)
+        qimage1 = QImage(image1.data, image1.shape[1], image1.shape[0],
+                              QImage.Format_Grayscale8)
+        pixmap1 = QPixmap.fromImage(qimage1)
 
-        qimage2 = QtGui.QImage(image2.data, image2.shape[1], image2.shape[0],
-                              QtGui.QImage.Format_Grayscale8)
-        pixmap2 = QtGui.QPixmap.fromImage(qimage2)
+        qimage2 = QImage(image2.data, image2.shape[1], image2.shape[0],
+                              QImage.Format_Grayscale8)
+        pixmap2 = QPixmap.fromImage(qimage2)
 
         self.canvas1 = CanvasLabel()
         self.canvas1.setPixmap(pixmap1)
@@ -211,7 +206,7 @@ class ThumbnailGenerator(MiscellaneousFilters):
         targetz_label = QLabel('Target Z')
 
         s = QSlider(Qt.Horizontal)
-        s.setFocusPolicy(QtCore.Qt.NoFocus)
+        s.setFocusPolicy(Qt.NoFocus)
         s.setTickPosition(QSlider.TicksBothSides)
         s.setMinimum(0)
         s.setMaximum(MAXSLIDER-1)
