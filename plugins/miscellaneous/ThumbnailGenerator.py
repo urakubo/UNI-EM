@@ -23,7 +23,7 @@ from PyQt5.QtCore import Qt, pyqtSlot
 
 import PyQt5.QtCore as QtCore
 import PyQt5.QtGui as QtGui
-import PyQt5.QtWidgets as QtWidgets
+# import PyQt5.QtWidgets as QtWidgets
 
 
 from os import path, pardir
