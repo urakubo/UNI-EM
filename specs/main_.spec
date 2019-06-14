@@ -77,6 +77,9 @@ hiddenimports=['scipy._lib.messagestream',
                'gast'
               ]
 
+#excludes=['PyQt5.QtQuick']
+
+
 coll += analysis(['./../main.py'], pathex, datas, hiddenimports, 'main')
 
 

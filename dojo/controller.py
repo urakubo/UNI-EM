@@ -11,7 +11,7 @@ import math
 import shutil
 from scipy import ndimage        ################## Unnecessary?!
 from skimage import exposure     ################## Unnecessary?!
-import skimage
+#import skimage
 from PIL import Image as PILImage
 
 
