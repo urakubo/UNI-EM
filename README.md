@@ -49,7 +49,7 @@ Recommendation: High-performance NVIDIA graphics card whose GPU has over 3.5 com
 ## Installation
 We provide standalone versions (pyinstaller version) and Python source codes.
 
-### Pyinstaller version (Microsoft Windows 10 Only)
+### Pyinstaller version (Microsoft Windows 10 only)
 1.	Download one of the following two versions, and unzip it:
 
 
