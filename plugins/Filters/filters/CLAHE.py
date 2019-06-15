@@ -20,8 +20,8 @@ class CLAHE():
 
     def __init__(self):
         self.tips = [
-                        'contrast limitation to avoid noise amplification.'
-                        'Image is divided into "tiles" (small blocks), \\n and each of these blocks are histogram equalized.'
+                        'contrast limitation to avoid noise amplification.',
+                        'Image is divided into small blocks, and each of these blocks are histogram equalized.'
                         ]
 
         self.args = [
@@ -29,6 +29,6 @@ class CLAHE():
                         ['Tile Size', 'SpinBox', [1, 8, 256]],
             ]
 
-        self.output_bitdepth = '16'
+        self.output_bitdepth = '8'
 
 

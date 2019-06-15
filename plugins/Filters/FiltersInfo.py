@@ -6,6 +6,7 @@ from Filters.filters import Binary
 from Filters.filters import Canny
 from Filters.filters import Gaussian
 from Filters.filters import Invert
+from Filters.filters import CLAHE
 from Filters.filters import Label
 from Filters.filters import Skimg
 from Filters.filters import Label3D
@@ -19,6 +20,7 @@ class FiltersInfo(object):
             {'type': '2d', 'name': 'Canny', 'class': Canny.Canny},
             {'type': '2d', 'name': 'Gaussian', 'class': Gaussian.Gaussian},
             {'type': '2d', 'name': 'Invert', 'class': Invert.Invert},
+            {'type': '2d', 'name': 'CLAHE', 'class': CLAHE.CLAHE},
             {'type': '2d', 'name': '2D Label', 'class': Label.Label},
             {'type': '2d', 'name': '2D Watershed', 'class': Skimg.Skimg},
             {'type': '3d', 'name': '3D Label', 'class': Label3D.Label3D},
