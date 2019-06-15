@@ -113,6 +113,8 @@ class Params:
             self.exec_tensorboard = 'tensorboard '
 
         self.tensorflow_model_path = os.path.normpath( path.join(self.data_path, "model_tensorflow") )
+        self.parameters_path = os.path.normpath( path.join(self.data_path, "parameters") )
+
 
     def SetUserInfo(self, user_path):
 

@@ -82,9 +82,8 @@ class FFNPostprocessing(MiscellaneousSegment):
         datadir = u_info.data_path
 
         target_inference_file = os.path.join(datadir, "ffn","0", "0", "seg-0_0_0.npz")
-        output_segmentation_path   = os.path.join(datadir, "DNN_segmentation")
 
-        self.paramfile = os.path.join(datadir, "parameters", "FFN_Postprocessing.pickle")
+        self.paramfile = os.path.join(u_info.parameters_path, "FFN_Postprocessing.pickle")
 
         self.filter_name = 'Postprocessing'
 

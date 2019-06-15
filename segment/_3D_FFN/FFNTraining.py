@@ -76,7 +76,7 @@ class FFNTraining(MiscellaneousSegment):
         ground_truth_file   = os.path.join(datadir, "ffn", "groundtruth.h5")
         record_file_path   = os.path.join(datadir, "ffn", "tf_record_file")
         tensorflow_file_path   = u_info.tensorflow_model_path
-        self.paramfile = os.path.join(datadir, "parameters", "FFN_Training.pickle")
+        self.paramfile = os.path.join( u_info.parameters_path, "FFN_Training.pickle")
 
         self.filter_name = 'FFN Training'
 

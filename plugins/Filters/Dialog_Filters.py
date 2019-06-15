@@ -110,8 +110,8 @@ class TableGenerator(MiscellaneousFilters):
 
 
     def GenerateTableObject(self):
-        datadir =  self.parent.u_info.data_path
-        paramfile = os.path.join(datadir, "parameters", "Filters.pickle")
+
+        paramfile = os.path.join(self.parent.u_info.parameters_path, "Filters.pickle")
 
         args = [
                         'Target Folder',

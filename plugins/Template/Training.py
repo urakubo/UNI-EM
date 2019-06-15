@@ -41,9 +41,8 @@ class Training(MiscellaneousTemplate):
 
     def __init__(self, u_info):
         ##
-        datadir = u_info.data_path
         tensorflow_path = u_info.tensorflow_model_path
-        self.paramfile = os.path.join(datadir, "parameters", "Training.pickle")
+        self.paramfile = os.path.join(u_info.parameters_path, "Training.pickle")
 
         self.name = 'Training'
 

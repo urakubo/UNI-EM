@@ -55,11 +55,8 @@ class TrainingTab(MiscellaneousSegment):
                         'Network topology'
                         ]
 
-        datadir = u_info.data_path
-        imgpath =  os.path.join(datadir, "DNN_training_images")
-        segpath =  os.path.join(datadir, "DNN_ground_truth")
         modelpath =  u_info.tensorflow_model_path
-        paramfile = os.path.join(datadir, "parameters", "Training_2D.pickle")
+        paramfile = os.path.join( u_info.parameters_path, "Training_2D.pickle")
         self.args = [
                         ['Image Folder',    'SelectOpenImage', 'OpenImage'],
                         ['Segmentation Folder',   'SelectOpenImage', 'OpenImage'],

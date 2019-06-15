@@ -79,10 +79,8 @@ class FFNPrepTraining(MiscellaneousSegment):
     def __init__(self, u_info):
         ##
         datadir = u_info.data_path
-        training_image_path = os.path.join(datadir, "DNN_training_images")
-        ground_truth_path   = os.path.join(datadir, "DNN_ground_truth")
         processed_file_path   = os.path.join(datadir, "ffn")
-        self.paramfile = os.path.join(datadir, "parameters", "FFN_PrepTraining.pickle")
+        self.paramfile = os.path.join(u_info.parameters_path, "FFN_PrepTraining.pickle")
 
         self.filter_name = 'FFN Preparation'
 

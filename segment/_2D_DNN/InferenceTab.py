@@ -46,11 +46,8 @@ class InferenceTab(MiscellaneousSegment):
                         'Load Parameters '
                         ]
 
-        datadir   =  u_info.data_path
-        imgpath   =  os.path.join(datadir, "DNN_test_images")
-        outpath   =  os.path.join(datadir, "DNN_segmentation")
         modelpath =  u_info.tensorflow_model_path
-        paramfile =  os.path.join(datadir, "parameters", "Inference_2D.pickle")
+        paramfile =  os.path.join( u_info.parameters_path, "Inference_2D.pickle")
         self.args = [
                         ['Image Folder',    'SelectOpenImage', 'OpenImage'],
                         ['Output Segmentation Folder',   'SelectOpenImage', 'OpenImage'],
