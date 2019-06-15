@@ -62,11 +62,11 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 		- [GPU version (Ver0.78: 715 MB)](http://bit.ly/2wNKm1G)
 
 
-2.	Download sample EM/segmentation dojo files from the following website, and unzip it:
+2.	Download one of sample EM/segmentation dojo folders from the following link, and unzip it:
    	- https://www.dropbox.com/s/pxds28wdckmnpe8/ac3x75.zip?dl=0
 	- https://www.dropbox.com/s/6nvu8o6she6rx9v/ISBI_Dojo.zip?dl=0
 
-3.	Please click the link "main.exe" in [UNI-EM] to launch the control panel.
+3.	Click the link "main.exe" in [UNI-EM] to launch the control panel.
 
 4.	Select Dojo → Open Dojo Folder from the dropdown menu, and specify the folder of the sample EM/segmentation dojo files.  The proofreading software Dojo will be launched.
 
@@ -93,13 +93,13 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 	The marching cube program is obtained from the ilastik: https://github.com/ilastik/marching_cubes
 
 
-6. Download sample EM/segmentation dojo files from the following website, and unzip it:
+6. Download one of sample EM/segmentation dojo folders from the following link, and unzip it:
    	- https://www.dropbox.com/s/pxds28wdckmnpe8/ac3x75.zip?dl=0
 	- https://www.dropbox.com/s/6nvu8o6she6rx9v/ISBI_Dojo.zip?dl=0
 
 7. Execute "python main.py" in the [UNI-EM] folder. The control panel will appear.
 
-8.	Select Dojo → Open Dojo Folder from the dropdown menu, and specify the folder of the sample EM/segmentation dojo files. The proofreading software Dojo will be launched.
+8.	Select Dojo → Open Dojo Folder from the dropdown menu, and specify the sample EM/segmentation dojo folder. The proofreading software Dojo will be launched.
 
 ## Authors
 
