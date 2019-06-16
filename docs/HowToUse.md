@@ -66,10 +66,8 @@ We implemented 2D CNN (Resnet/U-net/Highwaynet/Densenet)-based segmentation prog
 	- https://github.com/tbullmann/imagetranslation-tensorflow
 
 #### Requirements. 
-1.	one-page ground truth with 512 x 512 xy-pixels.
+1.	one-page ground truth over 512 x 512 xy-pixels.
 2.	Six min training period with a NVIDIA-GPU card (in the case of GTX1070).
-
-The VAST Lite is recommended for the ground truth generation (https://software.rc.fas.harvard.edu/lichtman/vast/ ).
 
 
 #### Procedure:
@@ -85,16 +83,16 @@ The VAST Lite is recommended for the ground truth generation (https://software.r
 	- Display Frequency
 	- Save Parameters
 	- Load Parameters
-3. Execute training. The default parameters target a sample EM image "[UNI-EM]/data/DNN_ground_truth/49.png" and segmentation image "[UNI-EM]/data/DNN_training_images/49.png".
+3. Execute training. Specify the folders containing a sample EM image "[ExampleCNN]/TrainingImages" and ground truth segmentation "[ExampleCNN]/GroundTruth".
 4. Select Segmentation → Tensorboard to inspect the progression of training. It took 5 min for the training of sample data by use of NVIDIA GeForce GTX 1070.
 5. The console window shows the end of training as "saving model".
-6. Confirm the connectivity file "model-XXXXX.data-XXXXX-of-XXXXX" (800 MB) in the checkpoint folder. 
+6. Check the generation of the file "model-XXXXX.data-XXXXX-of-XXXXX" (800 MB) in the Model folder. 
 9. Select Segmentation → 2D DNN, and set the parameters of the inference tab.
 	- Image Folder:	Folder containing EM images (tiff/png images).
    	- Output Segmentation Folder 
-	- Checkpoint 
+	- Model Folder
 10. Execute inference.
-11. Check that the inference results are stored in the Output Segmentation Folder (Dojo_Standalone/data/DNN_segmentation by default).
+11. Check that the inference results are stored in the Output Segmentation Folder.
 
 <BR>
 <p align="center">
@@ -108,10 +106,10 @@ The VAST Lite is recommended for the ground truth generation (https://software.r
 Here, we wrapped an excellent membrane segmentation program that was developed by Dr. Michał Januszewski et al. : flood filling networks (FFN, Nature Methods, vol. 15 (2018), pp. 605-610 ; https://github.com/google/ffn ). The FFN, which is a recurrent 3D convolutional network, directly produce 3D volume segmentation with high precision. 
 
 #### Requirements. 
-1.	3D ground truth of 512 x 512 xy-pixels and over 50 Z-slices.
-2.	Long training period (-1 weeks) with a high-performance NVIDIA-GPU card (GTX1080ti or higher).
+1.	3D ground truth over 512 x 512 xy-pixels and 50 Z-slices.
+2.	Long training period (-1 weeks) using a high-performance NVIDIA-GPU card (GTX1080ti or higher).
 
-The VAST Lite is recommended for the ground truth generation (https://software.rc.fas.harvard.edu/lichtman/vast/ ).
+The VAST Lite is recommended for 3D ground truth generation (https://software.rc.fas.harvard.edu/lichtman/vast/ ).
 
 
 #### Procedure:
@@ -123,15 +121,13 @@ The VAST Lite is recommended for the ground truth generation (https://software.r
 	- Save Parameters
 	- Load Parameters
 
-	By default, "Image Folder" indicates [UNI-EM
-	]/data/DNN_training_images, and "Ground Truth Folder" indicates [UNI-EM]/data/DNN_ground_truth.
 	Users will see an example EM image volume and their segmentation (kasthuri15) by downloading the following example data.
 	- ExampleFFN.zip 522MB: https://www.dropbox.com/s/cztcf8w0ywj1pmz/ExampleFFN.zip?dl=0
 
-3.	Execute the preprocessing. It takes 5 to 60 min depending on the target image volume and machine speed. It produces the three files in the FFN file folder: af.h5, groundtruth.h5, and tf_record_file .
+3.	Execute the preprocessing. It takes 5 to 60 min depending on target image volume and machine speed. It produces three files in the FFN file folder: af.h5, groundtruth.h5, and tf_record_file .
 4.	Select the training tab and specify parameters:
 	- Max Training Steps: 	The number of training FFN, a key parameter.
-	- Sparse Z:	Check it if the target EM-image stack is anisotropic. Internally, 
+	- Sparse Z:	Check it if the target EM-image stack is anisotropic.
 	- Training Image h5 File:	Generated file
 	- Ground truth h5 File:		Generated file.
 	- Tensorflow Record File:	Generated file.
@@ -146,7 +142,7 @@ The VAST Lite is recommended for the ground truth generation (https://software.r
 	- FFN File Folder: Folder storing generated files for inference "inference_params.pbtxt."
 	- Save Parameters
 	- Load Parameters
-7.  Execute the inference. It requires 5-60 min depending on the target image volume and machine speed. It produces the inference results "0/0/seg-0_0_0.npz " and " seg-0_0_0.prob " in the Output Inference Folder. It also produces "inference_params.pbtxt" in the FFN file folder.
+7.  Execute the inference. It requires 5-60 min depending on target image volume and machine speed. It produces inference results "0/0/seg-0_0_0.npz " and " seg-0_0_0.prob " in the Output Inference Folder. It also produces "inference_params.pbtxt" in the FFN file folder.
 8.  Select the postprocessing tab and specify parameters:
 	- Target Inference File: Specify inferred segmentation file such as seg-0_0_0.npz.
 	- Output Inference Folder: Folder storing generated sequential image files.
