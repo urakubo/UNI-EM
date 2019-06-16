@@ -67,7 +67,7 @@ We implemented 2D CNN (Resnet/U-net/Highwaynet/Densenet)-based segmentation prog
 
 #### Requirements. 
 1.	one-page ground truth over 512 x 512 xy-pixels.
-2.	Six min training period with a NVIDIA-GPU card (in the case of GTX1070).
+2.	Training period (6 min with a NVIDIA-GPU card GTX1070).
 
 
 #### Procedure:
