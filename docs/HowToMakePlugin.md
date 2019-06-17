@@ -1,7 +1,7 @@
 [Japanese version here](HowToMakePlugin.ja.md)
 
 ## How to make a plugin
-Users can easily embed their own executable program (including a Python program) in UNI-EM as a plugin. Here we show how to make such a plugin by tracing a pre-installed template. The template plugin executes an external Python program "run_example.py" located at UNI_EM\ plugins\Template. First, check the contents of UNI_EM\plugins\menu.json that defines the Plugin dropdown menu.
+Users can easily embed their own executable program (including a Python program) in UNI-EM as a plugin. Here we show how to make such a plugin by tracing a pre-installed template. The template plugin executes an external Python program "run_example.py" located at UNI_EM\plugins\Template. First, check the contents of UNI_EM\plugins\menu.json that defines the Plugin dropdown menu.
 ```json
 {
 "2D/3D Filters": {
