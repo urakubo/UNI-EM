@@ -6,7 +6,7 @@ Users can easily embed their own executable program (including a Python program)
 {
 "2D/3D Filters": {
 	"Sub":		0,
-	"Func":		"Filters"
+	"Func":		"Filters2D3D"
 },
 "Template": {
 	"Sub":		0,
@@ -22,21 +22,17 @@ Users can easily embed their own executable program (including a Python program)
 },
 }
 ```
-Where the keys at a highest level (e.g., "2D/3D Filters") correspond to the contents of the dropdown menu, and the key "Sub" specifies the number of lower-level contents that are subsequently generated. The key "Func" specifies the functions that are called in UNI_EM\plugins\Plugin.py. Here, check the contents of Plugin.py:
+Where the keys at a highest level (e.g., "2D/3D Filters") correspond to the contents of the dropdown menu, and the key "Sub" specifies the number of lower-level contents that are subsequently generated. The key "Func" specifies the functions that are called in UNI_EM\plugins. Here, check the content of UNI_EM\plugins\Template\Template.py. This program creates a control panel (Widget).
 ```python
-sys.path.append(path.join(plugins_dir, "Template"))
-from Dialog_Template   import Dialog_Template
+from Template.Training   import Training
+from Template.Inference  import Inference
 
-class Plugins():
-    def Template(self):
-        self.tmp = Dialog_Template(self)
-```
-The folder UNI_EM\plugins\Template is included in the search path (line 1), and the Dialog_Template class in that folder is imported (line 2). The function "Template" assigns the Dialog_Template class to an object (self.tmp). Next check the content of UNI_EM\plugins\Template\Dialog_Template.py. This program creates a control panel (Widget).
-```python
-from Training   import Training
-from Inference  import Inference
+class GenerateDialog(QWidget, MiscellaneousTemplate):
+    def __init__(self, parent):
+        self.title  = "Template"
+	...
+        self.initUI()
 
-class Dialog_Template(QWidget, MiscellaneousTemplate):
     def initUI(self):
 	# Training
         training        = Training(self.u_info)
@@ -48,7 +44,7 @@ class Dialog_Template(QWidget, MiscellaneousTemplate):
         tab_inference    = self.GenerateTabWidget(inference)
         tabs.addTab(tab_inference, 'Inference')
 ```
-Dialog_Template.py imports Training.py and Inference.py in the first two lines, and initUI assigns them to objects. One of the classes UNI_EM\ plugins\Template\Training.py can be read as follows:
+Template.py imports Training.py and Inference.py in the first two lines, and initUI assigns them to objects. One of the classes UNI_EM\ plugins\Template\Training.py can be read as follows:
 ```python
 ##
 exec_dir = os.path.join(main_dir, 'plugins','Template')
