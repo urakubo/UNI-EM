@@ -26,12 +26,20 @@ sys.path.append(os.path.join(main_dir, "segment"))
 sys.path.append(os.path.join(main_dir, "plugins"))
 sys.path.append(os.path.join(main_dir, "annotator"))
 
-
+#
+# For Pyinstaller
+#
+import Annotator.Annotator
+import _2D_DNN._2D_DNN
+import _3D_FFN._3D_FFN
+import _tensorb._tensorb
+import Blank.Blank
+import Filter2D3D.Filter2D3D
+import Template.Template
+#
 
 from Params  import Params
 from Script  import Script
-# from Annotator import Annotator
-# from Segment import Segment
 from DojoFileIO  import DojoFileIO
 from FileMenu  import FileMenu
 from DojoMenu  import DojoMenu

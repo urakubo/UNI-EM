@@ -62,6 +62,10 @@ for dirpath, dirnames, filenames in os.walk( path.join(main_dir, "segment") ):
     if os.path.basename(dirpath) != '__pycache__':
             pathex.append(path.join(main_dir, "segment", dirpath))
 
+for dirpath, dirnames, filenames in os.walk( path.join(main_dir, "annotator") ):
+    if os.path.basename(dirpath) != '__pycache__':
+            pathex.append(path.join(main_dir, "segment", dirpath))
+
 datas=[
           ( '../annotator/menu.json', './annotator/' ),
           ( '../plugins/menu.json', './plugins/' ),
