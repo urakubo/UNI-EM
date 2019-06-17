@@ -22,7 +22,7 @@ Users can easily embed their own executable program (including a Python program)
 },
 }
 ```
-Where the keys at a highest level (e.g., "2D/3D Filters") show the items of the dropdown menu, and the key "Sub" specifies the number of lower-level items that are subsequently generated. The key "Func" specifies the functions that are called in UNI_EM\plugins. Here, check the content of UNI_EM\plugins\Template\Template.py. The class GenerateDialog is automatically called to create a dialog (Widget).
+Where the keys at a highest level (e.g., "2D/3D Filters") show the items of the dropdown menu, and the key "Sub" specifies the number of lower-level items that are subsequently generated. The key "Func" specifies the functions that are called in UNI_EM\plugins. Here, check the content of UNI_EM\plugins\Template\Template.py. Its class GenerateDialog is automatically called to create a dialog (Widget).
 ```python
 from Template.Training   import Training
 from Template.Inference  import Inference
