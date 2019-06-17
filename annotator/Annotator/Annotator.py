@@ -9,6 +9,8 @@ import sys
 import os
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
+icon_dir = path.join(main_dir, "icons")
+
 from Annotator.AnnotatorServer import AnnotatorServerLogic
 from Annotator.ControlAnnotatorServer import ControlAnnotatorServer
 
@@ -21,6 +23,7 @@ class GenerateDialog(QWidget):
         self.u_info = parent.u_info
         self.parent = parent
         super().__init__()
+        self.setWindowIcon(QIcon(path.join(icon_dir, 'Mojo2_16.png')))
         self.initUI()
 
     def initUI(self):

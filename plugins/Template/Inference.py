@@ -49,8 +49,8 @@ class Inference(MiscellaneousTemplate):
                     ]
 
         self.args = [
-                        ['Test image folder', 'SelectOpenImage', 'OpenImage'],
-                        ['Inferred segmentation folder', 'SelectOpenImage', 'OpenImage'],
+                        ['Test image folder', 'SelectImageFolder', 'OpenImageFolder'],
+                        ['Inferred segmentation folder', 'SelectImageFolder', 'OpenImageFolder'],
                         ['Tensorflow model file' , 'LineEdit', tensorflow_file , 'BrowseFile'],
                     ]
 

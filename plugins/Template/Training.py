@@ -56,8 +56,8 @@ class Training(MiscellaneousTemplate):
                         ]
 
         self.args = [
-                        ['Training image folder', 'SelectOpenImage', 'OpenImage'],
-                        ['Ground truth folder', 'SelectOpenImage', 'OpenImage'],
+                        ['Training image folder', 'SelectImageFolder', 'OpenImageFolder'],
+                        ['Ground truth folder', 'SelectImageFolder', 'OpenImageFolder'],
                         ['Tensorflow model folder', 'LineEdit', tensorflow_path, 'BrowseDir'],
                         ['Checkpoint Interval', 'SpinBox', [100, 1800, 65535]],
                         ['Sparse Z', 'CheckBox', False],
