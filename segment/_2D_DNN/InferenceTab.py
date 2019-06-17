@@ -31,7 +31,7 @@ sys.path.append(segmentation_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
 
 from MiscellaneousSegment import MiscellaneousSegment
-from ExecuteInference import ExecuteInference
+from _2D_DNN.ExecuteInference import ExecuteInference
 from miscellaneous.SyncListQComboBoxManager import *
 
 class InferenceTab(MiscellaneousSegment):

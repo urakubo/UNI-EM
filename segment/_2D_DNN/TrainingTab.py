@@ -29,7 +29,7 @@ segmentation_dir = path.join(main_dir, "segment")
 sys.path.append(segmentation_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
 from MiscellaneousSegment import MiscellaneousSegment
-from ExecuteTraining import ExecuteTraining
+from _2D_DNN.ExecuteTraining import ExecuteTraining
 from miscellaneous.SyncListQComboBoxManager import *
 
 class TrainingTab(MiscellaneousSegment):

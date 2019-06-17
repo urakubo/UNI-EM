@@ -32,11 +32,11 @@ sys.path.append(segmentation_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
 
 from MiscellaneousSegment import MiscellaneousSegment
-from TrainingTab  import TrainingTab
-from InferenceTab  import InferenceTab
+from _2D_DNN.TrainingTab  import TrainingTab
+from _2D_DNN.InferenceTab  import InferenceTab
 
 
-class Dialog_2D_DNN(QDialog):
+class GenerateDialog(QDialog):
     def __init__(self, parent):
         super().__init__()
         self.left   = 200

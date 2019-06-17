@@ -1,6 +1,6 @@
 
 
-from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtWidgets import  QMessageBox,  QWidget, QFileDialog
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt, pyqtSlot
 
@@ -9,18 +9,21 @@ import sys
 import os
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
-plugins_dir = path.join(main_dir, "plugins")
-sys.path.append(plugins_dir)
-from AnnotatorServer import AnnotatorServerLogic
-from ControlAnnotatorServer import ControlAnnotatorServer
+from Annotator.AnnotatorServer import AnnotatorServerLogic
+from Annotator.ControlAnnotatorServer import ControlAnnotatorServer
 
 #sys.path.append(path.join(plugins_dir, "superpixel"))
 
 # import wxglade_superpixel
 
-class Annotator():
+class GenerateDialog(QWidget):
+    def __init__(self, parent):
+        self.u_info = parent.u_info
+        self.parent = parent
+        super().__init__()
+        self.initUI()
 
-    def Annotator_(self):
+    def initUI(self):
 
         ## Dialog: Is Dojo activated?
         if self.u_info.files_found == False:
@@ -28,23 +31,18 @@ class Annotator():
             return
 
         ## Dialog: Is the 3D Viewer already launched?
-        print( self.table_widget.appl )
-        if 'annotator' in self.table_widget.appl:
+        print( self.parent.table_widget.appl )
+        if 'annotator' in self.parent.table_widget.appl:
             QMessageBox.information(self, "3D Annotator", "3D Annotator has already been launched!")
             return
 
         ## Initialize
-        self.u_info.annotator = ControlAnnotatorServer(self.u_info)
+        self.parent.annotator = ControlAnnotatorServer(self.u_info)
 
         ## Start StlServer
-        self.u_info.annotator.LaunchAnnotator()
+        self.parent.annotator.LaunchAnnotator()
 
         ## Call StlViewer
-        self.table_widget.addTab('annotator', '3D Annotator', self.u_info.url_stl+'index.html' )
-
-    def CloseAnnotator(self):
-        ## Start StlServer
-        print('Close 3D Annotator')
-        self.u_info.annotator.TerminateAnnotator()
+        self.parent.table_widget.addTab('annotator', '3D Annotator', self.u_info.url_stl+'index.html' )
 
 

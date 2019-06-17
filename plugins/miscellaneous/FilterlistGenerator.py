@@ -14,7 +14,7 @@ import cv2
 import threading
 
 from miscellaneous.ListManager import ListManager
-from Filters.FiltersInfo import FiltersInfo
+from Filter2D3D.FiltersInfo import FilterInfo
 
 from PyQt5.QtWidgets import QMainWindow, qApp, QApplication, QWidget, QTabWidget, QSizePolicy, QInputDialog, \
     QLineEdit, QComboBox, QDialog, QDialogButtonBox, QFormLayout, QGridLayout, QMessageBox, QSpinBox, QSlider, \
@@ -54,7 +54,7 @@ class FilterlistGenerator(MiscellaneousFilters):
     def GenerateFilterlistObject(self):
         ##
         ##
-        fi = FiltersInfo()
+        fi = FilterInfo()
         _2D_Filters = fi.get_2d_filter_name_list()
         _3D_Filters = fi.get_3d_filter_name_list()
 

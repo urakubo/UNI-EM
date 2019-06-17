@@ -9,6 +9,6 @@
 },
 "Tensorboard": {
 	"Sub":		0,
-	"Func":		"_Tensorboard"
+	"Func":		"_tensorb"
 }
 }

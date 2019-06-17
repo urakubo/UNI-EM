@@ -97,7 +97,7 @@ class Params:
             self.exec_compute_partition = os.path.join(main_dir, 'compute_partitions.exe')
             self.exec_build_coordinates = os.path.join(main_dir, 'build_coordinates.exe')
             self.exec_train = os.path.join(main_dir, 'train.exe')
-            self.exec_tensorboard = os.path.join(main_dir, 'tensorb.exe')
+            self.exec_tensorboard = os.path.join(main_dir, 'launch_tensorboard.exe')
 
         else:
             # print('Run on live python.')

@@ -140,13 +140,13 @@ coll += analysis(translate, pathex, [], hiddenimports, 'compute_partitions')
 import tensorboard as _
 WEBFILES = os.path.join(_.__path__[0], "webfiles.zip")
 
-tensorb=[path.join(main_dir, "segment","tensorboard","tensorb.py")]
+tensorb=[path.join(main_dir, "segment","_tensorb","launch_tensorbord.py")]
 pathex=[]
 
 datas=[ ( WEBFILES, './tensorboard/' ) ]
 hiddenimports=['scipy._lib.messagestream','pywt._extensions._cwt','tensorflow.contrib']
 
-coll += analysis(tensorb, pathex, datas, hiddenimports, 'tensorb')
+coll += analysis(tensorb, pathex, datas, hiddenimports, 'launch_tensorbord')
 
 
 

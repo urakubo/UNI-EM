@@ -5,7 +5,7 @@ import sys, os
 import numpy as np
 import subprocess as s
 from PyQt5.QtCore import Qt
-from MiscellaneousTemplate import MiscellaneousTemplate
+from miscellaneous.MiscellaneousTemplate import MiscellaneousTemplate
 import miscellaneous.Miscellaneous as m
 
 from os import path, pardir

@@ -6,7 +6,7 @@ from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt, pyqtSlot,  QAbstractListModel, QModelIndex, QVariant, QDir, QSize
 import PyQt5.QtGui as QtGui
 
-from MiscellaneousTemplate import MiscellaneousTemplate
+from miscellaneous.MiscellaneousTemplate import MiscellaneousTemplate
 from miscellaneous.SyncListQComboBoxManager import *
 
 class TabTemplate(MiscellaneousTemplate):

@@ -24,6 +24,9 @@ main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
 icon_dir = path.join(main_dir, "icons")
 
+
+_3D_FFN_dir = path.join(main_dir, "segment",'_3D_FFN')
+sys.path.append(_3D_FFN_dir)
 from TableGeneratorFFN import TableGeneratorFFN
 from FFNPrepTraining   import FFNPrepTraining
 from FFNTraining    import FFNTraining
@@ -34,7 +37,7 @@ segmentation_dir = path.join(main_dir, "segment")
 sys.path.append(segmentation_dir)
 
 
-class Dialog_3D_FFN(QWidget):
+class GenerateDialog(QWidget):
     def __init__(self, parent):
         super().__init__()
         self.left   = 200
