@@ -53,13 +53,8 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 1.	Download one of the following two versions, and unzip it:
 
 
-	- [New feature: Folder management system](docs/HowToUse.md#Folder-management-system)
 		- [CPU version (Ver0.80; 282 MB)](http://bit.ly/2Rdsl6m)
 		- [GPU version (Ver0.80: 706 MB)](http://bit.ly/2IbI1E8)
-
-	- Previous version
-		- [CPU version (Ver0.78; 290 MB)](http://bit.ly/2IwquWk)
-		- [GPU version (Ver0.78: 715 MB)](http://bit.ly/2wNKm1G)
 
 
 2.	Download sample EM/segmentation dojo files from the following website, and unzip it:
@@ -78,10 +73,6 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 
 	- [New feature: Folder management system](docs/HowToUse.md#Folder-management-system)
 		- git clone https://github.com/urakubo/UNI-EM.git
-
-	- Previous version
-		- git clone https://github.com/urakubo/UNI-EM.git
-		- git checkout f3870b6cdf64568d90044dc101d1fc4556f1d60d
 
 
 4. Install the following modules of Python: Tensorflow-gpu, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl. Check also "requirements-[os]-[cpu or gpu].txt". 
