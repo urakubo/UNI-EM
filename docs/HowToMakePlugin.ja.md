@@ -7,7 +7,7 @@ UNI-EMでは、ご自身のPython等の実行形式プログラムを容易に�
 {
 "2D/3D Filters": {
 	"Sub":		0,
-	"Func":		"Filters"
+	"Func":		"Filters2D3D"
 },
 "Template": {
 	"Sub":		0,
@@ -23,21 +23,17 @@ UNI-EMでは、ご自身のPython等の実行形式プログラムを容易に�
 },
 }
 ```
-ここで、最上位のkey (e.g., "2D/3D Filters") はPluginsのドロップダウンメニューの項目です。key "Sub" はドロップダウン階層を指定回数一段落とすことを指示し、key "Func" は UNI_EM\plugins\Plugin.py にて呼び出される関数名を指定します。次に、menu.json より呼び出される UNI_EM\plugins\Plugin.py の内容を確認します（抜粋）。
+ここで、最上位のkey (e.g., "2D/3D Filters") はPluginsのドロップダウンメニューの項目です。key "Sub" はドロップダウン階層を指定回数一段落とすことを指示し、key "Func" は例えば関数 UNI_EM\plugins\Template\Template.py を呼び出すことを指定します。そこで、UNI_EM\plugins\Template\Dialog_Template.pyを確認します（抜粋）。Dialog_Template.py はControl panel (Widget)本体を作成するプログラムです。
 ```python
-sys.path.append(path.join(plugins_dir, "Template"))
-from Dialog_Template   import Dialog_Template
+from Template.Training   import Training
+from Template.Inference  import Inference
 
-class Plugins():
-    def Template(self):
-        self.tmp = Dialog_Template(self)
-```
-一行目では UNI_EM\plugins\Template フォルダを参照することを指定し、二行目では Dialog_Template.py ファイルの Dialog_Templateクラスを読み込むことを指定し、def Template(self) にて Dialog_Template を呼び出します。そこで、UNI_EM\plugins\Template\Dialog_Template.pyを確認します（抜粋）。Dialog_Template.py はControl panel (Widget)本体を作成するプログラムです。
-```python
-from Training   import Training
-from Inference  import Inference
+class GenerateDialog(QWidget, MiscellaneousTemplate):
+    def __init__(self, parent):
+        self.title  = "Template"
+	...
+        self.initUI()
 
-class Dialog_Template(QWidget, MiscellaneousTemplate):
     def initUI(self):
 	# Training
         training        = Training(self.u_info)
@@ -49,7 +45,7 @@ class Dialog_Template(QWidget, MiscellaneousTemplate):
         tab_inference    = self.GenerateTabWidget(inference)
         tabs.addTab(tab_inference, 'Inference')
 ```
-最初の二行で Training.py および Inference.py 読み込み、initUI 内にて、Training tab と Inference tab を読み込んでいます。そこで Trainingタブの内容を決定する UNI_EM\plugins\Template\Training.py を確認します（抜粋）。
+最初の二行で Training.py および Inference.py 読み込み、initUI 内にて、Training tab と Inference tab を読み込んでいます。さらに Trainingタブの内容を決定する UNI_EM\plugins\Template\Training.py を確認します（抜粋）。
 ```python
 ##
 exec_dir = os.path.join(main_dir, 'plugins','Template')
