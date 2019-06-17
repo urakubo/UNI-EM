@@ -23,7 +23,7 @@ UNI-EMでは、ご自身のPython等の実行形式プログラムを容易に�
 },
 }
 ```
-ここで、最上位のkey (e.g., "2D/3D Filters") はPluginsのドロップダウンメニューの項目です。key "Sub" はドロップダウン階層を指定回数一段落とすことを指示し、key "Func" は例えば関数 UNI_EM\plugins\Template\Template.py を呼び出すことを指定します。そこで、UNI_EM\plugins\Template\Dialog_Template.pyを確認します（抜粋）。Dialog_Template.py はControl panel (Widget)本体を作成するプログラムです。
+ここで、最上位のkey (e.g., "2D/3D Filters") はPluginsのドロップダウンメニューの項目です。key "Sub" はドロップダウン階層を指定回数一段落とすことを指示し、key "Func" では、たとえばTemplateがクリックされると関数 UNI_EM\plugins\Template\Template.py を呼び出されることを示します。そこで、UNI_EM\plugins\Template\Dialog_Template.pyを確認します（抜粋）。Dialog_Template.py では、GenerateDialog class が自動的に呼びだされ、Control panel (Widget)本体が作成されます。
 ```python
 from Template.Training   import Training
 from Template.Inference  import Inference
