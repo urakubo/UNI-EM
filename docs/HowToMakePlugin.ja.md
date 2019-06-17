@@ -49,7 +49,7 @@ class GenerateDialog(QWidget, MiscellaneousTemplate):
 ```python
 ##
 exec_dir = os.path.join(main_dir, 'plugins','Template')
-exec_template = 'python ' +  os.path.join(exec_dir, 'run_example.py')
+exec_template = 'python ' + os.path.join(exec_dir, 'run_example.py')
 ##
 
 class Training(MiscellaneousTemplate):
@@ -64,22 +64,23 @@ class Training(MiscellaneousTemplate):
     def __init__(self, u_info):
     	##
         self.name = 'Training'
+
         self.tips = [
-                        'Checkpoint Interval',
-                        'Sparse Z',
-                        'Mode',
                         'Input : Training image folder',
                         'Input : Ground truth folder',
-                        'Input/Output: Tensorlflow Model Folder'
+                        'Input/Output: Tensorlflow Model Folder',
+                        'Checkpoint Interval',
+                        'Sparse Z',
+                        'Mode'
                         ]
 
         self.args = [
+                        ['Training image folder', 'SelectImageFolder', 'OpenImageFolder'],
+                        ['Ground truth folder', 'SelectImageFolder', 'OpenImageFolder'],
+                        ['Tensorflow model folder', 'LineEdit', tensorflow_path, 'BrowseDir'],
                         ['Checkpoint Interval', 'SpinBox', [100, 1800, 65535]],
                         ['Sparse Z', 'CheckBox', False],
-                        ['Mode', 'ComboBox', ['a','b','c']],
-                        ['Training image folder'   , 'LineEdit', training_image_path   , 'BrowseDirImg'],
-                        ['Ground truth folder'     , 'LineEdit', ground_truth_path     , 'BrowseDirImg'],
-                        ['Tensorflow model folder' , 'LineEdit', tensorflow_file_path  , 'BrowseDir'],
+                        ['Mode', 'ComboBox', ['a','b','c']]
             ]
 ```
 変数 exec_template に実行する外部プログラムを指定しています。ここで UNI_EM\plugins\Template\ フォルダ内の python run_example.py を指定しています。関数 _Run では引数を指定をすると共に s.run にて関数を実行しています。引数の指定は、関数__init__ にてself.arg を指定することを介して GUIにて行います。上段左より、項目"Checkpoint Interval"を作って下限100, 上限65535, 既定値1800のSpinboxを作成し、Spinboxを介して値を設定するように指示します。self.tipsは各項目上にマウスカーソルを置くと現れる注意書きです。Trainingクラスを実行したのち、GenerateTabWidget関数がクラス変数を正しく解釈することに成功すると、下のようなControl panel (Widget) が現れます。Control panelを通じて各種引数の設定を行うと共に、"Execute"ボタンによりプログラムを実行することができます。
