@@ -31,7 +31,7 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 plugins_dir = path.join(main_dir, "annotator")
 sys.path.append(plugins_dir)
-from AnnotatorServer import AnnotatorServerLogic
+from Annotator.AnnotatorServer import AnnotatorServerLogic
 sys.path.append(os.path.join(main_dir, "filesystem"))
 sys.path.append(os.path.join(main_dir, "gui"))
 

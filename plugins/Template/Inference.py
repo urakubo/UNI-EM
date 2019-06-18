@@ -4,7 +4,7 @@
 import sys, os
 import numpy as np
 import subprocess as s
-from MiscellaneousTemplate import MiscellaneousTemplate
+from miscellaneous.MiscellaneousTemplate import MiscellaneousTemplate
 import miscellaneous.Miscellaneous as m
 
 from os import path, pardir
@@ -37,9 +37,8 @@ class Inference(MiscellaneousTemplate):
     def __init__(self, u_info):
         ##
         self.u_info = u_info
-        datadir = u_info.data_path
         tensorflow_file = os.path.join(u_info.tensorflow_model_path,"model.tf")
-        self.paramfile = os.path.join(datadir, "parameters", "Inference.pickle")
+        self.paramfile = os.path.join(u_info.parameters_path, "Inference.pickle")
 
         self.name = 'Inference'
 
@@ -50,8 +49,8 @@ class Inference(MiscellaneousTemplate):
                     ]
 
         self.args = [
-                        ['Test image folder', 'SelectOpenImage', 'OpenImage'],
-                        ['Inferred segmentation folder', 'SelectOpenImage', 'OpenImage'],
+                        ['Test image folder', 'SelectImageFolder', 'OpenImageFolder'],
+                        ['Inferred segmentation folder', 'SelectImageFolder', 'OpenImageFolder'],
                         ['Tensorflow model file' , 'LineEdit', tensorflow_file , 'BrowseFile'],
                     ]
 

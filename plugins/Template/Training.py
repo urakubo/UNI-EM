@@ -5,7 +5,7 @@ import sys, os
 import numpy as np
 import subprocess as s
 from PyQt5.QtCore import Qt
-from MiscellaneousTemplate import MiscellaneousTemplate
+from miscellaneous.MiscellaneousTemplate import MiscellaneousTemplate
 import miscellaneous.Miscellaneous as m
 
 from os import path, pardir
@@ -41,9 +41,8 @@ class Training(MiscellaneousTemplate):
 
     def __init__(self, u_info):
         ##
-        datadir = u_info.data_path
         tensorflow_path = u_info.tensorflow_model_path
-        self.paramfile = os.path.join(datadir, "parameters", "Training.pickle")
+        self.paramfile = os.path.join(u_info.parameters_path, "Training.pickle")
 
         self.name = 'Training'
 
@@ -57,8 +56,8 @@ class Training(MiscellaneousTemplate):
                         ]
 
         self.args = [
-                        ['Training image folder', 'SelectOpenImage', 'OpenImage'],
-                        ['Ground truth folder', 'SelectOpenImage', 'OpenImage'],
+                        ['Training image folder', 'SelectImageFolder', 'OpenImageFolder'],
+                        ['Ground truth folder', 'SelectImageFolder', 'OpenImageFolder'],
                         ['Tensorflow model folder', 'LineEdit', tensorflow_path, 'BrowseDir'],
                         ['Checkpoint Interval', 'SpinBox', [100, 1800, 65535]],
                         ['Sparse Z', 'CheckBox', False],

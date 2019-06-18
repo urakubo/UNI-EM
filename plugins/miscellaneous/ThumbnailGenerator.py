@@ -11,7 +11,6 @@ import tornado
 import tornado.websocket
 import glob     # Wild card
 import cv2
-import threading
 
 from PyQt5.QtWidgets import QMainWindow, qApp, QApplication, QWidget, QTabWidget, QSizePolicy, QInputDialog, \
     QLineEdit, QComboBox, QDialog, QDialogButtonBox, QFormLayout, QGridLayout, QMessageBox, QSpinBox, QSlider, \
@@ -27,7 +26,7 @@ sys.path.append(main_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
 from miscellaneous.MiscellaneousFilters  import MiscellaneousFilters
 from miscellaneous.CanvasLabel import CanvasLabel
-from Filters.FiltersInfo import FiltersInfo
+from Filter2D3D.FiltersInfo import FilterInfo
 
 
 import miscellaneous.Miscellaneous as m
@@ -51,7 +50,7 @@ class ThumbnailGenerator(MiscellaneousFilters):
         self.currentX = 0
         self.currentY = 0
 
-        self.fi = FiltersInfo()
+        self.fi = FilterInfo()
 
 
     def GenerateThumbnailObject(self, obj_args, args):

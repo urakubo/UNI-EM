@@ -62,6 +62,10 @@ for dirpath, dirnames, filenames in os.walk( path.join(main_dir, "segment") ):
     if os.path.basename(dirpath) != '__pycache__':
             pathex.append(path.join(main_dir, "segment", dirpath))
 
+for dirpath, dirnames, filenames in os.walk( path.join(main_dir, "annotator") ):
+    if os.path.basename(dirpath) != '__pycache__':
+            pathex.append(path.join(main_dir, "segment", dirpath))
+
 datas=[
           ( '../annotator/menu.json', './annotator/' ),
           ( '../plugins/menu.json', './plugins/' ),
@@ -140,13 +144,13 @@ coll += analysis(translate, pathex, [], hiddenimports, 'compute_partitions')
 import tensorboard as _
 WEBFILES = os.path.join(_.__path__[0], "webfiles.zip")
 
-tensorb=[path.join(main_dir, "segment","tensorboard","tensorb.py")]
+tensorb=[path.join(main_dir, "segment","_tensorb","launch_tensorbord.py")]
 pathex=[]
 
 datas=[ ( WEBFILES, './tensorboard/' ) ]
 hiddenimports=['scipy._lib.messagestream','pywt._extensions._cwt','tensorflow.contrib']
 
-coll += analysis(tensorb, pathex, datas, hiddenimports, 'tensorb')
+coll += analysis(tensorb, pathex, datas, hiddenimports, 'launch_tensorbord')
 
 
 

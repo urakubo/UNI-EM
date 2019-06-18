@@ -1,7 +1,7 @@
 {
 "2D/3D Filters": {
 	"Sub":		0,
-	"Func":		"Filters"
+	"Func":		"Filter2D3D"
 },
 "Template": {
 	"Sub":		0,
@@ -9,10 +9,10 @@
 },
 "User Defined1": {
 	"Sub":		1,
-	"Func":		"UserDefined_"
+	"Func":		"Blank"
 },
 "User Defined2": {
 	"Sub":		0,
-	"Func":		"UserDefined_"
+	"Func":		"Blank"
 }
 }

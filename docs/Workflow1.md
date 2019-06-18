@@ -21,7 +21,7 @@ Here we try automated mitochondria segmentation of a stack of EM images using a 
 
 #### Preparation of ground truth
 
-Download "Example2CNN.zip" from the link below and unzip it on your UNI-EM installed PC. It has the folders "TrainingImages" (training image) and "GroundTruth" (ground truth annotation) (**Fig. 1.1**). The Example2CNN also has "TestImages" (test images), "GT_annotation" (empty), and "Proofreading" (empty). Users can use the provided ground truth image (start from the next section), or draw the ground truth using Dojo by themselves as stated below.
+Download "Example2CNN.zip" from the link below and unzip it on your UNI-EM installed PC. It has the folders "TrainingImages" (training image) and "GroundTruth" (ground truth annotation) (**Fig. 1.1**). The Example2CNN also has "TestImages" (test images), "GT_annotation" (empty), and "Proofreading" (empty). Users can use the provided ground truth image (start from the next section), or draw the ground truth using Dojo as stated below.
 
 - "Example2CNN.zip": https://www.dropbox.com/s/k73vlvyru1p3qei/Example2CNN.zip?dl=0
 

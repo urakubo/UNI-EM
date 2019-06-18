@@ -2,7 +2,7 @@ import sys
 import os
 import json
 from  collections import OrderedDict
-
+import importlib
 
 from os import path, pardir
 from PyQt5.QtWidgets import QMainWindow, QTabWidget, QApplication, \
@@ -26,23 +26,29 @@ sys.path.append(os.path.join(main_dir, "segment"))
 sys.path.append(os.path.join(main_dir, "plugins"))
 sys.path.append(os.path.join(main_dir, "annotator"))
 
-
+#
+# For Pyinstaller
+#
+import Annotator.Annotator
+import _2D_DNN._2D_DNN
+import _3D_FFN._3D_FFN
+import _tensorb._tensorb
+import Blank.Blank
+import Filter2D3D.Filter2D3D
+import Template.Template
+#
 
 from Params  import Params
 from Script  import Script
-from Annotator import Annotator
-from Plugins import Plugins
-from Segment import Segment
 from DojoFileIO  import DojoFileIO
 from FileMenu  import FileMenu
-
 from DojoMenu  import DojoMenu
 from Credit  import Credit
 from func_persephonep import *
 
 from miscellaneous.SyncListQComboBoxManager import *
 
-class MainWindow(QMainWindow, FileMenu, DojoMenu, Annotator, Segment, Plugins, Credit, DojoFileIO, Script):
+class MainWindow(QMainWindow, FileMenu, DojoMenu, DojoFileIO, Credit, Script):
 
     def __del__(self):
         for ofile in self.u_info.open_files4lock.values():
@@ -112,7 +118,7 @@ class MainWindow(QMainWindow, FileMenu, DojoMenu, Annotator, Segment, Plugins, C
         annotator_folder = main_menu.addMenu('Annotator')
         with open( path.join(annotator_dir, self.u_info.fname_menu) , 'r' ) as fp:
             e = json.load(fp, object_pairs_hook=OrderedDict)
-        self.GenerateDropdownMenu(annotator_folder, e)
+        self.GenerateDropdownMenuToDialog(annotator_folder, e, 'annotator')
 
 
         ##
@@ -121,7 +127,7 @@ class MainWindow(QMainWindow, FileMenu, DojoMenu, Annotator, Segment, Plugins, C
         segmentation_folder = main_menu.addMenu('Segmentation')
         with open( path.join(segmentation_dir, self.u_info.fname_menu) , 'r' ) as fp:
             e = json.load(fp, object_pairs_hook=OrderedDict)
-        self.GenerateDropdownMenu(segmentation_folder, e)
+        self.GenerateDropdownMenuToDialog(segmentation_folder, e, 'segment')
 
 
         ##
@@ -130,7 +136,7 @@ class MainWindow(QMainWindow, FileMenu, DojoMenu, Annotator, Segment, Plugins, C
         plugin_folder = main_menu.addMenu('Plugins')
         with open( path.join(plugins_dir, self.u_info.fname_menu) , 'r' ) as fp:
             e = json.load(fp, object_pairs_hook=OrderedDict)
-        self.GenerateDropdownMenu(plugin_folder, e)
+        self.GenerateDropdownMenuToDialog(plugin_folder, e, 'plugins')
 
 
         ##
@@ -158,18 +164,24 @@ class MainWindow(QMainWindow, FileMenu, DojoMenu, Annotator, Segment, Plugins, C
         self.setCentralWidget(self.table_widget)
         self.show()
 
+    # ----------------------------------------------------------------------
 
-    def GenerateDropdownMenu(self, folder, e):
+    def GenerateDropdownMenuToDialog(self, folder, e, target_folder):
         plugin_stack = [folder]
         snum_stack   = [0]
         items = e.items()
+        # imported_module = {}
         for key, val in items:
             if val['Sub'] > 0:
                 plugin_stack.append(QMenu(key, self))
                 snum_stack = snum_stack + [ val['Sub'] ]
             else:
                 id = QAction( key, self)
-                id.triggered.connect( getattr(self, val['Func']) )
+                modulename = val['Func']
+                called_module= importlib.import_module(target_folder+'.'+ modulename+'.'+modulename)
+                # imported_module[key] = called_module
+                # print(call_module.__name__)
+                id.triggered.connect( lambda  state, x = called_module: x.GenerateDialog(self) )
                 plugin_stack[-1].addAction(id)
             while(len(plugin_stack) >= 2 and snum_stack[-1] <= 0):
                 plugin_stack[-2].addMenu(plugin_stack[-1])
@@ -177,6 +189,7 @@ class MainWindow(QMainWindow, FileMenu, DojoMenu, Annotator, Segment, Plugins, C
                 snum_stack.pop()
             if snum_stack and (snum_stack[-1] > 0):
                 snum_stack[-1] = snum_stack[-1] - 1
+        # return imported_module
 
 ##
 ## Web browser
@@ -239,22 +252,26 @@ class PersephonepTableWidget(QWidget):
         '''
         ###
         if ('dojo' == self.appl[index]):
-            fail = self.parent.CloseDojoFiles2()
-            if (fail == 1):
+            flag = self.parent.CloseDojoFiles2()
+            if (flag == 1):
+                print('Error ocurred in closing Dojo.')
                 return
         ###
         if ('annotator' == self.appl[index]):
-            fail = self.parent.CloseAnnotator()
-            if (fail == 1):
+            print('Close 3D Annotator')
+            flag = self.parent.annotator.TerminateAnnotator()
+            if (flag == 1):
+                print('Error ocurred in closing annotator.')
                 return
         ###
         if ('tensorboard' == self.appl[index]):
-            fail = self.parent.CloseTensorboard()
-            if (fail == 1):
+            flag = self.parent.process_tensorboard.terminate()
+            if (flag == 1):
+                print('Error ocurred in closing tensorboard.')
                 return
         ###
         self.tab.pop(index)
-        appl = self.appl.pop(index)
+        # appl = self.appl.pop(index)
         self.tabs.removeTab(index)
 
     def updateTabName(self):

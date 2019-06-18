@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QLabel, QLineEdit, QCheckBox, QListWidgetItem, QSpinBox
 from PyQt5.QtCore import Qt
 
-from Filters.FiltersInfo import FiltersInfo
+from Filter2D3D.FiltersInfo import FilterInfo
 
 from .SourceWidget import SourceWidget
 from .TargetWidget import TargetWidget
@@ -11,7 +11,7 @@ class ListManager:
     def __init__(self, parent):
         self.parent = parent
         self.widgets = []
-        self.fi = FiltersInfo()
+        self.fi = FilterInfo()
         self.__width = 150
 
     def getFilterInstance(self, name):

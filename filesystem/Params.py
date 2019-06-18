@@ -91,15 +91,15 @@ class Params:
         if getattr(sys, 'frozen', False):
             # print('Run on pyinstaller.')
             self.data_path = os.path.normpath( path.join(main_dir, "../..","data") )
-
+            
             ext_os = lambda prg: f'{prg}.exe' if(os.name == 'nt') else prg
-
             self.exec_translate = os.path.join(main_dir, ext_os('translate'))
             self.exec_run_inference = os.path.join(main_dir, ext_os('run_inference_win'))
             self.exec_compute_partition = os.path.join(main_dir, ext_os('compute_partitions'))
             self.exec_build_coordinates = os.path.join(main_dir, ext_os('build_coordinates'))
             self.exec_train = os.path.join(main_dir, ext_os('train'))
-            self.exec_tensorboard = os.path.join(main_dir, ext_os('tensorb'))
+            self.exec_tensorboard = os.path.join(main_dir, ext_os('launch_tensorboard'))
+
 
         else:
             # print('Run on live python.')
@@ -115,6 +115,8 @@ class Params:
             self.exec_tensorboard = 'tensorboard '
 
         self.tensorflow_model_path = os.path.normpath( path.join(self.data_path, "model_tensorflow") )
+        self.parameters_path = os.path.normpath( path.join(self.data_path, "parameters") )
+
 
     def SetUserInfo(self, user_path):
 

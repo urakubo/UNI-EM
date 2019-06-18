@@ -9,7 +9,7 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
 icon_dir = path.join(main_dir, "icons")
-from TabTemplate import TabTemplate
+from miscellaneous.TabTemplate import TabTemplate
 
 # ------------------------------------------------------------
 # Example plugin
@@ -17,10 +17,10 @@ from TabTemplate import TabTemplate
 # Also edit Training.py and Inference.py
 # ------------------------------------------------------------
 
-from Training   import Training
-from Inference  import Inference
+from Template.Training   import Training
+from Template.Inference  import Inference
 
-class Dialog_Template(QWidget):
+class GenerateDialog(QWidget):
     def __init__(self, parent):
         self.title  = "Template"
         self.left   = 200

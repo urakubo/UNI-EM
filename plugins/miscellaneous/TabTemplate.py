@@ -6,7 +6,7 @@ from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt, pyqtSlot,  QAbstractListModel, QModelIndex, QVariant, QDir, QSize
 import PyQt5.QtGui as QtGui
 
-from MiscellaneousTemplate import MiscellaneousTemplate
+from miscellaneous.MiscellaneousTemplate import MiscellaneousTemplate
 from miscellaneous.SyncListQComboBoxManager import *
 
 class TabTemplate(MiscellaneousTemplate):
@@ -76,12 +76,12 @@ class TabTemplate(MiscellaneousTemplate):
             elif args[i][1] == 'CheckBox':
                 obj_args.append(QCheckBox(''))
                 obj_args[-1].setChecked( args[i][2] )
-            elif args[i][1] == 'SelectOpenImage':
+            elif args[i][1] == 'SelectImageFolder':
                 obj_args.append(SyncListQComboBoxExcludeDjojMtifManager.get().create(filter, i))
                 #for item in self.parent.u_info.open_files:
                 #    if self.parent.u_info.open_files_type[item] != 'Dojo' :
                 #        obj_args[-1].addItem(item)
-                if args[i][2] == 'OpenImage':
+                if args[i][2] == 'OpenImageFolder':
                     require_browse_open_img.append(i)
             else:
                 print('Internal error. No fucntion.')

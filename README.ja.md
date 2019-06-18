@@ -37,7 +37,7 @@
 * セグメンテーション結果を3Dで確認・アノテーションすることができるようにするために、3D annotatorを作成しました。
 * 推定画像の操作を行うために2D/3D フィルタを作成しました。
 
-深層学習のプログラム知識を持たない実験研究者が、EM画像/教師セグメンテーションをもとに「DNNによるセグメンテーション」「各種フィルタ処理」「人手による校正（プルーフリード）・アノテーション」「視覚化」までできるようにすることを目標とします。教師セグメンテーションの作成にはVast liteの使用をお勧めします ( https://software.rc.fas.harvard.edu/lichtman/vast/ ) 。
+深層学習のプログラム知識を持たない実験研究者が、EM画像をもとに「教師セグメンテーションの作成」「DNNによるセグメンテーション」「各種フィルタ処理」「人手による校正（プルーフリード）・アノテーション」「視覚化」までできるようにすることを目標とします。
 
 
 ## 動作条件：
@@ -53,14 +53,8 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 ### Pyinstaller版 (Windows10のみ)：
 1. GPU 版とCPU版を用意しました。いずれかをダウンロードして展開してください。
 
-
-- [新機能：フォルダ管理システム](docs/HowToUse.ja.md#フォルダ管理システム)
 	- [CPU version (Ver0.80; 282 MB)](http://bit.ly/2Rdsl6m)
 	- [GPU version (Ver0.80: 706 MB)](http://bit.ly/2IbI1E8)
-
-- Previous version
-	- [CPU version (Ver0.78; 290 MB)](http://bit.ly/2IwquWk)
-	- [GPU version (Ver0.78: 715 MB)](http://bit.ly/2wNKm1G)
 	
 2. 公開サンプルデータkasthuri15をダウンロードして適当なフォルダに展開してください。
 	- https://www.dropbox.com/s/pxds28wdckmnpe8/ac3x75.zip?dl=0
@@ -75,8 +69,7 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 2. Tensorflow 1.12 のためにGPUを利用する場合はcuda 9.0, cuda 9.0 and cuDNN 7.4.2 (or later)をインスト―ルしてください **[参考1]** 。
 3. 次の命令を実行してGithubより必要プログラムをダウンロードしてください。
 
-	- [新機能：フォルダ管理システム](docs/HowToUse.ja.md#フォルダ管理システム)
-		- git clone https://github.com/urakubo/UNI-EM.git
+	- git clone https://github.com/urakubo/UNI-EM.git
 
 
 4. requirements-[os]-[cpu or gpu].txtを参考、Pythonに必要モジュール「Tensorflow-gpu 1.12, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl」を pip install -r requirements-[os]-[cpu or gpu].txt などのコマンドを用いてインストールしてください。

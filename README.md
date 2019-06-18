@@ -52,15 +52,8 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 ### Pyinstaller version (Microsoft Windows 10 only)
 1.	Download one of the following two versions, and unzip it:
 
-
-	- [New feature: Folder management system](docs/HowToUse.md#Folder-management-system)
-		- [CPU version (Ver0.80; 282 MB)](http://bit.ly/2Rdsl6m)
-		- [GPU version (Ver0.80: 706 MB)](http://bit.ly/2IbI1E8)
-
-	- Previous version
-		- [CPU version (Ver0.78; 290 MB)](http://bit.ly/2IwquWk)
-		- [GPU version (Ver0.78: 715 MB)](http://bit.ly/2wNKm1G)
-
+	- [CPU version (Ver0.80; 282 MB)](http://bit.ly/2Rdsl6m)
+	- [GPU version (Ver0.80: 706 MB)](http://bit.ly/2IbI1E8)
 
 2.	Download one of sample EM/segmentation dojo folders from the following link, and unzip it:
    	- https://www.dropbox.com/s/pxds28wdckmnpe8/ac3x75.zip?dl=0
@@ -75,14 +68,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 2. Install cuda 9.0 and cuDNN 7.4.2 (or later) for Tensorflow 1.12 (latest combination on 2018/12/20) if your PC has a NVIDIA-GPU.
 3. Download the source codes from the github site:
 
-
-	- [New feature: Folder management system](docs/HowToUse.md#Folder-management-system)
-		- git clone https://github.com/urakubo/UNI-EM.git
-
-	- Previous version
-		- git clone https://github.com/urakubo/UNI-EM.git
-		- git checkout f3870b6cdf64568d90044dc101d1fc4556f1d60d
-
+	- git clone https://github.com/urakubo/UNI-EM.git
 
 4. Install the following modules of Python: Tensorflow-gpu, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl. Check also "requirements-[os]-[cpu or gpu].txt". 
 5. **Copy [UNI-EM]\marching_cubes\marching_cubes`*` and paste it to {$INSTALL_PYTHON}\Lib\site-packages.**
