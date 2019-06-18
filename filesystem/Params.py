@@ -92,12 +92,14 @@ class Params:
             # print('Run on pyinstaller.')
             self.data_path = os.path.normpath( path.join(main_dir, "../..","data") )
 
-            self.exec_translate = os.path.join(main_dir, 'translate.exe')
-            self.exec_run_inference = os.path.join(main_dir, 'run_inference_win.exe')
-            self.exec_compute_partition = os.path.join(main_dir, 'compute_partitions.exe')
-            self.exec_build_coordinates = os.path.join(main_dir, 'build_coordinates.exe')
-            self.exec_train = os.path.join(main_dir, 'train.exe')
-            self.exec_tensorboard = os.path.join(main_dir, 'tensorb.exe')
+            ext_os = lambda prg: f'{prg}.exe' if(os.name == 'nt') else prg
+
+            self.exec_translate = os.path.join(main_dir, ext_os('translate'))
+            self.exec_run_inference = os.path.join(main_dir, ext_os('run_inference_win'))
+            self.exec_compute_partition = os.path.join(main_dir, ext_os('compute_partitions'))
+            self.exec_build_coordinates = os.path.join(main_dir, ext_os('build_coordinates'))
+            self.exec_train = os.path.join(main_dir, ext_os('train'))
+            self.exec_tensorboard = os.path.join(main_dir, ext_os('tensorb'))
 
         else:
             # print('Run on live python.')
