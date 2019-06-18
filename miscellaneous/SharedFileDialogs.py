@@ -136,6 +136,6 @@ class SharedFileDialogs():
             elif args[i][1] == 'CheckBox':
                 param = obj_args[i].checkState()
                 print("{0:>20} : {1:d}".format(arg, param))
-            elif args[i][1] == 'SelectOpenImage':
+            elif args[i][1] == 'SelectImageFolder':
                 param = obj_args[i].currentText()
                 print("{0:>20} : {1:s}".format(arg, param))
