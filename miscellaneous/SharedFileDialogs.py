@@ -97,6 +97,7 @@ class SharedFileDialogs():
     ##
     ##
     def ObtainParams(self, obj_args, args):
+    
         args_header = [args[i][0] for i in range(len(args))]
         params = {}
         for i, arg in enumerate(args):
@@ -112,9 +113,10 @@ class SharedFileDialogs():
                 param = obj_args[i].tabText(id)
             elif args[i][1] == 'CheckBox':
                 param = obj_args[i].checkState()
-            elif args[i][1] == 'SelectOpenImage':
+            elif args[i][1] == 'SelectImageFolder':
                 param = obj_args[i].currentText()
             params[args_header[i]] = param
+        print(params)
         return params
 
 

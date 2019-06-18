@@ -49,8 +49,8 @@ class InferenceTab(MiscellaneousSegment):
         modelpath =  u_info.tensorflow_model_path
         paramfile =  os.path.join( u_info.parameters_path, "Inference_2D.pickle")
         self.args = [
-                        ['Image Folder',    'SelectOpenImage', 'OpenImage'],
-                        ['Output Segmentation Folder',   'SelectOpenImage', 'OpenImage'],
+                        ['Image Folder',    'SelectImageFolder', 'OpenImageFolder'],
+                        ['Output Segmentation Folder',   'SelectImageFolder', 'OpenImageFolder'],
                         ['Model Folder',      'LineEdit', modelpath, 'BrowseDir'],
                         ['Save Parameters', 'LineEdit',paramfile, 'BrowseFile'],
                         ['Load Parameters', 'LineEdit',paramfile, 'BrowseFile']
@@ -105,12 +105,12 @@ class InferenceTab(MiscellaneousSegment):
                 items = args[i][2]
                 for item in items:
                     self.obj_args[-1].addItem(item)
-            elif self.args[i][1] == 'SelectOpenImage':
+            elif self.args[i][1] == 'SelectImageFolder':
                 self.obj_args.append(SyncListQComboBoxExcludeDjojMtifManager.get().create(self, i))
                 #for item in self.parent.u_info.open_files:
                 #    if self.parent.u_info.open_files_type[item] != 'Dojo':
                 #        self.obj_args[-1].addItem(item)
-                if self.args[i][2] == 'OpenImage':
+                if self.args[i][2] == 'OpenImageFolder':
                     require_browse_open_img.append(i)
             else:
                 print('Internal error. No fucntion.')

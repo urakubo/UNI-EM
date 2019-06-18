@@ -152,7 +152,7 @@ class FFNInference(MiscellaneousSegment):
                         ]
 
         self.args = [
-                        ['Target Image Folder',    'SelectOpenImage', 'OpenImage'],
+                        ['Target Image Folder',    'SelectImageFolder', 'OpenImageFolder'],
                         ['Output Inference Folder',  'LineEdit', ffn_file_path, 'BrowseDir'],
                         ['Tensorflow Model Files', 'LineEdit', tensorflow_file, 'BrowseFile'],
                         ['Sparse Z', 'CheckBox', False],

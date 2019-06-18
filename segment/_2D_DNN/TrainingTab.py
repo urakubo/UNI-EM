@@ -58,8 +58,8 @@ class TrainingTab(MiscellaneousSegment):
         modelpath =  u_info.tensorflow_model_path
         paramfile = os.path.join( u_info.parameters_path, "Training_2D.pickle")
         self.args = [
-                        ['Image Folder',    'SelectOpenImage', 'OpenImage'],
-                        ['Segmentation Folder',   'SelectOpenImage', 'OpenImage'],
+                        ['Image Folder',    'SelectImageFolder', 'OpenImageFolder'],
+                        ['Segmentation Folder',   'SelectImageFolder', 'OpenImageFolder'],
                         ['Model Folder',      'LineEdit', modelpath, 'BrowseDir'],
                         ['Batch Size', 'SpinBox', [1, 1, 65535]],
                         ['Loss Function', 'ComboBox', ["softmax", "hinge", "square", "approx", "dice", "logistic"]],
@@ -137,12 +137,12 @@ class TrainingTab(MiscellaneousSegment):
                 self._Training2D_Resnet(ttab[1], self.lbl)
                 self._Training2D_Highwaynet(ttab[2], self.lbl)
                 self._Training2D_Densenet(ttab[3], self.lbl)
-            elif self.args[i][1] == 'SelectOpenImage':
+            elif self.args[i][1] == 'SelectImageFolder':
                 self.obj_args.append(SyncListQComboBoxExcludeDjojMtifManager.get().create(self, i))
                 #for item in self.parent.u_info.open_files:
                 #    if self.parent.u_info.open_files_type[item] != 'Dojo':
                 #       self.obj_args[-1].addItem(item)
-                if self.args[i][2] == 'OpenImage':
+                if self.args[i][2] == 'OpenImageFolder':
                     require_browse_open_img.append(i)
             else:
                 print('Internal error. No fucntion.')
