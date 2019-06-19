@@ -36,6 +36,7 @@ from Params import Params
 from ImportImgSeg import ImportImgSeg
 from miscellaneous.SharedFileDialogs import SharedFileDialogs
 from miscellaneous.SyncListQComboBoxManager import *
+import miscellaneous.Miscellaneous as m
 
 class _GenerateContents(SharedFileDialogs):
 
@@ -142,8 +143,8 @@ class DialogGenerateDojoFolder(QDialog):
             im = ImportImgSeg(self.u_info)
             Flag1 = im.images(dir_input_images)  ###
             Flag2 = im.ids(dir_input_ids)        ###
-            print(Flag1)
-            print(Flag2)
+            #print(Flag1)
+            #print(Flag2)
             if Flag1 == False or Flag2 == False:
                 print('Error! Dojo files were not created.')
                 self.close()
@@ -151,7 +152,6 @@ class DialogGenerateDojoFolder(QDialog):
             print('Dojo files were successfully created.')
             ## File system update
             self._UpdateFileSystem(dir_dojo)
-
             self.close()
         ##
         else :
@@ -159,8 +159,8 @@ class DialogGenerateDojoFolder(QDialog):
             im = ImportImgSeg(self.u_info)
             Flag1 = im.images(dir_input_images)  ###
             Flag2 = im.ids_dummy(dir_input_images)  ###
-            print(Flag1)
-            print(Flag2)
+            #print(Flag1)
+            #print(Flag2)
             if Flag1 == False or Flag2 == False:
                 print('Error! Dojo files were not created.')
                 self.close()
@@ -181,14 +181,16 @@ class DialogGenerateDojoFolder(QDialog):
 
 
     def _UpdateFileSystem(self, dir_dojo):
+        # Release
+        m.UnlockFolder(self.u_info, dir_dojo)
+        # Lock again
+        m.LockFolder(self.u_info, dir_dojo)
         # Filetype
         self.u_info.open_files_type[dir_dojo] = 'Dojo'
-        # Release
-        for lockfileobj in self.u_info.open_files4lock[dir_dojo].values():
-            lockfileobj.close()
-        # Lock again
-        self.parent.LockFolder(dir_dojo)
         # Dropdown menu update
         self.parent.UpdateOpenFileMenu()
         # Combo box update
-        SyncFileListQComboBoxHolder.addModel(dir_dojo)
+        SyncListQComboBoxExcludeDjojMtifManager.get().removeModel(dir_dojo)
+        SyncListQComboBoxOnlyDojoManager.get().addModel(dir_dojo)
+
+
