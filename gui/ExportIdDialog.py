@@ -31,7 +31,7 @@ from PyQt5.QtCore import Qt, pyqtSlot
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
-icon_dir          = path.join(main_dir, "icons")
+icon_dir    = path.join(main_dir, "icons")
 plugins_dir = path.join(main_dir, "plugins")
 sys.path.append(plugins_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))

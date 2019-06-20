@@ -38,9 +38,6 @@ from segment.MiscellaneousSegment import MiscellaneousSegment
 from segment._2D_DNN.TrainingTab  import TrainingTab
 from segment._2D_DNN.InferenceTab  import InferenceTab
 
-class dummy():
-    def __init__(self):
-        pass
 
 class GenerateDialog(QDialog):
     def __init__(self, parent):

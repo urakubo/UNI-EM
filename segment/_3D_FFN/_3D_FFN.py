@@ -36,9 +36,6 @@ from segment._3D_FFN.FFNPostprocessing   import FFNPostprocessing
 segmentation_dir = path.join(main_dir, "segment")
 sys.path.append(segmentation_dir)
 
-class dummy():
-    def __init__(self):
-        pass
 
 class GenerateDialog(QWidget):
     def __init__(self, parent):

@@ -33,6 +33,11 @@ def UnlockFolder(u_info, dir):
     if tmp_open_files4lock is None :
         print('UnlockFolder: folder already closed.')
         return False
+
+#    print('Unlock folder: ', dir)
+#    for lockfile in tmp_open_files4lock.keys():
+#        print('lockfile: ', lockfile)
+
     for lockfileobj in tmp_open_files4lock.values():
         lockfileobj.close()
     del u_info.open_files4lock[dir]

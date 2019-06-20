@@ -84,6 +84,7 @@ class ExecuteInference(MiscellaneousSegment):
             m.UnlockFolder(parent.u_info, params['Output Segmentation Folder'])  # Only for shared folder/file
             s.Popen(comm.split())
             m.LockFolder(parent.u_info, params['Output Segmentation Folder'])
+            return
         except subprocess.CalledProcessError as e:
             print("Inference was not executed.")
             m.LockFolder(parent.u_info, params['Output Segmentation Folder'])

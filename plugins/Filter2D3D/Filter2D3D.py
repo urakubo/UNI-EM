@@ -25,10 +25,6 @@ from plugins.miscellaneous.FilterlistGenerator   import FilterlistGenerator
 from plugins.miscellaneous.TableGenerator       import TableGenerator
 
 
-class dummy():
-    def __init__(self):
-        pass
-
 class GenerateDialog(QWidget, MiscellaneousFilters):
     def __init__(self, parent):
         self.left   = 200

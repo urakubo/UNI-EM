@@ -35,11 +35,11 @@ sys.path.append(plugins_dir)
 
 if getattr(sys, 'frozen', False):
   # Pyinstaller
-  print('Pyinstaller')
+  #print('Pyinstaller')
   stldata_dir = os.path.normpath(path.join(main_dir, "../..", "data","stlviewer"))
   main_dir_   = os.path.normpath(path.join(main_dir, "../.."))
 else:
-  print('Live Python')
+  #print('Live Python')
   # Live Python
   stldata_dir = os.path.normpath(path.join(main_dir, "data","stlviewer"))
   main_dir_   = main_dir

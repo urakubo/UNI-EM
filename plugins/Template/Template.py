@@ -24,9 +24,6 @@ from plugins.Template.Training   import Training
 from plugins.Template.Inference  import Inference
 
 
-class dummy():
-    def __init__(self):
-        pass
 
 class GenerateDialog(QWidget):
     def __init__(self, parent):

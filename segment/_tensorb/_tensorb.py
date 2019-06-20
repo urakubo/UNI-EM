@@ -13,11 +13,6 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
 
-#
-class dummy():
-    def __init__(self):
-        pass
-
 
 class GenerateDialog(QWidget):
     def __init__(self, parent):
@@ -49,6 +44,9 @@ class GenerateDialog(QWidget):
         comm = self.u_info.exec_tensorboard   + ' ' \
                 + ' --logdir ' + self.u_info.tensorboard_path + ' ' \
                 + ' --host ' + socket.gethostbyname(socket.gethostname())
+        print(comm)
+
+
         try:
             self.parent.process_tensorboard = s.Popen(comm.split(), stdout=s.PIPE)
             time.sleep(1)

@@ -20,11 +20,6 @@ from annotator.Annotator.ControlAnnotatorServer import ControlAnnotatorServer
 
 # import wxglade_superpixel
 
-
-class dummy():
-    def __init__(self):
-        pass
-
 class GenerateDialog(QWidget):
     def __init__(self, parent):
         self.u_info = parent.u_info
