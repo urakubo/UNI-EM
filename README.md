@@ -52,8 +52,20 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 ### Pyinstaller version (Microsoft Windows 10 only)
 1.	Download one of the following two versions, and unzip it:
 
+- Version 0.82:
+	- [CPU version (Ver0.82; 286 MB)](http://bit.ly/2Iveohj)
+	- [GPU version (Ver0.82: 710 MB)](http://bit.ly/2L2FMEZ)
+
+- Release Summary:
+	- Bug removals.
+		- Fix of abnormal end after creating Dojo folder.
+		- File clean-up including plugins/Template.py .
+		- CLAHE filter revival, etc.
+
+- Previous version:
 	- [CPU version (Ver0.80; 282 MB)](http://bit.ly/2Rdsl6m)
 	- [GPU version (Ver0.80: 706 MB)](http://bit.ly/2IbI1E8)
+
 
 2.	Download one of sample EM/segmentation dojo folders from the following link, and unzip it:
    	- https://www.dropbox.com/s/pxds28wdckmnpe8/ac3x75.zip?dl=0
