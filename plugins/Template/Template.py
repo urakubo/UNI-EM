@@ -7,9 +7,9 @@ from PyQt5.QtWidgets import QTabWidget, QWidget, QVBoxLayout
 from PyQt5.QtGui import QIcon
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
-sys.path.append(main_dir)
 icon_dir = path.join(main_dir, "icons")
 
+sys.path.append(main_dir)
 from miscellaneous.TabTemplate import TabTemplate
 
 # ------------------------------------------------------------

@@ -150,7 +150,7 @@ pathex=[]
 datas=[ ( WEBFILES, './tensorboard/' ) ]
 hiddenimports=['scipy._lib.messagestream','pywt._extensions._cwt','tensorflow.contrib']
 
-coll += analysis(tensorb, pathex, datas, hiddenimports, 'launch_tensorbord')
+coll += analysis(tensorb, pathex, datas, hiddenimports, 'launch_tensorboard')
 
 
 
