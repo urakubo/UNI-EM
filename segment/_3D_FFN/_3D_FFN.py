@@ -27,15 +27,18 @@ icon_dir = path.join(main_dir, "icons")
 
 _3D_FFN_dir = path.join(main_dir, "segment",'_3D_FFN')
 sys.path.append(_3D_FFN_dir)
-from TableGeneratorFFN import TableGeneratorFFN
-from FFNPrepTraining   import FFNPrepTraining
-from FFNTraining    import FFNTraining
-from FFNInference   import FFNInference
-from FFNPostprocessing   import FFNPostprocessing
+from segment._3D_FFN.TableGeneratorFFN import TableGeneratorFFN
+from segment._3D_FFN.FFNPrepTraining   import FFNPrepTraining
+from segment._3D_FFN.FFNTraining    import FFNTraining
+from segment._3D_FFN.FFNInference   import FFNInference
+from segment._3D_FFN.FFNPostprocessing   import FFNPostprocessing
 
 segmentation_dir = path.join(main_dir, "segment")
 sys.path.append(segmentation_dir)
 
+class dummy():
+    def __init__(self):
+        pass
 
 class GenerateDialog(QWidget):
     def __init__(self, parent):

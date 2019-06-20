@@ -16,10 +16,18 @@ icon_dir = path.join(main_dir, "icons")
 import miscellaneous.Miscellaneous as m
 from miscellaneous.SyncListQComboBoxManager import *
 ##
-from miscellaneous.MiscellaneousFilters  import MiscellaneousFilters
-from miscellaneous.ThumbnailGenerator    import ThumbnailGenerator
-from miscellaneous.FilterlistGenerator   import FilterlistGenerator
-from miscellaneous.TableGenerator       import TableGenerator
+
+plugins_dir = path.join(main_dir, "plugins")
+sys.path.append(plugins_dir)
+from plugins.miscellaneous.MiscellaneousFilters  import MiscellaneousFilters
+from plugins.miscellaneous.ThumbnailGenerator    import ThumbnailGenerator
+from plugins.miscellaneous.FilterlistGenerator   import FilterlistGenerator
+from plugins.miscellaneous.TableGenerator       import TableGenerator
+
+
+class dummy():
+    def __init__(self):
+        pass
 
 class GenerateDialog(QWidget, MiscellaneousFilters):
     def __init__(self, parent):

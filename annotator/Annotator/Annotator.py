@@ -11,12 +11,19 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 icon_dir = path.join(main_dir, "icons")
 
-from Annotator.AnnotatorServer import AnnotatorServerLogic
-from Annotator.ControlAnnotatorServer import ControlAnnotatorServer
+annotator_dir = path.join(main_dir, "annotator")
+sys.path.append(annotator_dir)
+from annotator.Annotator.AnnotatorServer import AnnotatorServerLogic
+from annotator.Annotator.ControlAnnotatorServer import ControlAnnotatorServer
 
 #sys.path.append(path.join(plugins_dir, "superpixel"))
 
 # import wxglade_superpixel
+
+
+class dummy():
+    def __init__(self):
+        pass
 
 class GenerateDialog(QWidget):
     def __init__(self, parent):

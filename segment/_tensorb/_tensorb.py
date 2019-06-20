@@ -14,6 +14,11 @@ main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
 
 #
+class dummy():
+    def __init__(self):
+        pass
+
+
 class GenerateDialog(QWidget):
     def __init__(self, parent):
         self.u_info = parent.u_info

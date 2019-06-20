@@ -29,13 +29,13 @@ sys.path.append(os.path.join(main_dir, "annotator"))
 #
 # For Pyinstaller
 #
-import Annotator.Annotator
-import _2D_DNN._2D_DNN
-import _3D_FFN._3D_FFN
-import _tensorb._tensorb
-import Blank.Blank
-import Filter2D3D.Filter2D3D
-import Template.Template
+from annotator.Annotator.Annotator import dummy as d1
+from segment._2D_DNN._2D_DNN import dummy as d2
+from segment._3D_FFN._3D_FFN import dummy as d3
+from segment._tensorb._tensorb import dummy as d4
+from plugins.Blank.Blank import dummy as d5
+from plugins.Filter2D3D.Filter2D3D import dummy as d6
+from plugins.Template.Template import dummy as d7
 #
 
 from Params  import Params
@@ -63,6 +63,18 @@ class MainWindow(QMainWindow, FileMenu, DojoMenu, DojoFileIO, Credit, Script):
     def __init__(self):
 
         #
+        # Pyinstaller
+        #
+
+        #flag = annotator.Annotator.Annotator.dummy()
+        #flag = segment._2D_DNN._2D_DNN.dummy()
+        #flag = segment._3D_FFN._3D_FFN.dummy()
+        #flag = segment._tensorb._tensorb.dummy()
+        #flag = plugins.Blank.Blank.dummy()
+        #flag = plugins.Filter2D3D.Filter2D3D.dummy()
+        #flag = plugins.Template.Template.dummy()
+
+        #
         # Define user info
         #
         self.u_info = Params()
@@ -70,6 +82,19 @@ class MainWindow(QMainWindow, FileMenu, DojoMenu, DojoFileIO, Credit, Script):
         super(MainWindow, self).__init__()
         FileMenu.__init__(self)
         DojoMenu.__init__(self) # ???
+
+
+        #
+        # Pyinstaller
+        #
+        flag = d1()
+        flag = d2()
+        flag = d3()
+        flag = d4()
+        flag = d5()
+        flag = d6()
+        flag = d7()
+
 
         #
         # Prepare the main window
