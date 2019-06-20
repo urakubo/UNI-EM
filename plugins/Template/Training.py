@@ -8,10 +8,9 @@ import miscellaneous.Miscellaneous as m
 
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
-exec_dir = os.path.join(main_dir, 'plugins','Template')
-exec_template = 'python ' +  os.path.join(exec_dir, 'run_example.py')
-##
-##
+#exec_dir = os.path.join(main_dir, 'plugins','Template')
+#exec_template = 'python ' +  os.path.join(exec_dir, 'run_example.py')
+
 
 class Training(MiscellaneousTemplate):
     def _Run(self, params, comm_title):
@@ -23,7 +22,7 @@ class Training(MiscellaneousTemplate):
         print('Checkpoint Interval: ', params['Checkpoint Interval'])
         print('Mode               : ', params['Mode'])
         ##
-        comm_run = exec_template + ' ' \
+        comm_run = self.u_info.exec_template + ' ' \
                      + ' --training_image_folder '    + params['Training image folder'] + ' ' \
                      + ' --ground_truth_folder '      + params['Ground truth folder'] + ' ' \
                      + ' --tensorflow_model_folder ' + params['Tensorflow model folder']  + ' ' \
@@ -37,6 +36,9 @@ class Training(MiscellaneousTemplate):
     def __init__(self, u_info):
         ##
         tensorflow_path = u_info.tensorflow_model_path
+        
+        self.u_info = u_info
+        
         self.paramfile = os.path.join(u_info.parameters_path, "Training.pickle")
 
         self.name = 'Training'

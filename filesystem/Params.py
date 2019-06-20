@@ -99,6 +99,7 @@ class Params:
             self.exec_build_coordinates = os.path.join(main_dir, ext_os('build_coordinates'))
             self.exec_train = os.path.join(main_dir, ext_os('train'))
             self.exec_tensorboard = os.path.join(main_dir, ext_os('launch_tensorboard'))
+            self.exec_template = os.path.join(main_dir, ext_os('run_example'))
 
 
         else:
@@ -113,6 +114,7 @@ class Params:
             self.exec_build_coordinates = 'python ' + os.path.join(_3D_FFN_dir, 'build_coordinates.py')
             self.exec_train = 'python ' + os.path.join(_3D_FFN_dir, 'train.py')
             self.exec_tensorboard = 'tensorboard '
+            self.exec_template = 'python ' + os.path.join(main_dir,  'plugins', 'Template', 'run_example.py')
 
         self.tensorflow_model_path = os.path.normpath( path.join(self.data_path, "model_tensorflow") )
         self.parameters_path = os.path.normpath( path.join(self.data_path, "parameters") )

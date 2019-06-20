@@ -8,17 +8,15 @@ import miscellaneous.Miscellaneous as m
 
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
-exec_dir = os.path.join(main_dir, 'plugins','Template')
-exec_template = 'python ' +  os.path.join(exec_dir, 'run_example.py')
+#exec_dir = os.path.join(main_dir, 'plugins','Template')
+#exec_template = 'python ' +  os.path.join(exec_dir, 'run_example.py')
 
-##
-##
 
 class Inference(MiscellaneousTemplate):
 
     def _Run(self, params, comm_title):
         ##
-        comm_run = exec_template + ' ' \
+        comm_run = self.u_info.exec_template + ' ' \
                     + ' --test_image_folder '   + params['Test image folder'] + ' ' \
                     + ' --inferred_segmentation_folder '     + params['Inferred segmentation folder'] + ' ' \
                     + ' --tensorflow_model_file ' + params['Tensorflow model file']  + ' '
