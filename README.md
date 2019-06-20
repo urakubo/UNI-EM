@@ -60,7 +60,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 	- Bug removal.
 		- Fix of abnormal end after creating Dojo folder.
 		- File clean-up including plugins/Template.py .
-		- CLAHE filter revival, etc.
+		- 2D CLAHE revival, etc.
 
 - Previous version:
 	- [CPU version (Ver0.80; 282 MB)](http://bit.ly/2Rdsl6m)
