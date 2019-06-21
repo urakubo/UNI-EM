@@ -21,9 +21,8 @@ segmentation_dir = path.join(main_dir, "segment")
 sys.path.append(segmentation_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
 
-from MiscellaneousSegment import MiscellaneousSegment
 
-class FFNPrepTraining(MiscellaneousSegment):
+class FFNPrepTraining():
 
     def _Run(self, parent, params, comm_title):
         ##
@@ -79,10 +78,12 @@ class FFNPrepTraining(MiscellaneousSegment):
     def __init__(self, u_info):
         ##
         datadir = u_info.data_path
+
         processed_file_path   = os.path.join(datadir, "ffn")
+
         self.paramfile = os.path.join(u_info.parameters_path, "FFN_PrepTraining.pickle")
 
-        self.filter_name = 'FFN Preparation'
+        self.title = 'FFN Preparation'
 
         self.tips = [
                         'Input: Path to folder containing images',
@@ -98,12 +99,4 @@ class FFNPrepTraining(MiscellaneousSegment):
             ]
 
 
-    def Execute(self, parent, comm_title, obj_args, args):
-        params = self.ObtainParams(obj_args, args)
-        thread = threading.Thread(target=self._Run, args=( parent, params, comm_title ) )
-        thread.daemon = True
-        thread.start()
-        QMessageBox.about(parent, 'FFN',  comm_title + ' runs on a different process.')
-        # parent.close()
-        return
 

@@ -22,12 +22,11 @@ from PyQt5.QtCore import Qt, pyqtSlot
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
+from miscellaneous.TabGenerator import TabGenerator
+
 icon_dir = path.join(main_dir, "icons")
-
-
 _3D_FFN_dir = path.join(main_dir, "segment",'_3D_FFN')
 sys.path.append(_3D_FFN_dir)
-from segment._3D_FFN.TableGeneratorFFN import TableGeneratorFFN
 from segment._3D_FFN.FFNPrepTraining   import FFNPrepTraining
 from segment._3D_FFN.FFNTraining    import FFNTraining
 from segment._3D_FFN.FFNInference   import FFNInference
@@ -58,37 +57,34 @@ class GenerateDialog(QWidget):
         layout = QVBoxLayout()
         tabs = QTabWidget()
         tabs.resize(300, 500)
+        tab  = TabGenerator(self)
 
         ##
         ## FFN preparation
         ##
         prep_ffn = FFNPrepTraining(self.u_info)
-        table1 = TableGeneratorFFN(self)
-        Widget1_bottom, obj_args, args = table1.GenerateTableObject(prep_ffn) # Widget
+        Widget1_bottom = tab.GenerateTabWidget(prep_ffn) # Widget
         tabs.addTab(Widget1_bottom, 'Preprocessing')
 
         ##
         ## FFN training
         ##
         run_ffn = FFNTraining(self.u_info)
-        table2 = TableGeneratorFFN(self)
-        Widget2_bottom, obj_args, args = table2.GenerateTableObject(run_ffn) # Widget
+        Widget2_bottom = tab.GenerateTabWidget(run_ffn) # Widget
         tabs.addTab(Widget2_bottom, 'Training')
 
         ##
         ## FFN inferernce
         ##
         run_ffn = FFNInference(self.u_info)
-        table3 = TableGeneratorFFN(self)
-        Widget3_bottom, obj_args, args = table3.GenerateTableObject(run_ffn) # Widget
+        Widget3_bottom = tab.GenerateTabWidget(run_ffn) # Widget
         tabs.addTab(Widget3_bottom, 'Inference')
 
         ##
         ## FFN postprocessing
         ##
         run_ffn = FFNPostprocessing(self.u_info)
-        table4 = TableGeneratorFFN(self)
-        Widget4_bottom, obj_args, args = table4.GenerateTableObject(run_ffn) # Widget
+        Widget4_bottom = tab.GenerateTabWidget(run_ffn) # Widget
         tabs.addTab(Widget4_bottom, 'Postprocessing')
 
         ##

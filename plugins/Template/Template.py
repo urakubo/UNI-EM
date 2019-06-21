@@ -9,6 +9,7 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 icon_dir = path.join(main_dir, "icons")
 sys.path.append(main_dir)
+from miscellaneous.TabGenerator import TabGenerator
 
 # ------------------------------------------------------------
 # Example plugin
@@ -20,7 +21,6 @@ plugins_dir = path.join(main_dir, "plugins")
 sys.path.append(plugins_dir)
 from plugins.Template.Training   import Training
 from plugins.Template.Inference  import Inference
-from miscellaneous.TabTemplate import TabTemplate
 
 
 class GenerateDialog(QWidget):
@@ -43,7 +43,7 @@ class GenerateDialog(QWidget):
         layout = QVBoxLayout()
         layout.addWidget(tabs)
         self.setLayout(layout)
-        tab = TabTemplate(self)
+        tab = TabGenerator(self)
 
         # Training
         training        = Training(self.u_info)

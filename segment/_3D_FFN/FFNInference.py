@@ -25,12 +25,11 @@ sys.path.append(segmentation_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
 import miscellaneous.Miscellaneous as m
 
-#######
+##
+##
+##
 
-
-from MiscellaneousSegment import MiscellaneousSegment
-
-class FFNInference(MiscellaneousSegment):
+class FFNInference():
 
     def write_text(self, f, key, value, t):
         if isinstance(value, str):
@@ -49,6 +48,24 @@ class FFNInference(MiscellaneousSegment):
                 self.write_text(f, key, value, t)
 
     def _Run(self, parent, params, comm_title):
+
+        ##
+        ## Remove preovious results.
+        ##
+        removal_file1 = os.path.join( params['Output Inference Folder'] ,'0','0','seg-0_0_0.npz' )
+        removal_file2 = os.path.join( params['Output Inference Folder'], '0','0','seg-0_0_0.prob')
+
+        if os.path.isfile(removal_file1) or os.path.isfile(removal_file2) :
+            Reply = QMessageBox.question(parent, 'FFN', 'seg-0_0_0 files were found at the Output Inference Folder. Remove them?',  QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            if Reply == QMessageBox.Yes:
+                with contextlib.suppress(FileNotFoundError):
+                    os.remove(removal_file1)
+                with contextlib.suppress(FileNotFoundError):
+                    os.remove(removal_file2)
+                print('seg-0_0_0 files were removed.')
+            else:
+                print('FFN inference was canceled.')
+                return
 
         ##
         ## h5 file (target image file) generation.
@@ -136,11 +153,14 @@ class FFNInference(MiscellaneousSegment):
     def __init__(self, u_info):
         ##
         datadir = u_info.data_path
+
         ffn_file_path        = os.path.join(datadir, "ffn")
+
         tensorflow_file      = os.path.join(u_info.tensorflow_model_path, "model.ckpt-2000000")
+
         self.paramfile = os.path.join(u_info.parameters_path, "FFN_Inference.pickle")
 
-        self.filter_name = 'FFN Inference'
+        self.title = 'FFN Inference'
 
         self.tips = [
                         'Input: Path to folder containing target images',
@@ -160,29 +180,4 @@ class FFNInference(MiscellaneousSegment):
                         ['FFN File Folder', 'LineEdit', ffn_file_path, 'BrowseDir']
             ]
 
-
-    def Execute(self, parent, comm_title, obj_args, args):
-        params = self.ObtainParams(obj_args, args)
-
-        removal_file1 = os.path.join( params['Output Inference Folder'] ,'0','0','seg-0_0_0.npz' )
-        removal_file2 = os.path.join( params['Output Inference Folder'], '0','0','seg-0_0_0.prob')
-
-        if os.path.isfile(removal_file1) or os.path.isfile(removal_file2) :
-            Reply = QMessageBox.question(parent, 'FFN', 'seg-0_0_0 files were found at the Output Inference Folder. Remove them?',  QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-            if Reply == QMessageBox.Yes:
-                with contextlib.suppress(FileNotFoundError):
-                    os.remove(removal_file1)
-                with contextlib.suppress(FileNotFoundError):
-                    os.remove(removal_file2)
-                print('seg-0_0_0 files were removed.')
-            else:
-                print('FFN inference was canceled.')
-                return
-
-        thread = threading.Thread(target=self._Run, args=( parent, params, comm_title ) )
-        thread.daemon = True
-        thread.start()
-        QMessageBox.about(parent, 'FFN',  comm_title + ' runs on a different process.')
-        # parent.close()
-        return
 

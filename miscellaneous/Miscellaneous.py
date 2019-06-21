@@ -31,7 +31,7 @@ sys.path.append(main_dir)
 def UnlockFolder(u_info, dir):
     tmp_open_files4lock = u_info.open_files4lock.get(dir)
     if tmp_open_files4lock is None :
-        print('UnlockFolder: folder already closed.')
+        print('UnlockFolder: folder already open.')
         return False
 
 #    print('Unlock folder: ', dir)

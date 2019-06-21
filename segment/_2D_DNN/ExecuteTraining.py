@@ -27,7 +27,7 @@ sys.path.append(os.path.join(main_dir, "filesystem"))
 ##
 ##
 
-from MiscellaneousSegment import MiscellaneousSegment
+from _2D_DNN.MiscellaneousSegment import MiscellaneousSegment
 
 class ExecuteTraining(MiscellaneousSegment):
 

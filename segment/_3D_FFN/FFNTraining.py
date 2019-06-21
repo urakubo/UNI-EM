@@ -21,23 +21,23 @@ icon_dir = path.join(main_dir, "icons")
 segmentation_dir = path.join(main_dir, "segment")
 sys.path.append(segmentation_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
-from MiscellaneousSegment import MiscellaneousSegment
 
-class FFNTraining(MiscellaneousSegment):
+
+class FFNTraining():
+    #
     def _Run(self, parent, params, comm_title):
-        ##
-        #try:
-
+    #
         with h5py.File(params['Training Image h5 File'], 'r') as f:
             image = f['raw'].value
             image_mean = np.mean(image).astype(np.int16)
             image_std  = np.std(image).astype(np.int16)
         print('Training image mean: ', image_mean)
         print('Training image std : ', image_std)
+        #
         #except:
         #    print("Error: Training Image h5 was not loaded.")
         #    return False
-        ##
+        #
         if params['Sparse Z'] != Qt.Unchecked:
             arg = ' {"depth":9,"fov_size":[33,33,17],"deltas":[8,8,4]} '
         else:
@@ -78,7 +78,7 @@ class FFNTraining(MiscellaneousSegment):
         tensorflow_file_path   = u_info.tensorflow_model_path
         self.paramfile = os.path.join( u_info.parameters_path, "FFN_Training.pickle")
 
-        self.filter_name = 'FFN Training'
+        self.title = 'FFN Training'
 
         self.tips = [
                         'Maximal Training Steps',
@@ -99,11 +99,3 @@ class FFNTraining(MiscellaneousSegment):
             ]
         ##
 
-    def Execute(self, parent, comm_title, obj_args, args):
-        params = self.ObtainParams(obj_args, args)
-        thread = threading.Thread(target=self._Run, args=( parent, params, comm_title ) )
-        thread.daemon = True
-        thread.start()
-        QMessageBox.about(parent, 'FFN',  comm_title + ' runs on a different process.')
-        # parent.close()
-        return

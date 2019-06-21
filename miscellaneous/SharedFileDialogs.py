@@ -96,6 +96,17 @@ class SharedFileDialogs():
 
     ##
     ##
+    def ObtainImageFiles(self, input_path):
+        #
+        search1 = os.path.join(input_path, '*.png')
+        search2 = os.path.join(input_path, '*.tif')
+        search3 = os.path.join(input_path, '*.tiff')
+        filestack = sorted(glob.glob(search1))
+        filestack.extend(sorted(glob.glob(search2)))
+        filestack.extend(sorted(glob.glob(search3)))
+        return filestack
+    ##
+    ##
     def ObtainParams(self, obj_args, args):
     
         args_header = [args[i][0] for i in range(len(args))]
@@ -118,10 +129,8 @@ class SharedFileDialogs():
             params[args_header[i]] = param
         print(params)
         return params
-
-
-
-
+    ##
+    ##
     def print_current_states(self, obj_args, args, args_title):
         for i, arg in enumerate(args_title):
             if args[i][1] == 'LineEdit':
@@ -139,3 +148,6 @@ class SharedFileDialogs():
             elif args[i][1] == 'SelectImageFolder':
                 param = obj_args[i].currentText()
                 print("{0:>20} : {1:s}".format(arg, param))
+
+
+

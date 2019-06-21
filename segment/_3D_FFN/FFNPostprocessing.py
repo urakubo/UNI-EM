@@ -17,14 +17,13 @@ from PyQt5.QtWidgets import QMessageBox
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
+import miscellaneous.Miscellaneous as m
 icon_dir = path.join(main_dir, "icons")
 segmentation_dir = path.join(main_dir, "segment")
 sys.path.append(segmentation_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
-import miscellaneous.Miscellaneous as m
-from MiscellaneousSegment import MiscellaneousSegment
 
-class FFNPostprocessing(MiscellaneousSegment):
+class FFNPostprocessing():
 
 
     def _Run(self, parent, params, comm_title):
@@ -85,7 +84,7 @@ class FFNPostprocessing(MiscellaneousSegment):
 
         self.paramfile = os.path.join(u_info.parameters_path, "FFN_Postprocessing.pickle")
 
-        self.filter_name = 'Postprocessing'
+        self.title = 'Postprocessing'
 
         self.tips = [
                         'Input: Path to folder containing an inference file',
@@ -101,12 +100,4 @@ class FFNPostprocessing(MiscellaneousSegment):
             ]
 
 
-    def Execute(self, parent, comm_title, obj_args, args):
-        params = self.ObtainParams(obj_args, args)
-        thread = threading.Thread(target=self._Run, args=( parent, params, comm_title ) )
-        thread.daemon = True
-        thread.start()
-        QMessageBox.about(parent, 'FFN',  comm_title + ' runs on a different process.')
-        # parent.close()
-        return
 

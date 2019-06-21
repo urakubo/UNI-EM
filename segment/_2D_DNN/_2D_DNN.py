@@ -34,7 +34,7 @@ sys.path.append(os.path.join(main_dir, "filesystem"))
 
 segment_dir = path.join(main_dir, "segment")
 sys.path.append(segment_dir)
-from segment.MiscellaneousSegment import MiscellaneousSegment
+from segment._2D_DNN.MiscellaneousSegment import MiscellaneousSegment
 from segment._2D_DNN.TrainingTab  import TrainingTab
 from segment._2D_DNN.InferenceTab  import InferenceTab
 

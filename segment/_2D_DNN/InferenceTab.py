@@ -30,7 +30,7 @@ segmentation_dir = path.join(main_dir, "segment")
 sys.path.append(segmentation_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
 
-from MiscellaneousSegment import MiscellaneousSegment
+from _2D_DNN.MiscellaneousSegment import MiscellaneousSegment
 from _2D_DNN.ExecuteInference import ExecuteInference
 from miscellaneous.SyncListQComboBoxManager import *
 
