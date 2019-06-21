@@ -16,6 +16,8 @@ from PyQt5.QtWidgets import QMessageBox
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
+import miscellaneous.Miscellaneous as m
+
 icon_dir = path.join(main_dir, "icons")
 segmentation_dir = path.join(main_dir, "segment")
 sys.path.append(segmentation_dir)
@@ -40,14 +42,14 @@ class FFNPrepTraining():
         ##
         # try:
         ##
-        training_image_files = self.ObtainImageFiles(params['Training Image Folder'])
+        training_image_files = m.ObtainImageFiles(params['Training Image Folder'])
         images = [cv2.imread(i, cv2.IMREAD_GRAYSCALE) for i in training_image_files]
         images = np.array(images)
         with h5py.File(os.path.join(params['FFN File Folder'], "grayscale_maps.h5"), 'w') as f:
             f.create_dataset('raw', data=images, compression='gzip')
         print('"grayscale_maps.h5" file (training image) was generated.')
 
-        ground_truth_files = self.ObtainImageFiles(params['Ground Truth Folder'])
+        ground_truth_files = m.ObtainImageFiles(params['Ground Truth Folder'])
         images = [cv2.imread(i, -1) for i in ground_truth_files]
         images = np.array(images).astype(np.int32)
         with h5py.File(os.path.join(params['FFN File Folder'], "groundtruth.h5"), 'w') as f:

@@ -93,7 +93,7 @@ class TabGenerator(SharedFileDialogs):
                 obj_args.append(QCheckBox(''))
                 obj_args[-1].setChecked(args[i][2])
             elif args[i][1] == 'SelectImageFolder':
-                obj_args.append(SyncListQComboBoxExcludeDjojMtifManager.get().create(filter, i))
+                obj_args.append(SyncListQComboBoxExcludeDjojMtifManager.get().create(att, i))
                 # for item in self.parent.u_info.open_files:
                 #   if self.parent.u_info.open_files_type[item] != 'Dojo':
                 #        obj_args[-1].addItem(item)

@@ -74,7 +74,7 @@ class FFNInference():
         target_image_file_h5 = os.path.join(params['FFN File Folder'], "grayscale_inf.h5")
 
         try:
-            target_image_files = self.ObtainImageFiles(params['Target Image Folder'])
+            target_image_files = m.ObtainImageFiles(params['Target Image Folder'])
             images = [cv2.imread(i, cv2.IMREAD_GRAYSCALE) for i in target_image_files]
             images = np.array(images)
             image_z    = images.shape[0]
