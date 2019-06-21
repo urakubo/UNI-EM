@@ -2,129 +2,104 @@
 ###
 ###
 import sys, os, time, errno
-
 import numpy as np
-import copy
-from distutils.dir_util import copy_tree
 from itertools import chain
-import pickle
-import threading
 import subprocess as s
-import tornado
-import tornado.websocket
-import time
+import threading
+import glob
+import cv2
 
-
-from PyQt5.QtWidgets import QMainWindow, qApp, QApplication, QWidget, QTabWidget, QSizePolicy, QInputDialog, \
-    QLineEdit, QComboBox, QDialog, QDialogButtonBox, QFormLayout, QGridLayout, QMessageBox, QSpinBox,  \
-    QGroupBox, QHBoxLayout, QLabel, QLineEdit, QMenu, QMenuBar, QPushButton, QFileDialog, QTextEdit, QVBoxLayout
-from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtCore import Qt, pyqtSlot
-
+from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtCore import Qt
 
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
+import miscellaneous.Miscellaneous as m
 icon_dir = path.join(main_dir, "icons")
 segmentation_dir = path.join(main_dir, "segment")
 sys.path.append(segmentation_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
 
-from _2D_DNN.MiscellaneousSegment import MiscellaneousSegment
-from _2D_DNN.ExecuteInference import ExecuteInference
-from miscellaneous.SyncListQComboBoxManager import *
 
-class InferenceTab(MiscellaneousSegment):
-    def __init__(self, parent):
-        self.parent = parent
-        u_info = parent.u_info
+class InferenceTab():
+
+    def _Run(self, parent, params, comm_title):
+
+        datadir = parent.u_info.data_path
+
+        input_files = glob.glob(os.path.join(params['Image Folder'], "*.jpg"))
+        input_png = glob.glob(os.path.join(params['Image Folder'], "*.png"))
+        input_tif = glob.glob(os.path.join(params['Image Folder'], "*.tif"))
+        input_files.extend(input_png)
+        input_files.extend(input_tif)
+        if len(input_files) == 0:
+            print('No images in the Image Folder.')
+            return
+
+        im = cv2.imread(input_files[0], cv2.IMREAD_UNCHANGED)
+        print('Target file to check color type : ', input_files[0])
+        print('Image dimensions                : ', im.shape)
+        print('Image filetype                  : ', im.dtype)
+        image_width  = im.shape[1]
+        image_height = im.shape[0]
+
+        if not (im.dtype == "uint8" and len(im.shape) == 3 and  input_tif == []) :
+            tmpdir = os.path.join(datadir, "tmp", "DNN_test_images")
+            if os.path.exists(tmpdir) :
+                shutil.rmtree(tmpdir)
+            os.mkdir(tmpdir)
+            for input_file in input_files:
+                im_col = cv2.imread(input_file)
+                filename = os.path.basename(input_file)
+                filename = filename.replace('.tif', '.png')
+                converted_input_file = os.path.join( tmpdir, filename )
+                cv2.imwrite(converted_input_file, im_col)
+            params['Image Folder'] = tmpdir
+            print('Filetype of images was changed to RGB 8bit, and stored in ', tmpdir)
+
+
+        comm = parent.u_info.exec_translate +' ' \
+                + ' --mode predict ' \
+                + ' --save_freq 0 ' \
+                + ' --input_dir ' + params['Image Folder'] + ' ' \
+                + ' --output_dir ' + params['Output Segmentation Folder'] + ' ' \
+                + ' --checkpoint ' + params['Model Folder'] + ' ' \
+                + ' --image_height ' + str(image_height) + ' ' \
+                + ' --image_width ' + str(image_width)
+
+        try:
+            print(comm)
+            print('Start inference.')
+            m.UnlockFolder(parent.u_info, params['Output Segmentation Folder'])  # Only for shared folder/file
+            s.Popen(comm.split())
+            m.LockFolder(parent.u_info, params['Output Segmentation Folder'])
+            return
+        except s.CalledProcessError as e:
+            print("Inference was not executed.")
+            m.LockFolder(parent.u_info, params['Output Segmentation Folder'])
+            return
+
+
+    def __init__(self, u_info):
+
+        modelpath =  u_info.tensorflow_model_path
+        self.paramfile =  os.path.join( u_info.parameters_path, "Inference_2D.pickle")
+
+        self.title = '2D Inference'
+
         self.tips = [
                         'Path to folder containing images',
                         'Path to folder for storing segmentation',
-                        'Directory with checkpoint for training data',
-                        'Save Parameters ',
-                        'Load Parameters '
+                        'Directory with checkpoint for training data'
                         ]
 
-        modelpath =  u_info.tensorflow_model_path
-        paramfile =  os.path.join( u_info.parameters_path, "Inference_2D.pickle")
+
         self.args = [
                         ['Image Folder',    'SelectImageFolder', 'OpenImageFolder'],
                         ['Output Segmentation Folder',   'SelectImageFolder', 'OpenImageFolder'],
-                        ['Model Folder',      'LineEdit', modelpath, 'BrowseDir'],
-                        ['Save Parameters', 'LineEdit',paramfile, 'BrowseFile'],
-                        ['Load Parameters', 'LineEdit',paramfile, 'BrowseFile']
+                        ['Model Folder',      'LineEdit', modelpath, 'BrowseDir']
                         ]
-        self.display_order = [0,1,2,3,4]
-        self.args_header   = [self.args[i][0] for i in range(len(self.args))]
-        self.obj_args = []
-
-    def Generate(self):
-
-        ## Labels
-        self.lbl   = []
-        require_browse_dir = []
-        require_browse_dir_img = []
-        require_browse_file = []
-        require_browse_open_img = []
-        ##
-        ##
-        args = self.args
-        for i in range(len(args)):
-        ##
-            arg = self.args[i][0]
-            if arg == 'Save Parameters':
-                self.lbl.append(QPushButton(arg))
-                self.lbl[-1].clicked.connect(self.SaveParams2D)
-            elif arg == 'Load Parameters':
-                self.lbl.append(QPushButton(arg))
-                self.lbl[-1].clicked.connect(self.LoadParams2D)
-            else :
-                self.lbl.append(QLabel(args[i][0] + ' :'))
-                self.lbl[-1].setToolTip(self.tips[i])
-
-        ##
-        for i in range(len(self.args)):
-        ##
-            if  args[i][1] == 'LineEdit':
-                self.obj_args.append( QLineEdit() )
-                self.obj_args[-1].setText( self.args[i][2] )
-                if self.args[i][3] == 'BrowseDir':
-                    require_browse_dir.append(i)
-                if self.args[i][3] == 'BrowseDirImg':
-                    require_browse_dir_img.append(i)
-                if self.args[i][3] == 'BrowseFile':
-                    require_browse_file.append(i)
-            elif args[i][1] == 'SpinBox':
-                self.obj_args.append(QSpinBox())
-                self.obj_args[-1].setMinimum( args[i][2][0] )
-                self.obj_args[-1].setMaximum( args[i][2][2] )
-                self.obj_args[-1].setValue( args[i][2][1] )
-            elif args[i][1] == 'ComboBox':
-                self.obj_args.append(QComboBox())
-                items = args[i][2]
-                for item in items:
-                    self.obj_args[-1].addItem(item)
-            elif self.args[i][1] == 'SelectImageFolder':
-                self.obj_args.append(SyncListQComboBoxExcludeDjojMtifManager.get().create(self, i))
-                #for item in self.parent.u_info.open_files:
-                #    if self.parent.u_info.open_files_type[item] != 'Dojo':
-                #        self.obj_args[-1].addItem(item)
-                if self.args[i][2] == 'OpenImageFolder':
-                    require_browse_open_img.append(i)
-            else:
-                print('Internal error. No fucntion.')
-
-        # Organize tab widget
-
-        tab = self.OrganizeTab2DNN(require_browse_dir, require_browse_dir_img, require_browse_file,
-                                   require_browse_open_img, self._ExecuteInference)
-        return tab
-
-    def _ExecuteInference(self):
-        ExecuteInference(self.obj_args, self.args, self.parent)
-        QMessageBox.about(self.parent, '2D DNN', 'Inference runs on a different process.')
-        return True
 
 
 

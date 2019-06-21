@@ -26,14 +26,14 @@ from PyQt5.QtCore import Qt, pyqtSlot
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
+from miscellaneous.TabGenerator import TabGenerator
+
 icon_dir = path.join(main_dir, "icons")
 segmentation_dir = path.join(main_dir, "segment")
 sys.path.append(segmentation_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
 
-
-segment_dir = path.join(main_dir, "segment")
-sys.path.append(segment_dir)
+sys.path.append(segmentation_dir)
 from segment._2D_DNN.MiscellaneousSegment import MiscellaneousSegment
 from segment._2D_DNN.TrainingTab  import TrainingTab
 from segment._2D_DNN.InferenceTab  import InferenceTab
@@ -64,17 +64,22 @@ class GenerateDialog(QDialog):
         tabs = QTabWidget()
         tabs.resize(300, 500)
 
+
         ##
         ## Training
         ##
         tab1  = TrainingTab(self).Generate() # Widget
         tabs.addTab(tab1, "Training")
 
+
         ##
         ## Inference
         ##
-        tab2 = InferenceTab(self).Generate() # Widget
+        tab_source = TabGenerator(self)
+        Inference  = InferenceTab(self.u_info)
+        tab2       = tab_source.GenerateTabWidget(Inference) # Widget
         tabs.addTab(tab2,"Inference")
+
 
         # Add tabs to widget
         self.layout.addWidget(tabs)

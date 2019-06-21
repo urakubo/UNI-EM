@@ -19,11 +19,12 @@ from PyQt5.QtCore import Qt
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
+import miscellaneous.Miscellaneous as m
 icon_dir = path.join(main_dir, "icons")
 segmentation_dir = path.join(main_dir, "segment")
 sys.path.append(segmentation_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
-import miscellaneous.Miscellaneous as m
+
 
 ##
 ##
