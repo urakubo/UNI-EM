@@ -68,7 +68,7 @@ class TrainingTab(MiscellaneousSegment):
                         ['Augmentation',    'ComboBox', ["fliplr, flipud, transpose", "fliplr, flipud", "fliplr", "flipud", "None"]],
                         ['Save Parameters', 'LineEdit',paramfile, 'BrowseFile'],
                         ['Load Parameters', 'LineEdit',paramfile, 'BrowseFile'],
-                        ['U depth','SpinBox',[1,8,8]],
+                        ['U depth','SpinBox',[1,8,20]],
                         ['N res blocks','SpinBox',[1,9,255]],
                         ['N highway units','SpinBox',[1,9,255]],
                         ['N dense blocks','SpinBox',[1,5,255]],

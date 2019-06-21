@@ -8,9 +8,6 @@ import png
 from itertools import product
 import glob
 
-import numpy as np
-import copy
-import pickle
 
 
 from PyQt5.QtWidgets import QMainWindow, qApp, QApplication, QWidget, QTabWidget, QSizePolicy, QInputDialog, \
@@ -34,62 +31,9 @@ from miscellaneous.SharedFileDialogs import SharedFileDialogs
 import miscellaneous.Miscellaneous as m
 
 class MiscellaneousSegment(SharedFileDialogs):
-
-    def save_params(self, obj_args, args, filter_name):
-        #
-        args_header = [args[i][0] for i in range(len(args))]
-        id = args_header.index('Save Parameters')
-        filename = obj_args[id].text()
-        params = self.ObtainParams(obj_args, args)
-
-        print('')
-        print('Save file : ', filename)
-        self.print_current_states(obj_args, args, args_header)
-        print('')
-        try:
-            with open(filename, mode='wb') as f:
-                pickle.dump(params, f)
-            print(filter_name, ': Parameter file was saved.')
-        except:
-            print(filter_name, ': Parameter file could not be saved.')
-            return False
-
-        return True
     ##
     ##
-    def load_params(self, obj_args, args, filter_name):
-        #
-        args_header = [args[i][0] for i in range(len(args))]
-        id = args_header.index('Load Parameters')
-        filename = obj_args[id].text()
-        print('')
-        print('Load file : ', filename)
-        try:
-            with open(filename, mode='rb') as f:
-                params = pickle.load(f)
-        except:  # parent of IOError, OSError *and* WindowsError where available
-            print(filter_name, ': Parameter file cannot be open.')
-            return False
-
-        for i, arg in enumerate(args_header):
-            if args[i][1] == 'LineEdit':
-                obj_args[i].setText(params[args_header[i]])
-            elif args[i][1] == 'SpinBox':
-                print(params[args_header[i]])
-                obj_args[i].setValue(int(params[args_header[i]]))
-            elif args[i][1] == 'ComboBox':
-                id = obj_args[i].findText(params[args_header[i]])
-                obj_args[i].setCurrentIndex(id)
-            elif args[i][1] == 'Tab':
-                obj_args[i].setCurrentIndex(  args[i][2].index(params[args_header[i]])  )
-            elif args[i][1] == 'CheckBox':
-                obj_args[i].setCheckState(params[args_header[i]])
-
-        self.print_current_states(obj_args, args, args_header)
-        return True
     ##
-    ##
-
     def OrganizeTab2DNN(self, require_browse_dir, require_browse_dir_img,
                         require_browse_file, require_browse_open_img, Execute):
         tab = QWidget()  # type: Any
@@ -116,8 +60,9 @@ class MiscellaneousSegment(SharedFileDialogs):
                 browse_button[-1].clicked.connect(lambda state, z=id: self.browse_OpenImageFolder(self.obj_args[z]))
                 tab.layout.addWidget(browse_button[-1], id + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
 
-
-        ## Execute & cancel buttons
+    ##
+    ## Execute & cancel buttons
+    ##
         ok_import = QPushButton("Execute")
         cl_import = QPushButton("Cancel")
         ok_import.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
@@ -132,8 +77,8 @@ class MiscellaneousSegment(SharedFileDialogs):
         return tab
     ##
     ##
-
-    def Cancel2D(self):  # wxGlade: ImportImagesSegments.<event_handler>
+    ##
+    def Cancel2D(self):
         self.parent.close()
         return False
 

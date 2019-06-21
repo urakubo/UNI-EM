@@ -2,6 +2,7 @@
 import sys, os, time
 import glob
 import numpy as np
+import pickle
 from os import path, pardir
 
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
@@ -127,7 +128,7 @@ class SharedFileDialogs():
             elif args[i][1] == 'SelectImageFolder':
                 param = obj_args[i].currentText()
             params[args_header[i]] = param
-        print(params)
+        # print(params)
         return params
     ##
     ##
@@ -149,5 +150,58 @@ class SharedFileDialogs():
                 param = obj_args[i].currentText()
                 print("{0:>20} : {1:s}".format(arg, param))
 
+
+    def save_params(self, obj_args, args, title):
+        #
+        args_header = [args[i][0] for i in range(len(args))]
+        id = args_header.index('Save Parameters')
+        filename = obj_args[id].text()
+        params = self.ObtainParams(obj_args, args)
+
+        print('')
+        print('Save file : ', filename)
+        self.print_current_states(obj_args, args, args_header)
+        print('')
+        try:
+            with open(filename, mode='wb') as f:
+                pickle.dump(params, f)
+            print(title, ': Parameter file was saved.')
+        except:
+            print(title, ': Parameter file could not be saved.')
+            return False
+
+        return True
+
+
+    def load_params(self, obj_args, args, title):
+        #
+        args_header = [args[i][0] for i in range(len(args))]
+        id = args_header.index('Load Parameters')
+        filename = obj_args[id].text()
+        print('')
+        print('Load file : ', filename)
+        try:
+            with open(filename, mode='rb') as f:
+                params = pickle.load(f)
+        except:  # parent of IOError, OSError *and* WindowsError where available
+            print(title, ': Parameter file cannot be open.')
+            return False
+
+        for i, arg in enumerate(args_header):
+            if args[i][1] == 'LineEdit':
+                obj_args[i].setText(params[args_header[i]])
+            elif args[i][1] == 'SpinBox':
+                #print(params[args_header[i]])
+                obj_args[i].setValue(int(params[args_header[i]]))
+            elif args[i][1] == 'ComboBox':
+                id = obj_args[i].findText(params[args_header[i]])
+                obj_args[i].setCurrentIndex(id)
+            elif args[i][1] == 'Tab':
+                obj_args[i].setCurrentIndex(  args[i][2].index(params[args_header[i]])  )
+            elif args[i][1] == 'CheckBox':
+                obj_args[i].setCheckState(params[args_header[i]])
+
+        self.print_current_states(obj_args, args, args_header)
+        return True
 
 
