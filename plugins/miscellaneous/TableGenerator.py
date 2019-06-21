@@ -47,12 +47,12 @@ class TableGenerator(MiscellaneousFilters):
         obj_args.append( SyncListQComboBoxExcludeDjojMtifManager.get().create(self, 2) )
 
         lbl.append(QPushButton('Save Parameters'))
-        lbl[-1].clicked.connect(lambda: self.save_params(args, obj_args))
+        lbl[-1].clicked.connect(lambda: self.SaveParamsFilter(args, obj_args))
         obj_args.append(QLineEdit())
         obj_args[-1].setText(paramfile)
 
         lbl.append(QPushButton('Load Parameters'))
-        lbl[-1].clicked.connect(lambda: self.load_params(args, obj_args))
+        lbl[-1].clicked.connect(lambda: self.LoadParamsFilter(args, obj_args))
         obj_args.append(QLineEdit())
         obj_args[-1].setText(paramfile)
 

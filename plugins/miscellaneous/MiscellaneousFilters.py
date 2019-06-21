@@ -41,7 +41,7 @@ import miscellaneous.Miscellaneous as m
 class MiscellaneousFilters(SharedFileDialogs):
     ##
     ##
-    def save_params(self, args, obj_args):
+    def SaveParamsFilter(self, args, obj_args):
         #
         id = args.index('Save Parameters')
         filename = obj_args[id].text()
@@ -69,7 +69,7 @@ class MiscellaneousFilters(SharedFileDialogs):
         return True
 
 
-    def load_params(self, args, obj_args):
+    def LoadParamsFilter(self, args, obj_args):
         #
         id = args.index('Load Parameters')
         filename = obj_args[id].text()

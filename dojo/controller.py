@@ -134,8 +134,8 @@ class Controller(object):
     output['origin'] = origin
     output['value'] = self.__new_merge_table
 
-    print('send_new_merge_table')
-    print(output)
+#    print('send_new_merge_table')
+#    print(output)
 
     self.__websocket.send(json.dumps(output))
 
