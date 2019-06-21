@@ -22,15 +22,13 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
 sys.path.append(os.path.join(main_dir, "segment"))
-sys.path.append(os.path.join(main_dir, "filesystem"))
-
+##
+##
+from miscellaneous.SharedFileDialogs import SharedFileDialogs
 ##
 ##
 
-from _2D_DNN.MiscellaneousSegment import MiscellaneousSegment
-
-class ExecuteTraining(MiscellaneousSegment):
-
+class ExecuteTraining(SharedFileDialogs):
     def __init__(self, obj_args, args, parent):  # wxGlade: ImportImagesSegments.<event_handler>
 
         ##
