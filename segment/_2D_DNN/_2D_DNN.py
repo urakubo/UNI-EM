@@ -34,7 +34,6 @@ sys.path.append(segmentation_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
 
 sys.path.append(segmentation_dir)
-from segment._2D_DNN.MiscellaneousSegment import MiscellaneousSegment
 from segment._2D_DNN.TrainingTab  import TrainingTab
 from segment._2D_DNN.InferenceTab  import InferenceTab
 
@@ -64,18 +63,17 @@ class GenerateDialog(QDialog):
         tabs = QTabWidget()
         tabs.resize(300, 500)
 
-
+        tab_source = TabGenerator(self)
         ##
         ## Training
         ##
-        tab1  = TrainingTab(self).Generate() # Widget
+        Training   = TrainingTab(self.u_info)
+        tab1       = tab_source.GenerateTabWidget(Training) # Widget
         tabs.addTab(tab1, "Training")
-
 
         ##
         ## Inference
         ##
-        tab_source = TabGenerator(self)
         Inference  = InferenceTab(self.u_info)
         tab2       = tab_source.GenerateTabWidget(Inference) # Widget
         tabs.addTab(tab2,"Inference")

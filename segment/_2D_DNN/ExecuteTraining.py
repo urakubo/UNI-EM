@@ -17,34 +17,24 @@ from PyQt5.QtWidgets import QMainWindow, qApp, QApplication, QWidget, QMessageBo
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt, pyqtSlot
 
-
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
 sys.path.append(os.path.join(main_dir, "segment"))
 ##
 ##
-from miscellaneous.SharedFileDialogs import SharedFileDialogs
 ##
 ##
 
-class ExecuteTraining(SharedFileDialogs):
-    def __init__(self, obj_args, args, parent):  # wxGlade: ImportImagesSegments.<event_handler>
+class ExecuteTraining():
+
+    def _Run(self, parent, params, comm_title):
+
+        datadir = parent.u_info.data_path
 
         ##
         ## Check bitdepth of EM images and segmentation in the target directory.
         ## Translate.py only accepts unit24 (RGB color).
-        ##
-
-        #
-        # Dialog to specify directory
-        #
-
-        params  = self.ObtainParams(obj_args, args)
-        datadir = parent.u_info.data_path
-
-        ##   
-        ## Check and change filetype of input images
         ##
         input_files = glob.glob(os.path.join(params['Image Folder'], "*.jpg"))
         input_png = glob.glob(os.path.join(params['Image Folder'], "*.png"))

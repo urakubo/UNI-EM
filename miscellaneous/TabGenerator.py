@@ -68,8 +68,27 @@ class TabGenerator(SharedFileDialogs):
         require_browse_file = []
         require_browse_open_img = []
 
+        tab_elem_count = 0
+        id_sub_tab = []
+
         for i in range(len(args)):
-            if args[i][1] == 'LineEdit':
+            if tab_elem_count > 0:
+                current_elem_id = tab_num_elem - tab_elem_count
+                tab_elem_count = tab_elem_count - 1
+                current_tab_id = tab_elem[current_elem_id]
+                obj_args.append(QSpinBox())
+                obj_args[-1].setMinimum( args[i][2][0] )
+                obj_args[-1].setMaximum( args[i][2][2] )
+                obj_args[-1].setValue( args[i][2][1] )
+                # print('tab_count      : ', tab_count)
+                # print('current_elem_id: ', current_elem_id)
+                # print('current_tab_id : ', current_tab_id)
+                # print('tab_row[current_tab_id] : ', tab_row[current_tab_id])
+                ttab[current_tab_id].layout.addWidget(lbl[i], tab_row[current_tab_id], 0, alignment=(Qt.AlignRight))
+                ttab[current_tab_id].layout.addWidget(obj_args[-1], tab_row[current_tab_id], 1, 1, 4)
+                tab_row[current_tab_id] = tab_row[current_tab_id] + 1
+                id_sub_tab.append(i)
+            elif args[i][1] == 'LineEdit':
                 obj_args.append(QLineEdit())
                 obj_args[-1].setText(args[i][2])
                 if args[i][3] == 'BrowseDir':
@@ -91,6 +110,20 @@ class TabGenerator(SharedFileDialogs):
             elif args[i][1] == 'CheckBox':
                 obj_args.append(QCheckBox(''))
                 obj_args[-1].setChecked(args[i][2])
+            elif args[i][1] == 'Tab':
+                obj_args.append(QTabWidget())
+                tab_num = len(args[i][2])
+                tab_elem = args[i][3]
+                tab_num_elem = len(args[i][3])
+                tab_elem_count = tab_num_elem
+                tab_row = [0 for i in range(tab_num)]
+                ttab = []
+                for j in range(tab_num):
+                    ttab.append(QWidget())
+                    obj_args[-1].addTab(ttab[-1], args[i][2][j])
+                    ttab[-1].layout = QGridLayout(ttab[-1])
+                    ttab[-1].setLayout(ttab[-1].layout)
+            ##
             elif args[i][1] == 'SelectImageFolder':
                 obj_args.append(SyncListQComboBoxExcludeDjojMtifManager.get().create(att, i))
                 if args[i][2] == 'OpenImageFolder':
@@ -102,7 +135,10 @@ class TabGenerator(SharedFileDialogs):
         tab.layout = QGridLayout(tab)
         ncol = 8
         browse_button = []
+        i = 0
         for id in range(len(lbl)):
+            if id in id_sub_tab :
+                continue
             tab.layout.addWidget(lbl[id], id + 1, 0, alignment=Qt.AlignRight)  # (Qt.AlignRight | Qt.AlignTop)
             tab.layout.addWidget(obj_args[id], id + 1, 1, 1, ncol - 1)
             if id in require_browse_dir:
