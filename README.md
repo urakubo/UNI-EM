@@ -57,8 +57,8 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 	- [GPU version (Ver0.82: 710 MB)](http://bit.ly/2L2FMEZ)
 
 - Release Summary:
-	- Bug removal.
-		- Fix of abnormal end after creating Dojo folder.
+	- Bug fix.
+		- Fix of abnormal termination after creating Dojo folder.
 		- File clean-up including plugins/Template.py .
 		- 2D CLAHE revival, etc.
 
