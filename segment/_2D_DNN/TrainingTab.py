@@ -3,23 +3,6 @@
 ###
 import sys, os, time, errno
 
-import numpy as np
-import copy
-from distutils.dir_util import copy_tree
-from itertools import chain
-import pickle
-import threading
-import subprocess as s
-import tornado
-import tornado.websocket
-import time
-
-
-from PyQt5.QtWidgets import QMainWindow, qApp, QApplication, QWidget, QTabWidget, QSizePolicy, QInputDialog, \
-    QLineEdit, QComboBox, QDialog, QDialogButtonBox, QFormLayout, QGridLayout, QMessageBox, QSpinBox,  \
-    QGroupBox, QHBoxLayout, QLabel, QLineEdit, QMenu, QMenuBar, QPushButton, QFileDialog, QTextEdit, QVBoxLayout
-from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtCore import Qt, pyqtSlot
 
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main

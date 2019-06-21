@@ -1,27 +1,16 @@
-###
-###
-###
+##
+##
+##
 
 import sys, os, time, errno
-
-import numpy as np
-import copy
-from itertools import chain
-import subprocess as s
-import time
-import cv2
 import glob
-import shutil
-
-from PyQt5.QtWidgets import QMainWindow, qApp, QApplication, QWidget, QMessageBox
-from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtCore import Qt, pyqtSlot
+import cv2
+import subprocess as s
 
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
 sys.path.append(os.path.join(main_dir, "segment"))
-##
 ##
 ##
 ##

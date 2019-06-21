@@ -2,15 +2,10 @@
 ###
 ###
 import sys, os, time, errno
-import numpy as np
-from itertools import chain
 import subprocess as s
-import threading
 import glob
 import cv2
 
-from PyQt5.QtWidgets import QMessageBox
-from PyQt5.QtCore import Qt
 
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
