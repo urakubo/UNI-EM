@@ -29,10 +29,10 @@ segmentation_dir = path.join(main_dir, "segment")
 sys.path.append(segmentation_dir)
 sys.path.append(os.path.join(main_dir, "filesystem"))
 
-from _2D_DNN.ExecuteTraining import ExecuteTraining
+from _2D_DNN.TrainingExe import TrainingExe
 from miscellaneous.SyncListQComboBoxManager import *
 
-class TrainingTab(ExecuteTraining):
+class TrainingTab(TrainingExe):
     def __init__(self, u_info):
 
         modelpath =  u_info.tensorflow_model_path

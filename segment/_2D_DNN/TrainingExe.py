@@ -26,7 +26,7 @@ sys.path.append(os.path.join(main_dir, "segment"))
 ##
 ##
 
-class ExecuteTraining():
+class TrainingExe():
 
     def _Run(self, parent, params, comm_title):
 
