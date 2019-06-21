@@ -31,14 +31,6 @@ class Training():
         print(comm_title, 'was finished.\n')
         return True
 
-    def Execute(self, parent, comm_title, obj_args, args):
-        params = self.ObtainParams(obj_args, args)
-        thread = threading.Thread(target=self._Run, args=( params, comm_title ) )
-        thread.daemon = True
-        thread.start()
-        QMessageBox.about(parent.parent, 'Template',  comm_title + ' runs on a different process.')
-        # parent.close()
-        return
 
     def __init__(self, u_info):
         ##
