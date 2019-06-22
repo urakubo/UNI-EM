@@ -54,7 +54,7 @@ exec_template = 'python ' + os.path.join(exec_dir, 'run_example.py')
 class Training(MiscellaneousTemplate):
     def _Run(self, params, comm_title):
         ##
-        comm_run = exec_train + ' ' \
+        comm_run = exec_template + ' ' \
                      + ' --training_image_folder '    + params['Training image folder'] + ' ' \
                      + ' --ground_truth_folder '      + params['Ground truth folder'] + ' ' \
                      + ' --tensorflow_model_folder ' + params['Tensorflow model folder']  + ' ' \
