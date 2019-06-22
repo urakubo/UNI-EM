@@ -7,7 +7,7 @@ import miscellaneous.Miscellaneous as m
 
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
-# exec_template = 'python ' + os.path.join(main_dir, 'plugins','Template', 'run_example.py')
+# exec_template = 'python ' + os.path.join(main_dir, 'plugins', 'Template', 'run_example.py')
 
 
 class Training():
