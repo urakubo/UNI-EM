@@ -38,7 +38,7 @@ class FileSystem():
         flag = self.OpenFileFolder(open_folder_name)
         if flag == False:
             return False
-        SyncListQComboBoxExcludeDjojMtifManager.get().addModel(open_folder_name)
+        SyncListQComboBoxExcludeDojoMtifManager.get().addModel(open_folder_name)
         SyncListQComboBoxOnlyDojoManager.get().addModel(open_folder_name)
 
 
@@ -54,7 +54,7 @@ class FileSystem():
         flag = self.OpenFileFolder( fileName )
         if flag == False:
             return False
-        SyncListQComboBoxExcludeDjojMtifManager.get().addModel(fileName)
+        SyncListQComboBoxExcludeDojoMtifManager.get().addModel(fileName)
         SyncListQComboBoxOnlyDojoManager.get().addModel(fileName)
 
 

@@ -121,7 +121,7 @@ class SyncListQComboBoxManager():
             self.currentIndexChanged.connect(lambda idx: manager.saveSelected(self, idx, key))
 
 
-class SyncListQComboBoxExcludeDjojMtifManager(SyncListQComboBoxManager):
+class SyncListQComboBoxExcludeDojoMtifManager(SyncListQComboBoxManager):
     
     def isExclude(self, fileName):
         if not fileName:

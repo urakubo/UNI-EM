@@ -50,7 +50,7 @@ class _GenerateContents(SharedFileDialogs):
 
     def generate(self, i):
         lbl   = QLabel(self.args[i])
-        edit  = SyncListQComboBoxExcludeDjojMtifManager.get().create(self, i)
+        edit  = SyncListQComboBoxExcludeDojoMtifManager.get().create(self, i)
         btn   = QPushButton("Open...")
         btn.clicked.connect(lambda state : self.browse_OpenImageFolder(edit) )
         return lbl, edit, btn
@@ -190,7 +190,7 @@ class DialogGenerateDojoFolder(QDialog):
         # Dropdown menu update
         self.parent.UpdateOpenFileMenu()
         # Combo box update
-        SyncListQComboBoxExcludeDjojMtifManager.get().removeModel(dir_dojo)
+        SyncListQComboBoxExcludeDojoMtifManager.get().removeModel(dir_dojo)
         SyncListQComboBoxOnlyDojoManager.get().addModel(dir_dojo)
 
 

@@ -125,7 +125,7 @@ class TabGenerator(SharedFileDialogs):
                     ttab[-1].setLayout(ttab[-1].layout)
             ##
             elif args[i][1] == 'SelectImageFolder':
-                obj_args.append(SyncListQComboBoxExcludeDjojMtifManager.get().create(att, i))
+                obj_args.append(SyncListQComboBoxExcludeDojoMtifManager.get().create(att, i))
                 if args[i][2] == 'OpenImageFolder':
                     require_browse_open_img.append(i)
             else:

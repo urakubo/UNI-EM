@@ -39,12 +39,12 @@ class TableGenerator(MiscellaneousFilters):
 
         lbl.append(QLabel('Target Folder:'))
         lbl[-1].setToolTip('Path to folder containing images')
-        self.parent.targ_image_folder_qcombo = SyncListQComboBoxExcludeDjojMtifManager.get().create(self, 1)
+        self.parent.targ_image_folder_qcombo = SyncListQComboBoxExcludeDojoMtifManager.get().create(self, 1)
         obj_args.append( self.parent.targ_image_folder_qcombo )
 
         lbl.append(QLabel('Output Folder:'))
         lbl[-1].setToolTip('Path to folder containing images')
-        obj_args.append( SyncListQComboBoxExcludeDjojMtifManager.get().create(self, 2) )
+        obj_args.append( SyncListQComboBoxExcludeDojoMtifManager.get().create(self, 2) )
 
         lbl.append(QPushButton('Save Parameters'))
         lbl[-1].clicked.connect(lambda: self.SaveParamsFilter(args, obj_args))

@@ -82,7 +82,7 @@ class MainWindow(QMainWindow, FileMenu, DojoMenu, DojoFileIO, Credit, Script):
         self.width = 1200
         self.height = 800
 
-        SyncListQComboBoxExcludeDjojMtifManager.build(self.u_info)
+        SyncListQComboBoxExcludeDojoMtifManager.build(self.u_info)
         SyncListQComboBoxOnlyDojoManager.build(self.u_info)
 
         self.initUI()
