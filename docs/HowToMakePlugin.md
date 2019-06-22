@@ -46,10 +46,7 @@ class GenerateDialog(QWidget, MiscellaneousTemplate):
 ```
 Template.py imports Training.py and Inference.py in the first two lines, and initUI assigns them to objects. One of the classes UNI_EM\ plugins\Template\Training.py can be read as follows:
 ```python
-##
-exec_dir = os.path.join(main_dir, 'plugins','Template')
-exec_template = 'python ' + os.path.join(exec_dir, 'run_example.py')
-##
+exec_template = 'python ' + os.path.join(main_dir, 'plugins','Template', 'run_example.py')
 
 class Training(MiscellaneousTemplate):
     def _Run(self, params, comm_title):
