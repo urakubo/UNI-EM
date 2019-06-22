@@ -119,11 +119,7 @@ class TrainingExe():
         print(comm)
         print('Start training.')
         try:
-
-            ##
-            ##
-            ##
-            s.Popen(comm.split())
+            s.call(comm.split())
         except s.CalledProcessError as e:
             print("Error ocurrs in Traslate.py.")
             return

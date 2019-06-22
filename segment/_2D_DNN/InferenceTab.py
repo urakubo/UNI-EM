@@ -67,7 +67,7 @@ class InferenceTab():
             print(comm)
             print('Start inference.')
             m.UnlockFolder(parent.u_info, params['Output Segmentation Folder'])  # Only for shared folder/file
-            s.Popen(comm.split())
+            s.call(comm.split())
             m.LockFolder(parent.u_info, params['Output Segmentation Folder'])
             return
         except s.CalledProcessError as e:

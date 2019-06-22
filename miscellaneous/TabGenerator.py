@@ -139,25 +139,25 @@ class TabGenerator(SharedFileDialogs):
         for id in range(len(lbl)):
             if id in id_sub_tab :
                 continue
-            tab.layout.addWidget(lbl[id], id + 1, 0, alignment=Qt.AlignRight)  # (Qt.AlignRight | Qt.AlignTop)
-            tab.layout.addWidget(obj_args[id], id + 1, 1, 1, ncol - 1)
+            tab.layout.addWidget(lbl[id], i + 1, 0, alignment=Qt.AlignRight)  # (Qt.AlignRight | Qt.AlignTop)
+            tab.layout.addWidget(obj_args[id], i + 1, 1, 1, ncol - 1)
             if id in require_browse_dir:
                 browse_button.append(QPushButton("Browse..."))
                 browse_button[-1].clicked.connect(lambda state, z=id: self.browse_dir(obj_args[z]))
-                tab.layout.addWidget(browse_button[-1], id + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
+                tab.layout.addWidget(browse_button[-1], i + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
             elif id in require_browse_dir_img:
                 browse_button.append(QPushButton("Browse..."))
                 browse_button[-1].clicked.connect(lambda state, z=id: self.browse_dir_img(obj_args[z]))
-                tab.layout.addWidget(browse_button[-1], id + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
+                tab.layout.addWidget(browse_button[-1], i + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
             elif id in require_browse_file:
                 browse_button.append(QPushButton("Browse..."))
                 browse_button[-1].clicked.connect(lambda state, z=id: self.browse_file(obj_args[z]))
-                tab.layout.addWidget(browse_button[-1], id + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
+                tab.layout.addWidget(browse_button[-1], i + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
             elif id in require_browse_open_img:
                 browse_button.append(QPushButton("Open..."))
                 browse_button[-1].clicked.connect(lambda state, z=id: self.browse_OpenImageFolder(obj_args[z]))
-                tab.layout.addWidget(browse_button[-1], id + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
-
+                tab.layout.addWidget(browse_button[-1], i + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
+            i = i + 1
                 # addWidget(*Widget, row, column, rowspan, colspan)
 
         ## Execute & cancel buttons
