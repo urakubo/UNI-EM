@@ -20,10 +20,10 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
 from miscellaneous.SyncListQComboBoxManager import *
+from miscellaneous.SharedFileDialogs import SharedFileDialogs
 
 miscellaneous_dir = path.join(main_dir, "miscellaneous")
 sys.path.append(miscellaneous_dir)
-from SharedFileDialogs import SharedFileDialogs
 
 class TabGenerator(SharedFileDialogs):
 

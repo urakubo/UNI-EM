@@ -168,7 +168,7 @@ coll += analysis(translate, pathex, [], hiddenimports, 'translate')
 pathex=[path.join(main_dir, "plugins","Template")]
 Template=[path.join(main_dir, "plugins","Template","run_example.py")]
 
-hiddenimports=['pywt._extensions._cwt']
+hiddenimports=[]
 
 coll += analysis(Template, pathex, [], hiddenimports, 'run_example')
 
