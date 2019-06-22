@@ -1,7 +1,7 @@
 [Japanese version here](README.ja.md)
 
-![System requirements](https://img.shields.io/badge/Platform-Win%2064,%20Linux%2064-green.svg)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+![System requirements](https://img.shields.io/badge/platform-win%2064,%20linux%2064-green.svg)
+[![License: GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 # A unified environment for DNN-based automated segmentation of neuronal EM images
 
