@@ -56,12 +56,6 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 - Version 0.82:
 	- [CPU version (Ver0.82; 286 MB)](http://bit.ly/2Iveohj)
 	- [GPU version (Ver0.82: 710 MB)](http://bit.ly/2L2FMEZ)
-
-- Release Summary:
-	- Bug removals.
-		- Fix of abnormal end after creating Dojo folder.
-		- File clean-up including plugins/Template.py .
-		- CLAHE filter revival, etc.
 	
 2. 公開サンプルデータkasthuri15をダウンロードして適当なフォルダに展開してください。
 	- https://www.dropbox.com/s/pxds28wdckmnpe8/ac3x75.zip?dl=0
