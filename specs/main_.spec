@@ -176,3 +176,4 @@ coll += analysis(Template, pathex, [], hiddenimports, 'run_example')
 ######### All Collect #########
 print('### Collect All resources ###')
 coll_all = COLLECT(*coll, strip=False, upx=True, name='main')
+
