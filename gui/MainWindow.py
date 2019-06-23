@@ -272,7 +272,7 @@ class PersephonepTableWidget(QWidget):
                 return
         ###
         self.tab.pop(index)
-        # appl = self.appl.pop(index)
+        appl = self.appl.pop(index)
         self.tabs.removeTab(index)
 
     def updateTabName(self):

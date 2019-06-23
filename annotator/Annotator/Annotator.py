@@ -37,7 +37,7 @@ class GenerateDialog(QWidget):
             return
 
         ## Dialog: Is the 3D Viewer already launched?
-        print( self.parent.table_widget.appl )
+        #print( self.parent.table_widget.appl )
         if 'annotator' in self.parent.table_widget.appl:
             QMessageBox.information(self, "3D Annotator", "3D Annotator has already been launched!")
             return

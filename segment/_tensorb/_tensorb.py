@@ -24,7 +24,8 @@ class GenerateDialog(QWidget):
     def initUI(self):
 
         ## Dialog: Is Tensorboard already launched?
-        if 1 in self.parent.table_widget.appl:
+        #print(self.parent.table_widget.appl)
+        if 'tensorboard' in self.parent.table_widget.appl:
             QMessageBox.information(self, "Tensorboard", "Tensorboard has already been launched!")
             return
 
