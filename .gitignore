@@ -54,3 +54,10 @@ docs/_build/
 
 # PyBuilder
 target/
+
+
+# 3D annotator
+*.stl
+Boundingbox.json
+segmentInfo.json
+
