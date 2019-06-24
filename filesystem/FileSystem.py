@@ -134,7 +134,7 @@ class FileSystem():
         self.u_info.open_files.remove(activeAction.data())
         self.UpdateOpenFileMenu()
 
-        SyncListQComboBoxExcludeDjojMtifManager.get().removeModel(fileName)
+        SyncListQComboBoxExcludeDojoMtifManager.get().removeModel(fileName)
         SyncListQComboBoxOnlyDojoManager.get().removeModel(fileName)
 
 
