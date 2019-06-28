@@ -62,6 +62,10 @@ class SharedFileDialogs():
         open_folder_name = open_folder_name.replace('/', os.sep)
         check_sucess = self.parent.parent.OpenImageFolder(open_folder_name)
         if check_sucess == False:
+            id = lineedit_obj.findText(open_folder_name)
+            if id >= 0:
+            	lineedit_obj.setCurrentIndex(id)
+            	return True
             return False
 
         lineedit_obj.addItem(open_folder_name)
@@ -86,6 +90,10 @@ class SharedFileDialogs():
         open_folder_name = open_folder_name.replace('/', os.sep)
         check_sucess = self.parent.parent.OpenDojoFolder(open_folder_name)
         if check_sucess == False:
+            id = lineedit_obj.findText(open_folder_name)
+            if id >= 0:
+            	lineedit_obj.setCurrentIndex(id)
+            	return True
             return False
 
         lineedit_obj.addItem(open_folder_name)
