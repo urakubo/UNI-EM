@@ -42,6 +42,13 @@ class GenerateDialog(QWidget):
             QMessageBox.information(self, "3D Annotator", "3D Annotator has already been launched!")
             return
 
+        ## New port
+        self.u_info.port_stl = self.u_info.port_stl + 1
+        ##
+        ## ? Params.SetUserInfo(self, user_path) ? 
+        ##
+        self.u_info.url_stl  = 'http://' + self.u_info.ip + ':' + str(self.u_info.port_stl) + '/'
+
         ## Initialize
         self.parent.annotator = ControlAnnotatorServer(self.u_info)
 

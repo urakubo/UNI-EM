@@ -123,7 +123,7 @@ class AnnotatorServerLogic:
 
 
   def run( self ):
-
+    ####
     path_main = os.path.join(main_dir_, "_web_stl")
     path_css = os.path.join(main_dir_, "_web_stl", "css") # (main_dir, "static", "css")
     path_js = os.path.join(main_dir_, "_web_stl", "js")
