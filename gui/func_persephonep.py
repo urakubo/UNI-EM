@@ -41,6 +41,7 @@ class PersephonepWindow(QWidget):
     
     def __init__(self, url):
         super(PersephonepWindow, self).__init__()
+        self.setAttribute(Qt.WA_DeleteOnClose, True)
 
 #    def Generate(self, url):
 
