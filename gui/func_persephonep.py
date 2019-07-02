@@ -31,6 +31,10 @@ QProgressBar::chunk {
 }
 """
 
+class WebPageWithJSConsole(QWebEnginePage):
+    def javaScriptConsoleMessage(self, page, msg, line, source):
+        print('%s line %d: %s' % (source, line, msg))
+
 ''' This is a single page of the browser.
     This class equals a tab of PersephonepTableWidget.
     This class can run only this python script, however,
@@ -49,9 +53,12 @@ class PersephonepWindow(QWidget):
 
         # config
         # initurl = 'https://www.google.co.jp'
-        
+
         # setting window
         self.window = QWebEngineView()
+
+        # Set WebPage with output javascript console.
+        self.window.setPage(WebPageWithJSConsole(self.window))
 
         proxy = QNetworkProxy()
         proxy.setType(QNetworkProxy.NoProxy)
