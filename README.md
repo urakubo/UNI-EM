@@ -53,8 +53,8 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 1.	Download one of the following two versions, and unzip it:
 
 - Version 0.84:
-	- [CPU version (Ver0.82; 293 MB)](http://bit.ly/2ZX2jHz)
-	- [GPU version (Ver0.82: 726 MB)](http://bit.ly/2RP8k6l)
+	- [CPU version (Ver0.84; 293 MB)](http://bit.ly/2ZX2jHz)
+	- [GPU version (Ver0.84: 726 MB)](http://bit.ly/2RP8k6l)
 
 - Release Summary:
 	- Bug fix.
