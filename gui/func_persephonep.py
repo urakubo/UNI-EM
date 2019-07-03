@@ -57,8 +57,9 @@ class PersephonepWindow(QWidget):
         # setting window
         self.window = QWebEngineView()
 
-        # Set WebPage with output javascript console.
-        self.window.setPage(WebPageWithJSConsole(self.window))
+#        # Set WebPage with javascript console output.
+#        self.window.setPage(WebPageWithJSConsole(self.window))
+#
 
         proxy = QNetworkProxy()
         proxy.setType(QNetworkProxy.NoProxy)

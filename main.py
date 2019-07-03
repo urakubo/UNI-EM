@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     # For QtWebEngine gpu problems and enable QtWebEngine debug mode.
 #    os.environ['QTWEBENGINE_CHROMIUM_FLAGS'] = '--disable-gpu'
-    os.environ['QTWEBENGINE_REMOTE_DEBUGGING'] = '9999'
+#    os.environ['QTWEBENGINE_REMOTE_DEBUGGING'] = '9999'
 
     app = QApplication(sys.argv)
     ex = MainWindow()
