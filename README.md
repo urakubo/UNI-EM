@@ -56,7 +56,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 	- [CPU version (Ver0.84; 293 MB)](http://bit.ly/2ZX2jHz)
 	- [GPU version (Ver0.84: 726 MB)](http://bit.ly/2RP8k6l)
 
-- Release Summary:
+- Release summary:
 	- Bug fix.
 		- Safe termination and re-launch of web applications.
 		- Correct folder selection from the "open" dialog.
