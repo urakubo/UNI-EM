@@ -271,7 +271,8 @@ class PersephonepTableWidget(QWidget):
                 print('Error ocurred in closing tensorboard.')
                 return
         ###
-        self.tab.pop(index).close()
+        # self.tab.pop(index).close() Error ocurrs when a tab is re-launched.
+        self.tab.pop(index)
         appl = self.appl.pop(index)
         self.tabs.removeTab(index)
 
