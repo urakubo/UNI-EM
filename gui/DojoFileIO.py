@@ -64,15 +64,15 @@ class DojoFileIO():
     def RestartDojo(self):
 
         print("Asked tornado to exit\n")
-        self.u_info.worker_loop.stop()
+        #self.u_info.worker_loop.stop()
         time.sleep(1)
-        self.u_info.worker_loop.close()
+        #self.u_info.worker_loop.close()
 
         time.sleep(1)
         print('Restart dojo server.')
         self.u_info.port = self.u_info.port + 1
         print('Port Num: ', self.u_info.port)
-        self.u_info.worker_loop = asyncio.new_event_loop()
+        #self.u_info.worker_loop = asyncio.new_event_loop()
         self.u_info.dojo_thread = threading.Thread(target=self.StartThreadDojo)
         self.u_info.dojo_thread.setDaemon(True) # Stops if control-C
         self.u_info.dojo_thread.start()
@@ -85,9 +85,9 @@ class DojoFileIO():
     def TerminateDojo(self):
         print("Asked tornado to exit\n")
         # Python3
-        self.u_info.worker_loop.stop()
-        time.sleep(1)
-        self.u_info.worker_loop.close()
+        #self.u_info.worker_loop.stop()
+        #time.sleep(1)
+        #self.u_info.worker_loop.close()
         #self.u_info.worker_loop.stop()
         #self.u_info.worker_loop.call_soon_threadsafe(self.u_info.worker_loop.close)
         #self.u_info.dojo_thread.join()
@@ -108,7 +108,7 @@ class DojoFileIO():
         # Python3
         self.u_info.port = self.u_info.port + 1
         print('Port Num: ', self.u_info.port)
-        self.u_info.worker_loop = asyncio.new_event_loop()
+        #self.u_info.worker_loop = asyncio.new_event_loop()
         self.u_info.dojo_thread = threading.Thread(target=self.StartThreadDojo)
         self.u_info.dojo_thread.setDaemon(True) # Stops if control-C
         self.u_info.dojo_thread.start()
