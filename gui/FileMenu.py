@@ -29,10 +29,10 @@ class FileMenu(FileSystem):
                           'Search_16.png',
                           'Power_Off_16.png']
         self.file_action = [self.OpenFolder,
-                            self.OpenMultiTiffFile,
-        					self.GenerateDojoFolder,
-                            self.Dummy,
-                            self.ExitUniEm]
+                          self.OpenMultiTiffFile,
+                          self.GenerateDojoFolder,
+                          self.Dummy,
+                          self.ExitUniEm]
 
         self.menu_open_files   = []
         self.menu_recent_files = []
