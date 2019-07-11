@@ -82,7 +82,10 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 
 	- git clone https://github.com/urakubo/UNI-EM.git
 
-4. Install the following modules of Python: Tensorflow-gpu, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl. Check also "requirements-[os]-[cpu or gpu].txt". 
+4. Install the following modules of Python: Tensorflow-gpu, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl. Check "requirements-[os]-[cpu or gpu].txt". Users can install those module using the following command.
+
+	- pip install -r requirements-[os]-[cpu or gpu].txt
+
 5. **Copy [UNI-EM]\marching_cubes\marching_cubes`*` and paste it to {$INSTALL_PYTHON}\Lib\site-packages.**
 
 	- **Execute the Python command "import site; site.getsitepackages()" to find {$INSTALL_PYTHON}.**
