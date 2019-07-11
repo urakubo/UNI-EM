@@ -20,14 +20,14 @@ class FileMenu(FileSystem):
         # File menu
         self.file_menu = ['Open Image/Dojo Folder',
                           'Open Multipage Tiff File',
-       	 				'Create Dojo Folder',
-                   'Open Recent File/Folder',
-                    'Exit from UNI-EM']
+                          'Create Dojo Folder',
+                          'Open Recent File/Folder',
+                          'Exit from UNI-EM']
         self.file_icon = ['Folder_Open_16.png',
                           'Photo_Open_16.png',
-        				'Photo_Import_16.png',
-                  'Search_16.png',
-                  'Power_Off_16.png']
+                          'Photo_Import_16.png',
+                          'Search_16.png',
+                          'Power_Off_16.png']
         self.file_action = [self.OpenFolder,
                             self.OpenMultiTiffFile,
         					self.GenerateDojoFolder,
