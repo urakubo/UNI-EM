@@ -128,7 +128,10 @@ class AnnotatorServerLogic:
     path_css = os.path.join(main_dir_, "_web_stl", "css") # (main_dir, "static", "css")
     path_js = os.path.join(main_dir_, "_web_stl", "js")
     ####
-    asyncio.set_event_loop(self.u_info.worker_loop_stl)
+    # asyncio.set_event_loop(self.u_info.worker_loop_stl)
+    ev_loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(ev_loop)
+
 
     annotator = tornado.web.Application([
       (r'/css/(.*)', tornado.web.StaticFileHandler, {'path': path_css}),
@@ -148,6 +151,8 @@ class AnnotatorServerLogic:
     print('*'*80)
 
     tornado.ioloop.IOLoop.instance().start()
+    ev_loop.stop()
+    ev_loop.close()
     server.stop()
     print("Tornado web server stops.")
     return
