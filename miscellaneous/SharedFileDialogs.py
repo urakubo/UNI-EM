@@ -9,7 +9,7 @@ main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
 sys.path.append(os.path.join(main_dir, "segment"))
 sys.path.append(os.path.join(main_dir, "filesystem"))
-import miscellaneous.Miscellaneous as m
+import miscellaneous.DialogImageFolder as d
 from PyQt5.QtWidgets import QFileDialog
 
 
@@ -18,7 +18,7 @@ class SharedFileDialogs():
 
     def browse_dir_img(self, lineedit_obj):
         currentdir = lineedit_obj.text()
-        Dialog = m.Dialog_ImageFolder(self.parent, "Select Image Folder", currentdir)
+        Dialog = d.DialogImageFolder(self.parent, "Select Image Folder", currentdir)
         return_flag = Dialog.w.exec_()
         if return_flag == 1:
             newdir = Dialog.GetValue()
@@ -50,7 +50,7 @@ class SharedFileDialogs():
         if len(currentdir) == 0:
             currentdir = os.path.normpath(main_dir)
         ## Custum image folder
-        Dialog = m.Dialog_ImageFolder(self.parent, "Select Image Folder", currentdir)
+        Dialog = d.DialogImageFolder(self.parent, "Select Image Folder", currentdir)
         return_flag = Dialog.w.exec_()
         if return_flag != 1:
             return False
