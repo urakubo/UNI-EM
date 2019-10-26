@@ -3,18 +3,11 @@
 ##
 
 import os, sys
-import numpy as np
-import h5py
-import PIL
-import PIL.Image
-import cv2
-import png
-from itertools import product
 import glob
 
-from PyQt5.QtWidgets import QDialog, QDialogButtonBox,\
-    QHBoxLayout, QLabel, QLineEdit, QMenu, QMenuBar, QPushButton, QVBoxLayout, \
-    QTreeView, QFileSystemModel, QListView, QTableView, QAbstractItemView
+from PyQt5.QtWidgets import QWidget, QApplication, QDialog, QDialogButtonBox, QGridLayout, \
+    QHBoxLayout, QVBoxLayout, QPushButton, \
+    QTreeView, QFileSystemModel, QListView, QAbstractItemView
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt, pyqtSlot,  QAbstractListModel, QModelIndex, QVariant, QDir, QSize
 
@@ -37,8 +30,10 @@ class _MyListModel(QAbstractListModel):
     def data(self, index, role):
         if index.isValid() and role == Qt.DecorationRole:
             return QIcon(QPixmap(self.listdata[index.row()]))
-        if index.isValid() and role == Qt.DisplayRole:
+        elif index.isValid() and role == Qt.DisplayRole:
             return QVariant(os.path.splitext(os.path.split(self.listdata[index.row()])[-1])[0])
+        elif role == Qt.SizeHintRole:
+            return QSize(300, 250)
         else:
             return QVariant()
 
