@@ -27,9 +27,9 @@ from typing import Any
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 icon_dir = path.join(main_dir, "icons")
-filesystem_dir = path.join(main_dir, "system")
+system_dir = path.join(main_dir, "system")
 sys.path.append(main_dir)
-sys.path.append(filesystem_dir)
+sys.path.append(system_dir)
 
 
 from FileManager import FileManager
