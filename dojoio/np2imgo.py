@@ -1,13 +1,7 @@
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import os
 import math
 import cv2
-import PIL
-import PIL.Image
 import lxml
 import lxml.etree
 import numpy as np

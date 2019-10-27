@@ -6,7 +6,7 @@ import sys
 import os
 from os import path
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
-sys.path.append(os.path.join(main_dir, "gui"))
+sys.path.append(os.path.join(main_dir, "system"))
 
 ##
 ## Call UNI-EM main window.

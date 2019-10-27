@@ -1,15 +1,10 @@
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import importlib.util
 from importlib import machinery
 import sys
 import os
 from os import path, pardir
-from PyQt5.QtWidgets import QApplication, QWidget, QSizePolicy, QInputDialog, QLineEdit, QComboBox, QDialog, QDialogButtonBox, QFormLayout, QGridLayout, \
-    QGroupBox, QHBoxLayout, QLabel, QLineEdit, QMenu, QMenuBar, QPushButton, QFileDialog, QTextEdit, QVBoxLayout
+from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon, QPixmap
 
@@ -18,8 +13,8 @@ icon_dir          = path.join(main_dir, "icons")
 icon_disabled_dir = path.join(icon_dir, "Disabled")
 plugins_dir = path.join(main_dir, "plugins")
 sys.path.append(plugins_dir)
-sys.path.append(os.path.join(main_dir, "filesystem"))
-sys.path.append(os.path.join(main_dir, "gui"))
+sys.path.append(os.path.join(main_dir, "system"))
+sys.path.append(os.path.join(main_dir, "dojoio"))
 import importlib.util
 
 

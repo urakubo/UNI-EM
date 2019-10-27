@@ -31,7 +31,7 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 icon_dir = path.join(main_dir, "icons")
 
-sys.path.append(os.path.join(main_dir, "filesystem"))
+sys.path.append(os.path.join(main_dir, "system"))
 from Params import Params
 # import SaveChanges
 

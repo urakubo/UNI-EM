@@ -9,8 +9,8 @@ from os import path, pardir
 import glob
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
-sys.path.append(os.path.join(main_dir, "filesystem"))
-sys.path.append(os.path.join(main_dir, "gui"))
+sys.path.append(os.path.join(main_dir, "system"))
+sys.path.append(os.path.join(main_dir, "dojoio"))
 
 from DialogGenerateDojoFolder import DialogGenerateDojoFolder
 
@@ -23,7 +23,7 @@ from Params import Params
 from miscellaneous.SyncListQComboBoxManager import *
 import miscellaneous.Miscellaneous as m
 
-class FileSystem():
+class FileManager():
 
     def GenerateDojoFolder(self):
         tmp = DialogGenerateDojoFolder(self, self.u_info)

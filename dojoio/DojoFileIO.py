@@ -3,23 +3,17 @@
 ###
 import sys, os, time, errno
 
-
-import numpy as np
-import copy
-#import shutil
 from distutils.dir_util import copy_tree
-from itertools import chain
-import pickle
 import threading
 import subprocess as s
-import tornado
-import tornado.websocket
 import time
 
+#import copy
+#import shutil
+#import tornado
+#import tornado.websocket
 
-from PyQt5.QtWidgets import QMainWindow, qApp, QApplication, QWidget, QSizePolicy, QInputDialog, \
-    QLineEdit, QComboBox, QDialog, QDialogButtonBox, QFormLayout, QGridLayout, QMessageBox, \
-    QGroupBox, QHBoxLayout, QLabel, QLineEdit, QMenu, QMenuBar, QPushButton, QFileDialog, QTextEdit, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QMessageBox, QFileDialog
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt, pyqtSlot
 
@@ -28,11 +22,9 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
 sys.path.append(path.join(main_dir, "dojo"))
-#sys.path.append(path.join(main_dir, "plugins"))
-#sys.path.append(path.join(main_dir, "segment"))
-sys.path.append(os.path.join(main_dir, "filesystem"))
-sys.path.append(os.path.join(main_dir, "gui"))
-#plugins_dir = path.join(main_dir, "plugins")
+sys.path.append(os.path.join(main_dir, "system"))
+sys.path.append(os.path.join(main_dir, "dojoio"))
+
 
 from Params  import Params
 #from Credit  import Credit
