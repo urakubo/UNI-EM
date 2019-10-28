@@ -8,7 +8,7 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
 sys.path.append(os.path.join(main_dir, "segment"))
-sys.path.append(os.path.join(main_dir, "filesystem"))
+sys.path.append(os.path.join(main_dir, "system"))
 import miscellaneous.DialogImageFolder as d
 from PyQt5.QtWidgets import QFileDialog
 

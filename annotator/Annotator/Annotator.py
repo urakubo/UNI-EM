@@ -10,9 +10,7 @@ import os
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 icon_dir = path.join(main_dir, "icons")
-
-annotator_dir = path.join(main_dir, "annotator")
-sys.path.append(annotator_dir)
+sys.path.append(path.join(main_dir, "annotator"))
 from annotator.Annotator.AnnotatorServer import AnnotatorServerLogic
 from annotator.Annotator.ControlAnnotatorServer import ControlAnnotatorServer
 

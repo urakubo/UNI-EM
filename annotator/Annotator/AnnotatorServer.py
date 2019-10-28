@@ -23,14 +23,14 @@ from stl import mesh
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
+sys.path.append(path.join(main_dir, "system"))
+sys.path.append(path.join(main_dir, "plugins"))
 
-sys.path.append(os.path.join(main_dir, "filesystem"))
 from Params import Params
 from DB import DB
 import miscellaneous.Miscellaneous as m
 
-plugins_dir = path.join(main_dir, "plugins")
-sys.path.append(plugins_dir)
+
 
 
 if getattr(sys, 'frozen', False):
