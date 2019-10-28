@@ -1,6 +1,6 @@
 [Japanese version here](Workflow1.ja.md)
 
-- [How to use: Folder management system](HowToUse.md#Folder-management-system)
+- [How to use: Folder manager](HowToUse.md#Folder-manager)
 - [How to use: Dojo proofreader](HowToUse.md#Dojo-proofreader)
 - [How to use: 3D annotator](HowToUse.md#3D-annotator)
 - [How to use: 2D CNN](HowToUse.md#2D-CNN)
