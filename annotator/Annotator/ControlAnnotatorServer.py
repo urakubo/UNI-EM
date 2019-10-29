@@ -32,8 +32,8 @@ main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 plugins_dir = path.join(main_dir, "annotator")
 sys.path.append(plugins_dir)
 from Annotator.AnnotatorServer import AnnotatorServerLogic
-sys.path.append(os.path.join(main_dir, "filesystem"))
-sys.path.append(os.path.join(main_dir, "gui"))
+sys.path.append(os.path.join(main_dir, "system"))
+sys.path.append(os.path.join(main_dir, "dojoio"))
 
 from marching_cubes import march
 from stl import mesh
