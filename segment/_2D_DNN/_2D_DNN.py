@@ -4,18 +4,15 @@
 import sys, os, time, errno
 from PyQt5.QtWidgets import QWidget, QTabWidget, QVBoxLayout, QDialog
 from PyQt5.QtGui import QIcon
-
 from os import path, pardir
+
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
-sys.path.append(main_dir)
-from miscellaneous.TabGenerator import TabGenerator
-
 icon_dir = path.join(main_dir, "icons")
-segmentation_dir = path.join(main_dir, "segment")
-sys.path.append(segmentation_dir)
-sys.path.append(os.path.join(main_dir, "filesystem"))
+sys.path.append(main_dir)
+sys.path.append(path.join(main_dir, "segment"))
+sys.path.append(path.join(main_dir, "filesystem"))
 
-sys.path.append(segmentation_dir)
+from miscellaneous.TabGenerator import TabGenerator
 from segment._2D_DNN.TrainingTab  import TrainingTab
 from segment._2D_DNN.InferenceTab  import InferenceTab
 
@@ -30,7 +27,7 @@ class GenerateDialog(QDialog):
         self.comboText = None
         self.u_info = parent.u_info
         self.parent = parent
-        self.title  = "2D DNN"
+        self.title  = "2D CNN"
         self.initUI()
 
 

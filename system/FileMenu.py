@@ -10,12 +10,12 @@ from PyQt5.QtCore import Qt, QPoint
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 icon_dir          = path.join(main_dir, "icons")
 icon_disabled_dir = path.join(icon_dir, "Disabled")
-sys.path.append(os.path.join(main_dir, "filesystem"))
-sys.path.append(os.path.join(main_dir, "gui"))
+sys.path.append(os.path.join(main_dir, "system"))
+sys.path.append(os.path.join(main_dir, "dojoio"))
 
-from FileSystem  import FileSystem
+from FileManager  import FileManager
 
-class FileMenu(FileSystem):
+class FileMenu(FileManager):
     def __init__(self):
         # File menu
         self.file_menu = ['Open Image/Dojo Folder',

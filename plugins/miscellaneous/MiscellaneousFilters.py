@@ -27,14 +27,12 @@ from typing import Any
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 icon_dir = path.join(main_dir, "icons")
-#segmentation_dir = path.join(main_dir, "segment")
-filesystem_dir = path.join(main_dir, "filesystem")
+system_dir = path.join(main_dir, "system")
 sys.path.append(main_dir)
-#sys.path.append(segmentation_dir)
-sys.path.append(filesystem_dir)
-#sys.path.append(gui_dir)
+sys.path.append(system_dir)
 
-from FileSystem import FileSystem
+
+from FileManager import FileManager
 from miscellaneous.SharedFileDialogs import SharedFileDialogs
 import miscellaneous.Miscellaneous as m
 

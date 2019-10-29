@@ -1,46 +1,29 @@
 ###
 ###
 ###
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import sys, os, time, errno
-
-
 import numpy as np
-import copy
-#import shutil
-from distutils.dir_util import copy_tree
-from itertools import chain
-import pickle
-import threading
 import subprocess as s
-import tornado
-import tornado.websocket
 import time
 
-
-from os import path, pardir
-from PyQt5.QtWidgets import QMainWindow, qApp, QApplication, QWidget, QSizePolicy, QInputDialog, \
-    QLineEdit, QComboBox, QDialog, QDialogButtonBox, QFormLayout, QGridLayout, QMessageBox, QSpinBox, \
-    QGroupBox, QHBoxLayout, QLabel, QLineEdit, QMenu, QMenuBar, QPushButton, QFileDialog, QTextEdit, QVBoxLayout
+from PyQt5.QtWidgets import QWidget, QSizePolicy, \
+    QLineEdit, QComboBox, QGridLayout, QSpinBox,  \
+    QLabel, QPushButton, QFileDialog
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt, pyqtSlot
-
 
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
-icon_dir          = path.join(main_dir, "icons")
+icon_dir    = path.join(main_dir, "icons")
 plugins_dir = path.join(main_dir, "plugins")
 sys.path.append(plugins_dir)
-sys.path.append(os.path.join(main_dir, "filesystem"))
-sys.path.append(os.path.join(main_dir, "gui"))
+sys.path.append(os.path.join(main_dir, "system"))
+sys.path.append(os.path.join(main_dir, "dojoio"))
 from ExportImgSeg import ExportImgSeg
+from SaveChanges import SaveChanges
 
-
-class ExportImageDialog(QWidget):
+class ExportIdDialog(QWidget):
     def __init__(self, u_info, parent):
         super().__init__()
 
@@ -55,16 +38,18 @@ class ExportImageDialog(QWidget):
         self.u_info = u_info
         self.parent = parent
 
-        self.flag   = 'images'
-        self.title  = "Export Images"
-        self.choice = ["PNG, 16bit, Grayscale", "PNG, 8bit, Grayscale",
-                  "TIFF, 16bit, Grayscale", "TIFF, 8bit, Grayscale",
-                  "Multi-TIFF, 16bit, Grayscale", "Multi-TIFF, 8bit, Grayscale",
-                  "NUMPY, 32bit, uint (npy)", "NUMPY, 32bit, uint (npz), 'stack'", "HDF, 64bit, int, 'stack'"]
-        self.table = ["PNG16G", "PNG8G",
-                      "TIF16G", "TIF8G",
-                      "MTIF16G", "MTIF8G",
-                      "NUMPY32", "NUMPY32C", "HDF64"]
+        self.flag   = 'ids'
+        self.title  = "Export Ids"
+        self.choice = ["PNG, 16bit, Grayscale", "PNG, 8bit, Grayscale", "PNG, 8bit, Color",
+                  "TIFF, 16bit, Grayscale", "TIFF, 8bit, Grayscale", "TIFF, 8bit, Color",
+                  "Multi-TIFF, 16bit, Grayscale", "Multi-TIFF, 8bit, Grayscale", "Multi-TIFF, 8bit, Color",
+                  "NUMPY, 32bit, uint (npy)", "NUMPY, 32bit, uint (npz), 'stack'",
+                  "HDF, 64bit, int, 'stack'"]
+        self.table = ["PNG16G", "PNG8G", "PNG8C",
+                      "TIF16G", "TIF8G", "TIF8C",
+                      "MTIF16G", "MTIF8G", "MTIF8C",
+                      "NUMPY32", "NUMPY32C",
+                      "HDF64"]
         self.initUI()
 
     def initUI(self):
@@ -138,9 +123,7 @@ class ExportImageDialog(QWidget):
         #
         #
 
-
         ftype_id = self.choice.index(self.comboText)
-
 
         ftype     = self.table[ftype_id]
         fname     = self.edit2_fname.text()
@@ -153,6 +136,11 @@ class ExportImageDialog(QWidget):
         print('Filetype:   ', ftype )
         print('Init ID:    ', startid )
         print('Num Digits: ', numdigit )
+
+        # Save changes
+        self.SaveC = SaveChanges()
+        self.SaveC.run(self.u_info)
+        #
 
         exports = ExportImgSeg()
         exports.run(self.u_info, dir, fname, ftype, startid, numdigit, self.flag)
