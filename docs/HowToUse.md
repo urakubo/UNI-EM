@@ -61,7 +61,7 @@ Click the "Save image" button at the right side. A screenshot of the scene will 
 <BR>
 
 ### 2D CNN
-We implemented 2D CNN (Resnet/U-net/Highwaynet/Densenet)-based segmentation programs.
+We implemented 2D CNN (Resnet/U-net/Highwaynet/Densenet)-based segmentation programs. All the CNNs accept single-channel (gray-scale) or three-channel (RGB) images.
 
 	- https://github.com/tbullmann/imagetranslation-tensorflow
 
