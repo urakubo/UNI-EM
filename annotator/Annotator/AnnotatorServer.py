@@ -24,6 +24,7 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
 sys.path.append(path.join(main_dir, "system"))
+sys.path.append(path.join(main_dir, "dojoio"))
 sys.path.append(path.join(main_dir, "plugins"))
 
 from Params import Params
