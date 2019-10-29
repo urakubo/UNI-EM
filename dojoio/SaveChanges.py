@@ -15,9 +15,9 @@ from DB import DB
 from Params import Params
 import miscellaneous.Miscellaneous as m
 
-import tornado.websocket
-import tornado.httpserver
-import threading
+# import tornado.websocket
+# import tornado.httpserver
+# import threading
 
 from os import path, pardir
 current_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of script
