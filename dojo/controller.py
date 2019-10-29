@@ -24,7 +24,7 @@ import sys
 from os import path, pardir
 
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
-sys.path.append(path.join(main_dir, "filesystem"))
+sys.path.append(path.join(main_dir, "system"))
 from DB import DB
 from Params import Params
 from SaveChanges import SaveChanges
