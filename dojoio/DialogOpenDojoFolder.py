@@ -19,7 +19,7 @@ from PyQt5.QtCore import Qt
 main_dir    = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 icon_dir    = path.join(main_dir, "icons")
 sys.path.append(main_dir)
-sys.path.append(os.path.join(main_dir, "filesystem"))
+sys.path.append(os.path.join(main_dir, "system"))
 
 
 from Params import Params
