@@ -1,14 +1,10 @@
 ###
 ###
 ###
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
 
 import sys, os, time, errno
 import threading
 import asyncio
-import time
 
 import h5py
 import numpy as np
@@ -21,8 +17,6 @@ from itertools import chain, product
 from skimage import measure
 from distutils.dir_util import copy_tree
 import pickle
-
-import time
 import csv
 ##
 
