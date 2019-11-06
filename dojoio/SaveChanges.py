@@ -15,24 +15,12 @@ from DB import DB
 from Params import Params
 import miscellaneous.Miscellaneous as m
 
-# import tornado.websocket
-# import tornado.httpserver
-# import threading
-
 from os import path, pardir
-current_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of script
-parent_dir  = path.abspath(path.join(current_dir, pardir))  # Parent dir of script
-#sys.path.append(parent_dir)
-
-#from DojoStandalone import ServerLogic
 
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(os.path.join(main_dir, "dojo"))
 import DojoServer
 
-#import h5py
-#import lxml
-#import lxml.etree
 
 class SaveChanges:
 
