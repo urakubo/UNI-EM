@@ -8,7 +8,6 @@ import sys, os, time, errno
 import numpy as np
 import pickle
 import subprocess as s
-import time
 
 
 from os import path, pardir

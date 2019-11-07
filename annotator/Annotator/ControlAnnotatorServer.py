@@ -2,44 +2,27 @@
 ###
 ###
 
+
 import sys, os, time, errno
 import threading
-import asyncio
-
-import h5py
-import numpy as np
-import copy
 import sqlite3
 import json
-import lxml
-import lxml.etree
-from itertools import chain, product
-from skimage import measure
-from distutils.dir_util import copy_tree
-import pickle
-import csv
-##
-
+from marching_cubes import march
+from stl import mesh
 from os import path, pardir
 
+##
+
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
-plugins_dir = path.join(main_dir, "annotator")
-sys.path.append(plugins_dir)
-from Annotator.AnnotatorServer import AnnotatorServerLogic
+sys.path.append(path.join(main_dir, "annotator"))
 sys.path.append(os.path.join(main_dir, "system"))
 sys.path.append(os.path.join(main_dir, "dojoio"))
 
-from marching_cubes import march
-from stl import mesh
-
+from Annotator.AnnotatorServer import AnnotatorServerLogic
 from DB import DB
 from Params import Params
 import miscellaneous.Miscellaneous as m
 ##
-import time
-#from pyqtgraph.opengl import GLViewWidget, MeshData
-#from pyqtgraph.opengl.items.GLMeshItem import GLMeshItem
-#from PyQt4.QtGui import QApplication
 
 if getattr(sys, 'frozen', False):
     stldata_dir = os.path.normpath(os.path.join(main_dir, "../..", "data", "stlviewer"))

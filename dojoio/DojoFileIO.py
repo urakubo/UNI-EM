@@ -6,12 +6,6 @@ import sys, os, time, errno
 from distutils.dir_util import copy_tree
 import threading
 import subprocess as s
-import time
-
-#import copy
-#import shutil
-#import tornado
-#import tornado.websocket
 
 from PyQt5.QtWidgets import QApplication, QMessageBox, QFileDialog
 from PyQt5.QtGui import QIcon, QPixmap
@@ -22,8 +16,8 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
 sys.path.append(path.join(main_dir, "dojo"))
-sys.path.append(os.path.join(main_dir, "system"))
-sys.path.append(os.path.join(main_dir, "dojoio"))
+sys.path.append(path.join(main_dir, "system"))
+sys.path.append(path.join(main_dir, "dojoio"))
 
 
 from Params  import Params

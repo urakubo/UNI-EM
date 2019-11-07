@@ -5,17 +5,8 @@ import tornado.websocket
 import tornado.httpserver
 import asyncio
 
-import threading
-import h5py
 import numpy as np
-import copy
-import sqlite3
 import json
-import lxml
-import lxml.etree
-from itertools import chain, product
-from skimage import measure
-
 
 from marching_cubes import march
 from stl import mesh
@@ -25,7 +16,6 @@ main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
 sys.path.append(path.join(main_dir, "system"))
 sys.path.append(path.join(main_dir, "dojoio"))
-sys.path.append(path.join(main_dir, "plugins"))
 
 from Params import Params
 from DB import DB

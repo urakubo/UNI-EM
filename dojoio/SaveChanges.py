@@ -10,15 +10,13 @@ import numpy as np
 import shutil
 
 from time import sleep
-
+from os import path, pardir
+main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
+sys.path.append(os.path.join(main_dir, "dojo"))
+sys.path.append(os.path.join(main_dir, "dojoio"))
 from DB import DB
 from Params import Params
 import miscellaneous.Miscellaneous as m
-
-from os import path, pardir
-
-main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
-sys.path.append(os.path.join(main_dir, "dojo"))
 import DojoServer
 
 

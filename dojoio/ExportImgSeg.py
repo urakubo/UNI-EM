@@ -11,8 +11,6 @@ import tifffile
 
 import PIL
 import PIL.Image
-#import cv2
-#import png
 import csv
 import sqlite3
 

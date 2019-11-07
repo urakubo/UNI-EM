@@ -7,11 +7,6 @@ import sys, os, time, errno
 
 import numpy as np
 import copy
-#import shutil
-#from distutils.dir_util import copy_tree
-#from itertools import chain
-#import pickle
-#import threading
 import subprocess as s
 import time
 

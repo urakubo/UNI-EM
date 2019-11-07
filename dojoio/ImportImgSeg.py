@@ -8,7 +8,6 @@ import cv2
 import png
 import glob     # Wild card
 import shutil
-# import argparse # Argument
 import numpy as np
 
 ##

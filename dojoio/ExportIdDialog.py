@@ -4,7 +4,6 @@
 import sys, os, time, errno
 import numpy as np
 import subprocess as s
-import time
 
 from PyQt5.QtWidgets import QWidget, QSizePolicy, \
     QLineEdit, QComboBox, QGridLayout, QSpinBox,  \

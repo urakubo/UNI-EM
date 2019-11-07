@@ -12,8 +12,6 @@ from itertools import chain
 import pickle
 import subprocess as s
 
-import time
-
 
 from os import path, pardir
 from PyQt5.QtWidgets import QMainWindow, qApp, QApplication, QWidget, QSizePolicy, QInputDialog, \
