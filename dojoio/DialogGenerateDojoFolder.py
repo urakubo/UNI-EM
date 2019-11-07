@@ -18,11 +18,8 @@ from PyQt5.QtCore import Qt
 
 main_dir    = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 icon_dir    = path.join(main_dir, "icons")
-# plugins_dir = path.join(main_dir, "plugins")
-# sys.path.append(plugins_dir)
 sys.path.append(main_dir)
 sys.path.append(os.path.join(main_dir, "system"))
-# sys.path.append(os.path.join(main_dir, "gui"))
 
 from Params import Params
 from ImportImgSeg import ImportImgSeg
@@ -112,12 +109,6 @@ class DialogGenerateDojoFolder(QDialog):
 
     def _CheckEMOnly(self):
         self.edit[1].setEnabled(self.em_only.isChecked() == Qt.Unchecked)
-#        if self.em_only.isChecked() == Qt.Unchecked:
-#            self.edit2.setEnabled(True)
-#        else:
-#            self.edit2.setEnabled(False)
-
-
 
     def _ExecuteImport(self):  # wxGlade: ImportImagesSegments.<event_handler>
         dir_input_images = self.edit[0].currentText()
