@@ -28,7 +28,6 @@ sys.path.append(path.join(main_dir, "system"))
 from DB import DB
 from Params import Params
 from SaveChanges import SaveChanges
-
 import miscellaneous.Miscellaneous as m
 
 class Controller(object):

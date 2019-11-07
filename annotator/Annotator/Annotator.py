@@ -14,7 +14,6 @@ sys.path.append(path.join(main_dir, "annotator"))
 from annotator.Annotator.AnnotatorServer import AnnotatorServerLogic
 from annotator.Annotator.ControlAnnotatorServer import ControlAnnotatorServer
 
-#sys.path.append(path.join(plugins_dir, "superpixel"))
 
 # import wxglade_superpixel
 

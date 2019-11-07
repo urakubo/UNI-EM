@@ -22,8 +22,8 @@ sys.path.append(main_dir)
 from miscellaneous.SyncListQComboBoxManager import *
 from miscellaneous.SharedFileDialogs import SharedFileDialogs
 
-miscellaneous_dir = path.join(main_dir, "miscellaneous")
-sys.path.append(miscellaneous_dir)
+
+sys.path.append( path.join(main_dir, "miscellaneous") )
 
 class TabGenerator(SharedFileDialogs):
 

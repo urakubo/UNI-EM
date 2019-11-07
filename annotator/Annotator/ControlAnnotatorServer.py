@@ -23,14 +23,6 @@ from DB import DB
 from Params import Params
 import miscellaneous.Miscellaneous as m
 ##
-
-if getattr(sys, 'frozen', False):
-    stldata_dir = os.path.normpath(os.path.join(main_dir, "../..", "data", "stlviewer"))
-else:
-    stldata_dir = os.path.normpath(os.path.join(main_dir, "data", "stlviewer"))
-
-if os.path.isdir(stldata_dir) == False:
-    os.makedirs(stldata_dir)
 ###
 ###
 class ControlAnnotatorServer:
@@ -40,6 +32,10 @@ class ControlAnnotatorServer:
 
         ## User info
         self.u_info = u_info
+
+        ## Makedir
+        if os.path.isdir(self.u_info.stldata_path) == False:
+        	os.makedirs(self.u_info.stldata_path)
 
         ## Load color file
         colordata = m.load_hdf5(self.u_info.color_map_file, self.u_info.hdf_color_name)
@@ -70,7 +66,7 @@ class ControlAnnotatorServer:
         ##
         ## Save
         ##
-        with open(os.path.join(stldata_dir,"segmentInfo.json"), 'w') as f:
+        with open(os.path.join(self.u_info.stldata_path,"segmentInfo.json"), 'w') as f:
             json.dump(data_dict, f, indent=2, ensure_ascii=False)
 
 

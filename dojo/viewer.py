@@ -9,18 +9,11 @@ main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 
 class Viewer(object):
 
-  def __init__(self):
+  def __init__(self, u_info):
     '''
     '''
     self.__query_viewer_regex = re.compile('^/dojo/.*$')
-
-
-    if getattr(sys, 'frozen', False):
-      print('Run on pyinstaller.')
-      self.__web_dir = os.path.join(main_dir, "../..", "_web/")
-    else:
-      print('Run on live python.')
-      self.__web_dir = os.path.join(main_dir, "_web/")
+    self.__web_dir = u_info.web_path
 
 
   def content_type(self, extension):
@@ -55,7 +48,7 @@ class Viewer(object):
       url += 'index.html'
 
     # get filename from query
-    requested_file = self.__web_dir + url.replace('/dojo/', '')
+    requested_file = self.__web_dir + os.sep + url.replace('/dojo/', '')
     requested_file = os.path.normpath( requested_file )
     extension = os.path.splitext(requested_file)[1]
 

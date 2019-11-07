@@ -33,22 +33,6 @@ icon_dir = path.join(main_dir, "icons")
 
 sys.path.append(os.path.join(main_dir, "system"))
 from Params import Params
-# import SaveChanges
-
-
-if getattr(sys, 'frozen', False):
-  # Pyinstaller
-  path_gfx = os.path.normpath(os.path.join(main_dir, "../..", "_web/gfx"))
-else:
-  # Live Python
-  path_gfx = os.path.join(main_dir, "_web/gfx")
-
-
-#def doSaneThing(sig, func=None):
-#    print "Here I am"
-#    raise KeyboardInterrupt
-#win32api.SetConsoleCtrlHandler(doSaneThing, 1)
-
 
 #
 # default handler
@@ -82,15 +66,13 @@ class ServerLogic:
 
     # register two data sources
     self.__segmentation = Segmentation( u_info.files_path , u_info.tmpdir, self)
-    self.__image = Image( u_info.files_path , u_info.tmpdir)
+    self.__image = Image( u_info.files_path , u_info.tmpdir )
 
     # and the controller
     self.__controller = Controller( u_info, self.__segmentation.get_database(), self ) ####
 
     # and the viewer
-    self.__viewer = Viewer()
-
-
+    self.__viewer = Viewer( u_info )
 
     # and the controller
     if self.__segmentation:
@@ -99,12 +81,10 @@ class ServerLogic:
       db = None
     self.__controller = Controller( u_info, db, self )
 
-
-
     # and the setup
     self.__setup = Setup(self, u_info.files_path, u_info.tmpdir)
 
-    print('path_gfx: ',path_gfx)
+    print('path_gfx: ',u_info.path_gfx)
     # running live
 
     ####
@@ -112,7 +92,7 @@ class ServerLogic:
     asyncio.set_event_loop(ev_loop)
 
     dojo = tornado.web.Application([
-      (r'/dojo/gfx/(.*)', tornado.web.StaticFileHandler, {'path': path_gfx}),
+      (r'/dojo/gfx/(.*)', tornado.web.StaticFileHandler, {'path': u_info.path_gfx}),
       (r'/ws', Websockets, dict(controller=self.__controller)),
       (r'/(.*)', DojoHandler, dict(logic=self))
     ],debug=True,autoreload=True) #            (r'/dojo/gfx/(.*)', tornado.web.StaticFileHandler, {'path': '/dojo/gfx'})

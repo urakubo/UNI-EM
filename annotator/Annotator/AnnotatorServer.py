@@ -23,22 +23,11 @@ import miscellaneous.Miscellaneous as m
 
 
 
-
-if getattr(sys, 'frozen', False):
-  # Pyinstaller
-  #print('Pyinstaller')
-  stldata_dir = os.path.normpath(path.join(main_dir, "../..", "data","stlviewer"))
-  main_dir_   = os.path.normpath(path.join(main_dir, "../.."))
-else:
-  #print('Live Python')
-  # Live Python
-  stldata_dir = os.path.normpath(path.join(main_dir, "data","stlviewer"))
-  main_dir_   = main_dir
-
 class AnnotatorWebSocket(tornado.websocket.WebSocketHandler):
   ###
   def __init__(self, *args, **kwargs):
-    self.small_ids = kwargs.pop('player')
+    self.small_ids    = kwargs.pop('player')
+    self.stldata_path = kwargs.pop('path')
     super(AnnotatorWebSocket, self).__init__(*args, **kwargs)
   ###
   def on_message(self, message):
@@ -63,7 +52,7 @@ class AnnotatorWebSocket(tornado.websocket.WebSocketHandler):
         for j in range(3):
             our_mesh.vectors[i][j] = vertices[f[j], :]
     ###
-    our_mesh.save(os.path.join(stldata_dir, 'i{0}.stl'.format(id) ))
+    our_mesh.save(os.path.join(self.stldata_path, 'i{0}.stl'.format(id) ))
     return True
   ###
 
@@ -96,7 +85,7 @@ class AnnotatorServerLogic:
       self.small_ids[0:small_map.shape[0], 0:small_map.shape[1], iz] = small_map
 
     boundingbox_dict = {'x': xmax, 'y': ymax, 'z': zmax}
-    with open(os.path.join(stldata_dir, 'Boundingbox.json'), 'w') as f:
+    with open(os.path.join(self.u_info.stldata_path, 'Boundingbox.json'), 'w') as f:
       json.dump(boundingbox_dict, f, indent=2, ensure_ascii=False)
 
     return None
@@ -115,9 +104,9 @@ class AnnotatorServerLogic:
 
   def run( self ):
     ####
-    path_main = os.path.join(main_dir_, "_web_stl")
-    path_css = os.path.join(main_dir_, "_web_stl", "css") # (main_dir, "static", "css")
-    path_js = os.path.join(main_dir_, "_web_stl", "js")
+    stl_path = self.u_info.web_stl_path
+    css_path = os.path.join(self.u_info.web_stl_path, "css")
+    js_path  = os.path.join(self.u_info.web_stl_path, "js")
     ####
     # asyncio.set_event_loop(self.u_info.worker_loop_stl)
     ev_loop = asyncio.new_event_loop()
@@ -125,16 +114,16 @@ class AnnotatorServerLogic:
 
 
     annotator = tornado.web.Application([
-      (r'/css/(.*)', tornado.web.StaticFileHandler, {'path': path_css}),
-      (r'/js/(.*)', tornado.web.StaticFileHandler, {'path': path_js}),
-      (r'/data/(.*)', tornado.web.StaticFileHandler, {'path': stldata_dir}),
-      (r'/ws/display', AnnotatorWebSocket, {'player': self.small_ids}),
-      (r'/(.*)', tornado.web.StaticFileHandler, {'path': path_main})
+      (r'/css/(.*)', tornado.web.StaticFileHandler, {'path': css_path}),
+      (r'/js/(.*)', tornado.web.StaticFileHandler, {'path': js_path}),
+      (r'/data/(.*)', tornado.web.StaticFileHandler, {'path': self.u_info.stldata_path}),
+      (r'/ws/display', AnnotatorWebSocket, {'player': self.small_ids, 'path': self.u_info.stldata_path}),
+      (r'/(.*)', tornado.web.StaticFileHandler, {'path': stl_path})
     ],debug=True,autoreload=True)
 
     server = tornado.httpserver.HTTPServer(annotator)
     server.listen(self.u_info.port_stl)
-    print('stldata_dir: ',stldata_dir)
+    print('stldata_dir: ',self.u_info.stldata_path)
     print('*'*80)
     print('*', '3D Annotator RUNNING')
     print('*')
