@@ -1,18 +1,15 @@
 
 import sys
 import os
-from os import path, pardir
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QAction, QMessageBox
+from os import path
+#from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QAction, QMessageBox
+from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import pyqtSlot
 
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 icon_dir          = path.join(main_dir, "icons")
 icon_disabled_dir = path.join(icon_dir, "Disabled")
-plugins_dir = path.join(main_dir, "plugins")
-sys.path.append(plugins_dir)
-sys.path.append(os.path.join(main_dir, "system"))
-
 
 
 class Credit():
