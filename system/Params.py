@@ -92,7 +92,7 @@ class Params:
             self.data_path    = os.path.normpath(os.path.join(main_dir, "..","..","data"))
             self.path_gfx     = os.path.normpath(os.path.join(main_dir, "..","..", "_web","gfx"))
             self.web_path     = os.path.normpath(os.path.join(main_dir, "..","..", "_web"))
-            self.web_stl_path = os.path.normpath(os.path.join(main_dir, "..","..", "_web","stl"))
+            self.web_stl_path = os.path.normpath(os.path.join(main_dir, "..","..", "_web_stl"))
             self.stldata_path = os.path.normpath(os.path.join(main_dir, "..","..", "data", "stlviewer"))
             
             ext_os = lambda prg: f'{prg}.exe' if(os.name == 'nt') else prg
@@ -110,7 +110,7 @@ class Params:
             self.data_path    = os.path.join(main_dir, "data")
             self.path_gfx     = os.path.join(main_dir, "_web","gfx")
             self.web_path     = os.path.join(main_dir, "_web")
-            self.web_stl_path = os.path.normpath(os.path.join(main_dir, "_web","stl"))
+            self.web_stl_path = os.path.normpath(os.path.join(main_dir, "_web_stl"))
             self.stldata_path = os.path.normpath(os.path.join(main_dir, "data", "stlviewer"))
 
             _2D_DNN_dir = os.path.join(main_dir, 'segment', '_2D_DNN')
