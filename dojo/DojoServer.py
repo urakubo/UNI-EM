@@ -84,7 +84,7 @@ class ServerLogic:
     # and the setup
     self.__setup = Setup(self, u_info.files_path, u_info.tmpdir)
 
-    print('path_gfx: ',u_info.path_gfx)
+    print('path_gfx: ',u_info.gfx_path)
     # running live
 
     ####
@@ -92,7 +92,7 @@ class ServerLogic:
     asyncio.set_event_loop(ev_loop)
 
     dojo = tornado.web.Application([
-      (r'/dojo/gfx/(.*)', tornado.web.StaticFileHandler, {'path': u_info.path_gfx}),
+      (r'/dojo/gfx/(.*)', tornado.web.StaticFileHandler, {'path': u_info.gfx_path}),
       (r'/ws', Websockets, dict(controller=self.__controller)),
       (r'/(.*)', DojoHandler, dict(logic=self))
     ],debug=True,autoreload=True) #            (r'/dojo/gfx/(.*)', tornado.web.StaticFileHandler, {'path': '/dojo/gfx'})

@@ -90,7 +90,7 @@ class Params:
         if getattr(sys, 'frozen', False):
             # print('Run on pyinstaller.')
             self.data_path    = os.path.normpath(os.path.join(main_dir, "..","..","data"))
-            self.path_gfx     = os.path.normpath(os.path.join(main_dir, "..","..", "_web_dojo","gfx"))
+            self.gfx_path     = os.path.normpath(os.path.join(main_dir, "..","..", "_web_dojo","gfx"))
             self.web_path     = os.path.normpath(os.path.join(main_dir, "..","..", "_web_dojo"))
             self.web_annotator_path = os.path.normpath(os.path.join(main_dir, "..","..", "_web_annotator"))
             self.data_annotator_path = os.path.normpath(os.path.join(main_dir, "..","..", "data", "annotator"))
@@ -108,7 +108,7 @@ class Params:
         else:
             # print('Run on live python.')
             self.data_path    = os.path.join(main_dir, "data")
-            self.path_gfx     = os.path.join(main_dir, "_web_dojo","gfx")
+            self.gfx_path     = os.path.join(main_dir, "_web_dojo","gfx")
             self.web_path     = os.path.join(main_dir, "_web_dojo")
             self.web_annotator_path = os.path.normpath(os.path.join(main_dir, "_web_annotator"))
             self.data_annotator_path = os.path.normpath(os.path.join(main_dir, "data", "annotator"))

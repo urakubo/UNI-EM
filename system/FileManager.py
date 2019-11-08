@@ -1,7 +1,7 @@
 ###
 ###
 ###
-import sys, os, time, errno
+import sys, os, time, errno, copy
 #from lockfile import LockFile
 #import portalocker
 
@@ -289,6 +289,7 @@ class FileManager():
 
     def CheckFolderDojo(self, folder_path):
         tmp_info = Params()
+#        tmp_info = copy.copy(self.u_info)
         tmp_info.SetUserInfo(folder_path)
         # Check file existence
         if  os.path.exists(tmp_info.files_path) and \
