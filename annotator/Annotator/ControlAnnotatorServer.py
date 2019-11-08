@@ -34,8 +34,8 @@ class ControlAnnotatorServer:
         self.u_info = u_info
 
         ## Makedir
-        if os.path.isdir(self.u_info.stldata_path) == False:
-        	os.makedirs(self.u_info.stldata_path)
+        if os.path.isdir(self.u_info.data_annotator_path) == False:
+        	os.makedirs(self.u_info.data_annotator_path)
 
         ## Load color file
         colordata = m.load_hdf5(self.u_info.color_map_file, self.u_info.hdf_color_name)
@@ -66,7 +66,7 @@ class ControlAnnotatorServer:
         ##
         ## Save
         ##
-        with open(os.path.join(self.u_info.stldata_path,"segmentInfo.json"), 'w') as f:
+        with open(os.path.join(self.u_info.data_annotator_path,"segmentInfo.json"), 'w') as f:
             json.dump(data_dict, f, indent=2, ensure_ascii=False)
 
 
