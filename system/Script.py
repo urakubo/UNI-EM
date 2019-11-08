@@ -11,10 +11,9 @@ from PyQt5.QtGui import QIcon, QPixmap
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 icon_dir          = path.join(main_dir, "icons")
 icon_disabled_dir = path.join(icon_dir, "Disabled")
-plugins_dir = path.join(main_dir, "plugins")
-sys.path.append(plugins_dir)
-sys.path.append(os.path.join(main_dir, "system"))
-sys.path.append(os.path.join(main_dir, "dojoio"))
+sys.path.append(path.join(main_dir, "plugins"))
+sys.path.append(path.join(main_dir, "system"))
+sys.path.append(path.join(main_dir, "dojoio"))
 import importlib.util
 
 
