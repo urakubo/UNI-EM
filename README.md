@@ -113,10 +113,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 
 ## Reference
 
-Urakubo, H., Bullmann, T., Kubota, Y., Oba, S., Ishii, S. 
-
-UNI-EM: An Environment for Deep Neural Network-Based Automated Segmentation of Neuronal Electron Microscopic Images.
-
+Urakubo, H., Bullmann, T., Kubota, Y., Oba, S., Ishii, S., UNI-EM: An Environment for Deep Neural Network-Based Automated Segmentation of Neuronal Electron Microscopic Images.
 [**Scientific Reports 9, 19413 (2019) doi:10.1038/s41598-019-55431-0**](https://www.nature.com/articles/s41598-019-55431-0)
 
 ## License
