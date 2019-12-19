@@ -110,6 +110,11 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 * [**Naoki Tamura**](https://github.com/tamutamu) - *Deployment using pyinstaller* - 
 * [**Ryoya Kamikawa**](https://ryoka.in) - *GUI of classic image filters* - 
 
+## Reference
+
+Urakubo, H., Bullmann, T., Kubota, Y., Oba, S., Ishii, S. 
+
+UNI-EM: An Environment for Deep Neural Network-Based Automated Segmentation of Neuronal Electron Microscopic Images. Sci Rep 9, 19413 (2019) doi:10.1038/s41598-019-55431-0
 
 ## License
 
