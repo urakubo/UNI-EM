@@ -23,14 +23,14 @@ from stl import mesh
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
+sys.path.append(path.join(main_dir, "system"))
+sys.path.append(path.join(main_dir, "plugins"))
 
-sys.path.append(os.path.join(main_dir, "filesystem"))
 from Params import Params
 from DB import DB
 import miscellaneous.Miscellaneous as m
 
-plugins_dir = path.join(main_dir, "plugins")
-sys.path.append(plugins_dir)
+
 
 
 if getattr(sys, 'frozen', False):
@@ -126,7 +126,10 @@ class AnnotatorServerLogic:
     ####
     path_main = os.path.join(main_dir_, "_web_stl", "dist")
     ####
-    asyncio.set_event_loop(self.u_info.worker_loop_stl)
+    # asyncio.set_event_loop(self.u_info.worker_loop_stl)
+    ev_loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(ev_loop)
+
 
     annotator = tornado.web.Application([
       (r'/data/(.*)', tornado.web.StaticFileHandler, {'path': stldata_dir}),
@@ -144,6 +147,8 @@ class AnnotatorServerLogic:
     print('*'*80)
 
     tornado.ioloop.IOLoop.instance().start()
+    ev_loop.stop()
+    ev_loop.close()
     server.stop()
     print("Tornado web server stops.")
     return

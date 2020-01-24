@@ -15,7 +15,7 @@
 
 ---
 Check the following pages after installation.
-- [How to use: Folder management system](docs/HowToUse.md#Folder-management-system)
+- [How to use: Folder manager](docs/HowToUse.md#Folder-manager)
 - [How to use: Dojo proofreader](docs/HowToUse.md#Dojo-proofreader)
 - [How to use: 3D annotator](docs/HowToUse.md#3D-annotator)
 - [How to use: 2D CNN](docs/HowToUse.md#2D-CNN)
@@ -53,10 +53,10 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 1.	Download one of the following two versions, and unzip it:
 
 - Version 0.84:
-	- [CPU version (Ver0.82; 293 MB)](http://bit.ly/2ZX2jHz)
-	- [GPU version (Ver0.82: 726 MB)](http://bit.ly/2RP8k6l)
+	- [CPU version (Ver0.84; 293 MB)](http://bit.ly/2ZX2jHz)
+	- [GPU version (Ver0.84: 726 MB)](http://bit.ly/2RP8k6l)
 
-- Release Summary:
+- Release summary:
 	- Bug fix.
 		- Safe termination and re-launch of web applications.
 		- Correct folder selection from the "open" dialog.
@@ -82,7 +82,10 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 
 	- git clone https://github.com/urakubo/UNI-EM.git
 
-4. Install the following modules of Python: Tensorflow-gpu, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl. Check also "requirements-[os]-[cpu or gpu].txt". 
+4. Install the following modules of Python: Tensorflow-gpu, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl. Check "requirements-[os]-[cpu or gpu].txt". Users can install those module using the following command.
+
+	- pip install -r requirements-[os]-[cpu or gpu].txt
+
 5. **Copy [UNI-EM]\marching_cubes\marching_cubes`*` and paste it to {$INSTALL_PYTHON}\Lib\site-packages.**
 
 	- **Execute the Python command "import site; site.getsitepackages()" to find {$INSTALL_PYTHON}.**

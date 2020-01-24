@@ -10,29 +10,29 @@ from PyQt5.QtCore import Qt, QPoint
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 icon_dir          = path.join(main_dir, "icons")
 icon_disabled_dir = path.join(icon_dir, "Disabled")
-sys.path.append(os.path.join(main_dir, "filesystem"))
-sys.path.append(os.path.join(main_dir, "gui"))
+sys.path.append(os.path.join(main_dir, "system"))
+sys.path.append(os.path.join(main_dir, "dojoio"))
 
-from FileSystem  import FileSystem
+from FileManager  import FileManager
 
-class FileMenu(FileSystem):
+class FileMenu(FileManager):
     def __init__(self):
         # File menu
         self.file_menu = ['Open Image/Dojo Folder',
                           'Open Multipage Tiff File',
-       	 				'Create Dojo Folder',
-                   'Open Recent File/Folder',
-                    'Exit from UNI-EM']
+                          'Create Dojo Folder',
+                          'Open Recent File/Folder',
+                          'Exit from UNI-EM']
         self.file_icon = ['Folder_Open_16.png',
                           'Photo_Open_16.png',
-        				'Photo_Import_16.png',
-                  'Search_16.png',
-                  'Power_Off_16.png']
+                          'Photo_Import_16.png',
+                          'Search_16.png',
+                          'Power_Off_16.png']
         self.file_action = [self.OpenFolder,
-                            self.OpenMultiTiffFile,
-        					self.GenerateDojoFolder,
-                            self.Dummy,
-                            self.ExitUniEm]
+                          self.OpenMultiTiffFile,
+                          self.GenerateDojoFolder,
+                          self.Dummy,
+                          self.ExitUniEm]
 
         self.menu_open_files   = []
         self.menu_recent_files = []

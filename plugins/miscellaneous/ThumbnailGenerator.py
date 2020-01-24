@@ -12,10 +12,9 @@ import tornado.websocket
 import glob     # Wild card
 import cv2
 
-from PyQt5.QtWidgets import QMainWindow, qApp, QApplication, QWidget, QTabWidget, QSizePolicy, QInputDialog, \
-    QLineEdit, QComboBox, QDialog, QDialogButtonBox, QFormLayout, QGridLayout, QMessageBox, QSpinBox, QSlider, \
-    QGroupBox, QHBoxLayout, QLabel, QLineEdit, QMenu, QMenuBar, QPushButton, QFileDialog, QTextEdit, QVBoxLayout, \
-    QLabel, QCheckBox, QFrame
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget,  \
+    QGridLayout, QSlider, QHBoxLayout, QLabel, QPushButton, \
+    QCheckBox, QFrame
 from PyQt5.QtGui import QIcon, QPixmap, QPainter, QColor, QFont, QImage
 from PyQt5.QtCore import Qt, pyqtSlot
 

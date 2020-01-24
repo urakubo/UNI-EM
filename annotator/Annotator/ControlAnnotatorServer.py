@@ -102,7 +102,7 @@ class ControlAnnotatorServer:
         logic.run()
 
     def LaunchAnnotator(self):
-        self.u_info.worker_loop_stl = asyncio.new_event_loop()
+        # self.u_info.worker_loop_stl = asyncio.new_event_loop()
         self.u_info.stl_thread = threading.Thread(target=self.StartThreadAnnotatorServer)
         self.u_info.stl_thread.setDaemon(True) # Stops if control-C
         self.u_info.stl_thread.start()
@@ -114,7 +114,7 @@ class ControlAnnotatorServer:
             return False
 
         print("Asked tornado to exit\n")
-        self.u_info.worker_loop_stl.stop()
-        time.sleep(1)
-        self.u_info.worker_loop_stl.close()
+        #self.u_info.worker_loop_stl.stop()
+        #time.sleep(1)
+        #self.u_info.worker_loop_stl.close()
         self.u_info.stl_thread = None

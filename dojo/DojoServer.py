@@ -31,7 +31,7 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 icon_dir = path.join(main_dir, "icons")
 
-sys.path.append(os.path.join(main_dir, "filesystem"))
+sys.path.append(os.path.join(main_dir, "system"))
 from Params import Params
 # import SaveChanges
 
@@ -108,7 +108,8 @@ class ServerLogic:
     # running live
 
     ####
-    asyncio.set_event_loop(u_info.worker_loop)
+    ev_loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(ev_loop)
 
     dojo = tornado.web.Application([
       (r'/dojo/gfx/(.*)', tornado.web.StaticFileHandler, {'path': path_gfx}),
@@ -128,6 +129,8 @@ class ServerLogic:
     print('*'*80)
 
     tornado.ioloop.IOLoop.instance().start()
+    ev_loop.stop()
+    ev_loop.close()
     server.stop()
 
     # def sig_handler(signum, frame):

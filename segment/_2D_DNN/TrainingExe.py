@@ -5,9 +5,10 @@
 import sys, os, time, errno
 import glob
 import cv2
+import shutil
 import subprocess as s
-
 from os import path, pardir
+
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
 sys.path.append(os.path.join(main_dir, "segment"))

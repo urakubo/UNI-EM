@@ -53,9 +53,10 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 ### Pyinstaller版 (Windows10のみ)：
 1. GPU 版とCPU版を用意しました。いずれかをダウンロードして展開してください。
 
-- Version 0.82:
-	- [CPU version (Ver0.82; 286 MB)](http://bit.ly/2Iveohj)
-	- [GPU version (Ver0.82: 710 MB)](http://bit.ly/2L2FMEZ)
+- Version 0.84:
+	- [CPU version (Ver0.84; 293 MB)](http://bit.ly/2ZX2jHz)
+	- [GPU version (Ver0.84: 726 MB)](http://bit.ly/2RP8k6l)
+
 	
 2. 公開サンプルデータkasthuri15をダウンロードして適当なフォルダに展開してください。
 	- https://www.dropbox.com/s/pxds28wdckmnpe8/ac3x75.zip?dl=0

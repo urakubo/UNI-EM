@@ -1,26 +1,12 @@
 import sys, os, time, errno
 
-
 import numpy as np
 import copy
-from distutils.dir_util import copy_tree
-from itertools import chain
-import pickle
-import threading
-import tornado
-import tornado.websocket
-import glob     # Wild card
-import cv2
-import threading
 
 from miscellaneous.ListManager import ListManager
 from Filter2D3D.FiltersInfo import FilterInfo
 
-from PyQt5.QtWidgets import QMainWindow, qApp, QApplication, QWidget, QTabWidget, QSizePolicy, QInputDialog, \
-    QLineEdit, QComboBox, QDialog, QDialogButtonBox, QFormLayout, QGridLayout, QMessageBox, QSpinBox, QSlider, \
-    QGroupBox, QHBoxLayout, QLabel, QLineEdit, QMenu, QMenuBar, QPushButton, QFileDialog, QTextEdit, QVBoxLayout, \
-    QLabel, QCheckBox, QWidget, QTableWidget, QTableWidgetItem, QAction, QListWidget, \
-    QVBoxLayout, QPushButton, QHBoxLayout, QFileDialog, QApplication, QListView, QAbstractItemView
+from PyQt5.QtWidgets import  QWidget, QHBoxLayout, QLabel, QPushButton, QVBoxLayout
 from PyQt5.QtGui import QIcon, QPixmap, QPainter, QColor, QFont, QStandardItemModel
 from PyQt5.QtCore import Qt, pyqtSlot, QStringListModel, QEvent
 

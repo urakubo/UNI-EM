@@ -8,19 +8,16 @@ import sys, os, time, errno
 import numpy as np
 import copy
 #import shutil
-from distutils.dir_util import copy_tree
-from itertools import chain
-import pickle
-import threading
+#from distutils.dir_util import copy_tree
+#from itertools import chain
+#import pickle
+#import threading
 import subprocess as s
-import tornado
-import tornado.websocket
 import time
 
 
 from os import path, pardir
-from PyQt5.QtWidgets import QApplication, QWidget, QSizePolicy, QInputDialog, QLineEdit, QComboBox, QDialog, QDialogButtonBox, QFormLayout, QGridLayout, \
-    QGroupBox, QHBoxLayout, QLabel, QLineEdit, QMenu, QMenuBar, QPushButton, QFileDialog, QTextEdit, QVBoxLayout, QCheckBox
+from PyQt5.QtWidgets import QApplication, QWidget, QSizePolicy,QComboBox, QDialog, QDialogButtonBox, QFormLayout, QGridLayout, QLabel, QPushButton, QCheckBox
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import Qt
 
@@ -29,7 +26,7 @@ icon_dir    = path.join(main_dir, "icons")
 # plugins_dir = path.join(main_dir, "plugins")
 # sys.path.append(plugins_dir)
 sys.path.append(main_dir)
-sys.path.append(os.path.join(main_dir, "filesystem"))
+sys.path.append(os.path.join(main_dir, "system"))
 # sys.path.append(os.path.join(main_dir, "gui"))
 
 from Params import Params

@@ -1,8 +1,4 @@
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import sys
 import os
 from os import path, pardir
@@ -15,8 +11,7 @@ icon_dir          = path.join(main_dir, "icons")
 icon_disabled_dir = path.join(icon_dir, "Disabled")
 plugins_dir = path.join(main_dir, "plugins")
 sys.path.append(plugins_dir)
-sys.path.append(os.path.join(main_dir, "filesystem"))
-sys.path.append(os.path.join(main_dir, "gui"))
+sys.path.append(os.path.join(main_dir, "system"))
 
 
 
@@ -24,7 +19,7 @@ class Credit():
     def Credit(self):
         #QMessageBox.setIcon(QMessageBox.Information)
         msg = QMessageBox(QMessageBox.Information, "About UNI-EM",
-                            "<h1>UNI-EM Ver0.84</h1><BR>"
+                            "<h1>UNI-EM Ver0.86</h1><BR>"
                             "(C) 2019 Hidetoshi Urakubo, Torsten Bullmann, Ryoji Miyamoto, Naoki Tamura, Ryoya Kamikawa.<BR>"
                             "This project is licensed under the GNU General Public License Version 3 (GPLv3).<BR>"
                             "UNI-EM is powered by the following software:<BR>"
