@@ -386,6 +386,7 @@ const updateMetricsOnAnnotationTable = (annotationTable) => {
 	})
 	annotationTable.updateData(newRows);
 };
+
 APP.getMeshes = () => {
 	return APP.scene.children.filter(object => object.type === "Mesh" && object.geometry.isBufferGeometry && !object.isCursor);
 }
