@@ -15,7 +15,7 @@ var ObjObjextTable = new Tabulator("#ObjectTable", {
 	columns:[                 //define the table columns
     // ActやConfidenceはダウンロード時に除外されないよう定義しておく。ただしカラムvisible: falseにして非表示にする
     {title:"Act", field: "act", download: true, visible: false},
-		{title:"Visible", field:"act", width: 73, align:"center",formatter:"tickCross", editor:"tickCross", download: false},
+		{title:"Visible", field:"act", width: 73, align:"center",formatter:"tickCross", cellClick: (e, cell)=>{cell.setValue(!cell.getValue());}, download: false},
 		{title:"ID", field:"id", width: 50},
 		{title:"Name", field:"name", editor:"input"},
 		{title:"Size", field:"size", width:60, align:"right"},

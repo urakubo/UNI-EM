@@ -4,18 +4,10 @@
   <meta charset="utf-8">
   <title>3D Annotator</title>
   <link rel="shortcut icon" href="img/favicon.ico">
-  <link rel="stylesheet" type="text/css" href="css/tabulator.css">
+  <link rel="stylesheet" type="text/css" href="app.bundle.css">
   <link rel="stylesheet" type="text/css" href="css/construction.css">
-  <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
-  <script type="text/javascript" src="js/tabulator.js"></script>
 
-  <script type="text/javascript" src="js/three.min.js"></script>
-  <script type="text/javascript" src="js/STLLoader.js"></script>
-  <script type="text/javascript" src="js/CanvasRenderer.js"></script>
-  <script type="text/javascript" src="js/Projector.js"></script>
-  <script type="text/javascript" src="js/TrackballControls.js"></script>
-  <script type="text/javascript" src="js/agh.sprintf.js"></script>
-
+  <script type="text/javascript" src="app.bundle.js"></script>
   <script type="text/javascript" src="js/StlViewer.js"></script>
 </head>
 <body>
@@ -108,6 +100,39 @@
       </fieldset>
     </p>
     <p>
+      <fieldset class="table-frame annotation-table-frame">
+	      <legend>Annotation Table</legend>
+              <div class="menu-label"> </div>
+              OFF
+              <label class="switch">
+                <input type="checkbox" onclick="switchAnnotation(this.checked)">
+                <span class="slider round"></span>
+              </label>
+              ON
+        <div><button type="button" id="button-add-annotation-layer" class="btn btn4 font3">+</button></div>
+        <div id="AnnotationTable"></div>
+        <div>Eraser
+          <label class="switch">
+            <input type="checkbox" onclick="switchEraserAnnotation(this.checked)" checked>
+            <span class="slider round"></span>
+          </label>
+          Annotator
+        </div>
+        <div>Overwrite OFF
+          <label class="switch">
+            <input type="checkbox" onclick="setAnnotationOverwrite(this.checked)">
+            <span class="slider round"></span>
+          </label>
+          ON
+        </div>
+
+        <div class="annotation-table-actions">
+          <button type="button" id="save-annotation-table-csv" clss="btn btn4 font3">Download CSV</button>
+        </div>
+      </fieldset>
+    </p>
+
+    <p>
       <fieldset class="table-frame marker-table-frame">
         <legend>Marker Table</legend>
         <div id="MarkerTable"></div>
@@ -128,6 +153,7 @@
   <script type="text/javascript" src="js/ObjectTable.js"></script>
   <script type="text/javascript" src="js/MarkerTable.js"></script>
   <script type="text/javascript" src="js/ControlStlViewer.js"></script>
+  <script type="text/javascript" src="js/AnnotationTable.js"></script>
   <script>
   $(function() {
     StlViewer();
