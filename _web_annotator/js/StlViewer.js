@@ -386,7 +386,6 @@ const updateMetricsOnAnnotationTable = (annotationTable) => {
 	})
 	annotationTable.updateData(newRows);
 };
-
 APP.getMeshes = () => {
 	return APP.scene.children.filter(object => object.type === "Mesh" && object.geometry.isBufferGeometry && !object.isCursor);
 }
@@ -445,7 +444,7 @@ export function StlViewer() {
 	APP.MarkerRadius = 2.0;
 	APP.MarkerID     = 1;
 
-	// Cursor 
+	// Cursor
 	var geometry = new THREE.SphereBufferGeometry( 3, 32, 32 );
 	var material = new THREE.MeshLambertMaterial( {color: 0xffffff, opacity: 0.3, transparent: true, depthWrite: false} );
 	var cursor = new THREE.Mesh( geometry, material );
