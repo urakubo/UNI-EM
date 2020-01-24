@@ -1,3 +1,6 @@
+import { AnnotationTable, updateColorOptionsOnAnnotator } from "./AnnotationTable";
+import { APP } from "./APP";
+import { ObjMarkerTable } from "./MarkerTable";
 
 var xratio = 0.6;
 var yratio = 0.95;
@@ -12,8 +15,6 @@ xshift = 0;
 yshift = 0;
 zshift = 0;
 
-
-var APP = { };
 APP.animate = function() {
 	APP.renderer.render( APP.scene, APP.camera );
 	APP.controls.update();
@@ -161,7 +162,7 @@ function clickPosition( event ) {
 	// Write the most proximal one.
 	if (Object.keys(intersects).length > 0) {
 		var objid = intersects[0].object.name;
-		target = document.getElementById("ClickedObjectID");
+		const target = document.getElementById("ClickedObjectID");
 		target.innerHTML = objid;
 
 		if (APP.MarkerOffOn == 1) {
@@ -186,7 +187,7 @@ function clickPosition( event ) {
 			});
 		}
 	}else{
-		target = document.getElementById("ClickedObjectID");
+		const target = document.getElementById("ClickedObjectID");
 		target.innerHTML = "Background";
 	}
 }
@@ -364,7 +365,7 @@ const updateMetricsOnAnnotationTable = (annotationTable, scene) => {
 };
 
 
-function StlViewer() {
+export function StlViewer() {
 
 	// Renderer
 	var container = document.getElementById('myCanvas');

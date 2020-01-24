@@ -48,7 +48,12 @@ module.exports = env => {
           loader: "babel-loader",
           query: {
             presets: [
-              [require.resolve("@babel/preset-env")],
+              [require.resolve("@babel/preset-env"),
+              {
+                "targets": {
+                  "browsers": ["chrome >= 73"]
+                }
+              }],
             ],
             plugins: [
               [
@@ -104,13 +109,7 @@ module.exports = env => {
           to: "index.html",
         },
         {
-          from: "js/**/*",
-        },
-        {
           from: "img/**/*",
-        },
-        {
-          from: "css/**/*",
         },
       ]),
     ].filter(item => item),

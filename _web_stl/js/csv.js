@@ -1,6 +1,6 @@
 // TabulatorのcsvFormatterに不具合があるため再定義する
 // csvFormatter from Download.prototype.downloaders in tabulator.js
-var csvFormatter = function(columns, data, options, setFileContents, config) {
+export const csvFormatter = function(columns, data, options, setFileContents, config) {
   // TabulatorのcsvFormatterは隠れてるカラムがダウンロード対象にならないためカラムを再定義する
   var columnDefinitions = this.table.getColumnDefinitions();
   columns = columnDefinitions.filter(function(column) {
@@ -101,7 +101,7 @@ var csvFormatter = function(columns, data, options, setFileContents, config) {
  * @param  {string} csv カンマ区切りの文字列
  * @return {Array}  変換した配列
  */
-function parseCSV(csv) {
+export function parseCSV(csv) {
   var result = [];
   var array = csv2array(csv);
 

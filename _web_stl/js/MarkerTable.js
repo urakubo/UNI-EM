@@ -1,4 +1,7 @@
-var ObjMarkerTable = new Tabulator("#MarkerTable", {
+import { APP } from "./APP";
+import { parseCSV, csvFormatter } from "./csv";
+
+export const ObjMarkerTable = new Tabulator("#MarkerTable", {
 	layout:"fitColumns",      //fit columns to width of table
 	autoResize:true,
 	responsiveLayout:"hide",  //hide columns that dont fit on the table

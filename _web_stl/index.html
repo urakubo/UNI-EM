@@ -5,10 +5,7 @@
   <title>3D Annotator</title>
   <link rel="shortcut icon" href="img/favicon.ico">
   <link rel="stylesheet" type="text/css" href="app.bundle.css">
-  <link rel="stylesheet" type="text/css" href="css/construction.css">
-
   <script type="text/javascript" src="app.bundle.js"></script>
-  <script type="text/javascript" src="js/StlViewer.js"></script>
 </head>
 <body>
   <div class="left-container">
@@ -147,31 +144,5 @@
       </fieldset>
     </p>
   </div>
-
-  <script type="text/javascript" src="js/util.js"></script>
-  <script type="text/javascript" src="js/csv.js"></script>
-  <script type="text/javascript" src="js/ObjectTable.js"></script>
-  <script type="text/javascript" src="js/MarkerTable.js"></script>
-  <script type="text/javascript" src="js/ControlStlViewer.js"></script>
-  <script type="text/javascript" src="js/AnnotationTable.js"></script>
-  <script>
-  $(function() {
-    StlViewer();
-
-    $('.subMenu').hide();
-    $('#menu .archive').click(function(e){
-        $('+ul.subMenu',this).slideToggle();
-    });
-  });
-  
-  // Prohibit file drag & drop.
-  window.addEventListener('dragover', function(ev){
-     ev.preventDefault();
-	}, false);
-	window.addEventListener('drop', function(ev){
-     ev.preventDefault();
-     ev.stopPropagation();
-	}, false);
-  </script>
 </body>
 </html>
