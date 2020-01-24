@@ -1,3 +1,5 @@
+import { APP } from "./APP";
+
 const mutatorClip = (value, data, type, mutatorParams, component) => {
   const min = mutatorParams.min;
   const max = mutatorParams.max;
@@ -20,7 +22,7 @@ const reversalBit = index => {
   return value;
 }
 
-// 明度・彩度が最大で、なるべく異なる色相の色を返す
+// 彩度が最大で、なるべく異なる色相の色を返す
 const getRandomColor = (index) => {
   const value = ((reversalBit(index - 1)) % 1) * 3;
   const mainColorType = Math.floor(value);
@@ -34,14 +36,14 @@ const getRandomColor = (index) => {
   }
 }
 
-const updateColorOptionsOnAnnotator = () => {
+export const updateColorOptionsOnAnnotator = () => {
   const activeColors = [];
   const colorParams = {
     eraser: {r: 1, g: 1, b: 1},
   };
   const tableData = AnnotationTable.getData("active");
   let targetColorId = null;
-  for (row of tableData) {
+  for (const row of tableData) {
     colorParams[row.id] = {r: row.r / 255, g: row.g / 255, b: row.b / 255};
     if(row.target) {
       targetColorId = row.id;
@@ -63,7 +65,7 @@ const updateColorOptionsOnAnnotator = () => {
   setColorOptions(colorOptions, {scene: APP.scene});
 };
 
-const AnnotationTable = new Tabulator('#AnnotationTable', {
+export const AnnotationTable = new Tabulator('#AnnotationTable', {
 	layout:"fitColumns",
 	autoResize:true,
 	responsiveLayout:"hide",
@@ -111,17 +113,17 @@ const AnnotationTable = new Tabulator('#AnnotationTable', {
   }
 });
 
-const switchAnnotation = (checked) => {
+window.switchAnnotation = (checked) => {
 	APP.annotation_mode = checked;
 	APP.controls.noRotate = checked;
 }; 
 
-const switchEraserAnnotation = (checked) => {
+window.switchEraserAnnotation = (checked) => {
 	APP.annotation_paint_mode = checked;
   updateColorOptionsOnAnnotator()
 };
 
-const setAnnotationOverwrite = (checked) => {
+window.setAnnotationOverwrite = (checked) => {
   APP.annotation_overwrite = checked;
   updateColorOptionsOnAnnotator()
 }
