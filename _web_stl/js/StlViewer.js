@@ -355,9 +355,10 @@ var annotate = (event) => {
 const updateMetricsOnAnnotationTable = (annotationTable, scene) => {
 	const params = getCurrentParams(scene);
 	const areas = params.areas;
-	const newRows = Object.keys(areas).map((colorId) => {
-		colorId = Number(colorId);
-		return {id: colorId, area: areas[colorId] && areas[colorId].toFixed(0)}
+	const newRows = annotationTable.getData("active").map(_item => {
+		const item = Object.assign({}, _item);
+		item.area =  areas[item.id] && areas[item.id].toFixed(0);
+		return item;
 	})
 	annotationTable.updateData(newRows);
 };

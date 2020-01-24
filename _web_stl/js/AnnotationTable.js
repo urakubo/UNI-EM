@@ -39,7 +39,7 @@ const updateColorOptionsOnAnnotator = () => {
   const colorParams = {
     eraser: {r: 1, g: 1, b: 1},
   };
-  const tableData = AnnotationTable.getData(true);
+  const tableData = AnnotationTable.getData("active");
   let targetColorId = null;
   for (row of tableData) {
     colorParams[row.id] = {r: row.r / 255, g: row.g / 255, b: row.b / 255};
@@ -77,34 +77,32 @@ const AnnotationTable = new Tabulator('#AnnotationTable', {
 	movableRows: true,
 	initialSort:[{column:"id", dir:"dsc"},],
 	columns:[
-      {title: "Delete", formatter: "buttonCross",  align: "center", cellClick: (e, cell) => {cell.getRow().delete()}},
-      {title: "Visible", field:"visibility", width: 73, align:"center", formatter:"tickCross", cellClick: (e, cell)=>{
+      {title: "Delete", formatter: "buttonCross",  align: "center", cellClick: (e, cell) => {cell.getRow().delete()}, headerSort:false},
+      {title: "Visible", field:"visibility", width: 73, align:"center", formatter:"tickCross", headerSort:false, cellClick: (e, cell)=>{
         const value = cell.getRow().getData();
         cell.setValue(!value.visibility || value.target);
         updateColorOptionsOnAnnotator();
     }},
-      {title: "Target", field:"target", width: 73, align:"center", formatter:"tickCross", cellClick: (e, cell)=>{
-        const table = cell.getTable();
+      {title: "Target", field:"target", width: 73, align:"center", formatter:"tickCross", headerSort:false, cellClick: (e, cell)=>{
+        const table = AnnotationTable;
         const value = cell.getRow().getData();
-        table.setData(table.getData(true).filter(item => { 
+        table.setData(table.getData("active").map(item => { 
+          item = Object.assign({}, item);
+          item.debug = true;
           item.target = value.id == item.id;
           item.visibility = item.visibility || item.target;
-          return item;
+          return item;  
         }))
         updateColorOptionsOnAnnotator();
       }},
 	    {title: "ID", field:"id", width: 40},
 	    {title: "Name", field: "name"},
-   	  {title: "R", field: "r", minwidth: 30, width: 35, align: "right", visible: true, editor: "number", editorParams: {min:0, max: 255, step: 1}, mutator: mutatorClip, mutatorParams: mutatorParamsClip},
-	    {title: "G", field: "g", minwidth: 30, width: 35, align: "right", visible: true, editor: "number", editorParams: {min:0, max: 255, step: 1}, mutator: mutatorClip, mutatorParams: mutatorParamsClip},
-	    {title: "B", field: "b", minwidth: 30, width: 35, align: "right", visible: true, editor: "number", editorParams: {min:0, max: 255, step: 1}, mutator: mutatorClip, mutatorParams: mutatorParamsClip},
+   	  {title: "R", field: "r", minwidth: 30, width: 35, align: "right", visible: true, editor: "number", editorParams: {min:0, max: 255, step: 1}, mutator: mutatorClip, mutatorParams: mutatorParamsClip, headerSort:false},
+	    {title: "G", field: "g", minwidth: 30, width: 35, align: "right", visible: true, editor: "number", editorParams: {min:0, max: 255, step: 1}, mutator: mutatorClip, mutatorParams: mutatorParamsClip, headerSort:false},
+	    {title: "B", field: "b", minwidth: 30, width: 35, align: "right", visible: true, editor: "number", editorParams: {min:0, max: 255, step: 1}, mutator: mutatorClip, mutatorParams: mutatorParamsClip, headerSort:false},
 	    {title: "Area", field: "area"},
 	    {title: "Volume", field: "volume"}
 	],  
-	cellEdited: (cell) => {
-    console.log("cellEdited")
-    updateColorOptionsOnAnnotator()
-  },
   rowMoved: (row) => {
     updateColorOptionsOnAnnotator()
   },
@@ -131,7 +129,7 @@ const setAnnotationOverwrite = (checked) => {
 let annotationId = 0;
 $('#button-add-annotation-layer').on('click', (event) => {
     annotationId++;
-    const hasTarget = AnnotationTable.getData(true).some(item => item.target);
+    const hasTarget = AnnotationTable.getData("active").some(item => item.target);
     var layer = Object.assign({id: annotationId, name: "Layer" + String(annotationId), area:0, volume: 0, visibility: true, target: !hasTarget}, getRandomColor(annotationId));
     AnnotationTable.addData(layer);
     updateColorOptionsOnAnnotator()
@@ -142,7 +140,7 @@ $('#save-annotation-table-csv').on('click', (event) => {
 });
 
 const downloadAnnotationTableAsCSV = () => {
-  const tableData = AnnotationTable.getData(true);
+  const tableData = AnnotationTable.getData("active");
   const csvData = [["id", "name", "r", "g", "b", "area"]]
   for (row of tableData) {
     csvData.push([row.id, row.name, row.r, row.g, row.b]);
