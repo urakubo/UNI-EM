@@ -1,6 +1,6 @@
-//
-//
-//
+import { AnnotationTable, updateColorOptionsOnAnnotator } from "./AnnotationTable";
+import { APP } from "./APP";
+import { ObjMarkerTable } from "./MarkerTable";
 
 var xratio = 0.6;
 var yratio = 0.95;
@@ -15,14 +15,16 @@ xshift = 0;
 yshift = 0;
 zshift = 0;
 
-
-var APP = { };
 APP.animate = function() {
 	APP.renderer.render( APP.scene, APP.camera );
 	APP.controls.update();
 	requestAnimationFrame( APP.animate );
 };
 
+APP.dragging = false;
+APP.annotation_mode = false;
+APP.annotation_paint_mode = true;
+APP.annotation_overwrite = false;
 
 // ObtainWindowSize
 function onWindowResize() {
@@ -37,28 +39,40 @@ function onWindowResize() {
 
 // Add stl objects and a name
 APP.addSTLObject = function(url, name, objcolor) {
-    var loader = new THREE.STLLoader();
-    loader.load(url, function (geometry) {
-		var material = new THREE.MeshLambertMaterial( { color: objcolor } ); //ambient: 0xff0000,
-        var mesh = new THREE.Mesh(geometry, material);
-        // APP.scene.add(mesh);
-        mesh.name = name;
-        mesh.scale.set(1,1,1);
-		mesh.material.side = THREE.DoubleSide;
-        APP.scene.add(mesh);
+  var loader = new THREE.STLLoader();
+  loader.load(url, function(bufferGeometry) {
+	  if (bufferGeometry.isBufferGeometry) {
+		  bufferGeometry.attributes.color = bufferGeometry.attributes.color || bufferGeometry.attributes.position.clone();
+		  bufferGeometry.attributes.color.array.fill(1);
+		  bufferGeometry.attributes.color.needsUpdate = true;
+		  bufferGeometry.colorsNeedUpdate = true;
+	  }
+	  const meshMaterial = new THREE.MeshPhongMaterial({
+		  color: objcolor,
+		  specular: 0x776666,
+		  shininess: 0.2,
+		  vertexColors: THREE.FaceColors,
+		  side: true
+	  })
+	  var mesh = new THREE.Mesh(bufferGeometry, meshMaterial);
+      mesh.name = name;
+      mesh.scale.set(1, 1, 1);
+      mesh.material.side = THREE.DoubleSide;
+      APP.scene.add(mesh);
 
-        mesh.translateX( xshift );
-        mesh.translateY( yshift );
-        mesh.translateZ( zshift );
+      mesh.translateX(xshift);
+      mesh.translateY(yshift);
+	  mesh.translateZ(zshift);
 
-		//APP.scene.getObjectByName('test_name2').rotation.x += 0.005;
-		//APP.scene.getObjectByName('test_name2').rotation.y += 0.005;
-		//console.log('Object name:');
-		//console.log(name);
-        //APP.scene.remove(mesh);
-    	});
-	}
+	  updateColorOptionsOnAnnotator();
 
+      //APP.scene.getObjectByName('test_name2').rotation.x += 0.005;
+      //APP.scene.getObjectByName('test_name2').rotation.y += 0.005;
+      //console.log('Object name:');
+      //console.log(name);
+      //APP.scene.remove(mesh);
+  });
+}
 
 // Change the color of the stl object specified by a name after generation.
 APP.changecolorSTLObject = function(name, objcolor){
@@ -80,8 +94,8 @@ APP.removeSTLObject = function(name){
 APP.addBoundingBox = function(){
 
 	if ( APP.BackGroundColor == 'Black'){
-		var mat = new THREE.LineBasicMaterial( { color: 0xFFFFFF, linewidth: 2 } );
-		}
+		  var mat = new THREE.LineBasicMaterial( { color: 0xFFFFFF, linewidth: 2 } );
+		  }
 	else{
 		var mat = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 2 } );
 		}
@@ -127,9 +141,11 @@ function rgb2hex ( rgb ) {
 
 // Operation on mouse click
 function clickPosition( event ) {
+	onDragStart(event);
 	// Location of mouse
 	var clientX = event.clientX;
 	var clientY = event.clientY;
+
 
 	// Normalization of location
 	var mouse = new THREE.Vector2();
@@ -143,11 +159,10 @@ function clickPosition( event ) {
 
 	// Indetify crossing objects.
 	var intersects = raycaster.intersectObjects( APP.scene.children );
-
 	// Write the most proximal one.
 	if (Object.keys(intersects).length > 0) {
 		var objid = intersects[0].object.name;
-		target = document.getElementById("ClickedObjectID");
+		const target = document.getElementById("ClickedObjectID");
 		target.innerHTML = objid;
 
 		if (APP.MarkerOffOn == 1) {
@@ -172,7 +187,7 @@ function clickPosition( event ) {
 			});
 		}
 	}else{
-		target = document.getElementById("ClickedObjectID");
+		const target = document.getElementById("ClickedObjectID");
 		target.innerHTML = "Background";
 	}
 }
@@ -308,12 +323,49 @@ APP.removeMarker = function(id){
     APP.scene.remove(obj);
 	}
 
-	// Remove from json variable
+        // Remove from json variable
 	//var newData = APP.MarkerTable.filter(function(item, index){ if (item.id != id) return true;});
 	//APP.MarkerTable = newData
 }
 
-function StlViewer() {
+
+var onDragStart = (event) => {
+  APP.dragging = true;
+	annotate(event);
+}
+
+var onDragEnd = (event) => {
+	APP.dragging = false;
+}
+
+var annotate = (event) => {
+  if (!APP.dragging) return;
+  if (!APP.annotation_mode) return;
+	annotateBySphere({
+		x: event.offsetX,
+		y: event.offsetY,
+		camera: APP.camera,
+		scene: APP.scene,
+		container: APP.renderer.domElement,
+		radius: 3.,
+		ignoreBackFace: null,
+  });
+  updateMetricsOnAnnotationTable(AnnotationTable, {scene: APP.scene})
+};
+
+const updateMetricsOnAnnotationTable = (annotationTable, scene) => {
+	const params = getCurrentParams(scene);
+	const areas = params.areas;
+	const newRows = annotationTable.getData("active").map(_item => {
+		const item = Object.assign({}, _item);
+		item.area =  areas[item.id] && areas[item.id].toFixed(0);
+		return item;
+	})
+	annotationTable.updateData(newRows);
+};
+
+
+export function StlViewer() {
 
 	// Renderer
 	var container = document.getElementById('myCanvas');
@@ -348,12 +400,14 @@ function StlViewer() {
 
 	// Controlsを用意
 	APP.controls = new THREE.TrackballControls( APP.camera, APP.renderer.domElement );
-	APP.controls.rotateSpeed = 20.0;
-	APP.animate();
+  APP.controls.rotateSpeed = 10;
+  APP.animate();
 
 	// Response to mouse click
-	APP.renderer.domElement.addEventListener( 'mousedown', clickPosition, false );
-
+		APP.renderer.domElement.addEventListener( 'mousedown', clickPosition, false );
+		APP.renderer.domElement.addEventListener('mouseup', onDragEnd, false);
+		APP.renderer.domElement.addEventListener('onmousemove', annotate, false);
+		APP.renderer.domElement.onmousemove = annotate;
 	// Marker Variables
 	APP.MarkerOffOn = 0;
 	APP.MarkerR = 255;

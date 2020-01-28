@@ -124,9 +124,7 @@ class AnnotatorServerLogic:
 
   def run( self ):
     ####
-    path_main = os.path.join(main_dir_, "_web_stl")
-    path_css = os.path.join(main_dir_, "_web_stl", "css") # (main_dir, "static", "css")
-    path_js = os.path.join(main_dir_, "_web_stl", "js")
+    path_main = os.path.join(main_dir_, "_web_stl", "dist")
     ####
     # asyncio.set_event_loop(self.u_info.worker_loop_stl)
     ev_loop = asyncio.new_event_loop()
@@ -134,8 +132,6 @@ class AnnotatorServerLogic:
 
 
     annotator = tornado.web.Application([
-      (r'/css/(.*)', tornado.web.StaticFileHandler, {'path': path_css}),
-      (r'/js/(.*)', tornado.web.StaticFileHandler, {'path': path_js}),
       (r'/data/(.*)', tornado.web.StaticFileHandler, {'path': stldata_dir}),
       (r'/ws/display', AnnotatorWebSocket, {'player': self.small_ids}),
       (r'/(.*)', tornado.web.StaticFileHandler, {'path': path_main})

@@ -61,3 +61,5 @@ target/
 Boundingbox.json
 segmentInfo.json
 
+# Web Application
+_web_stl/node_modules

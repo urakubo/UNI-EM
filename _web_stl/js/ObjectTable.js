@@ -1,3 +1,6 @@
+import { APP } from "./APP";
+import { csvFormatter } from "./csv";
+
 var ObjObjextTable = new Tabulator("#ObjectTable", {
 	ajaxURL:"./data/segmentInfo.json",
 	layout:"fitColumns",      //fit columns to width of table
@@ -15,7 +18,7 @@ var ObjObjextTable = new Tabulator("#ObjectTable", {
 	columns:[                 //define the table columns
     // ActやConfidenceはダウンロード時に除外されないよう定義しておく。ただしカラムvisible: falseにして非表示にする
     {title:"Act", field: "act", download: true, visible: false},
-		{title:"Visible", field:"act", width: 73, align:"center",formatter:"tickCross", editor:"tickCross", download: false},
+		{title:"Visible", field:"act", width: 73, align:"center",formatter:"tickCross", cellClick: (e, cell)=>{cell.setValue(!cell.getValue());}, download: false},
 		{title:"ID", field:"id", width: 50},
 		{title:"Name", field:"name", editor:"input"},
 		{title:"Size", field:"size", width:60, align:"right"},
@@ -48,13 +51,13 @@ var ObjObjextTable = new Tabulator("#ObjectTable", {
 	  		console.log("Requested ID:", id );
 	  		var host = location.hostname ;
 	  		var port = location.port;
-			call_url = "ws:"+host+":"+port+"/ws/display";
-			filename = "http://"+host+":"+port+"/data/i%d.stl";
+			const call_url = "ws:"+host+":"+port+"/ws/display";
+			const filename = "http://"+host+":"+port+"/data/i%d.stl";
 			var connection = new WebSocket(call_url);
 			connection.onopen = function(){ connection.send(id); }
         	connection.onmessage = function (e) {
         		if(e.data == 'True') {
-        			target_url = sprintf(filename, id );
+        			const target_url = sprintf(filename, id );
         			console.log( target_url );
             		APP.addSTLObject(target_url, id, r*256*256+g*256+b*1);
             		};
@@ -63,7 +66,7 @@ var ObjObjextTable = new Tabulator("#ObjectTable", {
 
 	  	if(act == false) {
 	  		console.log("Disappear ID:", id )
-			filename = sprintf("./stls/i%d.stl", id );
+			const filename = sprintf("./stls/i%d.stl", id );
 			APP.removeSTLObject(id);
 			}
 		}
