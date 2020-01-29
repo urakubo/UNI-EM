@@ -61,3 +61,4 @@ segmentInfo.json
 
 # Web Application
 _web_stl/node_modules
+!_web_stl/dist
