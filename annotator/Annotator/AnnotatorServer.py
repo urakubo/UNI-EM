@@ -121,6 +121,7 @@ class AnnotatorServerLogic:
       (r'/(.*)', tornado.web.StaticFileHandler, {'path': web_path})
     ],debug=True,autoreload=True)
 
+
     server = tornado.httpserver.HTTPServer(annotator)
     server.listen(self.u_info.port_stl)
     print('Annotator data path: ',self.u_info.data_annotator_path)

@@ -201,3 +201,37 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+.toggleButton {
+  height: 24px;
+  width: 24px;
+  background: #fff;
+}
+
+button:active {
+  background: #eee;
+  border-top: 2px solid #000;
+  border-left: 2px solid #000;
+}
+button.active {
+  background: #eee;
+  border-top: 2px solid #000;
+  border-left: 2px solid #000;
+}
+button {
+  -webkit-appearance: initial;
+}
+button:focus {
+  outline: none;
+}
+
+.buttonGroup button{
+  height: 24px;
+  font-size: 11px;
+}
+
+.buttonGroup {
+  font-size: 0;
+  margin-top: 3px;
+  margin-bottom: 5px;
+}

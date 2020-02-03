@@ -1,7 +1,8 @@
+import { APP } from "./APP";
 //
 //
 //
-function BackgroundWhiteBlack(ischecked) {
+window.BackgroundWhiteBlack = function (ischecked) {
 		if( ischecked == true ) {
 			APP.setBackGroundColor( 0x000000 );
 			APP.BackGroundColor = 'Black';
@@ -13,7 +14,7 @@ function BackgroundWhiteBlack(ischecked) {
       		APP.setBoundingBoxColor( 0x000000 );
 			}
       }
-function FrameOffOn(ischecked) {
+window.FrameOffOn =  function (ischecked) {
 		if( ischecked == true ) {
       		APP.addBoundingBox();
    			}
@@ -21,14 +22,14 @@ function FrameOffOn(ischecked) {
 			APP.removeBoundingBox();
 			}
       }
-function DirLight(isnum) {
+window.DirLight = function (isnum) {
 		APP.directionalLight.intensity = isnum / 100;
       }
-function AmbLight(isnum) {
+window.AmbLight = function (isnum) {
 		APP.ambientLight.intensity = isnum / 100;
       }
 
-function MarkerOffOn(ischecked) {
+window.MarkerOffOn = function (ischecked) {
 		if( ischecked == true ) {
       		APP.MarkerOffOn = 1;
    			}
@@ -37,7 +38,7 @@ function MarkerOffOn(ischecked) {
 			}
       }
 
-function SaveImage(ischecked) {
+window.SaveImage = function (ischecked) {
 	let canvas = document.getElementById("myCanvas").querySelector('canvas');
 
 	let link = document.createElement("a");
