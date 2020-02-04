@@ -104,7 +104,7 @@ class AnnotatorServerLogic:
 
   def run( self ):
     ####
-    web_path = self.u_info.web_annotator_path
+    web_path = os.path.join(self.u_info.web_annotator_path, "dist")
     css_path = os.path.join(self.u_info.web_annotator_path, "css")
     js_path  = os.path.join(self.u_info.web_annotator_path, "js")
     ####
