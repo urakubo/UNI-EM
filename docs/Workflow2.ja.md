@@ -67,6 +67,7 @@ UNI-EMによる3D FFNセグメンテーションの一例として、ATUM/SEMに
 	I0217 21:52:10.164829  4268 build_coordinates.py:78]  13: 71675
 	I0217 21:52:10.164829  4268 build_coordinates.py:80] Resampling and shuffling coordinates.
 	I0217 21:52:38.350505  4268 build_coordinates.py:88] Saving coordinates.
+	FFN preparaion was finished.
 ```
 
 <BR>
