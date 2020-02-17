@@ -46,10 +46,10 @@ coll = ()
 ########################## main ##########################
 pathex=[
   main_dir,
-  path.join(main_dir, "filesystem"),
+  path.join(main_dir, "system"),
   path.join(main_dir, "dojo"),
   path.join(main_dir, "annotator"),
-  path.join(main_dir, "gui"),
+  path.join(main_dir, "dojoio"),
   path.join(main_dir, "plugins"),
   path.join(main_dir, "segment")
 ]
