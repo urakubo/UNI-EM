@@ -53,19 +53,22 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 ### Pyinstaller version (Microsoft Windows 10 only)
 1.	Download one of the following two versions, and unzip it:
 
-- Version 0.84:
-	- [CPU version (Ver0.84; 293 MB)](http://bit.ly/2ZX2jHz)
-	- [GPU version (Ver0.84: 726 MB)](http://bit.ly/2RP8k6l)
+- Version 0.86:
+	- [CPU version (Ver0.86; 293 MB)](http://bit.ly/2wrxDF3)
+	- [GPU version (Ver0.86: 717 MB)](http://bit.ly/323xXp5)
 
 - Release summary:
 	- Bug fix.
-		- Safe termination and re-launch of web applications.
-		- Correct folder selection from the "open" dialog.
-		- Clear internal file/folder arrangement.
+		- 2D CNNs accept any sized images between 256 – 16384 xy pixels in the inference process.
+		- Safe termination and re-launch of Dojo web applications.
+		- Safe re-execution of 2D CNNs 
+		- Rapid thumbnail appearance in the image folder selection dialogs.
+		- Internal file/folder re-arrangement.
+		- Newer pillow and werkzeug were utilized.
 
 - Previous version:
-	- [CPU version (Ver0.82; 286 MB)](http://bit.ly/2Iveohj)
-	- [GPU version (Ver0.82: 710 MB)](http://bit.ly/2L2FMEZ)
+	- [CPU version (Ver0.84; 293 MB)](http://bit.ly/2ZX2jHz)
+	- [GPU version (Ver0.84: 726 MB)](http://bit.ly/2RP8k6l)
 
 
 2.	Download one of sample EM/segmentation dojo folders from the following link, and unzip it:
