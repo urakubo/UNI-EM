@@ -82,7 +82,7 @@ Here we try automated membrane segmentation of a stack of EM images from mouse s
 
 5. Select the training tab in the FFN dialogue (**Fig. 2a**).
 	- Set the parameter Max Training Steps. It is necessary to train the tensorflow model over several million times, and it takes over one week for precise inference with a NVIDIA GTX1080ti-equipped PC. The training program outputs a tensorflow model every 3000 steps. Users can restart the training from the latest model even if the training process is interrupted. The training program automatically read the latest model from the Tensorflow Model Folder. The training process ends if it reaches the Max Training Steps. Users can execute additional training by setting the larger Max Training Steps if the training appears to be insufficient.
-	- Check "Sparse Z" if the z-pitch (nm/pixel) of the EM image is smaller than the xy-pitch (nm/pixel). Here please check it because the target EM images have a 29-nm z pitch and a 3-nm xy pitch ( Cell 162(3):648-61, 2015 ). Internally, the parameters are set as :
+	- Check "Sparse Z" if the z-pitch (nm/pixel) of the EM image is greater than the xy-pitch (nm/pixel). Here please check it because the target EM images have a 29-nm z pitch and a 3-nm xy pitch ( Cell 162(3):648-61, 2015 ). Internally, the parameters are set as :
 		- "depth":12,"fov_size":[33,33,33],"deltas":[8,8,8] for checked
 		- "depth":9,"fov_size":[33,33,17],"deltas":[8,8,4] for unchecked
 
