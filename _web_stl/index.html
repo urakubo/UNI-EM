@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>3D Annotator</title>
+  <link rel="shortcut icon" href="img/favicon.ico">
+  <link rel="stylesheet" type="text/css" href="app.bundle.css">
+  <script type="text/javascript" src="app.bundle.js"></script>
+</head>
+<body>
+  <div class="left-container">
+    <div id="myCanvas"></div>
+  </div>
+
+  <div class="right-container">
+    <h3><strong>3D Annotator</strong></h3>
+    <div class="InLineMessage">
+      Clicked object ID:
+      <div class="contents InLineMessage" id="ClickedObjectID"></div>
+    </div>
+    <ul id="menu">
+      <li>
+        <div class="archive">Appearance</div>
+        <ul class="subMenu appearance-actions">
+          <li>
+            <div class="menu-label">Background:</div>
+            White
+            <label class="switch">
+              <input type="checkbox" onclick="BackgroundWhiteBlack(this.checked);">
+              <span class="slider round"></span>
+            </label>
+            Black
+          </li>
+          <li>
+            <div class="menu-label">Bounding box:</div>
+            OFF
+            <label class="switch">
+              <input type="checkbox" onclick="FrameOffOn(this.checked);">
+              <span class="slider round"></span>
+            </label>
+            ON
+          </li>
+          <li>
+            <div class="menu-label">Directional light intensity:</div>
+            <input type="number" min="0" max="100" step="5" value="80" onchange="DirLight(this.value);">
+          </li>
+          <li>
+            <div class="menu-label">Ambient light intensity:</div>
+            <input type="number" min="0" max="100" step="5" value="50" onchange="AmbLight(this.value);">
+          </li>
+        </ul>
+        <li>
+          <div class="archive">Marker label</div>
+          <ul class="subMenu marker-label-actions">
+            <li>
+              <div class="menu-label"> </div>
+              OFF
+              <label class="switch">
+                <input type="checkbox" onclick="MarkerOffOn(this.checked);">
+                <span class="slider round"></span>
+              </label>
+              ON
+            </li>
+            <li>
+              <div class="menu-label">Radius:</div>
+              <input type="number" min="0.2" max="20" step="0.2" value="2.0" onchange="APP.MarkerRadius = Number(this.value);">
+            </li>
+            <li>
+              <div class="menu-label">Color:</div>
+              R: <input type="number" min="0" max="255" step="1" value="255" onchange="APP.MarkerR = Number(this.value);">
+              G: <input type="number" min="0" max="255" step="1" value="0"   onchange="APP.MarkerG = Number(this.value);">
+              B: <input type="number" min="0" max="255" step="1" value="0"   onchange="APP.MarkerB = Number(this.value);">
+            </li>
+            <li>
+              <div class="menu-label">Prefix:</div>
+              <input type="text" value="Marker" onchange="APP.MarkerPrefix = this.value;">
+            </li>
+            <li>
+              <div class="menu-label">Suffix:</div>
+              <input type="number" id="SetSuffixNum" min="0" step="1" value="0" onchange="APP.MarkerSuffix = Number(this.value);">
+            </li>
+          </ul>
+          <li>
+            <button type="button" class="save-image btn btn4 font3" onClick="SaveImage(this.checked);">Save Image</button>
+          </li>
+        </li>
+      </li>
+    </ul>
+
+    <p>
+      <fieldset class="table-frame">
+        <legend>Object Table</legend>
+        <div id="ObjectTable"></div>
+        <div class="object-table-actions">
+          <button type="button" id="save-object-table-csv" class="download-csv btn btn4 font3">Download CSV</button>
+        </div>
+      </fieldset>
+    </p>
+    <p>
+      <fieldset class="table-frame annotation-table-frame">
+	      <legend>Annotation Table</legend>
+              <div class="menu-label"> </div>
+              OFF
+              <label class="switch">
+                <input type="checkbox" onclick="switchAnnotation(this.checked)">
+                <span class="slider round"></span>
+              </label>
+              ON
+        <div><button type="button" id="button-add-annotation-layer" class="btn btn4 font3">+</button></div>
+        <div id="AnnotationTable"></div>
+        <div>Eraser
+          <label class="switch">
+            <input type="checkbox" onclick="switchEraserAnnotation(this.checked)" checked>
+            <span class="slider round"></span>
+          </label>
+          Annotator
+        </div>
+        <div>Overwrite OFF
+          <label class="switch">
+            <input type="checkbox" onclick="setAnnotationOverwrite(this.checked)">
+            <span class="slider round"></span>
+          </label>
+          ON
+        </div>
+
+        <div class="annotation-table-actions">
+          <button type="button" id="save-annotation-table-csv" clss="btn btn4 font3">Download CSV</button>
+        </div>
+      </fieldset>
+    </p>
+
+    <p>
+      <fieldset class="table-frame marker-table-frame">
+        <legend>Marker Table</legend>
+        <div id="MarkerTable"></div>
+        <div class="marker-table-actions">
+          <button type="button" id="save-marker-table-csv" class="btn btn4 font3">Download CSV</button>
+          <label for="import-csv-marker-table" id="import-csv-marker-table-label" class="load-csv-label btn btn4 font3">
+            Import CSV
+            <input type="file" id="import-csv-marker-table" class="btn btn4 font3" style="display: none;">
+          </label>
+          <button type="button" id="clear-marker-table" class="btn btn4 font3">Clear</button>
+        </div>
+      </fieldset>
+    </p>
+  </div>
+</body>
+</html>
