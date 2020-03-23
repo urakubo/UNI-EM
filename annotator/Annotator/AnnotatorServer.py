@@ -7,6 +7,7 @@ import asyncio
 
 import numpy as np
 import json
+import socketio
 
 from marching_cubes import march
 from stl import mesh
@@ -19,6 +20,7 @@ sys.path.append(path.join(main_dir, "dojoio"))
 
 from Params import Params
 from DB import DB
+from annotator.Annotator.sio import sio
 import miscellaneous.Miscellaneous as m
 
 
@@ -112,12 +114,12 @@ class AnnotatorServerLogic:
     ev_loop = asyncio.new_event_loop()
     asyncio.set_event_loop(ev_loop)
 
-
     annotator = tornado.web.Application([
       (r'/css/(.*)', tornado.web.StaticFileHandler, {'path': css_path}),
       (r'/js/(.*)', tornado.web.StaticFileHandler, {'path': js_path}),
       (r'/data/(.*)', tornado.web.StaticFileHandler, {'path': self.u_info.data_annotator_path}),
       (r'/ws/display', AnnotatorWebSocket, {'player': self.small_ids, 'path': self.u_info.data_annotator_path}),
+      (r'/socket.io/', socketio.get_tornado_handler(sio)),
       (r'/(.*)', tornado.web.StaticFileHandler, {'path': web_path})
     ],debug=True,autoreload=True)
 
@@ -132,9 +134,9 @@ class AnnotatorServerLogic:
     print('*'*80)
 
     tornado.ioloop.IOLoop.instance().start()
-    ev_loop.stop()
-    ev_loop.close()
-    server.stop()
+    #ev_loop.stop()
+    #ev_loop.close()
+    #server.stop()
     print("Tornado web server stops.")
     return
 
