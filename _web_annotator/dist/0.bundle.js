@@ -1013,6 +1013,7 @@ _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].addSTLObject = function (url, name, obj
       specular: 0x776666,
       shininess: 0.2,
       vertexColors: THREE.FaceColors,
+      opacity: 0.4,
       side: true
     });
     var mesh = new THREE.Mesh(bufferGeometry, meshMaterial);
@@ -1020,6 +1021,7 @@ _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].addSTLObject = function (url, name, obj
     mesh.scale.set(1, 1, 1);
     mesh.material.side = THREE.DoubleSide;
     _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.add(mesh);
+    _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].addCenterlineObject(name, objcolor);
     mesh.translateX(xshift);
     mesh.translateY(yshift);
     mesh.translateZ(zshift);
@@ -1038,6 +1040,14 @@ _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].changecolorSTLObject = function (name, 
   if (obj != undefined) {
     obj.material.color.setHex(objcolor);
   }
+
+  name_centerline = 'line' + name.toString();
+  console.log(name_centerline);
+  var obj = _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.getObjectByName(name_centerline);
+
+  if (obj != undefined) {
+    obj.material.color.setHex(objcolor);
+  }
 }; // Remove a stl object by a name after generation.
 
 
@@ -1047,6 +1057,89 @@ _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].removeSTLObject = function (name) {
   if (obj != undefined) {
     _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.remove(obj);
   }
+
+  name_centerline = 'line' + name.toString();
+  console.log(name_centerline);
+  var obj = _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.getObjectByName(name_centerline);
+
+  if (obj != undefined) {
+    _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.remove(obj);
+  }
+}; // Add stl objects and a name
+
+
+_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].addCenterlineObject = function (id, objcolor) {
+  var data_vertices = _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].obtainDATA('vertices', id);
+  var data_edges = _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].obtainDATA('edges', id);
+  console.log('Length vertices: ' + data_vertices.length);
+
+  if (isNaN(data_vertices[0][0]) == true) {
+    console.log(data_vertices);
+    console.log('No morphological data.');
+    return false;
+  } // console.log('Color: ' + objcolor);
+
+
+  var geometry = new THREE.Geometry();
+  var material = new THREE.LineBasicMaterial({
+    color: objcolor,
+    //0x000000
+    linewidth: 3,
+    fog: true
+  });
+
+  for (var i = 0; i < data_edges.length; i++) {
+    i1 = data_edges[i][0];
+    i2 = data_edges[i][1]; //console.log(data_edges)
+
+    v1 = new THREE.Vector3(data_vertices[i1][0] + xshift, data_vertices[i1][1] + yshift, data_vertices[i1][2] + zshift);
+    v2 = new THREE.Vector3(data_vertices[i2][0] + xshift, data_vertices[i2][1] + yshift, data_vertices[i2][2] + zshift);
+    geometry.vertices.push(v1, v2);
+    console.log(data_vertices[i1][0] + xshift, data_vertices[i1][1] + yshift, data_vertices[i1][2] + zshift);
+  }
+
+  var line = new THREE.LineSegments(geometry, material);
+  line.name = 'line' + id.toString();
+  console.log(line.name);
+  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.add(line); //renderer.render(scene, camera);
+};
+
+_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].obtainDATA = function (name, id) {
+  var req = new XMLHttpRequest();
+  var response = undefined; // 値を引き取るための変数
+
+  req.onload = function () {
+    response = req.response; // 親ブロック（xhrStart）のresponse変数に引き継ぐ
+  };
+
+  req.open("get", "./ws/skeleton?variable=" + name + "&id=" + id, false);
+  req.send(null);
+  response_array = _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].convertCSVtoArray(response);
+  return response_array;
+};
+
+_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].convertCSVtoArray = function (responseText) {
+  //改行ごとに配列化
+  var arr = responseText.split('\n');
+  console.log('Length: ' + arr.length); //1次元配列を2次元配列に変換
+
+  var res = [];
+
+  for (var i = 0; i < arr.length; i++) {
+    //空白行が出てきた時点で終了
+    if (arr[i] == '') break; //","ごとに配列化
+
+    res[i] = arr[i].split(',');
+
+    for (var i2 = 0; i2 < res[i].length; i2++) {
+      //数字の場合は「"」を削除
+      if (res[i][i2].match(/\-?\d+(.\d+)?(e[\+\-]d+)?/)) {
+        res[i][i2] = parseFloat(res[i][i2].replace('"', ''));
+      }
+    }
+  }
+
+  return res;
 }; // Draw bounding box
 
 
@@ -1396,6 +1489,9 @@ function StlViewer() {
 
   _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].controls = new THREE.TrackballControls(_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].camera, _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].renderer.domElement);
   _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].controls.rotateSpeed = 10;
+  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].controls.staticMoving = false;
+  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].controls.dynamicDampingFactor = 1.0; // staticMoving = false のときの減衰量
+
   _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].animate(); // Response to mouse click
 
   _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].renderer.domElement.addEventListener('mousedown', clickPosition, false);
@@ -1410,7 +1506,7 @@ function StlViewer() {
   _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerPrefix = "Marker";
   _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerSuffix = 0;
   _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerRadius = 2.0;
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerID = 1; // Cursor 
+  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerID = 1; // Cursor
 
   var geometry = new THREE.SphereBufferGeometry(3, 32, 32);
   var material = new THREE.MeshLambertMaterial({
