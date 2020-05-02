@@ -1410,7 +1410,7 @@ function StlViewer() {
   _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerPrefix = "Marker";
   _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerSuffix = 0;
   _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerRadius = 2.0;
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerID = 1; // Cursor 
+  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerID = 1; // Cursor
 
   var geometry = new THREE.SphereBufferGeometry(3, 32, 32);
   var material = new THREE.MeshLambertMaterial({

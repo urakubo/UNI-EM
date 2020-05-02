@@ -1,7 +1,7 @@
 {
   "name": "uni-em-annotator",
   "version": "1.0.0",
-  "description": "",
+  "description": "```\r sudo apt install node npm\r ```",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server",
@@ -17,6 +17,7 @@
     "@babel/plugin-proposal-optional-chaining": "^7.8.3",
     "@babel/preset-env": "^7.8.3",
     "babel-loader": "^8.0.6",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^3.4.2",
     "file-loader": "^5.0.2",
@@ -28,6 +29,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.12.0",
     "agh.sprintf": "0.0.11",
+    "express": "^4.17.1",
     "jquery": "^3.4.1",
     "tabulator-tables": "^4.5.3",
     "three": "^0.112.1",
