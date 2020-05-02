@@ -52,6 +52,7 @@ APP.addSTLObject = function(url, name, objcolor) {
 		  specular: 0x776666,
 		  shininess: 0.2,
 		  vertexColors: THREE.FaceColors,
+	    	  opacity: 0.4,
 		  side: true
 	  })
 	  var mesh = new THREE.Mesh(bufferGeometry, meshMaterial);
@@ -60,9 +61,10 @@ APP.addSTLObject = function(url, name, objcolor) {
       mesh.material.side = THREE.DoubleSide;
       APP.scene.add(mesh);
 
+ 
       mesh.translateX(xshift);
       mesh.translateY(yshift);
-	  mesh.translateZ(zshift);
+      mesh.translateZ(zshift);
 
 	  updateColorOptionsOnAnnotator();
 
@@ -71,6 +73,8 @@ APP.addSTLObject = function(url, name, objcolor) {
       //console.log('Object name:');
       //console.log(name);
       //APP.scene.remove(mesh);
+
+
   });
 }
 
@@ -80,14 +84,107 @@ APP.changecolorSTLObject = function(name, objcolor){
 	if ( obj != undefined ) {
     		obj.material.color.setHex( objcolor );
 		}
+	
+	name_centerline = 'line' + name.toString();
+	console.log(name_centerline);
+	var obj = APP.scene.getObjectByName(name_centerline);
+	if ( obj != undefined ) {
+    		obj.material.color.setHex( objcolor );
+		}
 	}
 
 // Remove a stl object by a name after generation.
 APP.removeSTLObject = function(name){
 	var obj = APP.scene.getObjectByName(name);
 	if ( obj != undefined ) {
+    	    APP.scene.remove(obj);
+	}
+	name_centerline = 'line' + name.toString();
+	console.log(name_centerline);
+	var obj = APP.scene.getObjectByName(name_centerline);
+	if ( obj != undefined ) {
     		APP.scene.remove(obj);
+	}
+	}
+
+
+
+// Add stl objects and a name
+APP.addCenterlineObject = function(id, objcolor) {
+
+		var data_vertices = APP.obtainDATA('vertices', id);
+		var data_edges    = APP.obtainDATA('edges', id);
+		
+		var i1 = undefined;
+		var i2 = undefined;
+		var v1 = undefined;
+		var v2 = undefined;
+		
+		console.log('Length vertices: ' + data_vertices.length);
+		if (isNaN(data_vertices[0][0]) == true) {
+			console.log(data_vertices);
+			console.log('No morphological data.');
+			return false;
 		}
+		// console.log('Color: ' + objcolor);
+		var geometry = new THREE.Geometry();
+		var material = new THREE.LineBasicMaterial({
+			color: objcolor,  //0x000000
+			linewidth: 3,
+			fog:true
+		});
+		for(var i=0;i< data_edges.length;i++){
+			i1 = data_edges[i][0];
+			i2 = data_edges[i][1];
+			//console.log(data_edges)
+			v1 = new THREE.Vector3( data_vertices[i1][0]+xshift,data_vertices[i1][1]+yshift,data_vertices[i1][2]+zshift);
+			v2 = new THREE.Vector3( data_vertices[i2][0]+xshift,data_vertices[i2][1]+yshift,data_vertices[i2][2]+zshift);
+			geometry.vertices.push(v1, v2);
+			//console.log(data_vertices[i1][0]+xshift,data_vertices[i1][1]+yshift,data_vertices[i1][2]+zshift)
+			}
+		var line = new THREE.LineSegments( geometry, material );
+
+		line.name = 'line' + id.toString();
+		console.log(line.name);
+		APP.scene.add( line );
+		//renderer.render(scene, camera);
+	}
+
+
+
+APP.obtainDATA = function(name, id){
+		var req = new XMLHttpRequest();
+		var response = undefined;  // 値を引き取るための変数
+		req.onload = function(){
+		response = req.response;  // 親ブロック（xhrStart）のresponse変数に引き継ぐ
+			}
+		req.open("get", "./ws/skeleton?variable="+name+"&id="+id, false);
+		req.send(null);
+		return APP.convertCSVtoArray(response);
+	}
+
+
+APP.convertCSVtoArray = function(responseText){
+		//改行ごとに配列化
+		var arr = responseText.split('\n');
+		// console.log('Length: ' + arr.length); 
+
+		//1次元配列を2次元配列に変換
+		var res = [];
+		for(var i = 0; i < arr.length; i++){
+			//空白行が出てきた時点で終了
+			if(arr[i] == '') break;
+			//","ごとに配列化
+			res[i] = arr[i].split(',');
+
+			for(var i2 = 0; i2 < res[i].length; i2++){
+				//数字の場合は「"」を削除
+				if(res[i][i2].match(/\-?\d+(.\d+)?(e[\+\-]d+)?/)){
+					res[i][i2] = parseFloat(res[i][i2].replace('"', ''));
+				}
+			}
+		}
+		return res;
 	}
 
 // Draw bounding box
@@ -427,15 +524,18 @@ export function StlViewer() {
 
 	// Controlsを用意
 	APP.controls = new THREE.TrackballControls( APP.camera, APP.renderer.domElement );
-  APP.controls.rotateSpeed = 10;
-  APP.animate();
+	   APP.controls.rotateSpeed = 10;
+    	APP.controls.staticMoving = false;
+	APP.controls.dynamicDampingFactor = 1.0; // staticMoving = false のときの減衰量
+	APP.animate();
 
 	// Response to mouse click
-		APP.renderer.domElement.addEventListener( 'mousedown', clickPosition, false );
-		APP.renderer.domElement.addEventListener('mouseup', onDragEnd, false);
-		APP.renderer.domElement.addEventListener('onmousemove', annotate, false);
-		APP.renderer.domElement.onmousemove = annotate;
-	// Marker Variables
+	APP.renderer.domElement.addEventListener( 'mousedown', clickPosition, false );
+	APP.renderer.domElement.addEventListener('mouseup', onDragEnd, false);
+	APP.renderer.domElement.addEventListener('onmousemove', annotate, false);
+	APP.renderer.domElement.onmousemove = annotate;
+
+    // Marker Variables
 	APP.MarkerOffOn = 0;
 	APP.MarkerR = 255;
 	APP.MarkerG = 0;

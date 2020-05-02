@@ -4,6 +4,7 @@ import tornado
 import tornado.websocket
 import tornado.httpserver
 import asyncio
+import h5py
 
 import numpy as np
 import json
@@ -58,6 +59,66 @@ class AnnotatorWebSocket(tornado.websocket.WebSocketHandler):
     return True
   ###
 
+  
+
+class SkeletonHandler(tornado.web.RequestHandler):
+  ###
+  def __init__(self, *args, **kwargs):
+    self.data_skeleton_path = kwargs.pop('path')
+    super(SkeletonHandler, self).__init__(*args, **kwargs)
+  ###
+  def get(self):
+    variable = self.get_argument('variable', 'null')
+    id   = self.get_argument('id', 'null')
+    print(id)
+    if id == 'undefined':
+      print('ID is undefined.')
+      raise tornado.web.HTTPError(403)
+      return False
+    filename = os.path.join(self.data_skeleton_path, str(id).zfill(10)+'.hdf5')
+    if os.path.isfile(filename) == False:
+      print('No file exist: ', filename)
+      raise tornado.web.HTTPError(403)
+      return False
+    print(filename)
+    with h5py.File( filename ,'r') as f:
+      if variable == 'edges':
+          print('Send edges.')
+          att = 'attachement; filename=edges.csv'
+          target = f['edges'].value
+      elif variable == 'vertices':
+          print('Send vertices.')
+          att = 'attachement; filename=vertices.csv'
+          target = f['vertices'].value
+
+          scale_factor_xy = 5
+          xscale = 1 / (2 ** scale_factor_xy)
+          yscale = 1 / (2 ** scale_factor_xy)
+          zscale = 1 / 40
+          #print('target[:,0].shape : ', target[:,0].shape)
+          #print('target.shape : ', target.shape)
+          #print('xscale : ', xscale)
+          target = target[:,[0,2,1]]
+          target[:,0] = target[:,0]*zscale
+          target[:,1] = target[:,1]*xscale # Z
+          target[:,2] = target[:,2]*yscale
+          
+          #
+          
+      else:
+          print('No key.')
+          raise tornado.web.HTTPError(403)
+          return  False
+
+    self.set_header('Content-Type','text/csv')
+    self.set_header('content-Disposition', att)
+    for targ in target:
+      csv_data = ','.join(str(d) for d in targ) +'\n'
+      # print(csv_data)
+      self.write(csv_data) # mock data
+
+
+
 class AnnotatorHandler(tornado.web.RequestHandler):
   def get(self):
     self.render('index.html')
@@ -109,6 +170,7 @@ class AnnotatorServerLogic:
     web_path = os.path.join(self.u_info.web_annotator_path, "dist")
     css_path = os.path.join(self.u_info.web_annotator_path, "css")
     js_path  = os.path.join(self.u_info.web_annotator_path, "js")
+    skeleton_path  = os.path.join( self.u_info.files_path, "skeletons")
     ####
     # asyncio.set_event_loop(self.u_info.worker_loop_stl)
     ev_loop = asyncio.new_event_loop()
@@ -119,6 +181,7 @@ class AnnotatorServerLogic:
       (r'/js/(.*)', tornado.web.StaticFileHandler, {'path': js_path}),
       (r'/data/(.*)', tornado.web.StaticFileHandler, {'path': self.u_info.data_annotator_path}),
       (r'/ws/display', AnnotatorWebSocket, {'player': self.small_ids, 'path': self.u_info.data_annotator_path}),
+      (r'/ws/skeleton', SkeletonHandler, {'path': skeleton_path}),
       (r'/socket.io/', socketio.get_tornado_handler(sio)),
       (r'/(.*)', tornado.web.StaticFileHandler, {'path': web_path})
     ],debug=True,autoreload=True)

@@ -60,6 +60,7 @@ var ObjObjextTable = new Tabulator("#ObjectTable", {
         			const target_url = sprintf(filename, id );
         			console.log( target_url );
             		APP.addSTLObject(target_url, id, r*256*256+g*256+b*1);
+            		APP.addCenterlineObject( id, r*256*256+g*256+b*1 );
             		};
 				};
 			}
