@@ -60,5 +60,5 @@ Boundingbox.json
 segmentInfo.json
 
 # Web Application
-_web_stl/node_modules
-!_web_stl/dist
+_web_annotator/node_modules
+!_web_annotator/dist
