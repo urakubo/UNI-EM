@@ -170,7 +170,8 @@ class AnnotatorServerLogic:
     web_path = os.path.join(self.u_info.web_annotator_path, "dist")
     css_path = os.path.join(self.u_info.web_annotator_path, "css")
     js_path  = os.path.join(self.u_info.web_annotator_path, "js")
-    skeleton_path  = os.path.join( self.u_info.files_path, "skeletons")
+    skeletons_path  = self.u_info.skeletons_path
+    surfaces_path   = self.u_info.surfaces_path
     ####
     # asyncio.set_event_loop(self.u_info.worker_loop_stl)
     ev_loop = asyncio.new_event_loop()
@@ -181,7 +182,7 @@ class AnnotatorServerLogic:
       (r'/js/(.*)', tornado.web.StaticFileHandler, {'path': js_path}),
       (r'/data/(.*)', tornado.web.StaticFileHandler, {'path': self.u_info.data_annotator_path}),
       (r'/ws/display', AnnotatorWebSocket, {'player': self.small_ids, 'path': self.u_info.data_annotator_path}),
-      (r'/ws/skeleton', SkeletonHandler, {'path': skeleton_path}),
+      (r'/ws/skeleton', SkeletonHandler, {'path': skeletons_path}),
       (r'/socket.io/', socketio.get_tornado_handler(sio)),
       (r'/(.*)', tornado.web.StaticFileHandler, {'path': web_path})
     ],debug=True,autoreload=True)

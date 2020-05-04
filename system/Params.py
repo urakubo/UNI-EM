@@ -148,6 +148,9 @@ class Params:
         self.tile_images_path          = self.images_path  + os.sep + 'tiles'
         self.tile_images_volume_file   = self.images_path  + os.sep + 'tiledVolumeDescription.xml'
 
+        self.skeletons_path            = self.files_path   + os.sep + 'skeletons'
+        self.surfaces_path             = self.files_path   + os.sep + 'surfaces'
+
         self.ids_files_undo             = []
         self.ids_files_redo             = []
         self.flag_undo                  = 0
