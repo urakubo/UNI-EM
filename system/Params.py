@@ -93,7 +93,7 @@ class Params:
             self.gfx_path     = os.path.normpath(os.path.join(main_dir, "..","..", "_web_dojo","gfx"))
             self.web_path     = os.path.normpath(os.path.join(main_dir, "..","..", "_web_dojo"))
             self.web_annotator_path = os.path.normpath(os.path.join(main_dir, "..","..", "_web_annotator"))
-            self.data_annotator_path = os.path.normpath(os.path.join(main_dir, "..","..", "data", "annotator"))
+#            self.data_annotator_path = os.path.normpath(os.path.join(main_dir, "..","..", "data", "annotator"))
             
             ext_os = lambda prg: f'{prg}.exe' if(os.name == 'nt') else prg
             self.exec_translate = os.path.join(main_dir, ext_os('translate'))
@@ -111,7 +111,7 @@ class Params:
             self.gfx_path     = os.path.join(main_dir, "_web_dojo","gfx")
             self.web_path     = os.path.join(main_dir, "_web_dojo")
             self.web_annotator_path = os.path.normpath(os.path.join(main_dir, "_web_annotator"))
-            self.data_annotator_path = os.path.normpath(os.path.join(main_dir, "data", "annotator"))
+#            self.data_annotator_path = os.path.normpath(os.path.join(main_dir, "data", "annotator"))
 
             _2D_DNN_dir = os.path.join(main_dir, 'segment', '_2D_DNN')
             _3D_FFN_dir = os.path.join(main_dir, 'segment', '_3D_FFN', 'ffn')
@@ -150,6 +150,8 @@ class Params:
 
         self.skeletons_path            = self.files_path   + os.sep + 'skeletons'
         self.surfaces_path             = self.files_path   + os.sep + 'surfaces'
+        self.skeletons_whole_path      = self.files_path   + os.sep + 'skeletons' + os.sep + 'whole'
+        self.surfaces_whole_path       = self.files_path   + os.sep + 'surfaces' + os.sep + 'whole'
 
         self.ids_files_undo             = []
         self.ids_files_redo             = []

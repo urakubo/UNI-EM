@@ -2,7 +2,7 @@ import { APP } from "./APP";
 import { csvFormatter } from "./csv";
 
 var ObjObjextTable = new Tabulator("#ObjectTable", {
-	ajaxURL:"./data/segmentInfo.json",
+	ajaxURL:"./surface/segmentInfo.json",
 	layout:"fitColumns",      //fit columns to width of table
 	autoResize:true,
 	responsiveLayout:"hide",  //hide columns that dont fit on the table
@@ -18,14 +18,14 @@ var ObjObjextTable = new Tabulator("#ObjectTable", {
 	columns:[                 //define the table columns
     // ActやConfidenceはダウンロード時に除外されないよう定義しておく。ただしカラムvisible: falseにして非表示にする
     {title:"Act", field: "act", download: true, visible: false},
-		{title:"Visible", field:"act", width: 73, align:"center",formatter:"tickCross", cellClick: (e, cell)=>{cell.setValue(!cell.getValue());}, download: false},
+		{title:"Visible", field:"act", width: 73, hozAlign:"center",formatter:"tickCross", cellClick: (e, cell)=>{cell.setValue(!cell.getValue());}, download: false},
 		{title:"ID", field:"id", width: 50},
 		{title:"Name", field:"name", editor:"input"},
-		{title:"Size", field:"size", width:60, align:"right"},
+		{title:"Size", field:"size", width:60, hozAlign:"right"},
     {title:"Confidence", field: "confidence", download: true, visible: false},
-		{title:"R", field:"r", minWidth: 30, width: 35, align:"right", editor:"range",editorParams:{min:0, max:255, step:1}},
-		{title:"G", field:"g", minWidth: 30, width: 35, align:"right", editor:"range",editorParams:{min:0, max:255, step:1}},
-		{title:"B", field:"b", minWidth: 30, width: 35, align:"right", editor:"range",editorParams:{min:0, max:255, step:1}},
+		{title:"R", field:"r", minWidth: 30, width: 35, hozAlign:"right", editor:"range",editorParams:{min:0, max:255, step:1}},
+		{title:"G", field:"g", minWidth: 30, width: 35, hozAlign:"right", editor:"range",editorParams:{min:0, max:255, step:1}},
+		{title:"B", field:"b", minWidth: 30, width: 35, hozAlign:"right", editor:"range",editorParams:{min:0, max:255, step:1}},
 	],
 
 	// セルが編集されたとき
@@ -52,7 +52,7 @@ var ObjObjextTable = new Tabulator("#ObjectTable", {
 	  		var host = location.hostname ;
 	  		var port = location.port;
 			const call_url = "ws:"+host+":"+port+"/ws/display";
-			const filename = "http://"+host+":"+port+"/data/i%d.stl";
+			const filename = "http://"+host+":"+port+"/surface/whole/i%d.stl";
 			var connection = new WebSocket(call_url);
 			connection.onopen = function(){ connection.send(id); }
         	connection.onmessage = function (e) {
@@ -60,14 +60,14 @@ var ObjObjextTable = new Tabulator("#ObjectTable", {
         			const target_url = sprintf(filename, id );
         			console.log( target_url );
             		APP.addSTLObject(target_url, id, r*256*256+g*256+b*1);
-            		APP.addCenterlineObject( id, r*256*256+g*256+b*1 );
+            		// APP.addCenterlineObject( id, r*256*256+g*256+b*1 );
             		};
 				};
 			}
 
 	  	if(act == false) {
 	  		console.log("Disappear ID:", id )
-			const filename = sprintf("./stls/i%d.stl", id );
+			//const filename = sprintf("./stls/i%d.stl", id );
 			APP.removeSTLObject(id);
 			}
 		}

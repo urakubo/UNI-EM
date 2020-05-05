@@ -26,8 +26,8 @@ $(() => {
         $(`[data-mode-show=${mode}]`).show();
         $(`[data-mode-show]:not([data-mode-show=${mode}])`).hide();
 
-        window.MarkerOffOn(mode === "point");
-        window.switchAnnotation(mode === "paint");
+        // window.MarkerOffOn(mode === "point");
+        // window.switchAnnotation(mode === "paint");
     }
     $('[data-mode]').click(e => {
         const mode = e.target.getAttribute("data-mode");

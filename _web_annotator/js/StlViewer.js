@@ -99,12 +99,14 @@ APP.removeSTLObject = function(name){
 	if ( obj != undefined ) {
     	    APP.scene.remove(obj);
 	}
+	/*
 	name_centerline = 'line' + name.toString();
 	console.log(name_centerline);
 	var obj = APP.scene.getObjectByName(name_centerline);
 	if ( obj != undefined ) {
     		APP.scene.remove(obj);
 	}
+	*/
 	}
 
 
@@ -347,7 +349,6 @@ APP.addMarker = function(markerData, isImportFromFile) {
       y: markerData_y,
       z: markerData_z
     };
-
     ObjMarkerTable.addData(NewMarker);  // Change database MarkerTable (setData)
     APP.updateMarkerId();
     return true;
@@ -555,7 +556,7 @@ export function StlViewer() {
 
 	// Boundingbox variables
 	var prot = location.protocol;
-	var url = prot +"/data/Boundingbox.json";
+	var url = prot +"/surface/Boundingbox.json";
 
   // jQuery getJSONを使用
   $.getJSON(url, function(data) {

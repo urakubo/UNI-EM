@@ -249,9 +249,8 @@ $(() => {
     $(`[data-mode=${mode}]`).addClass("active");
     $(`[data-mode]:not([data-mode=${mode}])`).removeClass("active");
     $(`[data-mode-show=${mode}]`).show();
-    $(`[data-mode-show]:not([data-mode-show=${mode}])`).hide();
-    window.MarkerOffOn(mode === "point");
-    window.switchAnnotation(mode === "paint");
+    $(`[data-mode-show]:not([data-mode-show=${mode}])`).hide(); // window.MarkerOffOn(mode === "point");
+    // window.switchAnnotation(mode === "paint");
   };
 
   $('[data-mode]').click(e => {

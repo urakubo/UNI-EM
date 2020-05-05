@@ -129,7 +129,7 @@ const AnnotationTable = new Tabulator('#AnnotationTable', {
   columns: [{
     title: "Delete",
     formatter: "buttonCross",
-    align: "center",
+    hozAlign: "center",
     cellClick: (e, cell) => {
       cell.getRow().delete();
     },
@@ -138,7 +138,7 @@ const AnnotationTable = new Tabulator('#AnnotationTable', {
     title: "Visible",
     field: "visibility",
     width: 73,
-    align: "center",
+    hozAlign: "center",
     formatter: "tickCross",
     headerSort: false,
     cellClick: (e, cell) => {
@@ -150,7 +150,7 @@ const AnnotationTable = new Tabulator('#AnnotationTable', {
     title: "Target",
     field: "target",
     width: 73,
-    align: "center",
+    hozAlign: "center",
     formatter: "tickCross",
     headerSort: false,
     cellClick: (e, cell) => {
@@ -175,9 +175,9 @@ const AnnotationTable = new Tabulator('#AnnotationTable', {
   }, {
     title: "R",
     field: "r",
-    minwidth: 30,
+    minWidth: 30,
     width: 35,
-    align: "right",
+    hozAlign: "right",
     visible: true,
     editor: "number",
     editorParams: {
@@ -191,9 +191,9 @@ const AnnotationTable = new Tabulator('#AnnotationTable', {
   }, {
     title: "G",
     field: "g",
-    minwidth: 30,
+    minWidth: 30,
     width: 35,
-    align: "right",
+    hozAlign: "right",
     visible: true,
     editor: "number",
     editorParams: {
@@ -207,9 +207,9 @@ const AnnotationTable = new Tabulator('#AnnotationTable', {
   }, {
     title: "B",
     field: "b",
-    minwidth: 30,
+    minWidth: 30,
     width: 35,
-    align: "right",
+    hozAlign: "right",
     visible: true,
     editor: "number",
     editorParams: {
@@ -397,7 +397,7 @@ const ObjMarkerTable = new Tabulator("#MarkerTable", {
     title: "Delete",
     formatter: "buttonCross",
     width: 73,
-    align: "center",
+    hozAlign: "center",
     editor: "tickCross",
     editable: onDeleteCheck,
     download: false
@@ -423,7 +423,7 @@ const ObjMarkerTable = new Tabulator("#MarkerTable", {
     title: "Radius",
     field: "radius",
     width: 60,
-    align: "right",
+    hozAlign: "right",
     editor: "number",
     editorParams: {
       min: 0.2,
@@ -435,7 +435,7 @@ const ObjMarkerTable = new Tabulator("#MarkerTable", {
     field: "r",
     minWidth: 30,
     width: 35,
-    align: "right",
+    hozAlign: "right",
     editor: "range",
     editorParams: {
       min: 0,
@@ -447,7 +447,7 @@ const ObjMarkerTable = new Tabulator("#MarkerTable", {
     field: "g",
     minWidth: 30,
     width: 35,
-    align: "right",
+    hozAlign: "right",
     editor: "range",
     editorParams: {
       min: 0,
@@ -459,7 +459,7 @@ const ObjMarkerTable = new Tabulator("#MarkerTable", {
     field: "b",
     minWidth: 30,
     width: 35,
-    align: "right",
+    hozAlign: "right",
     editor: "range",
     editorParams: {
       min: 0,
@@ -784,7 +784,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var ObjObjextTable = new Tabulator("#ObjectTable", {
-  ajaxURL: "./data/segmentInfo.json",
+  ajaxURL: "./surface/segmentInfo.json",
   layout: "fitColumns",
   //fit columns to width of table
   autoResize: true,
@@ -818,7 +818,7 @@ var ObjObjextTable = new Tabulator("#ObjectTable", {
     title: "Visible",
     field: "act",
     width: 73,
-    align: "center",
+    hozAlign: "center",
     formatter: "tickCross",
     cellClick: (e, cell) => {
       cell.setValue(!cell.getValue());
@@ -836,7 +836,7 @@ var ObjObjextTable = new Tabulator("#ObjectTable", {
     title: "Size",
     field: "size",
     width: 60,
-    align: "right"
+    hozAlign: "right"
   }, {
     title: "Confidence",
     field: "confidence",
@@ -847,7 +847,7 @@ var ObjObjextTable = new Tabulator("#ObjectTable", {
     field: "r",
     minWidth: 30,
     width: 35,
-    align: "right",
+    hozAlign: "right",
     editor: "range",
     editorParams: {
       min: 0,
@@ -859,7 +859,7 @@ var ObjObjextTable = new Tabulator("#ObjectTable", {
     field: "g",
     minWidth: 30,
     width: 35,
-    align: "right",
+    hozAlign: "right",
     editor: "range",
     editorParams: {
       min: 0,
@@ -871,7 +871,7 @@ var ObjObjextTable = new Tabulator("#ObjectTable", {
     field: "b",
     minWidth: 30,
     width: 35,
-    align: "right",
+    hozAlign: "right",
     editor: "range",
     editorParams: {
       min: 0,
@@ -902,7 +902,7 @@ var ObjObjextTable = new Tabulator("#ObjectTable", {
         var host = location.hostname;
         var port = location.port;
         const call_url = "ws:" + host + ":" + port + "/ws/display";
-        const filename = "http://" + host + ":" + port + "/data/i%d.stl";
+        const filename = "http://" + host + ":" + port + "/surface/whole/i%d.stl";
         var connection = new WebSocket(call_url);
 
         connection.onopen = function () {
@@ -913,8 +913,7 @@ var ObjObjextTable = new Tabulator("#ObjectTable", {
           if (e.data == 'True') {
             const target_url = sprintf(filename, id);
             console.log(target_url);
-            _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSTLObject(target_url, id, r * 256 * 256 + g * 256 + b * 1);
-            _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addCenterlineObject(id, r * 256 * 256 + g * 256 + b * 1);
+            _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSTLObject(target_url, id, r * 256 * 256 + g * 256 + b * 1); // APP.addCenterlineObject( id, r*256*256+g*256+b*1 );
           }
 
           ;
@@ -922,8 +921,8 @@ var ObjObjextTable = new Tabulator("#ObjectTable", {
       }
 
       if (act == false) {
-        console.log("Disappear ID:", id);
-        const filename = sprintf("./stls/i%d.stl", id);
+        console.log("Disappear ID:", id); //const filename = sprintf("./stls/i%d.stl", id );
+
         _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSTLObject(id);
       }
     }
@@ -1057,14 +1056,15 @@ _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].removeSTLObject = function (name) {
   if (obj != undefined) {
     _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.remove(obj);
   }
-
+  /*
   name_centerline = 'line' + name.toString();
   console.log(name_centerline);
-  var obj = _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.getObjectByName(name_centerline);
-
-  if (obj != undefined) {
-    _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.remove(obj);
+  var obj = APP.scene.getObjectByName(name_centerline);
+  if ( obj != undefined ) {
+     		APP.scene.remove(obj);
   }
+  */
+
 }; // Add stl objects and a name
 
 
@@ -1523,7 +1523,7 @@ function StlViewer() {
   _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.add(cursor); // Boundingbox variables
 
   var prot = location.protocol;
-  var url = prot + "/data/Boundingbox.json"; // jQuery getJSONを使用
+  var url = prot + "/surface/Boundingbox.json"; // jQuery getJSONを使用
 
   $.getJSON(url, function (data) {
     _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxX = data.x;

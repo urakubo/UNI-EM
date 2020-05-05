@@ -17,7 +17,7 @@ export const ObjMarkerTable = new Tabulator("#MarkerTable", {
 	columns:[                 //define the table columns
     // ActやX,Y,Zはダウンロード時に除外されないよう定義しておく。ただしカラムvisible: falseにして非表示にする
     {title:"Act", field: "act", download: true, visible: false},
-		{title:"Delete", formatter:"buttonCross", width: 73, align:"center", editor:"tickCross", editable: onDeleteCheck, download: false},
+		{title:"Delete", formatter:"buttonCross", width: 73, hozAlign:"center", editor:"tickCross", editable: onDeleteCheck, download: false},
 		{title:"ID", field:"id", width: 40},
 
     // マーカー名を入力する時に日本語などASCII外が入力されないようにする
@@ -27,10 +27,10 @@ export const ObjMarkerTable = new Tabulator("#MarkerTable", {
     }},
 
 		{title:"Parent ID", field:"parentid", width: 70},
-		{title:"Radius", field:"radius", width: 60, align:"right", editor:"number",editorParams:{min:0.2, max:24, step:0.2}},
-		{title:"R", field:"r", minWidth: 30, width: 35, align:"right", editor:"range",editorParams:{min:0, max:255, step:1}},
-		{title:"G", field:"g", minWidth: 30, width: 35, align:"right", editor:"range",editorParams:{min:0, max:255, step:1}},
-		{title:"B", field:"b", minWidth: 30, width: 35, align:"right", editor:"range",editorParams:{min:0, max:255, step:1}},
+		{title:"Radius", field:"radius", width: 60, hozAlign:"right", editor:"number",editorParams:{min:0.2, max:24, step:0.2}},
+		{title:"R", field:"r", minWidth: 30, width: 35, hozAlign:"right", editor:"range",editorParams:{min:0, max:255, step:1}},
+		{title:"G", field:"g", minWidth: 30, width: 35, hozAlign:"right", editor:"range",editorParams:{min:0, max:255, step:1}},
+		{title:"B", field:"b", minWidth: 30, width: 35, hozAlign:"right", editor:"range",editorParams:{min:0, max:255, step:1}},
     {title:"X", field:"x", download: true, visible: false},
     {title:"Y", field:"y", download: true, visible: false},
     {title:"Z", field:"z", download: true, visible: false}
