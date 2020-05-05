@@ -26,24 +26,26 @@ import miscellaneous.Miscellaneous as m
 
 
 
-class AnnotatorWebSocket(tornado.websocket.WebSocketHandler):
+class SurfaceHandler(tornado.web.RequestHandler):
   ###
   def __init__(self, *args, **kwargs):
-    self.small_ids    = kwargs.pop('player')
+    self.small_ids    = kwargs.pop('3Dmap')
     self.surfaces_whole_path = kwargs.pop('path')
-    super(AnnotatorWebSocket, self).__init__(*args, **kwargs)
+    super(SurfaceHandler, self).__init__(*args, **kwargs)
   ###
-  def on_message(self, message):
-    id = int(message)
+  def get(self):
+    id = self.get_argument('id', 'null')
+    id = int(id)
     print('Target object id:', id)
     result = self.GenerateStl(id)
     if result :
-        self.write_message("True")
+        self.write("True")
     else :
-        self.write_message("False")
+        self.write("False")
   ###
   def GenerateStl(self, id):
     mask = (self.small_ids == id)
+    # print('self.small_ids: ', self.small_ids)
     try:
         vertices, normals, faces = march(mask, 2)
     except:
@@ -55,7 +57,7 @@ class AnnotatorWebSocket(tornado.websocket.WebSocketHandler):
         for j in range(3):
             our_mesh.vectors[i][j] = vertices[f[j], :]
     ###
-    our_mesh.save(os.path.join(self.surfaces_whole_path, 'i{0}.stl'.format(id) ))
+    our_mesh.save(os.path.join(self.surfaces_whole_path, str(id).zfill(10)+'.stl' ))
     return True
   ###
 
@@ -183,8 +185,9 @@ class AnnotatorServerLogic:
       (r'/css/(.*)', tornado.web.StaticFileHandler, {'path': css_path}),
       (r'/js/(.*)', tornado.web.StaticFileHandler, {'path': js_path}),
       (r'/surface/(.*)', tornado.web.StaticFileHandler, {'path': surfaces_path}),
+      (r'/surface/whole/(.*)', tornado.web.StaticFileHandler, {'path': surfaces_whole_path}),
       (r'/skeleton/(.*)', tornado.web.StaticFileHandler, {'path': skeletons_path}),
-      (r'/ws/display', AnnotatorWebSocket, {'player': self.small_ids, 'path': surfaces_whole_path}),
+      (r'/ws/surface', SurfaceHandler, {'3Dmap': self.small_ids, 'path': surfaces_whole_path}),
       (r'/socket.io/', socketio.get_tornado_handler(sio)),
       (r'/(.*)', tornado.web.StaticFileHandler, {'path': web_path})
     ],debug=True,autoreload=True)

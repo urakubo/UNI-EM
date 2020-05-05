@@ -50,21 +50,10 @@ var ObjObjextTable = new Tabulator("#ObjectTable", {
 	  	if(act == true) {
 	  		console.log("Requested ID:", id );
 	  		var host = location.hostname ;
-	  		var port = location.port;
-			const call_url = "ws:"+host+":"+port+"/ws/display";
-			const filename = "http://"+host+":"+port+"/surface/whole/i%d.stl";
-			var connection = new WebSocket(call_url);
-			connection.onopen = function(){ connection.send(id); }
-        	connection.onmessage = function (e) {
-        		if(e.data == 'True') {
-        			const target_url = sprintf(filename, id );
-        			console.log( target_url );
-            		APP.addSTLObject(target_url, id, r*256*256+g*256+b*1);
-            		// APP.addCenterlineObject( id, r*256*256+g*256+b*1 );
-            		};
-				};
+	  		var port = location.port ;
+			var col  = r*256*256+g*256+b*1 ; 
+			APP.addSTLObject(host, port, id, col);
 			}
-
 	  	if(act == false) {
 	  		console.log("Disappear ID:", id )
 			//const filename = sprintf("./stls/i%d.stl", id );

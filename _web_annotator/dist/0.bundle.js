@@ -901,23 +901,8 @@ var ObjObjextTable = new Tabulator("#ObjectTable", {
         console.log("Requested ID:", id);
         var host = location.hostname;
         var port = location.port;
-        const call_url = "ws:" + host + ":" + port + "/ws/display";
-        const filename = "http://" + host + ":" + port + "/surface/whole/i%d.stl";
-        var connection = new WebSocket(call_url);
-
-        connection.onopen = function () {
-          connection.send(id);
-        };
-
-        connection.onmessage = function (e) {
-          if (e.data == 'True') {
-            const target_url = sprintf(filename, id);
-            console.log(target_url);
-            _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSTLObject(target_url, id, r * 256 * 256 + g * 256 + b * 1); // APP.addCenterlineObject( id, r*256*256+g*256+b*1 );
-          }
-
-          ;
-        };
+        var col = r * 256 * 256 + g * 256 + b * 1;
+        _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSTLObject(host, port, id, col);
       }
 
       if (act == false) {
@@ -998,9 +983,28 @@ function onWindowResize() {
 } // Add stl objects and a name
 
 
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].addSTLObject = function (url, name, objcolor) {
+_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].addSTLObject = function (host, port, id, objcolor) {
+  const call_url = "http://" + host + ":" + port + "/ws/surface?id=";
+  const target_url = "http://" + host + ":" + port + "/surface/whole/" + ('0000000000' + id).slice(-10) + ".stl";
+  var xhr = new XMLHttpRequest();
+  xhr.open("HEAD", target_url, false); //同期モード
+
+  xhr.send(null);
+
+  if (xhr.status == 404) {
+    var req = new XMLHttpRequest();
+    req.open("get", call_url + id, false);
+    req.send(null);
+
+    if (req.responseText == "False") {
+      alert("No surface.");
+      return false;
+    }
+  } // console.log('Mesh prepared:');
+
+
   var loader = new THREE.STLLoader();
-  loader.load(url, function (bufferGeometry) {
+  loader.load(target_url, function (bufferGeometry) {
     if (bufferGeometry.isBufferGeometry) {
       bufferGeometry.attributes.color = bufferGeometry.attributes.color || bufferGeometry.attributes.position.clone();
       bufferGeometry.attributes.color.array.fill(1);
@@ -1008,19 +1012,21 @@ _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].addSTLObject = function (url, name, obj
       bufferGeometry.colorsNeedUpdate = true;
     }
 
+    console.log('Stl loaded:');
     const meshMaterial = new THREE.MeshPhongMaterial({
       color: objcolor,
       specular: 0x776666,
       shininess: 0.2,
       vertexColors: THREE.FaceColors,
-      opacity: 0.4,
       side: true
-    });
+    }); // 	    	  opacity: 0.4,
+
     var mesh = new THREE.Mesh(bufferGeometry, meshMaterial);
-    mesh.name = name;
+    mesh.name = id;
     mesh.scale.set(1, 1, 1);
     mesh.material.side = THREE.DoubleSide;
-    _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.add(mesh);
+    _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.add(mesh); // console.log('3D processed:');
+
     mesh.translateX(xshift);
     mesh.translateY(yshift);
     mesh.translateZ(zshift);
@@ -1050,8 +1056,8 @@ _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].changecolorSTLObject = function (name, 
 }; // Remove a stl object by a name after generation.
 
 
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].removeSTLObject = function (name) {
-  var obj = _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.getObjectByName(name);
+_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].removeSTLObject = function (id) {
+  var obj = _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.getObjectByName(id);
 
   if (obj != undefined) {
     _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.remove(obj);
