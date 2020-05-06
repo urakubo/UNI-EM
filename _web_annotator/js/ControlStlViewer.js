@@ -47,3 +47,4 @@ window.SaveImage = function (ischecked) {
 	link.click();
 	}
 
+

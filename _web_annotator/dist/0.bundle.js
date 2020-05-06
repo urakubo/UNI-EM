@@ -899,10 +899,8 @@ var ObjObjextTable = new Tabulator("#ObjectTable", {
     if (columnField == 'act') {
       if (act == true) {
         console.log("Requested ID:", id);
-        var host = location.hostname;
-        var port = location.port;
         var col = r * 256 * 256 + g * 256 + b * 1;
-        _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSTLObject(host, port, id, col);
+        _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSTLObject(id, col);
       }
 
       if (act == false) {
@@ -953,13 +951,12 @@ __webpack_require__.r(__webpack_exports__);
 var xratio = 0.6;
 var yratio = 0.95; //var ysize = 600;
 
-var frustumSize = 1000;
-var xshift = -64;
-var yshift = -128 - 59;
-var zshift = -64;
-xshift = 0;
-yshift = 0;
-zshift = 0;
+var frustumSize = 1000; //var xshift = -64;
+//var yshift = -128-59;
+//var zshift = -64
+//xshift = 0;
+//yshift = 0;
+//zshift = 0;
 
 _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].animate = function () {
   _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].renderer.render(_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene, _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].camera);
@@ -970,7 +967,10 @@ _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].animate = function () {
 _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].dragging = false;
 _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].annotation_mode = false;
 _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].annotation_paint_mode = true;
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].annotation_overwrite = false; // ObtainWindowSize
+_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].annotation_overwrite = false;
+_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxX = 0.0;
+_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxY = 0.0;
+_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxZ = 0.0; // ObtainWindowSize
 
 function onWindowResize() {
   var aspect = window.innerWidth / window.innerHeight;
@@ -983,9 +983,9 @@ function onWindowResize() {
 } // Add stl objects and a name
 
 
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].addSTLObject = function (host, port, id, objcolor) {
-  const call_url = "http://" + host + ":" + port + "/ws/surface?id=";
-  const target_url = "http://" + host + ":" + port + "/surface/whole/" + ('0000000000' + id).slice(-10) + ".stl";
+_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].addSTLObject = function (id, objcolor) {
+  const call_url = location.protocol + "//" + location.host + "/ws/surface?id=";
+  const target_url = location.protocol + "//" + location.host + "/surface/whole/" + ('0000000000' + id).slice(-10) + ".stl";
   var xhr = new XMLHttpRequest();
   xhr.open("HEAD", target_url, false); //同期モード
 
@@ -1026,10 +1026,10 @@ _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].addSTLObject = function (host, port, id
     mesh.scale.set(1, 1, 1);
     mesh.material.side = THREE.DoubleSide;
     _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.add(mesh); // console.log('3D processed:');
+    //      mesh.translateX(xshift);
+    //      mesh.translateY(yshift);
+    //      mesh.translateZ(zshift);
 
-    mesh.translateX(xshift);
-    mesh.translateY(yshift);
-    mesh.translateZ(zshift);
     Object(_AnnotationTable__WEBPACK_IMPORTED_MODULE_0__["updateColorOptionsOnAnnotator"])(); //APP.scene.getObjectByName('test_name2').rotation.x += 0.005;
     //APP.scene.getObjectByName('test_name2').rotation.y += 0.005;
     //console.log('Object name:');
@@ -1101,9 +1101,11 @@ _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].addCenterlineObject = function (id, obj
   for (var i = 0; i < data_edges.length; i++) {
     i1 = data_edges[i][0];
     i2 = data_edges[i][1]; //console.log(data_edges)
+    // v1 = new THREE.Vector3( data_vertices[i1][0]+xshift,data_vertices[i1][1]+yshift,data_vertices[i1][2]+zshift);
+    // v2 = new THREE.Vector3( data_vertices[i2][0]+xshift,data_vertices[i2][1]+yshift,data_vertices[i2][2]+zshift);
 
-    v1 = new THREE.Vector3(data_vertices[i1][0] + xshift, data_vertices[i1][1] + yshift, data_vertices[i1][2] + zshift);
-    v2 = new THREE.Vector3(data_vertices[i2][0] + xshift, data_vertices[i2][1] + yshift, data_vertices[i2][2] + zshift);
+    v1 = new THREE.Vector3(data_vertices[i1][0], data_vertices[i1][1], data_vertices[i1][2]);
+    v2 = new THREE.Vector3(data_vertices[i2][0], data_vertices[i2][1], data_vertices[i2][2]);
     geometry.vertices.push(v1, v2); //console.log(data_vertices[i1][0]+xshift,data_vertices[i1][1]+yshift,data_vertices[i1][2]+zshift)
   }
 
@@ -1526,16 +1528,21 @@ function StlViewer() {
   var cursor = new THREE.Mesh(geometry, material);
   cursor.isCursor = true;
   _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].cursor = cursor;
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.add(cursor); // Boundingbox variables
+  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.add(cursor); // Initilize camera position
 
-  var prot = location.protocol;
-  var url = prot + "/surface/Boundingbox.json"; // jQuery getJSONを使用
+  const centeringBoundingBox = function () {
+    const call_url = location.protocol + "//" + location.host + "/surface/Boundingbox.json";
+    $.getJSON(call_url).done(function (data) {
+      _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxX = data.x;
+      _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxY = data.y;
+      _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxZ = data.z;
+      console.log('XYZ: ', _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxX / 2, _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxY / 2, _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxZ / 2); // APP.camera.position(new THREE.Vector3(APP.BoundingboxX/2, APP.BoundingboxY/2, APP.BoundingboxZ*4));
 
-  $.getJSON(url, function (data) {
-    _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxX = data.x;
-    _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxY = data.y;
-    _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxZ = data.z;
-  });
+      _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].camera.lookAt(new THREE.Vector3(_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxX / 2, _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxY / 2, _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxZ / 2));
+    });
+  };
+
+  centeringBoundingBox();
 }
 window.addEventListener('resize', onWindowResize, false);
 

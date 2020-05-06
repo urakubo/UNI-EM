@@ -7,13 +7,13 @@ var yratio = 0.95;
 //var ysize = 600;
 
 var frustumSize = 1000;
-var xshift = -64;
-var yshift = -128-59;
-var zshift = -64
+//var xshift = -64;
+//var yshift = -128-59;
+//var zshift = -64
 
-xshift = 0;
-yshift = 0;
-zshift = 0;
+//xshift = 0;
+//yshift = 0;
+//zshift = 0;
 
 APP.animate = function() {
 	APP.renderer.render( APP.scene, APP.camera );
@@ -25,6 +25,10 @@ APP.dragging = false;
 APP.annotation_mode = false;
 APP.annotation_paint_mode = true;
 APP.annotation_overwrite = false;
+
+APP.BoundingboxX = 0.0;
+APP.BoundingboxY = 0.0;
+APP.BoundingboxZ = 0.0;
 
 // ObtainWindowSize
 function onWindowResize() {
@@ -38,10 +42,10 @@ function onWindowResize() {
 	}
 
 // Add stl objects and a name
-APP.addSTLObject = function(host, port, id, objcolor) {
+APP.addSTLObject = function(id, objcolor) {
 
-	const call_url   = "http://"+host+":"+port+"/ws/surface?id=";
-	const target_url = "http://"+host+":"+port+"/surface/whole/" + ( '0000000000' + id ).slice( -10 ) + ".stl";
+	const call_url   = location.protocol+"//"+location.host+"/ws/surface?id=";
+	const target_url = location.protocol+"//"+location.host+"/surface/whole/" + ( '0000000000' + id ).slice( -10 ) + ".stl";
 
 	var xhr = new XMLHttpRequest();
 	xhr.open("HEAD", target_url, false);  //同期モード
@@ -80,9 +84,9 @@ APP.addSTLObject = function(host, port, id, objcolor) {
       APP.scene.add(mesh);
       // console.log('3D processed:');
 
-      mesh.translateX(xshift);
-      mesh.translateY(yshift);
-      mesh.translateZ(zshift);
+//      mesh.translateX(xshift);
+//      mesh.translateY(yshift);
+//      mesh.translateZ(zshift);
 
 	  updateColorOptionsOnAnnotator();
 
@@ -155,8 +159,10 @@ APP.addCenterlineObject = function(id, objcolor) {
 			i1 = data_edges[i][0];
 			i2 = data_edges[i][1];
 			//console.log(data_edges)
-			v1 = new THREE.Vector3( data_vertices[i1][0]+xshift,data_vertices[i1][1]+yshift,data_vertices[i1][2]+zshift);
-			v2 = new THREE.Vector3( data_vertices[i2][0]+xshift,data_vertices[i2][1]+yshift,data_vertices[i2][2]+zshift);
+			// v1 = new THREE.Vector3( data_vertices[i1][0]+xshift,data_vertices[i1][1]+yshift,data_vertices[i1][2]+zshift);
+			// v2 = new THREE.Vector3( data_vertices[i2][0]+xshift,data_vertices[i2][1]+yshift,data_vertices[i2][2]+zshift);
+			v1 = new THREE.Vector3( data_vertices[i1][0],data_vertices[i1][1],data_vertices[i1][2]);
+			v2 = new THREE.Vector3( data_vertices[i2][0],data_vertices[i2][1],data_vertices[i2][2]);
 			geometry.vertices.push(v1, v2);
 			//console.log(data_vertices[i1][0]+xshift,data_vertices[i1][1]+yshift,data_vertices[i1][2]+zshift)
 			}
@@ -204,6 +210,7 @@ APP.convertCSVtoArray = function(responseText){
 		}
 		return res;
 	}
+
 
 // Draw bounding box
 APP.addBoundingBox = function(){
@@ -260,7 +267,6 @@ function clickPosition( event ) {
 	// Location of mouse
 	var clientX = event.clientX;
 	var clientY = event.clientY;
-
 
 	// Normalization of location
 	var mouse = new THREE.Vector2();
@@ -541,8 +547,8 @@ export function StlViewer() {
 
 	// Controlsを用意
 	APP.controls = new THREE.TrackballControls( APP.camera, APP.renderer.domElement );
-	   APP.controls.rotateSpeed = 10;
-    	APP.controls.staticMoving = false;
+	APP.controls.rotateSpeed = 10;
+    APP.controls.staticMoving = false;
 	APP.controls.dynamicDampingFactor = 1.0; // staticMoving = false のときの減衰量
 	APP.animate();
 
@@ -570,16 +576,25 @@ export function StlViewer() {
 	APP.cursor = cursor;
 	APP.scene.add( cursor );
 
-	// Boundingbox variables
-	var prot = location.protocol;
-	var url = prot +"/surface/Boundingbox.json";
+  		// Initilize camera position
+	const centeringBoundingBox = function () {
+		const call_url   = location.protocol+"//"+location.host+"/surface/Boundingbox.json";
+		$.getJSON(call_url).done(function(data) {
+	        APP.BoundingboxX = data.x;
+			APP.BoundingboxY = data.y;
+			APP.BoundingboxZ = data.z;
+			console.log('XYZ: ',APP.BoundingboxX/2, APP.BoundingboxY/2, APP.BoundingboxZ/2);
+			// APP.camera.position(new THREE.Vector3(APP.BoundingboxX/2, APP.BoundingboxY/2, APP.BoundingboxZ*4));
+			APP.camera.lookAt(new THREE.Vector3(APP.BoundingboxX/2, APP.BoundingboxY/2, APP.BoundingboxZ/2));
+	    });
+	    }
 
-  // jQuery getJSONを使用
-  $.getJSON(url, function(data) {
-    APP.BoundingboxX = data.x;
-    APP.BoundingboxY = data.y;
-    APP.BoundingboxZ = data.z;
-  });
+	centeringBoundingBox()
+
 }
 
+
+
 window.addEventListener( 'resize', onWindowResize, false );
+
+

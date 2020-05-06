@@ -49,10 +49,8 @@ var ObjObjextTable = new Tabulator("#ObjectTable", {
 	  if(columnField == 'act') {
 	  	if(act == true) {
 	  		console.log("Requested ID:", id );
-	  		var host = location.hostname ;
-	  		var port = location.port ;
 			var col  = r*256*256+g*256+b*1 ; 
-			APP.addSTLObject(host, port, id, col);
+			APP.addSTLObject(id, col);
 			}
 	  	if(act == false) {
 	  		console.log("Disappear ID:", id )

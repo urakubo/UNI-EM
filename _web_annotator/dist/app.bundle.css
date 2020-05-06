@@ -1030,6 +1030,34 @@ fieldset.table-frame {
   margin: 8px 0 2px 0;
 }
 
+/* Button top radius */
+.buttonGroup button{
+  height: 30px;
+}
+
+.buttonGroup {
+  font-size: 0;
+  margin-top: 3px;
+  margin-bottom: 5px;
+}
+
+.btn-top-radius {
+  position: relative;
+  display: inline-block;
+  font-size:14px;
+  padding: 4px 5px 2px 5px;
+  text-decoration: none;
+  color: #000000;
+  background: #e1f3ff;
+  border-bottom: solid 2px #668ad8;
+  border-radius: 4px 4px 0 0;
+  transition: .4s;
+}
+
+.btn-top-radius:hover {
+  background: #668ad8;
+  color: #FFFFFF;
+}
 
 /* Buttons */
 .btn {
@@ -1040,7 +1068,7 @@ fieldset.table-frame {
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 14px;
+  font-size: 18px;
   border-radius: 4px;
   display: inline-block;
   cursor: pointer;
@@ -1149,16 +1177,6 @@ button:focus {
   outline: none;
 }
 
-.buttonGroup button{
-  height: 24px;
-  font-size: 11px;
-}
-
-.buttonGroup {
-  font-size: 0;
-  margin-top: 3px;
-  margin-bottom: 5px;
-}
 /*!
  * Font Awesome Free 5.13.0 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
