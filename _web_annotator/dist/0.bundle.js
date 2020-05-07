@@ -289,9 +289,9 @@ const downloadAnnotationTableAsCSV = () => {
 
 /***/ }),
 
-/***/ "./js/ControlStlViewer.js":
+/***/ "./js/ControlAnnotator.js":
 /*!********************************!*\
-  !*** ./js/ControlStlViewer.js ***!
+  !*** ./js/ControlAnnotator.js ***!
   \********************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -471,13 +471,7 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].setBoundingBoxColor = function (objcolo
 
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].setBackGroundColor = function (backcolor) {
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.background = new THREE.Color(backcolor);
-};
-
-function rgb2hex(rgb) {
-  return "#" + rgb.map(function (value) {
-    return ("0" + value.toString(16)).slice(-2);
-  }).join("");
-} // Operation on mouse click
+}; // Operation on mouse click
 
 
 function clickPosition(event) {
@@ -755,6 +749,12 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addMarker = function (markerData, isImp
 
   return false;
 };
+
+function rgb2hex(rgb) {
+  return "#" + rgb.map(function (value) {
+    return ("0" + value.toString(16)).slice(-2);
+  }).join("");
+}
 /**
  * MarkerIDを更新する
  */
@@ -1794,7 +1794,7 @@ function csv2array(csv, delimiter) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _js_ControlStlViewer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../js/ControlStlViewer */ "./js/ControlStlViewer.js");
+/* harmony import */ var _js_ControlAnnotator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../js/ControlAnnotator */ "./js/ControlAnnotator.js");
 /* harmony import */ var _js_csv__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../js/csv */ "./js/csv.js");
 /* harmony import */ var _js_MarkerTable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../js/MarkerTable */ "./js/MarkerTable.js");
 /* harmony import */ var _js_util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../js/util */ "./js/util.js");

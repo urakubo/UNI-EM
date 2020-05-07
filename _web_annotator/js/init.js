@@ -1,4 +1,4 @@
-import "../js/ControlStlViewer";
+import "../js/ControlAnnotator";
 import "../js/csv";
 import "../js/MarkerTable";
 import "../js/util";

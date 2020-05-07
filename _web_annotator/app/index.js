@@ -12,6 +12,7 @@ import "@fortawesome/fontawesome-free/css/all.css";
 
 $(() => {
     import("../js/init")
+
     // Prohibit file drag & drop.
     window.addEventListener('dragover', function(ev){
         ev.preventDefault();
@@ -27,7 +28,11 @@ $(() => {
         $(`[data-mode-show]:not([data-mode-show=${mode}])`).hide();
 
         // window.MarkerOffOn(mode === "point");
-        // window.switchAnnotation(mode === "paint");
+        // window.switchAnnotation(mode === "paint"); 
+
+        // APP.MarkerOffOn = (mode == "point");
+        // APP.annotation_mode = (mode == "paint");
+
     }
     $('[data-mode]').click(e => {
         const mode = e.target.getAttribute("data-mode");

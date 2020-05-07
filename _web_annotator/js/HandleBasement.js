@@ -76,12 +76,6 @@ APP.setBackGroundColor = function( backcolor ){
 		APP.scene.background = new THREE.Color( backcolor );
 	}
 
-function rgb2hex ( rgb ) {
-	return "#" + rgb.map( function ( value ) {
-		return ( "0" + value.toString( 16 ) ).slice( -2 ) ;
-	} ).join( "" ) ;
-}
-
 // Operation on mouse click
 function clickPosition( event ) {
 	onDragStart(event);

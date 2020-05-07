@@ -73,6 +73,13 @@ APP.addMarker = function(markerData, isImportFromFile) {
   return false;
 };
 
+
+function rgb2hex ( rgb ) {
+	return "#" + rgb.map( function ( value ) {
+		return ( "0" + value.toString( 16 ) ).slice( -2 ) ;
+	} ).join( "" ) ;
+}
+
 /**
  * MarkerIDを更新する
  */

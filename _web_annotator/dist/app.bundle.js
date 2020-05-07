@@ -250,7 +250,9 @@ $(() => {
     $(`[data-mode]:not([data-mode=${mode}])`).removeClass("active");
     $(`[data-mode-show=${mode}]`).show();
     $(`[data-mode-show]:not([data-mode-show=${mode}])`).hide(); // window.MarkerOffOn(mode === "point");
-    // window.switchAnnotation(mode === "paint");
+    // window.switchAnnotation(mode === "paint"); 
+    // APP.MarkerOffOn = (mode == "point");
+    // APP.annotation_mode = (mode == "paint");
   };
 
   $('[data-mode]').click(e => {
