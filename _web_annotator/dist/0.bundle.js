@@ -300,8 +300,19 @@ const downloadAnnotationTableAsCSV = () => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _APP__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./APP */ "./js/APP.js");
  //
+// Shared
 //
+
+window.SaveImage = function (ischecked) {
+  let canvas = document.getElementById("myCanvas").querySelector('canvas');
+  let link = document.createElement("a");
+  link.href = canvas.toDataURL("image/png");
+  link.download = "Screenshot.png";
+  link.click();
+}; //
+// View
 //
+
 
 window.BackgroundWhiteBlack = function (ischecked) {
   if (ischecked == true) {
@@ -331,22 +342,6 @@ window.AmbLight = function (isnum) {
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].ambientLight.intensity = isnum / 100;
 };
 
-window.MarkerOffOn = function (ischecked) {
-  if (ischecked == true) {
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerOffOn = 1;
-  } else {
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerOffOn = 0;
-  }
-};
-
-window.SaveImage = function (ischecked) {
-  let canvas = document.getElementById("myCanvas").querySelector('canvas');
-  let link = document.createElement("a");
-  link.href = canvas.toDataURL("image/png");
-  link.download = "Screenshot.png";
-  link.click();
-};
-
 window.CenterXY = function () {
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.up.set(0, 0, 1);
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.position.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax * 3.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0);
@@ -363,6 +358,677 @@ window.CenterZX = function () {
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.up.set(1, 0, 0);
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.position.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax * 3.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0);
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].controls.target.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0);
+}; //
+// Point
+//
+
+
+window.MarkerOffOn = function (ischecked) {
+  if (ischecked == true) {
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerOffOn = 1;
+  } else {
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerOffOn = 0;
+  }
+}; //
+// Skeleton
+//
+//
+// Paint
+//
+// Eraser, Radius, Overwrite
+
+/***/ }),
+
+/***/ "./js/HandleBasement.js":
+/*!******************************!*\
+  !*** ./js/HandleBasement.js ***!
+  \******************************/
+/*! exports provided: launchAnnotator */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "launchAnnotator", function() { return launchAnnotator; });
+/* harmony import */ var _APP__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./APP */ "./js/APP.js");
+/* harmony import */ var _AnnotationTable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AnnotationTable */ "./js/AnnotationTable.js");
+
+
+var xratio = 0.6;
+var yratio = 0.95;
+var frustumSize = 1000;
+
+function animate() {
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.render(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].controls.update();
+  requestAnimationFrame(animate);
+}
+
+;
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].dragging = false;
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].annotation_mode = false;
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].annotation_paint_mode = true;
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].annotation_overwrite = false;
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX = 0.0;
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY = 0.0;
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ = 0.0;
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax = 0.0; // ObtainWindowSize
+
+function onWindowResize() {
+  var aspect = window.innerWidth / window.innerHeight;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.left = -frustumSize * aspect / 2;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.right = frustumSize * aspect / 2;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.top = frustumSize / 2;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.bottom = -frustumSize / 2;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.updateProjectionMatrix();
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.setSize(window.innerWidth * xratio, window.innerHeight * yratio);
+} // Draw bounding box
+
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addBoundingBox = function () {
+  if (_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BackGroundColor == 'Black') {
+    var mat = new THREE.LineBasicMaterial({
+      color: 0xFFFFFF,
+      linewidth: 2
+    });
+  } else {
+    var mat = new THREE.LineBasicMaterial({
+      color: 0x000000,
+      linewidth: 2
+    });
+  }
+
+  var geometry = new THREE.BoxBufferGeometry(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX);
+  var geo = new THREE.EdgesGeometry(geometry); // or WireframeGeometry( geometry )
+
+  var boundingbox = new THREE.LineSegments(geo, mat);
+  boundingbox.name = 'BoundingBox';
+  boundingbox.scale.set(1, 1, 1);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(boundingbox);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingBox = 'On';
+  boundingbox.translateX(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2);
+  boundingbox.translateY(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2);
+  boundingbox.translateZ(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2);
+};
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeBoundingBox = function () {
+  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName('BoundingBox');
+
+  if (obj != undefined) {
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.remove(obj);
+  }
+
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingBox = 'Off';
+};
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].setBoundingBoxColor = function (objcolor) {
+  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName('BoundingBox');
+
+  if (obj != undefined) {
+    obj.material.color.setHex(objcolor);
+  }
+}; // Set background color
+
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].setBackGroundColor = function (backcolor) {
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.background = new THREE.Color(backcolor);
+};
+
+function rgb2hex(rgb) {
+  return "#" + rgb.map(function (value) {
+    return ("0" + value.toString(16)).slice(-2);
+  }).join("");
+} // Operation on mouse click
+
+
+function clickPosition(event) {
+  onDragStart(event); // Location of mouse
+
+  var clientX = event.clientX;
+  var clientY = event.clientY; // Normalization of location
+
+  var mouse = new THREE.Vector2();
+  mouse.x = (clientX - _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.domElement.offsetLeft) / _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.domElement.clientWidth * 2 - 1;
+  mouse.y = -((clientY - _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.domElement.offsetTop) / _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.domElement.clientHeight) * 2 + 1; // Raycasterインスタンス作成
+
+  var raycaster = new THREE.Raycaster(); // 取得したX、Y座標でrayの位置を更新
+
+  raycaster.setFromCamera(mouse, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera); // Indetify crossing objects.
+
+  var intersects = raycaster.intersectObjects(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.children); // Write the most proximal one.
+
+  if (Object.keys(intersects).length > 0) {
+    var objid = intersects[0].object.name;
+    const target = document.getElementById("ClickedObjectID");
+    target.innerHTML = objid;
+
+    if (_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerOffOn == 1) {
+      var x = intersects[0].point.x;
+      var y = intersects[0].point.y;
+      var z = intersects[0].point.z; //Append Jsontable
+
+      var markerName = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerPrefix + String(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerSuffix);
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addMarker({
+        act: 1,
+        name: markerName,
+        parentid: objid,
+        radius: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerRadius,
+        r: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerR,
+        g: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerG,
+        b: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerB,
+        x: x,
+        y: y,
+        z: z
+      });
+    }
+  } else {
+    const target = document.getElementById("ClickedObjectID");
+    target.innerHTML = "Background";
+  }
+}
+
+var onDragStart = event => {
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].dragging = true;
+  annotate(event);
+};
+
+var onDragEnd = event => {
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].dragging = false;
+};
+
+var annotate = event => {
+  if (!_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].dragging) {
+    const {
+      intersect
+    } = getIntersect({
+      x: event.offsetX,
+      y: event.offsetY,
+      camera: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera,
+      meshes: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].getMeshes(),
+      container: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.domElement
+    });
+    updateCursor(intersect && intersect.point);
+    return;
+  }
+
+  ;
+  if (!_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].annotation_mode) return;
+  const {
+    intersect
+  } = annotateBySphere({
+    x: event.offsetX,
+    y: event.offsetY,
+    camera: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera,
+    meshes: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].getMeshes(),
+    container: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.domElement,
+    radius: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].AnnotatorRadius || 3,
+    ignoreBackFace: null
+  });
+  updateCursor(intersect && intersect.point);
+  updateMetricsOnAnnotationTable(_AnnotationTable__WEBPACK_IMPORTED_MODULE_1__["AnnotationTable"]);
+};
+
+const updateCursor = position => {
+  const radius = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].AnnotatorRadius || 3;
+  const cursor = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].cursor;
+
+  if (position) {
+    cursor.position.copy(position);
+    const zoom = radius / cursor.geometry.boundingSphere.radius;
+    cursor.scale.set(zoom, zoom, zoom);
+    cursor.visible = true;
+  } else {
+    cursor.visible = false;
+  }
+};
+
+const updateMetricsOnAnnotationTable = annotationTable => {
+  const params = getCurrentParams({
+    meshes: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].getMeshes()
+  });
+  const areas = params.areas;
+  const newRows = annotationTable.getData("active").map(_item => {
+    const item = Object.assign({}, _item);
+    item.area = areas[item.id] && areas[item.id].toFixed(0);
+    return item;
+  });
+  annotationTable.updateData(newRows);
+};
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].getMeshes = () => {
+  return _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.children.filter(object => object.type === "Mesh" && object.geometry.isBufferGeometry && !object.isCursor);
+};
+
+function launchAnnotator() {
+  // Renderer
+  var container = document.getElementById('myCanvas');
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer = new THREE.WebGLRenderer({
+    preserveDrawingBuffer: true
+  });
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.setSize(window.innerWidth * xratio, window.innerHeight * yratio);
+  container.appendChild(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.domElement); // Initilize camera
+
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera = new THREE.PerspectiveCamera(); // Scene
+
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene = new THREE.Scene();
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera); // Background Color
+
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.background = new THREE.Color(0xffffff);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BackGroundColor == 'White'; // Light
+
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].directionalLight = new THREE.DirectionalLight(0xffffff);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].directionalLight.position.set(1, 1, 1);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].directionalLight.intensity = 0.8;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.add(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].directionalLight);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].ambientLight = new THREE.AmbientLight(0xffffff);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].ambientLight.intensity = 0.5;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.add(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].ambientLight);
+  var min = 0;
+  var max = 255; // Controlsを用意
+
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].controls = new THREE.TrackballControls(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.domElement);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].controls.rotateSpeed = 10;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].controls.staticMoving = false;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].controls.dynamicDampingFactor = 1.0; // staticMoving = false のときの減衰量
+
+  animate(); // Response to mouse click
+
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.domElement.addEventListener('mousedown', clickPosition, false);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.domElement.addEventListener('mouseup', onDragEnd, false);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.domElement.addEventListener('onmousemove', annotate, false);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.domElement.onmousemove = annotate; // Marker Variables
+
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerOffOn = 0;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerR = 255;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerG = 0;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerB = 0;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerPrefix = "Marker";
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerSuffix = 0;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerRadius = 2.0;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerID = 1;
+  const call_url = location.protocol + "//" + location.host + "/surface/Boundingbox.json";
+  $.getJSON(call_url).done(function (data) {
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX = data.x;
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY = data.y;
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ = data.z;
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax = Math.max(data.x, data.y, data.z);
+    window.CenterXY();
+  }); // Cursor
+
+  var geometry = new THREE.SphereBufferGeometry(3, 32, 32);
+  var material = new THREE.MeshLambertMaterial({
+    color: 0xffffff,
+    opacity: 0.3,
+    transparent: true,
+    depthWrite: false
+  });
+  var cursor = new THREE.Mesh(geometry, material);
+  cursor.isCursor = true;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].cursor = cursor;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(cursor);
+}
+window.addEventListener('resize', onWindowResize, false);
+
+/***/ }),
+
+/***/ "./js/HandleMarkers.js":
+/*!*****************************!*\
+  !*** ./js/HandleMarkers.js ***!
+  \*****************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _APP__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./APP */ "./js/APP.js");
+/* harmony import */ var _csv__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./csv */ "./js/csv.js");
+/* harmony import */ var _MarkerTable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./MarkerTable */ "./js/MarkerTable.js");
+//
+//
+//
+//
+//
+
+
+
+/**
+ * マーカーを追加する
+ *
+ * @param {Object} markerData CSVで読み込まれたプロパティを持つオブジェクト。以下のプロパティが有効
+ *   - act      : {number} 例: 1
+ *   - name     : {string} 例: "Marker1"
+ *   - parentid : {number} 例: 3036
+ *   - radius   : {number} 例: 2.8
+ *   - r        : {number} 例: 255
+ *   - g        : {number} 例: 30
+ *   - b        : {number} 例: 100
+ *   - x        : {number} 例: 9.076891761740626
+ *   - y        : {number} 例: 10.850928915374125
+ *   - z        : {number} 例: 252.16774396931498
+ *
+ * @param {bool} [isImportFromFile=false] ファイルからの読み込みかどうか。
+ *   ファイルからの読み込み時はMarkerがOFFでもMarkerTableに追加する
+ * @return {bool} マーカーを追加したらtrueが返る
+ */
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addMarker = function (markerData, isImportFromFile) {
+  var markerData_act = Number(markerData.act);
+  var markerData_name = String(markerData.name);
+  var markerData_parentid = Number(markerData.parentid);
+  var markerData_radius = Number(markerData.radius);
+  var markerData_r = Number(markerData.r);
+  var markerData_g = Number(markerData.g);
+  var markerData_b = Number(markerData.b);
+  var markerData_x = Number(markerData.x);
+  var markerData_y = Number(markerData.y);
+  var markerData_z = Number(markerData.z); // CSVファイルからの読み込み時はMarkerがOFFでも描画する(要確認)
+
+  if (_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerOffOn == 1 || isImportFromFile) {
+    var color = rgb2hex([markerData_r, markerData_g, markerData_b]); // Add sphere
+
+    var geometry = new THREE.SphereGeometry(1);
+    var material = new THREE.MeshBasicMaterial({
+      color: color
+    });
+    var sphere = new THREE.Mesh(geometry, material);
+    sphere.scale.set(markerData_radius, markerData_radius, markerData_radius);
+    sphere.position.set(markerData_x, markerData_y, markerData_z);
+    sphere.name = 'm' + _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerID.toString();
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(sphere);
+    var NewMarker = {
+      act: markerData_act,
+      id: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerID,
+      name: markerData_name,
+      parentid: markerData_parentid,
+      radius: markerData_radius,
+      r: markerData_r,
+      g: markerData_g,
+      b: markerData_b,
+      x: markerData_x,
+      y: markerData_y,
+      z: markerData_z
+    };
+    _MarkerTable__WEBPACK_IMPORTED_MODULE_2__["MarkerTable"].addData(NewMarker); // Change database MarkerTable (setData)
+
+    updateMarkerId();
+    return true;
+  }
+
+  return false;
+};
+/**
+ * MarkerIDを更新する
+ */
+
+
+function updateMarkerId() {
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerSuffix = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerSuffix + 1;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerID = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerID + 1;
+  $('#SetSuffixNum').val(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerSuffix); // Change suffix for index.html
+}
+
+;
+/**
+ * マーカーを描画する
+ *
+ * @example
+ * renderMarker({
+ *   "act": 1,
+ *   "name": "test1",
+ *   "parentid": 3000,
+ *   "radius": 2,
+ *   "r": 100,
+ *   "g": 0,
+ *   "b": 0,
+ *   "x": 100,
+ *   "y": 200,
+ *   "z": 200
+ * })
+ *
+ * @param {Object} markerData CSVで読み込まれたプロパティを持つオブジェクト。addMarkerの引数と同じ
+ */
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderMarker = function (markerData) {
+  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(Number(markerData.parentid));
+
+  if (obj == null) {
+    return false;
+  }
+
+  return _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addMarker(markerData, true);
+}; // Change the color of the stl object specified by a name after generation.
+
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeMarkerRadius = function (id, r) {
+  var name = 'm' + id.toString();
+  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name);
+  console.log(obj);
+
+  if (obj != undefined) {
+    obj.scale.set(r, r, r);
+  }
+}; // Change the color of the stl object specified by a name after generation.
+
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeMarkerColor = function (id, objcolor) {
+  var name = 'm' + id.toString();
+  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name);
+
+  if (obj != undefined) {
+    obj.material.color.setHex(objcolor);
+  }
+}; // Remove a stl object by a name after generation.
+
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeMarker = function (id) {
+  // Remove from scene
+  var name = 'm' + id.toString();
+  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name);
+
+  if (obj != undefined) {
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.remove(obj);
+  }
+};
+
+/***/ }),
+
+/***/ "./js/HandleSkeletons.js":
+/*!*******************************!*\
+  !*** ./js/HandleSkeletons.js ***!
+  \*******************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _APP__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./APP */ "./js/APP.js");
+/* harmony import */ var _csv__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./csv */ "./js/csv.js");
+//
+//
+//
+//
+//
+
+ // Add stl objects and a name
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject = function (id, objcolor) {
+  var data_vertices = obtainDATA('vertices', id);
+  var data_edges = obtainDATA('edges', id);
+  var i1 = undefined;
+  var i2 = undefined;
+  var v1 = undefined;
+  var v2 = undefined;
+  console.log('Length vertices: ' + data_vertices.length);
+
+  if (isNaN(data_vertices[0][0]) == true) {
+    console.log(data_vertices);
+    console.log('No morphological data.');
+    return false;
+  } // console.log('Color: ' + objcolor);
+
+
+  var geometry = new THREE.Geometry();
+  var material = new THREE.LineBasicMaterial({
+    color: objcolor,
+    //0x000000
+    linewidth: 3,
+    fog: true
+  });
+
+  for (var i = 0; i < data_edges.length; i++) {
+    i1 = data_edges[i][0];
+    i2 = data_edges[i][1]; //console.log(data_edges)
+
+    v1 = new THREE.Vector3(data_vertices[i1][0], data_vertices[i1][1], data_vertices[i1][2]);
+    v2 = new THREE.Vector3(data_vertices[i2][0], data_vertices[i2][1], data_vertices[i2][2]);
+    geometry.vertices.push(v1, v2); //console.log(data_vertices[i1][0]+xshift,data_vertices[i1][1]+yshift,data_vertices[i1][2]+zshift)
+  }
+
+  var line = new THREE.LineSegments(geometry, material);
+  line.name = 'line' + id.toString();
+  console.log(line.name);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(line); //renderer.render(scene, camera);
+};
+
+function obtainDATA(name, id) {
+  var req = new XMLHttpRequest();
+  var response = undefined; // 値を引き取るための変数
+
+  req.onload = function () {
+    response = req.response; // 親ブロック（xhrStart）のresponse変数に引き継ぐ
+  };
+
+  req.open("get", "./ws/skeleton?variable=" + name + "&id=" + id, false);
+  req.send(null);
+  return convertCSVtoArray(response);
+}
+
+function convertCSVtoArray(responseText) {
+  //改行ごとに配列化
+  var arr = responseText.split('\n'); // console.log('Length: ' + arr.length); 
+  //1次元配列を2次元配列に変換
+
+  var res = [];
+
+  for (var i = 0; i < arr.length; i++) {
+    //空白行が出てきた時点で終了
+    if (arr[i] == '') break; //","ごとに配列化
+
+    res[i] = arr[i].split(',');
+
+    for (var i2 = 0; i2 < res[i].length; i2++) {
+      //数字の場合は「"」を削除
+      if (res[i][i2].match(/\-?\d+(.\d+)?(e[\+\-]d+)?/)) {
+        res[i][i2] = parseFloat(res[i][i2].replace('"', ''));
+      }
+    }
+  }
+
+  return res;
+}
+
+/***/ }),
+
+/***/ "./js/HandleSurfaces.js":
+/*!******************************!*\
+  !*** ./js/HandleSurfaces.js ***!
+  \******************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _APP__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./APP */ "./js/APP.js");
+/* harmony import */ var _csv__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./csv */ "./js/csv.js");
+/* harmony import */ var _AnnotationTable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AnnotationTable */ "./js/AnnotationTable.js");
+//
+//
+//
+//
+//
+
+
+ // Add surface objects and a name
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject = function (id, objcolor) {
+  const call_url = location.protocol + "//" + location.host + "/ws/surface?id=";
+  const target_url = location.protocol + "//" + location.host + "/surface/whole/" + ('0000000000' + id).slice(-10) + ".stl";
+  var xhr = new XMLHttpRequest();
+  xhr.open("HEAD", target_url, false); //同期モード
+
+  xhr.send(null);
+
+  if (xhr.status == 404) {
+    var req = new XMLHttpRequest();
+    req.open("get", call_url + id, false);
+    req.send(null);
+
+    if (req.responseText == "False") {
+      alert("No surface.");
+      return false;
+    }
+  } // console.log('Mesh prepared:');
+
+
+  var loader = new THREE.STLLoader();
+  loader.load(target_url, function (bufferGeometry) {
+    if (bufferGeometry.isBufferGeometry) {
+      bufferGeometry.attributes.color = bufferGeometry.attributes.color || bufferGeometry.attributes.position.clone();
+      bufferGeometry.attributes.color.array.fill(1);
+      bufferGeometry.attributes.color.needsUpdate = true;
+      bufferGeometry.colorsNeedUpdate = true;
+    }
+
+    console.log('Stl loaded:');
+    const meshMaterial = new THREE.MeshPhongMaterial({
+      color: objcolor,
+      specular: 0x776666,
+      shininess: 0.2,
+      vertexColors: THREE.FaceColors,
+      side: true
+    }); // 	    	  opacity: 0.4,
+
+    var mesh = new THREE.Mesh(bufferGeometry, meshMaterial);
+    mesh.name = id;
+    mesh.scale.set(1, 1, 1);
+    mesh.material.side = THREE.DoubleSide;
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(mesh);
+    Object(_AnnotationTable__WEBPACK_IMPORTED_MODULE_2__["updateColorOptionsOnAnnotator"])();
+  });
+}; // Change the color of the stl object specified by a name after generation.
+
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectColor = function (name, objcolor) {
+  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name);
+
+  if (obj != undefined) {
+    obj.material.color.setHex(objcolor);
+  }
+
+  name_centerline = 'line' + name.toString();
+  console.log(name_centerline);
+  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name_centerline);
+
+  if (obj != undefined) {
+    obj.material.color.setHex(objcolor);
+  }
+}; // Remove a stl object by a name after generation.
+
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSurfaceObject = function (id) {
+  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(id);
+
+  if (obj != undefined) {
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.remove(obj);
+  }
+  /*
+  name_centerline = 'line' + name.toString();
+  console.log(name_centerline);
+  var obj = APP.scene.getObjectByName(name_centerline);
+  if ( obj != undefined ) {
+     		APP.scene.remove(obj);
+  }
+  */
+
 };
 
 /***/ }),
@@ -371,17 +1037,17 @@ window.CenterZX = function () {
 /*!***************************!*\
   !*** ./js/MarkerTable.js ***!
   \***************************/
-/*! exports provided: ObjMarkerTable */
+/*! exports provided: MarkerTable */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ObjMarkerTable", function() { return ObjMarkerTable; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MarkerTable", function() { return MarkerTable; });
 /* harmony import */ var _APP__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./APP */ "./js/APP.js");
 /* harmony import */ var _csv__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./csv */ "./js/csv.js");
 
 
-const ObjMarkerTable = new Tabulator("#MarkerTable", {
+const MarkerTable = new Tabulator("#MarkerTable", {
   layout: "fitColumns",
   //fit columns to width of table
   autoResize: true,
@@ -628,7 +1294,7 @@ function clearMarkerTable() {
 
 
 function downloadMarkerTableAsCSV() {
-  ObjMarkerTable.download(_csv__WEBPACK_IMPORTED_MODULE_1__["csvFormatter"], 'MarkerTable.csv');
+  MarkerTable.download(_csv__WEBPACK_IMPORTED_MODULE_1__["csvFormatter"], 'MarkerTable.csv');
 }
 /**
  * テーブルカラムのタイトルとフィールドのペアを取得する
@@ -788,10 +1454,10 @@ function validateMarkerDataXYZ(markerData) {
 
 /***/ }),
 
-/***/ "./js/ObjectTable.js":
-/*!***************************!*\
-  !*** ./js/ObjectTable.js ***!
-  \***************************/
+/***/ "./js/SurfaceTable.js":
+/*!****************************!*\
+  !*** ./js/SurfaceTable.js ***!
+  \****************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -801,7 +1467,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _csv__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./csv */ "./js/csv.js");
 
 
-var ObjObjextTable = new Tabulator("#ObjectTable", {
+var SurfaceTable = new Tabulator("#SurfaceTable", {
   ajaxURL: "./surface/segmentInfo.json",
   layout: "fitColumns",
   //fit columns to width of table
@@ -918,651 +1584,35 @@ var ObjObjextTable = new Tabulator("#ObjectTable", {
       if (act == true) {
         console.log("Requested ID:", id);
         var col = r * 256 * 256 + g * 256 + b * 1;
-        _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSTLObject(id, col);
+        _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject(id, col);
       }
 
       if (act == false) {
         console.log("Disappear ID:", id); //const filename = sprintf("./stls/i%d.stl", id );
 
-        _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSTLObject(id);
+        _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSurfaceObject(id);
       }
     }
 
     if (columnField == 'r' || columnField == 'g' || columnField == 'b') {
       console.log("Changecolor ID:", id);
-      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changecolorSTLObject(id, r * 256 * 256 + g * 256 + b * 1);
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectColor(id, r * 256 * 256 + g * 256 + b * 1);
     }
   }
 }); // 「Download CSV」ボタンを押したとき
 
 $('#save-object-table-csv').on('click', function (event) {
-  downloadObjectTableAsCSV();
+  downloadSurfaceTableAsCSV();
   return false;
 });
 /**
  * ObjectTableをCSVでダウンロードする
  */
 
-function downloadObjectTableAsCSV() {
+function downloadSurfaceTableAsCSV() {
   console.log("downloadObjectTableAsCSV");
-  ObjObjextTable.download(_csv__WEBPACK_IMPORTED_MODULE_1__["csvFormatter"], 'ObjextTable.csv');
+  SurfaceTable.download(_csv__WEBPACK_IMPORTED_MODULE_1__["csvFormatter"], 'SurfaceTable.csv');
 }
-
-/***/ }),
-
-/***/ "./js/StlViewer.js":
-/*!*************************!*\
-  !*** ./js/StlViewer.js ***!
-  \*************************/
-/*! exports provided: StlViewer */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StlViewer", function() { return StlViewer; });
-/* harmony import */ var _AnnotationTable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AnnotationTable */ "./js/AnnotationTable.js");
-/* harmony import */ var _APP__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./APP */ "./js/APP.js");
-/* harmony import */ var _MarkerTable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./MarkerTable */ "./js/MarkerTable.js");
-
-
-
-var xratio = 0.6;
-var yratio = 0.95; //var ysize = 600;
-
-var frustumSize = 1000; //var xshift = -64;
-//var yshift = -128-59;
-//var zshift = -64
-//xshift = 0;
-//yshift = 0;
-//zshift = 0;
-
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].animate = function () {
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].renderer.render(_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene, _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].camera);
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].controls.update();
-  requestAnimationFrame(_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].animate);
-};
-
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].dragging = false;
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].annotation_mode = false;
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].annotation_paint_mode = true;
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].annotation_overwrite = false;
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxX = 0.0;
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxY = 0.0;
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxZ = 0.0;
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxMax = 0.0; // ObtainWindowSize
-
-function onWindowResize() {
-  var aspect = window.innerWidth / window.innerHeight;
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].camera.left = -frustumSize * aspect / 2;
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].camera.right = frustumSize * aspect / 2;
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].camera.top = frustumSize / 2;
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].camera.bottom = -frustumSize / 2;
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].camera.updateProjectionMatrix();
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].renderer.setSize(window.innerWidth * xratio, window.innerHeight * yratio);
-} // Add stl objects and a name
-
-
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].addSTLObject = function (id, objcolor) {
-  const call_url = location.protocol + "//" + location.host + "/ws/surface?id=";
-  const target_url = location.protocol + "//" + location.host + "/surface/whole/" + ('0000000000' + id).slice(-10) + ".stl";
-  var xhr = new XMLHttpRequest();
-  xhr.open("HEAD", target_url, false); //同期モード
-
-  xhr.send(null);
-
-  if (xhr.status == 404) {
-    var req = new XMLHttpRequest();
-    req.open("get", call_url + id, false);
-    req.send(null);
-
-    if (req.responseText == "False") {
-      alert("No surface.");
-      return false;
-    }
-  } // console.log('Mesh prepared:');
-
-
-  var loader = new THREE.STLLoader();
-  loader.load(target_url, function (bufferGeometry) {
-    if (bufferGeometry.isBufferGeometry) {
-      bufferGeometry.attributes.color = bufferGeometry.attributes.color || bufferGeometry.attributes.position.clone();
-      bufferGeometry.attributes.color.array.fill(1);
-      bufferGeometry.attributes.color.needsUpdate = true;
-      bufferGeometry.colorsNeedUpdate = true;
-    }
-
-    console.log('Stl loaded:');
-    const meshMaterial = new THREE.MeshPhongMaterial({
-      color: objcolor,
-      specular: 0x776666,
-      shininess: 0.2,
-      vertexColors: THREE.FaceColors,
-      side: true
-    }); // 	    	  opacity: 0.4,
-
-    var mesh = new THREE.Mesh(bufferGeometry, meshMaterial);
-    mesh.name = id;
-    mesh.scale.set(1, 1, 1);
-    mesh.material.side = THREE.DoubleSide;
-    _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.add(mesh); // console.log('3D processed:');
-    //      mesh.translateX(xshift);
-    //      mesh.translateY(yshift);
-    //      mesh.translateZ(zshift);
-
-    Object(_AnnotationTable__WEBPACK_IMPORTED_MODULE_0__["updateColorOptionsOnAnnotator"])(); //APP.scene.getObjectByName('test_name2').rotation.x += 0.005;
-    //APP.scene.getObjectByName('test_name2').rotation.y += 0.005;
-    //console.log('Object name:');
-    //console.log(name);
-    //APP.scene.remove(mesh);
-  });
-}; // Change the color of the stl object specified by a name after generation.
-
-
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].changecolorSTLObject = function (name, objcolor) {
-  var obj = _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.getObjectByName(name);
-
-  if (obj != undefined) {
-    obj.material.color.setHex(objcolor);
-  }
-
-  name_centerline = 'line' + name.toString();
-  console.log(name_centerline);
-  var obj = _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.getObjectByName(name_centerline);
-
-  if (obj != undefined) {
-    obj.material.color.setHex(objcolor);
-  }
-}; // Remove a stl object by a name after generation.
-
-
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].removeSTLObject = function (id) {
-  var obj = _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.getObjectByName(id);
-
-  if (obj != undefined) {
-    _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.remove(obj);
-  }
-  /*
-  name_centerline = 'line' + name.toString();
-  console.log(name_centerline);
-  var obj = APP.scene.getObjectByName(name_centerline);
-  if ( obj != undefined ) {
-     		APP.scene.remove(obj);
-  }
-  */
-
-}; // Add stl objects and a name
-
-
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].addCenterlineObject = function (id, objcolor) {
-  var data_vertices = _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].obtainDATA('vertices', id);
-  var data_edges = _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].obtainDATA('edges', id);
-  var i1 = undefined;
-  var i2 = undefined;
-  var v1 = undefined;
-  var v2 = undefined;
-  console.log('Length vertices: ' + data_vertices.length);
-
-  if (isNaN(data_vertices[0][0]) == true) {
-    console.log(data_vertices);
-    console.log('No morphological data.');
-    return false;
-  } // console.log('Color: ' + objcolor);
-
-
-  var geometry = new THREE.Geometry();
-  var material = new THREE.LineBasicMaterial({
-    color: objcolor,
-    //0x000000
-    linewidth: 3,
-    fog: true
-  });
-
-  for (var i = 0; i < data_edges.length; i++) {
-    i1 = data_edges[i][0];
-    i2 = data_edges[i][1]; //console.log(data_edges)
-    // v1 = new THREE.Vector3( data_vertices[i1][0]+xshift,data_vertices[i1][1]+yshift,data_vertices[i1][2]+zshift);
-    // v2 = new THREE.Vector3( data_vertices[i2][0]+xshift,data_vertices[i2][1]+yshift,data_vertices[i2][2]+zshift);
-
-    v1 = new THREE.Vector3(data_vertices[i1][0], data_vertices[i1][1], data_vertices[i1][2]);
-    v2 = new THREE.Vector3(data_vertices[i2][0], data_vertices[i2][1], data_vertices[i2][2]);
-    geometry.vertices.push(v1, v2); //console.log(data_vertices[i1][0]+xshift,data_vertices[i1][1]+yshift,data_vertices[i1][2]+zshift)
-  }
-
-  var line = new THREE.LineSegments(geometry, material);
-  line.name = 'line' + id.toString();
-  console.log(line.name);
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.add(line); //renderer.render(scene, camera);
-};
-
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].obtainDATA = function (name, id) {
-  var req = new XMLHttpRequest();
-  var response = undefined; // 値を引き取るための変数
-
-  req.onload = function () {
-    response = req.response; // 親ブロック（xhrStart）のresponse変数に引き継ぐ
-  };
-
-  req.open("get", "./ws/skeleton?variable=" + name + "&id=" + id, false);
-  req.send(null);
-  return _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].convertCSVtoArray(response);
-};
-
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].convertCSVtoArray = function (responseText) {
-  //改行ごとに配列化
-  var arr = responseText.split('\n'); // console.log('Length: ' + arr.length); 
-  //1次元配列を2次元配列に変換
-
-  var res = [];
-
-  for (var i = 0; i < arr.length; i++) {
-    //空白行が出てきた時点で終了
-    if (arr[i] == '') break; //","ごとに配列化
-
-    res[i] = arr[i].split(',');
-
-    for (var i2 = 0; i2 < res[i].length; i2++) {
-      //数字の場合は「"」を削除
-      if (res[i][i2].match(/\-?\d+(.\d+)?(e[\+\-]d+)?/)) {
-        res[i][i2] = parseFloat(res[i][i2].replace('"', ''));
-      }
-    }
-  }
-
-  return res;
-}; // Draw bounding box
-
-
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].addBoundingBox = function () {
-  if (_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BackGroundColor == 'Black') {
-    var mat = new THREE.LineBasicMaterial({
-      color: 0xFFFFFF,
-      linewidth: 2
-    });
-  } else {
-    var mat = new THREE.LineBasicMaterial({
-      color: 0x000000,
-      linewidth: 2
-    });
-  }
-
-  var geometry = new THREE.BoxBufferGeometry(_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxZ, _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxY, _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxX);
-  var geo = new THREE.EdgesGeometry(geometry); // or WireframeGeometry( geometry )
-
-  var boundingbox = new THREE.LineSegments(geo, mat);
-  boundingbox.name = 'BoundingBox';
-  boundingbox.scale.set(1, 1, 1);
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.add(boundingbox);
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingBox = 'On';
-  boundingbox.translateX(_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxZ / 2);
-  boundingbox.translateY(_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxY / 2);
-  boundingbox.translateZ(_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxX / 2);
-};
-
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].removeBoundingBox = function () {
-  var obj = _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.getObjectByName('BoundingBox');
-
-  if (obj != undefined) {
-    _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.remove(obj);
-  }
-
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingBox = 'Off';
-};
-
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].setBoundingBoxColor = function (objcolor) {
-  var obj = _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.getObjectByName('BoundingBox');
-
-  if (obj != undefined) {
-    obj.material.color.setHex(objcolor);
-  }
-}; // Set background color
-
-
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].setBackGroundColor = function (backcolor) {
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.background = new THREE.Color(backcolor);
-};
-
-function rgb2hex(rgb) {
-  return "#" + rgb.map(function (value) {
-    return ("0" + value.toString(16)).slice(-2);
-  }).join("");
-} // Operation on mouse click
-
-
-function clickPosition(event) {
-  onDragStart(event); // Location of mouse
-
-  var clientX = event.clientX;
-  var clientY = event.clientY; // Normalization of location
-
-  var mouse = new THREE.Vector2();
-  mouse.x = (clientX - _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].renderer.domElement.offsetLeft) / _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].renderer.domElement.clientWidth * 2 - 1;
-  mouse.y = -((clientY - _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].renderer.domElement.offsetTop) / _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].renderer.domElement.clientHeight) * 2 + 1; // Raycasterインスタンス作成
-
-  var raycaster = new THREE.Raycaster(); // 取得したX、Y座標でrayの位置を更新
-
-  raycaster.setFromCamera(mouse, _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].camera); // Indetify crossing objects.
-
-  var intersects = raycaster.intersectObjects(_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.children); // Write the most proximal one.
-
-  if (Object.keys(intersects).length > 0) {
-    var objid = intersects[0].object.name;
-    const target = document.getElementById("ClickedObjectID");
-    target.innerHTML = objid;
-
-    if (_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerOffOn == 1) {
-      var x = intersects[0].point.x;
-      var y = intersects[0].point.y;
-      var z = intersects[0].point.z; //Append Jsontable
-
-      var markerName = _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerPrefix + String(_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerSuffix);
-      _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].addMarker({
-        act: 1,
-        name: markerName,
-        parentid: objid,
-        radius: _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerRadius,
-        r: _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerR,
-        g: _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerG,
-        b: _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerB,
-        x: x,
-        y: y,
-        z: z
-      });
-    }
-  } else {
-    const target = document.getElementById("ClickedObjectID");
-    target.innerHTML = "Background";
-  }
-}
-/**
- * マーカーを追加する
- *
- * @param {Object} markerData CSVで読み込まれたプロパティを持つオブジェクト。以下のプロパティが有効
- *   - act      : {number} 例: 1
- *   - name     : {string} 例: "Marker1"
- *   - parentid : {number} 例: 3036
- *   - radius   : {number} 例: 2.8
- *   - r        : {number} 例: 255
- *   - g        : {number} 例: 30
- *   - b        : {number} 例: 100
- *   - x        : {number} 例: 9.076891761740626
- *   - y        : {number} 例: 10.850928915374125
- *   - z        : {number} 例: 252.16774396931498
- *
- * @param {bool} [isImportFromFile=false] ファイルからの読み込みかどうか。
- *   ファイルからの読み込み時はMarkerがOFFでもMarkerTableに追加する
- * @return {bool} マーカーを追加したらtrueが返る
- */
-
-
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].addMarker = function (markerData, isImportFromFile) {
-  var markerData_act = Number(markerData.act);
-  var markerData_name = String(markerData.name);
-  var markerData_parentid = Number(markerData.parentid);
-  var markerData_radius = Number(markerData.radius);
-  var markerData_r = Number(markerData.r);
-  var markerData_g = Number(markerData.g);
-  var markerData_b = Number(markerData.b);
-  var markerData_x = Number(markerData.x);
-  var markerData_y = Number(markerData.y);
-  var markerData_z = Number(markerData.z); // CSVファイルからの読み込み時はMarkerがOFFでも描画する(要確認)
-
-  if (_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerOffOn == 1 || isImportFromFile) {
-    var color = rgb2hex([markerData_r, markerData_g, markerData_b]); // Add sphere
-
-    var geometry = new THREE.SphereGeometry(1);
-    var material = new THREE.MeshBasicMaterial({
-      color: color
-    });
-    var sphere = new THREE.Mesh(geometry, material);
-    sphere.scale.set(markerData_radius, markerData_radius, markerData_radius);
-    sphere.position.set(markerData_x, markerData_y, markerData_z);
-    sphere.name = 'm' + _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerID.toString();
-    _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.add(sphere);
-    var NewMarker = {
-      act: markerData_act,
-      id: _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerID,
-      name: markerData_name,
-      parentid: markerData_parentid,
-      radius: markerData_radius,
-      r: markerData_r,
-      g: markerData_g,
-      b: markerData_b,
-      x: markerData_x,
-      y: markerData_y,
-      z: markerData_z
-    };
-    _MarkerTable__WEBPACK_IMPORTED_MODULE_2__["ObjMarkerTable"].addData(NewMarker); // Change database MarkerTable (setData)
-
-    _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].updateMarkerId();
-    return true;
-  }
-
-  return false;
-};
-/**
- * MarkerIDを更新する
- */
-
-
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].updateMarkerId = function () {
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerSuffix = _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerSuffix + 1;
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerID = _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerID + 1;
-  $('#SetSuffixNum').val(_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerSuffix); // Change suffix for index.html
-};
-/**
- * マーカーを描画する
- *
- * @example
- * renderMarker({
- *   "act": 1,
- *   "name": "test1",
- *   "parentid": 3000,
- *   "radius": 2,
- *   "r": 100,
- *   "g": 0,
- *   "b": 0,
- *   "x": 100,
- *   "y": 200,
- *   "z": 200
- * })
- *
- * @param {Object} markerData CSVで読み込まれたプロパティを持つオブジェクト。addMarkerの引数と同じ
- */
-
-
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].renderMarker = function (markerData) {
-  var obj = _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.getObjectByName(Number(markerData.parentid));
-
-  if (obj == null) {
-    return false;
-  }
-
-  return _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].addMarker(markerData, true);
-}; // Change the color of the stl object specified by a name after generation.
-
-
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].changeMarkerRadius = function (id, r) {
-  var name = 'm' + id.toString();
-  var obj = _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.getObjectByName(name);
-  console.log(obj);
-
-  if (obj != undefined) {
-    obj.scale.set(r, r, r);
-  }
-}; // Change the color of the stl object specified by a name after generation.
-
-
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].changeMarkerColor = function (id, objcolor) {
-  var name = 'm' + id.toString();
-  var obj = _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.getObjectByName(name);
-
-  if (obj != undefined) {
-    obj.material.color.setHex(objcolor);
-  }
-}; // Remove a stl object by a name after generation.
-
-
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].removeMarker = function (id) {
-  // Remove from scene
-  var name = 'm' + id.toString();
-  var obj = _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.getObjectByName(name);
-
-  if (obj != undefined) {
-    _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.remove(obj);
-  } // Remove from json variable
-  //var newData = APP.MarkerTable.filter(function(item, index){ if (item.id != id) return true;});
-  //APP.MarkerTable = newData
-
-};
-
-var onDragStart = event => {
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].dragging = true;
-  annotate(event);
-};
-
-var onDragEnd = event => {
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].dragging = false;
-};
-
-var annotate = event => {
-  if (!_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].dragging) {
-    const {
-      intersect
-    } = getIntersect({
-      x: event.offsetX,
-      y: event.offsetY,
-      camera: _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].camera,
-      meshes: _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].getMeshes(),
-      container: _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].renderer.domElement
-    });
-    updateCursor(intersect && intersect.point);
-    return;
-  }
-
-  ;
-  if (!_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].annotation_mode) return;
-  const {
-    intersect
-  } = annotateBySphere({
-    x: event.offsetX,
-    y: event.offsetY,
-    camera: _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].camera,
-    meshes: _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].getMeshes(),
-    container: _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].renderer.domElement,
-    radius: _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].AnnotatorRadius || 3,
-    ignoreBackFace: null
-  });
-  updateCursor(intersect && intersect.point);
-  updateMetricsOnAnnotationTable(_AnnotationTable__WEBPACK_IMPORTED_MODULE_0__["AnnotationTable"]);
-};
-
-const updateCursor = position => {
-  const radius = _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].AnnotatorRadius || 3;
-  const cursor = _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].cursor;
-
-  if (position) {
-    cursor.position.copy(position);
-    const zoom = radius / cursor.geometry.boundingSphere.radius;
-    cursor.scale.set(zoom, zoom, zoom);
-    cursor.visible = true;
-  } else {
-    cursor.visible = false;
-  }
-};
-
-const updateMetricsOnAnnotationTable = annotationTable => {
-  const params = getCurrentParams({
-    meshes: _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].getMeshes()
-  });
-  const areas = params.areas;
-  const newRows = annotationTable.getData("active").map(_item => {
-    const item = Object.assign({}, _item);
-    item.area = areas[item.id] && areas[item.id].toFixed(0);
-    return item;
-  });
-  annotationTable.updateData(newRows);
-};
-
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].getMeshes = () => {
-  return _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.children.filter(object => object.type === "Mesh" && object.geometry.isBufferGeometry && !object.isCursor);
-};
-
-function StlViewer() {
-  // Renderer
-  var container = document.getElementById('myCanvas');
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].renderer = new THREE.WebGLRenderer({
-    preserveDrawingBuffer: true
-  });
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].renderer.setSize(window.innerWidth * xratio, window.innerHeight * yratio);
-  container.appendChild(_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].renderer.domElement); // Initilize camera
-
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].camera = new THREE.PerspectiveCamera(); // Scene
-
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene = new THREE.Scene();
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.add(_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].camera); // Background Color
-
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.background = new THREE.Color(0xffffff);
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BackGroundColor == 'White'; // Light
-
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].directionalLight = new THREE.DirectionalLight(0xffffff);
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].directionalLight.position.set(1, 1, 1);
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].directionalLight.intensity = 0.8;
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].camera.add(_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].directionalLight);
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].ambientLight = new THREE.AmbientLight(0xffffff);
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].ambientLight.intensity = 0.5;
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].camera.add(_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].ambientLight);
-  var min = 0;
-  var max = 255; // Controlsを用意
-
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].controls = new THREE.TrackballControls(_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].camera, _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].renderer.domElement);
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].controls.rotateSpeed = 10;
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].controls.staticMoving = false;
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].controls.dynamicDampingFactor = 1.0; // staticMoving = false のときの減衰量
-
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].animate(); // Response to mouse click
-
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].renderer.domElement.addEventListener('mousedown', clickPosition, false);
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].renderer.domElement.addEventListener('mouseup', onDragEnd, false);
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].renderer.domElement.addEventListener('onmousemove', annotate, false);
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].renderer.domElement.onmousemove = annotate; // Marker Variables
-
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerOffOn = 0;
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerR = 255;
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerG = 0;
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerB = 0;
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerPrefix = "Marker";
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerSuffix = 0;
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerRadius = 2.0;
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerID = 1;
-  centerInit(); // Cursor
-
-  var geometry = new THREE.SphereBufferGeometry(3, 32, 32);
-  var material = new THREE.MeshLambertMaterial({
-    color: 0xffffff,
-    opacity: 0.3,
-    transparent: true,
-    depthWrite: false
-  });
-  var cursor = new THREE.Mesh(geometry, material);
-  cursor.isCursor = true;
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].cursor = cursor;
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.add(cursor);
-}
-
-const centerInit = function () {
-  const call_url = location.protocol + "//" + location.host + "/surface/Boundingbox.json";
-  $.getJSON(call_url).done(function (data) {
-    _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxX = data.x;
-    _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxY = data.y;
-    _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxZ = data.z;
-    _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxMax = Math.max(data.x, data.y, data.z);
-    window.CenterXY(); //APP.camera.up.set(0,0,1);
-    //APP.camera.position.set(max_size*4.0,  APP.BoundingboxY/2.0, APP.BoundingboxX/2.0);
-    //APP.controls.target.set( APP.BoundingboxZ/2.0, APP.BoundingboxY/2.0, APP.BoundingboxX/2.0 );
-  });
-};
-
-window.addEventListener('resize', onWindowResize, false);
 
 /***/ }),
 
@@ -1749,15 +1799,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _js_MarkerTable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../js/MarkerTable */ "./js/MarkerTable.js");
 /* harmony import */ var _js_util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../js/util */ "./js/util.js");
 /* harmony import */ var _js_util__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_js_util__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _js_ObjectTable__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../js/ObjectTable */ "./js/ObjectTable.js");
-/* harmony import */ var _js_StlViewer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../js/StlViewer */ "./js/StlViewer.js");
+/* harmony import */ var _js_SurfaceTable__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../js/SurfaceTable */ "./js/SurfaceTable.js");
+/* harmony import */ var _js_HandleSurfaces__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../js/HandleSurfaces */ "./js/HandleSurfaces.js");
+/* harmony import */ var _js_HandleSkeletons__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../js/HandleSkeletons */ "./js/HandleSkeletons.js");
+/* harmony import */ var _js_HandleMarkers__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../js/HandleMarkers */ "./js/HandleMarkers.js");
+/* harmony import */ var _js_HandleBasement__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../js/HandleBasement */ "./js/HandleBasement.js");
 
 
 
 
 
 
-Object(_js_StlViewer__WEBPACK_IMPORTED_MODULE_5__["StlViewer"])();
+
+
+
+Object(_js_HandleBasement__WEBPACK_IMPORTED_MODULE_8__["launchAnnotator"])();
 
 /***/ }),
 

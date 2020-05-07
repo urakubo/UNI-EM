@@ -1,7 +1,7 @@
 import { APP } from "./APP";
 import { parseCSV, csvFormatter } from "./csv";
 
-export const ObjMarkerTable = new Tabulator("#MarkerTable", {
+export const MarkerTable = new Tabulator("#MarkerTable", {
 	layout:"fitColumns",      //fit columns to width of table
 	autoResize:true,
 	responsiveLayout:"hide",  //hide columns that dont fit on the table
@@ -166,7 +166,7 @@ function clearMarkerTable() {
  * MarkerTableをCSVでダウンロードする
  */
 function downloadMarkerTableAsCSV() {
-  ObjMarkerTable.download(csvFormatter, 'MarkerTable.csv');
+  MarkerTable.download(csvFormatter, 'MarkerTable.csv');
 }
 
 /**

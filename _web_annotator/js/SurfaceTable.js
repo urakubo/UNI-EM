@@ -1,7 +1,7 @@
 import { APP } from "./APP";
 import { csvFormatter } from "./csv";
 
-var ObjObjextTable = new Tabulator("#ObjectTable", {
+var SurfaceTable = new Tabulator("#SurfaceTable", {
 	ajaxURL:"./surface/segmentInfo.json",
 	layout:"fitColumns",      //fit columns to width of table
 	autoResize:true,
@@ -50,18 +50,18 @@ var ObjObjextTable = new Tabulator("#ObjectTable", {
 	  	if(act == true) {
 	  		console.log("Requested ID:", id );
 			var col  = r*256*256+g*256+b*1 ; 
-			APP.addSTLObject(id, col);
+			APP.addSurfaceObject(id, col);
 			}
 	  	if(act == false) {
 	  		console.log("Disappear ID:", id )
 			//const filename = sprintf("./stls/i%d.stl", id );
-			APP.removeSTLObject(id);
+			APP.removeSurfaceObject(id);
 			}
 		}
 
 	  if(columnField == 'r' || columnField == 'g' || columnField == 'b') {
 	  		console.log("Changecolor ID:", id )
-			APP.changecolorSTLObject(id, r*256*256+g*256+b*1);
+			APP.changeSurfaceObjectColor(id, r*256*256+g*256+b*1);
 		}
     }
 
@@ -69,14 +69,14 @@ var ObjObjextTable = new Tabulator("#ObjectTable", {
 
 // 「Download CSV」ボタンを押したとき
 $('#save-object-table-csv').on('click', function(event) {
-  downloadObjectTableAsCSV();
+  downloadSurfaceTableAsCSV();
   return false;
 });
 
 /**
  * ObjectTableをCSVでダウンロードする
  */
-function downloadObjectTableAsCSV() {
+function downloadSurfaceTableAsCSV() {
   console.log("downloadObjectTableAsCSV");
-  ObjObjextTable.download(csvFormatter, 'ObjextTable.csv');
+  SurfaceTable.download(csvFormatter, 'SurfaceTable.csv');
 }
