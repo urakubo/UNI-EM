@@ -53,6 +53,12 @@
             <div class="menu-label">Ambient light intensity:</div>
             <input type="number" min="0" max="100" step="5" value="50" onchange="AmbLight(this.value);">
           </li>
+          <li>
+            <div class="menu-label">Centering:</div>
+            <button type="button" class="btn btn4 font2" onClick="CenterXY();">XY</button>
+            <button type="button" class="btn btn4 font2" onClick="CenterYZ();">YZ</button>
+            <button type="button" class="btn btn4 font2" onClick="CenterZX();">ZX</button>
+          </li>
         </ul>
         <!-- <div data-mode-show="paint" class="archive">Paint</div> -->
         <ul data-mode-show="paint" class="subMenu appearance-actions">
@@ -66,7 +72,7 @@
             ON
           </li> -->
           <li>
-            <div class="menu-label">Tools:</div>
+            <div class="menu-label">Eraser:</div>
             <button class="toggleButton" onclick="switchEraserAnnotation(!this.classList.toggle('active'))" ><i class="fas fa-eraser"></i></button>
           </li>
           <li>

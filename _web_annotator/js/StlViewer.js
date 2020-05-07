@@ -29,6 +29,7 @@ APP.annotation_overwrite = false;
 APP.BoundingboxX = 0.0;
 APP.BoundingboxY = 0.0;
 APP.BoundingboxZ = 0.0;
+APP.BoundingboxMax = 0.0;
 
 // ObtainWindowSize
 function onWindowResize() {
@@ -435,17 +436,12 @@ APP.changeMarkerColor = function(id, objcolor){
 
 // Remove a stl object by a name after generation.
 APP.removeMarker = function(id){
-
 	// Remove from scene
 	var name = 'm'+ id.toString();
 	var obj = APP.scene.getObjectByName(name);
 	if ( obj != undefined ) {
     APP.scene.remove(obj);
 	}
-
-        // Remove from json variable
-	//var newData = APP.MarkerTable.filter(function(item, index){ if (item.id != id) return true;});
-	//APP.MarkerTable = newData
 }
 
 
@@ -520,10 +516,9 @@ export function StlViewer() {
 	APP.renderer.setSize(window.innerWidth * xratio, window.innerHeight * yratio);
 	container.appendChild( APP.renderer.domElement );
 
-	 // Camera
+	// Initilize camera
 	APP.camera = new THREE.PerspectiveCamera();
-	APP.camera.position.z = 400;
-	// APP.camera.lookAt(new THREE.Vector3(64, 64, 64));
+
 
 	// Scene
 	APP.scene = new THREE.Scene();
@@ -568,6 +563,10 @@ export function StlViewer() {
 	APP.MarkerRadius = 2.0;
 	APP.MarkerID     = 1;
 
+
+	centerInit()
+
+
 	// Cursor
 	var geometry = new THREE.SphereBufferGeometry( 3, 32, 32 );
 	var material = new THREE.MeshLambertMaterial( {color: 0xffffff, opacity: 0.3, transparent: true, depthWrite: false} );
@@ -575,24 +574,19 @@ export function StlViewer() {
 	cursor.isCursor = true;
 	APP.cursor = cursor;
 	APP.scene.add( cursor );
-
-  		// Initilize camera position
-	const centeringBoundingBox = function () {
-		const call_url   = location.protocol+"//"+location.host+"/surface/Boundingbox.json";
-		$.getJSON(call_url).done(function(data) {
-	        APP.BoundingboxX = data.x;
-			APP.BoundingboxY = data.y;
-			APP.BoundingboxZ = data.z;
-			console.log('XYZ: ',APP.BoundingboxX/2, APP.BoundingboxY/2, APP.BoundingboxZ/2);
-			// APP.camera.position(new THREE.Vector3(APP.BoundingboxX/2, APP.BoundingboxY/2, APP.BoundingboxZ*4));
-			APP.camera.lookAt(new THREE.Vector3(APP.BoundingboxX/2, APP.BoundingboxY/2, APP.BoundingboxZ/2));
-	    });
-	    }
-
-	centeringBoundingBox()
-
 }
 
+
+const centerInit = function () {
+	const call_url   = location.protocol+"//"+location.host+"/surface/Boundingbox.json";
+	$.getJSON(call_url).done(function(data) {
+        APP.BoundingboxX = data.x;
+		APP.BoundingboxY = data.y;
+		APP.BoundingboxZ = data.z;
+		APP.BoundingboxMax = Math.max(data.x, data.y, data.z);
+		window.CenterXY()
+    });
+}
 
 
 window.addEventListener( 'resize', onWindowResize, false );

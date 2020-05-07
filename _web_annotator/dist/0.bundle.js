@@ -347,6 +347,24 @@ window.SaveImage = function (ischecked) {
   link.click();
 };
 
+window.CenterXY = function () {
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.up.set(0, 0, 1);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.position.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax * 3.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].controls.target.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0);
+};
+
+window.CenterYZ = function () {
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.up.set(0, 1, 0);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.position.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax * 3.0);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].controls.target.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0);
+};
+
+window.CenterZX = function () {
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.up.set(1, 0, 0);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.position.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax * 3.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].controls.target.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0);
+};
+
 /***/ }),
 
 /***/ "./js/MarkerTable.js":
@@ -970,7 +988,8 @@ _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].annotation_paint_mode = true;
 _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].annotation_overwrite = false;
 _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxX = 0.0;
 _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxY = 0.0;
-_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxZ = 0.0; // ObtainWindowSize
+_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxZ = 0.0;
+_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxMax = 0.0; // ObtainWindowSize
 
 function onWindowResize() {
   var aspect = window.innerWidth / window.innerHeight;
@@ -1475,11 +1494,9 @@ function StlViewer() {
     preserveDrawingBuffer: true
   });
   _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].renderer.setSize(window.innerWidth * xratio, window.innerHeight * yratio);
-  container.appendChild(_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].renderer.domElement); // Camera
+  container.appendChild(_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].renderer.domElement); // Initilize camera
 
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].camera = new THREE.PerspectiveCamera();
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].camera.position.z = 400; // APP.camera.lookAt(new THREE.Vector3(64, 64, 64));
-  // Scene
+  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].camera = new THREE.PerspectiveCamera(); // Scene
 
   _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene = new THREE.Scene();
   _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.add(_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].camera); // Background Color
@@ -1516,7 +1533,8 @@ function StlViewer() {
   _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerPrefix = "Marker";
   _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerSuffix = 0;
   _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerRadius = 2.0;
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerID = 1; // Cursor
+  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].MarkerID = 1;
+  centerInit(); // Cursor
 
   var geometry = new THREE.SphereBufferGeometry(3, 32, 32);
   var material = new THREE.MeshLambertMaterial({
@@ -1528,22 +1546,22 @@ function StlViewer() {
   var cursor = new THREE.Mesh(geometry, material);
   cursor.isCursor = true;
   _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].cursor = cursor;
-  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.add(cursor); // Initilize camera position
-
-  const centeringBoundingBox = function () {
-    const call_url = location.protocol + "//" + location.host + "/surface/Boundingbox.json";
-    $.getJSON(call_url).done(function (data) {
-      _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxX = data.x;
-      _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxY = data.y;
-      _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxZ = data.z;
-      console.log('XYZ: ', _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxX / 2, _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxY / 2, _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxZ / 2); // APP.camera.position(new THREE.Vector3(APP.BoundingboxX/2, APP.BoundingboxY/2, APP.BoundingboxZ*4));
-
-      _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].camera.lookAt(new THREE.Vector3(_APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxX / 2, _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxY / 2, _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxZ / 2));
-    });
-  };
-
-  centeringBoundingBox();
+  _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].scene.add(cursor);
 }
+
+const centerInit = function () {
+  const call_url = location.protocol + "//" + location.host + "/surface/Boundingbox.json";
+  $.getJSON(call_url).done(function (data) {
+    _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxX = data.x;
+    _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxY = data.y;
+    _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxZ = data.z;
+    _APP__WEBPACK_IMPORTED_MODULE_1__["APP"].BoundingboxMax = Math.max(data.x, data.y, data.z);
+    window.CenterXY(); //APP.camera.up.set(0,0,1);
+    //APP.camera.position.set(max_size*4.0,  APP.BoundingboxY/2.0, APP.BoundingboxX/2.0);
+    //APP.controls.target.set( APP.BoundingboxZ/2.0, APP.BoundingboxY/2.0, APP.BoundingboxX/2.0 );
+  });
+};
+
 window.addEventListener('resize', onWindowResize, false);
 
 /***/ }),
