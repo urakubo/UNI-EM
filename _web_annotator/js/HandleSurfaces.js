@@ -8,10 +8,22 @@ import { parseCSV, csvFormatter } from "./csv";
 import { updateColorOptionsOnAnnotator } from "./AnnotationTable";
 
 // Add surface objects and a name
-APP.addSurfaceObject = function(id, objcolor) {
-	const call_url   = location.protocol+"//"+location.host+"/ws/surface?id=";
-	const target_url = location.protocol+"//"+location.host+"/surface/whole/" + ( '0000000000' + id ).slice( -10 ) + ".stl";
+APP.addSurfaceObject = function(id, col) {
 
+	const name =  ( '0000000000' + id ).slice( -10 );
+	const call_url   = location.protocol+"//"+location.host+"/ws/surface?id=";
+	const target_url = location.protocol+"//"+location.host+"/surface/whole/" + name + ".stl";
+
+	// Revive it if already exists.
+	// console.log('Name: ', name)
+	var obj = APP.scene.getObjectByName(name);
+	if ( obj != undefined ) {
+		// console.log('Obj: ', obj)
+		obj.visible = true;
+		return true;
+		}
+
+	// Request the surface mesh generation to the server if it does not exist.
 	var xhr = new XMLHttpRequest();
 	xhr.open("HEAD", target_url, false);  //同期モード
 	xhr.send(null);
@@ -26,6 +38,7 @@ APP.addSurfaceObject = function(id, objcolor) {
 	}
 	// console.log('Mesh prepared.');
 
+	// Load the stl file then generate mesh object.
 	var loader = new THREE.STLLoader();
 	loader.load(target_url, function(bufferGeometry) {
 	  if (bufferGeometry.isBufferGeometry) {
@@ -36,7 +49,7 @@ APP.addSurfaceObject = function(id, objcolor) {
 	  }
 	  // console.log('Stl loaded.');
 	  const meshMaterial = new THREE.MeshPhongMaterial({
-		  color: objcolor,
+		  color: col,
 		  specular: 0x776666,
 		  shininess: 0.2,
 		  vertexColors: THREE.FaceColors,
@@ -45,7 +58,7 @@ APP.addSurfaceObject = function(id, objcolor) {
 		  side: true
 	  }) // APP.surface_opacity
 	  var mesh = new THREE.Mesh(bufferGeometry, meshMaterial);
-      mesh.name = ( '0000000000' + id ).slice( -10 );
+      mesh.name = name;
       mesh.scale.set(1, 1, 1);
       mesh.material.side = THREE.DoubleSide;
       APP.scene.add(mesh);
@@ -78,38 +91,24 @@ APP.changeSurfaceObjectOpacity = function(opacity) {
 }
 
 
-// Change the color of a surface object specified by a name after generation.
+// Change the color of a surface object specified by the name.
 APP.changeSurfaceObjectColor = function(id, objcolor) {
-
 	name = ( '0000000000' + id ).slice( -10 );
 	var obj = APP.scene.getObjectByName(name);
 	if ( obj != undefined ) {
     		obj.material.color.setHex( objcolor );
 		}
-	
-	name_centerline = 'line' + name.toString();
-	console.log(name_centerline);
-	var obj = APP.scene.getObjectByName(name_centerline);
-	if ( obj != undefined ) {
-    		obj.material.color.setHex( objcolor );
-		}
 	}
+
 
 // Remove a stl object by a name after generation.
 APP.removeSurfaceObject = function(id) {
 	name = ( '0000000000' + id ).slice( -10 );
 	var obj = APP.scene.getObjectByName(name);
 	if ( obj != undefined ) {
-    	    APP.scene.remove(obj);
-	}
-	/*
-	name_centerline = 'line' + name.toString();
-	console.log(name_centerline);
-	var obj = APP.scene.getObjectByName(name_centerline);
-	if ( obj != undefined ) {
-    		APP.scene.remove(obj);
-	}
-	*/
+		// APP.scene.remove(obj);
+		obj.visible = false;
+		}
 	}
 
 

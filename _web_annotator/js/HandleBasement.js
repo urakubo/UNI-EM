@@ -91,17 +91,29 @@ function clickPosition( event ) {
 	raycaster.setFromCamera( mouse, APP.camera );
 
 	// Indetify crossing objects.
-	var intersects = raycaster.intersectObjects( APP.scene.children );
-	// Write the most proximal one.
-	if (Object.keys(intersects).length > 0) {
-		var objid = intersects[0].object.name;
-		const target = document.getElementById("ClickedObjectID");
-		target.innerHTML = objid;
+	var intersects_org = raycaster.intersectObjects( APP.scene.children );
+	
+	var intersected_filtered = [];
+	for (let i = 0; i < intersects_org.length; i++) {
+		var name = intersects_org[i].object.name;
+		// console.log(name)
+		if (name !== 'cursor' && name !== 'BoundingBox') {
+				intersected_filtered.push(intersects_org[i]);
+			}
+		}
 
-		if (APP.MarkerOffOn == 1) {
-			var x = intersects[ 0 ].point.x;
-			var y = intersects[ 0 ].point.y;
-			var z = intersects[ 0 ].point.z;
+	// Put a marker if in the marker mode (this should be moved to HandleMarker.js).
+	// Show the ID if not.
+	if (intersected_filtered.length > 0) {
+		// Get the most proximal one
+		var name = intersected_filtered[ 0 ].object.name;
+		const target = document.getElementById("ClickedObjectID");
+		target.innerHTML = name;
+
+		if (APP.MarkerMode == 1) {
+			var x = intersected_filtered[ 0 ].point.x;
+			var y = intersected_filtered[ 0 ].point.y;
+			var z = intersected_filtered[ 0 ].point.z;
 
 			//Append Jsontable
 			var markerName = APP.MarkerPrefix + String(APP.MarkerSuffix);
@@ -109,7 +121,7 @@ function clickPosition( event ) {
 			APP.addMarker({
 				act: 1,
 				name: markerName,
-				parentid: objid,
+				parentid: name,
 				radius: APP.MarkerRadius,
 				r: APP.MarkerR,
 				g: APP.MarkerG,
@@ -187,6 +199,7 @@ const updateMetricsOnAnnotationTable = (annotationTable) => {
 	annotationTable.updateData(newRows);
 };
 
+
 APP.getMeshes = () => {
 	return APP.scene.children.filter(object => object.type === "Mesh" && object.geometry.isBufferGeometry && !object.isCursor);
 }
@@ -236,31 +249,7 @@ export function launchAnnotator() {
 	APP.renderer.domElement.addEventListener('onmousemove', annotate, false);
 	APP.renderer.domElement.onmousemove = annotate;
 
-    // Marker Variables
-	APP.MarkerOffOn = 0;
-	APP.MarkerR = 255;
-	APP.MarkerG = 0;
-	APP.MarkerB = 0;
-	APP.MarkerPrefix = "Marker";
-	APP.MarkerSuffix = 0;
-	APP.MarkerRadius = 2.0;
-	APP.MarkerID     = 1;
-
-	// Opacity
-	APP.surface_opacity = 1.0;
-	APP.surface_opacity_reserved = 1.0;
-
-
-	const call_url   = location.protocol+"//"+location.host+"/surface/Boundingbox.json";
-	$.getJSON(call_url).done(function(data) {
-        APP.BoundingboxX = data.x;
-		APP.BoundingboxY = data.y;
-		APP.BoundingboxZ = data.z;
-		APP.BoundingboxMax = Math.max(data.x, data.y, data.z);
-		window.CenterXY()
-    });
-
-
+	// Paint
 	// Cursor
 	var geometry = new THREE.SphereBufferGeometry( 3, 32, 32 );
 	var material = new THREE.MeshLambertMaterial( {color: 0xffffff, opacity: 0.3, transparent: true, depthWrite: false} );
@@ -269,6 +258,33 @@ export function launchAnnotator() {
 	cursor.name = 'cursor';
 	APP.cursor = cursor;
 	APP.scene.add( cursor );
+
+    // Marker
+	APP.MarkerMode = 0;
+	APP.MarkerR = 255;
+	APP.MarkerG = 0;
+	APP.MarkerB = 0;
+	APP.MarkerPrefix = "Marker";
+	APP.MarkerSuffix = 0;
+	APP.MarkerRadius = 2.0;
+	APP.MarkerID     = 1;
+
+	// Surface opacity
+	APP.surface_opacity          = 1.0;
+	APP.surface_opacity_reserved = 0.5;
+
+	// Skeleton
+	APP.SkeletonMode = 0;
+
+	//Boundingbox
+	const call_url   = location.protocol+"//"+location.host+"/surface/Boundingbox.json";
+	$.getJSON(call_url).done(function(data) {
+        APP.BoundingboxX = data.x;
+		APP.BoundingboxY = data.y;
+		APP.BoundingboxZ = data.z;
+		APP.BoundingboxMax = Math.max(data.x, data.y, data.z);
+		window.CenterXY()
+    });
 }
 
 

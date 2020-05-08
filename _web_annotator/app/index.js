@@ -30,9 +30,6 @@ $(() => {
         // window.MarkerOffOn(mode === "point");
         // window.switchAnnotation(mode === "paint"); 
 
-        // APP.MarkerOffOn = (mode == "point");
-        // APP.annotation_mode = (mode == "paint");
-
     }
     $('[data-mode]').click(e => {
         const mode = e.target.getAttribute("data-mode");

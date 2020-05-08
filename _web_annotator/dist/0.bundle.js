@@ -303,6 +303,56 @@ __webpack_require__.r(__webpack_exports__);
 // Shared
 //
 
+window.ChangeMode = function (mode) {
+  switch (mode) {
+    case "view":
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerMode = 0;
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SkeletonMode = 0;
+      switchAnnotation(0);
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectOpacity(-1);
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSkeletons();
+      break;
+
+    case "point":
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerMode = 1;
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SkeletonMode = 0;
+      switchAnnotation(0);
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectOpacity(-1);
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSkeletons();
+      break;
+
+    case "paint":
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerMode = 0;
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SkeletonMode = 0;
+      switchAnnotation(1);
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectOpacity(-1);
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSkeletons();
+      break;
+
+    case "skeleton":
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerMode = 0;
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SkeletonMode = 1;
+      switchAnnotation(0);
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectOpacity(0);
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletons();
+      break;
+
+    default:
+      console.log(`Error. Mode ${mode} cannot be interpreted.`);
+  }
+}; //
+// app/index.jsで使っている
+//
+
+
+window.MarkerOffOn = function (ischecked) {
+  if (ischecked == true) {
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerOffOn = 1;
+  } else {
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerOffOn = 0;
+  }
+};
+
 window.SaveImage = function (ischecked) {
   let canvas = document.getElementById("myCanvas").querySelector('canvas');
   let link = document.createElement("a");
@@ -358,17 +408,6 @@ window.CenterZX = function () {
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.up.set(1, 0, 0);
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.position.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax * 3.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0);
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].controls.target.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0);
-}; //
-// Point
-//
-
-
-window.MarkerOffOn = function (ischecked) {
-  if (ischecked == true) {
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerOffOn = 1;
-  } else {
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerOffOn = 0;
-  }
 }; //
 // Skeleton
 //
@@ -484,23 +523,35 @@ function clickPosition(event) {
 
   raycaster.setFromCamera(mouse, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera); // Indetify crossing objects.
 
-  var intersects = raycaster.intersectObjects(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.children); // Write the most proximal one.
+  var intersects_org = raycaster.intersectObjects(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.children);
+  var intersected_filtered = [];
 
-  if (Object.keys(intersects).length > 0) {
-    var objid = intersects[0].object.name;
+  for (let i = 0; i < intersects_org.length; i++) {
+    var name = intersects_org[i].object.name; // console.log(name)
+
+    if (name !== 'cursor' && name !== 'BoundingBox') {
+      intersected_filtered.push(intersects_org[i]);
+    }
+  } // Put a marker if in the marker mode (this should be moved to HandleMarker.js).
+  // Show the ID if not.
+
+
+  if (intersected_filtered.length > 0) {
+    // Get the most proximal one
+    var name = intersected_filtered[0].object.name;
     const target = document.getElementById("ClickedObjectID");
-    target.innerHTML = objid;
+    target.innerHTML = name;
 
-    if (_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerOffOn == 1) {
-      var x = intersects[0].point.x;
-      var y = intersects[0].point.y;
-      var z = intersects[0].point.z; //Append Jsontable
+    if (_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerMode == 1) {
+      var x = intersected_filtered[0].point.x;
+      var y = intersected_filtered[0].point.y;
+      var z = intersected_filtered[0].point.z; //Append Jsontable
 
       var markerName = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerPrefix + String(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerSuffix);
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addMarker({
         act: 1,
         name: markerName,
-        parentid: objid,
+        parentid: name,
         radius: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerRadius,
         r: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerR,
         g: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerG,
@@ -625,27 +676,8 @@ function launchAnnotator() {
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.domElement.addEventListener('mousedown', clickPosition, false);
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.domElement.addEventListener('mouseup', onDragEnd, false);
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.domElement.addEventListener('onmousemove', annotate, false);
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.domElement.onmousemove = annotate; // Marker Variables
-
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerOffOn = 0;
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerR = 255;
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerG = 0;
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerB = 0;
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerPrefix = "Marker";
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerSuffix = 0;
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerRadius = 2.0;
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerID = 1; //
-
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity = 1.0;
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity_reserved = 1.0;
-  const call_url = location.protocol + "//" + location.host + "/surface/Boundingbox.json";
-  $.getJSON(call_url).done(function (data) {
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX = data.x;
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY = data.y;
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ = data.z;
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax = Math.max(data.x, data.y, data.z);
-    window.CenterXY();
-  }); // Cursor
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.domElement.onmousemove = annotate; // Paint
+  // Cursor
 
   var geometry = new THREE.SphereBufferGeometry(3, 32, 32);
   var material = new THREE.MeshLambertMaterial({
@@ -658,7 +690,30 @@ function launchAnnotator() {
   cursor.isCursor = true;
   cursor.name = 'cursor';
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].cursor = cursor;
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(cursor);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(cursor); // Marker
+
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerMode = 0;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerR = 255;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerG = 0;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerB = 0;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerPrefix = "Marker";
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerSuffix = 0;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerRadius = 2.0;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerID = 1; // Surface opacity
+
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity = 1.0;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity_reserved = 0.5; // Skeleton
+
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SkeletonMode = 0; //Boundingbox
+
+  const call_url = location.protocol + "//" + location.host + "/surface/Boundingbox.json";
+  $.getJSON(call_url).done(function (data) {
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX = data.x;
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY = data.y;
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ = data.z;
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax = Math.max(data.x, data.y, data.z);
+    window.CenterXY();
+  });
 }
 window.addEventListener('resize', onWindowResize, false);
 
@@ -716,7 +771,7 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addMarker = function (markerData, isImp
   var markerData_y = Number(markerData.y);
   var markerData_z = Number(markerData.z); // CSVファイルからの読み込み時はMarkerがOFFでも描画する(要確認)
 
-  if (_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerOffOn == 1 || isImportFromFile) {
+  if (_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerMode == 1 || isImportFromFile) {
     var color = rgb2hex([markerData_r, markerData_g, markerData_b]); // Add sphere
 
     var geometry = new THREE.SphereGeometry(1);
@@ -848,82 +903,118 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
- // Add stl objects and a name
+ // Change the opacity of all surface objects
 
-_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject = function (id, objcolor) {
-  var data_vertices = obtainDATA('vertices', id);
-  var data_edges = obtainDATA('edges', id);
-  var i1 = undefined;
-  var i2 = undefined;
-  var v1 = undefined;
-  var v2 = undefined;
-  console.log('Length vertices: ' + data_vertices.length);
-
-  if (isNaN(data_vertices[0][0]) == true) {
-    console.log(data_vertices);
-    console.log('No morphological data.');
-    return false;
-  } // console.log('Color: ' + objcolor);
-
-
-  var geometry = new THREE.Geometry();
-  var material = new THREE.LineBasicMaterial({
-    color: objcolor,
-    //0x000000
-    linewidth: 3,
-    fog: true
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletons = function () {
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.traverse(function (obj) {
+    if (obj instanceof THREE.Mesh === true && obj.name.length === 10) {
+      var id = obj.name - 0;
+      var col = obj.material.color;
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject(id, col);
+    }
   });
-
-  for (var i = 0; i < data_edges.length; i++) {
-    i1 = data_edges[i][0];
-    i2 = data_edges[i][1]; //console.log(data_edges)
-
-    v1 = new THREE.Vector3(data_vertices[i1][0], data_vertices[i1][1], data_vertices[i1][2]);
-    v2 = new THREE.Vector3(data_vertices[i2][0], data_vertices[i2][1], data_vertices[i2][2]);
-    geometry.vertices.push(v1, v2); //console.log(data_vertices[i1][0]+xshift,data_vertices[i1][1]+yshift,data_vertices[i1][2]+zshift)
-  }
-
-  var line = new THREE.LineSegments(geometry, material);
-  line.name = 'line' + id.toString();
-  console.log(line.name);
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(line); //renderer.render(scene, camera);
 };
 
-function obtainDATA(name, id) {
-  var req = new XMLHttpRequest();
-  var response = undefined; // 値を引き取るための変数
-
-  req.onload = function () {
-    response = req.response; // 親ブロック（xhrStart）のresponse変数に引き継ぐ
-  };
-
-  req.open("get", "./ws/skeleton?variable=" + name + "&id=" + id, false);
-  req.send(null);
-  return convertCSVtoArray(response);
-}
-
-function convertCSVtoArray(responseText) {
-  //改行ごとに配列化
-  var arr = responseText.split('\n'); // console.log('Length: ' + arr.length); 
-  //1次元配列を2次元配列に変換
-
-  var res = [];
-
-  for (var i = 0; i < arr.length; i++) {
-    //空白行が出てきた時点で終了
-    if (arr[i] == '') break; //","ごとに配列化
-
-    res[i] = arr[i].split(',');
-
-    for (var i2 = 0; i2 < res[i].length; i2++) {
-      //数字の場合は「"」を削除
-      if (res[i][i2].match(/\-?\d+(.\d+)?(e[\+\-]d+)?/)) {
-        res[i][i2] = parseFloat(res[i][i2].replace('"', ''));
-      }
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSkeletons = function () {
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.traverse(function (obj) {
+    if (obj.name.match(/line/)) {
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.remove(obj);
     }
+  });
+}; // Add stl objects and a name
+
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject = function (id, col) {
+  if (_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SkeletonMode == 0) {
+    return false;
   }
 
-  return res;
+  const target_url = location.protocol + "//" + location.host + "/skeleton/whole/" + ('0000000000' + id).slice(-10) + ".hdf5";
+  const filename = ('0000000000' + id).slice(-10) + ".hdf5";
+  fetch(target_url).then(function (response) {
+    return response.arrayBuffer();
+  }).then(function (buffer) {
+    //
+    //
+    var f = new hdf5.File(buffer, filename);
+    let g1 = f.get('vertices');
+    let g2 = f.get('edges');
+    var data_vertices = g1.value;
+    var data_edges = g2.value;
+    data_vertices = splitArray(data_vertices, 3);
+    data_edges = splitArray(data_edges, 2);
+    var i1 = undefined;
+    var i2 = undefined;
+    var v1 = undefined;
+    var v2 = undefined; // console.log(data_vertices)
+
+    console.log('Length vertices: ' + data_vertices.length);
+    console.log('Length edges   : ' + data_edges.length);
+
+    if (isNaN(data_vertices[0][0]) == true) {
+      // console.log(data_vertices);
+      console.log('No morphological data.');
+      return false;
+    }
+
+    var geometry = new THREE.Geometry();
+    var material = new THREE.LineBasicMaterial({
+      color: col,
+      //0x000000
+      linewidth: 3,
+      fog: true
+    });
+    var scale_factor_xy = 5;
+    var xscale = 1.0 / Math.pow(2, scale_factor_xy);
+    var yscale = 1.0 / Math.pow(2, scale_factor_xy);
+    var zscale = 1.0 / 40;
+
+    for (var i = 0; i < data_edges.length; i++) {
+      i1 = data_edges[i][0];
+      i2 = data_edges[i][1]; // console.log('Vertices ID: ', i1, i2 );
+
+      v1 = new THREE.Vector3(data_vertices[i1][0] * zscale, data_vertices[i1][2] * yscale, data_vertices[i1][1] * xscale);
+      v2 = new THREE.Vector3(data_vertices[i2][0] * zscale, data_vertices[i2][2] * yscale, data_vertices[i2][1] * xscale);
+      geometry.vertices.push(v1, v2);
+    }
+
+    var line = new THREE.LineSegments(geometry, material);
+    line.name = 'line' + ('0000000000' + id).slice(-10);
+    console.log(line.name);
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(line); //
+    //
+    //
+  });
+}; // Change the color of a skeleton object specified by a name.
+
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSkeletonObjectColor = function (id, col) {
+  name = 'line' + ('0000000000' + id).slice(-10);
+  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name_centerline);
+
+  if (obj != undefined) {
+    obj.material.color.setHex(col);
+  }
+}; // Remove a stl object by the name.
+
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSkeletonObject = function (id) {
+  name = 'line' + ('0000000000' + id).slice(-10);
+  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name);
+
+  if (obj != undefined) {
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.remove(obj);
+  }
+};
+
+function splitArray(array, part) {
+  var tmp = [];
+
+  for (var i = 0; i < array.length; i += part) {
+    tmp.push(array.slice(i, i + part));
+  }
+
+  return tmp;
 }
 
 /***/ }),
@@ -949,9 +1040,21 @@ __webpack_require__.r(__webpack_exports__);
 
  // Add surface objects and a name
 
-_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject = function (id, objcolor) {
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject = function (id, col) {
+  const name = ('0000000000' + id).slice(-10);
   const call_url = location.protocol + "//" + location.host + "/ws/surface?id=";
-  const target_url = location.protocol + "//" + location.host + "/surface/whole/" + ('0000000000' + id).slice(-10) + ".stl";
+  const target_url = location.protocol + "//" + location.host + "/surface/whole/" + name + ".stl"; // Revive it if already exists.
+  // console.log('Name: ', name)
+
+  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name);
+
+  if (obj != undefined) {
+    // console.log('Obj: ', obj)
+    obj.visible = true;
+    return true;
+  } // Request the surface mesh generation to the server if it does not exist.
+
+
   var xhr = new XMLHttpRequest();
   xhr.open("HEAD", target_url, false); //同期モード
 
@@ -967,6 +1070,7 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject = function (id, objcol
       return false;
     }
   } // console.log('Mesh prepared.');
+  // Load the stl file then generate mesh object.
 
 
   var loader = new THREE.STLLoader();
@@ -980,7 +1084,7 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject = function (id, objcol
 
 
     const meshMaterial = new THREE.MeshPhongMaterial({
-      color: objcolor,
+      color: col,
       specular: 0x776666,
       shininess: 0.2,
       vertexColors: THREE.FaceColors,
@@ -990,7 +1094,7 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject = function (id, objcol
     }); // APP.surface_opacity
 
     var mesh = new THREE.Mesh(bufferGeometry, meshMaterial);
-    mesh.name = ('0000000000' + id).slice(-10);
+    mesh.name = name;
     mesh.scale.set(1, 1, 1);
     mesh.material.side = THREE.DoubleSide;
     _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(mesh); // console.log(mesh.name);
@@ -1015,24 +1119,15 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectOpacity = function (
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.traverse(function (obj) {
     if (obj instanceof THREE.Mesh === true && obj.name !== 'cursor') {
       obj.material.opacity = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity;
-    }
+    } // console.log('Obj name:', obj.name );
 
-    console.log('Obj name:', obj.name);
   });
-}; // Change the color of a surface object specified by a name after generation.
+}; // Change the color of a surface object specified by the name.
 
 
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectColor = function (id, objcolor) {
   name = ('0000000000' + id).slice(-10);
   var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name);
-
-  if (obj != undefined) {
-    obj.material.color.setHex(objcolor);
-  }
-
-  name_centerline = 'line' + name.toString();
-  console.log(name_centerline);
-  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name_centerline);
 
   if (obj != undefined) {
     obj.material.color.setHex(objcolor);
@@ -1045,17 +1140,9 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSurfaceObject = function (id) {
   var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name);
 
   if (obj != undefined) {
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.remove(obj);
+    // APP.scene.remove(obj);
+    obj.visible = false;
   }
-  /*
-  name_centerline = 'line' + name.toString();
-  console.log(name_centerline);
-  var obj = APP.scene.getObjectByName(name_centerline);
-  if ( obj != undefined ) {
-     		APP.scene.remove(obj);
-  }
-  */
-
 };
 
 /***/ }),
@@ -1607,23 +1694,27 @@ var SurfaceTable = new Tabulator("#SurfaceTable", {
 
     var columnField = cell.getColumn().getField(); // console.log("編集後の値:", cellValue, "編集前の値:", cellOldValue, "編集した列:", row, "編集したカラム", columnField);
 
+    var col = r * 256 * 256 + g * 256 + b * 1;
+
     if (columnField == 'act') {
       if (act == true) {
         console.log("Requested ID:", id);
-        var col = r * 256 * 256 + g * 256 + b * 1;
         _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject(id, col);
+        _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject(id, col);
       }
 
       if (act == false) {
         console.log("Disappear ID:", id); //const filename = sprintf("./stls/i%d.stl", id );
 
         _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSurfaceObject(id);
+        _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSkeletonObject(id);
       }
     }
 
     if (columnField == 'r' || columnField == 'g' || columnField == 'b') {
       console.log("Changecolor ID:", id);
-      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectColor(id, r * 256 * 256 + g * 256 + b * 1);
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectColor(id, col);
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSkeletonObjectColor(id, col);
     }
   }
 }); // 「Download CSV」ボタンを押したとき

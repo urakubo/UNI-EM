@@ -40,7 +40,7 @@ APP.addMarker = function(markerData, isImportFromFile) {
   var markerData_z = Number(markerData.z);
 
   // CSVファイルからの読み込み時はMarkerがOFFでも描画する(要確認)
-  if (APP.MarkerOffOn == 1 || isImportFromFile) {
+  if (APP.MarkerMode == 1 || isImportFromFile) {
     var color = rgb2hex([markerData_r, markerData_g, markerData_b]);
 
     // Add sphere

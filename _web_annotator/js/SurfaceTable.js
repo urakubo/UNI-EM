@@ -46,22 +46,25 @@ var SurfaceTable = new Tabulator("#SurfaceTable", {
       var columnField = cell.getColumn().getField();
       // console.log("編集後の値:", cellValue, "編集前の値:", cellOldValue, "編集した列:", row, "編集したカラム", columnField);
 
+
+	  var col = r*256*256+g*256+b*1 ;
 	  if(columnField == 'act') {
 	  	if(act == true) {
 	  		console.log("Requested ID:", id );
-			var col  = r*256*256+g*256+b*1 ; 
 			APP.addSurfaceObject(id, col);
+			APP.addSkeletonObject(id, col);
 			}
 	  	if(act == false) {
 	  		console.log("Disappear ID:", id )
 			//const filename = sprintf("./stls/i%d.stl", id );
 			APP.removeSurfaceObject(id);
+			APP.removeSkeletonObject(id);
 			}
 		}
-
 	  if(columnField == 'r' || columnField == 'g' || columnField == 'b') {
-	  		console.log("Changecolor ID:", id )
-			APP.changeSurfaceObjectColor(id, r*256*256+g*256+b*1);
+	  	console.log("Changecolor ID:", id )
+		APP.changeSurfaceObjectColor(id, col);
+		APP.changeSkeletonObjectColor(id, col);
 		}
     }
 
