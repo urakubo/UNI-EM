@@ -408,10 +408,10 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].dragging = false;
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].annotation_mode = false;
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].annotation_paint_mode = true;
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].annotation_overwrite = false;
-_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX = 0.0;
-_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY = 0.0;
-_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ = 0.0;
-_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax = 0.0; // ObtainWindowSize
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_x = 0.0;
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_y = 0.0;
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_z = 0.0;
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_max = 0.0; // ObtainWindowSize
 
 function onWindowResize() {
   var aspect = window.innerWidth / window.innerHeight;
@@ -437,7 +437,7 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addBoundingBox = function () {
     });
   }
 
-  var geometry = new THREE.BoxBufferGeometry(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX);
+  var geometry = new THREE.BoxBufferGeometry(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_z, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_y, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_x);
   var geo = new THREE.EdgesGeometry(geometry); // or WireframeGeometry( geometry )
 
   var boundingbox = new THREE.LineSegments(geo, mat);
@@ -445,9 +445,9 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addBoundingBox = function () {
   boundingbox.scale.set(1, 1, 1);
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(boundingbox);
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingBox = 'On';
-  boundingbox.translateX(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2);
-  boundingbox.translateY(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2);
-  boundingbox.translateZ(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2);
+  boundingbox.translateX(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_z / 2);
+  boundingbox.translateY(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_y / 2);
+  boundingbox.translateZ(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_x / 2);
 };
 
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeBoundingBox = function () {
@@ -641,10 +641,10 @@ function launchAnnotator() {
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerID = 1;
   const call_url = location.protocol + "//" + location.host + "/surface/Boundingbox.json";
   $.getJSON(call_url).done(function (data) {
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX = data.x;
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY = data.y;
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ = data.z;
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax = Math.max(data.x, data.y, data.z);
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_x = data.x;
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_y = data.y;
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_z = data.z;
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_max = Math.max(data.x, data.y, data.z);
     window.CenterXY();
   }); // Cursor
 
@@ -947,7 +947,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 
- // Add surface objects and a name
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity = 0.5; // Add surface objects and a name
 
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject = function (id, objcolor) {
   const call_url = location.protocol + "//" + location.host + "/ws/surface?id=";
@@ -966,9 +967,9 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject = function (id, objcol
       alert("No surface.");
       return false;
     }
-  } // console.log('Mesh prepared:');
+  }
 
-
+  console.log('Mesh prepared:');
   var loader = new THREE.STLLoader();
   loader.load(target_url, function (bufferGeometry) {
     if (bufferGeometry.isBufferGeometry) {
@@ -978,17 +979,19 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject = function (id, objcol
       bufferGeometry.colorsNeedUpdate = true;
     }
 
-    console.log('Stl loaded:');
+    console.log('Stl loaded.');
     const meshMaterial = new THREE.MeshPhongMaterial({
       color: objcolor,
       specular: 0x776666,
       shininess: 0.2,
       vertexColors: THREE.FaceColors,
+      transparent: true,
+      opacity: 0,
       side: true
-    }); // 	    	  opacity: 0.4,
+    }); // APP.surface_opacity
 
     var mesh = new THREE.Mesh(bufferGeometry, meshMaterial);
-    mesh.name = id;
+    mesh.name = ('0000000000' + id).slice(-10);
     mesh.scale.set(1, 1, 1);
     mesh.material.side = THREE.DoubleSide;
     _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(mesh);
@@ -997,7 +1000,19 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject = function (id, objcol
 }; // Change the color of the stl object specified by a name after generation.
 
 
-_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectColor = function (name, objcolor) {
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectOpacity = function (opacity) {
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity = opacity;
+  console.log('Change opacity to: ', _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.traverse(function (obj) {
+    if (obj instanceof THREE.Mesh === true) {
+      obj.opacity = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity;
+    }
+  });
+}; // Change the color of the stl object specified by a name after generation.
+
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectColor = function (id, objcolor) {
+  name = ('0000000000' + id).slice(-10);
   var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name);
 
   if (obj != undefined) {
@@ -1015,7 +1030,8 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectColor = function (na
 
 
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSurfaceObject = function (id) {
-  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(id);
+  name = ('0000000000' + id).slice(-10);
+  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name);
 
   if (obj != undefined) {
     _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.remove(obj);

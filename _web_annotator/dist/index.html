@@ -21,6 +21,7 @@
         <button type="button" class="btn-top-radius" data-mode="view"  onClick="MarkerOffOn(0); switchAnnotation(0);">View</button> 
         <button type="button" class="btn-top-radius" data-mode="point" onClick="MarkerOffOn(1); switchAnnotation(0);">Point</button>
         <button type="button" class="btn-top-radius" data-mode="paint" onClick="MarkerOffOn(0); switchAnnotation(1);">Paint</button>
+        <button type="button" class="btn-top-radius" data-mode="skeleton" onClick="MarkerOffOn(0); switchAnnotation(0);">Skeleton</button>
       </div>
     </div>
     <ul id="menu">
@@ -119,6 +120,20 @@
             <input type="number" id="SetSuffixNum" min="0" step="1" value="0" onchange="APP.MarkerSuffix = Number(this.value);">
           </li>
         </ul>
+        
+        
+        
+                <!-- <div class="archive" data-mode-show="view">Appearance</div> -->
+        <ul  data-mode-show="skeleton" class="subMenu appearance-actions">
+          <li>
+            <div class="menu-label">Surface opacity:</div>
+            <input type="number" min="0.0" max="1.0" step="0.05" value="0.0" onchange="APP.changeSurfaceObjectOpacity(this.value);">
+          </li>
+        </ul>
+        
+        
+        
+        
         <li>
           <button type="button" class="save-image btn btn4 font3" onClick="SaveImage(this.checked);">Save Image</button>
         </li>
@@ -127,7 +142,7 @@
 
     <p>
       <fieldset class="table-frame">
-        <legend>Object Table</legend>
+        <legend>Surface Objects</legend>
         <div id="SurfaceTable"></div>
         <div class="object-table-actions">
           <button type="button" id="save-object-table-csv" class="download-csv btn btn4 font3">Download CSV</button>
