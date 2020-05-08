@@ -658,7 +658,7 @@ function launchAnnotator() {
   var cursor = new THREE.Mesh(geometry, material);
   cursor.isCursor = true;
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].cursor = cursor;
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(cursor);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(cursor); // console.log('Annotator is launched.')
 }
 window.addEventListener('resize', onWindowResize, false);
 
@@ -967,9 +967,9 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject = function (id, objcol
       alert("No surface.");
       return false;
     }
-  }
+  } // console.log('Mesh prepared.');
 
-  console.log('Mesh prepared:');
+
   var loader = new THREE.STLLoader();
   loader.load(target_url, function (bufferGeometry) {
     if (bufferGeometry.isBufferGeometry) {
@@ -977,16 +977,16 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject = function (id, objcol
       bufferGeometry.attributes.color.array.fill(1);
       bufferGeometry.attributes.color.needsUpdate = true;
       bufferGeometry.colorsNeedUpdate = true;
-    }
+    } // console.log('Stl loaded.');
 
-    console.log('Stl loaded.');
+
     const meshMaterial = new THREE.MeshPhongMaterial({
       color: objcolor,
       specular: 0x776666,
       shininess: 0.2,
       vertexColors: THREE.FaceColors,
       transparent: true,
-      opacity: 0,
+      opacity: 0.4,
       side: true
     }); // APP.surface_opacity
 
@@ -994,15 +994,16 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject = function (id, objcol
     mesh.name = ('0000000000' + id).slice(-10);
     mesh.scale.set(1, 1, 1);
     mesh.material.side = THREE.DoubleSide;
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(mesh);
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(mesh); // console.log(mesh.name);
+
     Object(_AnnotationTable__WEBPACK_IMPORTED_MODULE_2__["updateColorOptionsOnAnnotator"])();
   });
 }; // Change the color of the stl object specified by a name after generation.
 
 
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectOpacity = function (opacity) {
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity = opacity;
-  console.log('Change opacity to: ', _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity = opacity; // console.log('Change opacity to: ', APP.surface_opacity)
+
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.traverse(function (obj) {
     if (obj instanceof THREE.Mesh === true) {
       obj.opacity = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity;

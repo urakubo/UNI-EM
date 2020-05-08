@@ -26,7 +26,7 @@ APP.addSurfaceObject = function(id, objcolor) {
 				return false;
 				}
 	}
-	console.log('Mesh prepared:');
+	// console.log('Mesh prepared.');
 
 	var loader = new THREE.STLLoader();
 	loader.load(target_url, function(bufferGeometry) {
@@ -36,14 +36,14 @@ APP.addSurfaceObject = function(id, objcolor) {
 		  bufferGeometry.attributes.color.needsUpdate = true;
 		  bufferGeometry.colorsNeedUpdate = true;
 	  }
-	  console.log('Stl loaded.');
+	  // console.log('Stl loaded.');
 	  const meshMaterial = new THREE.MeshPhongMaterial({
 		  color: objcolor,
 		  specular: 0x776666,
 		  shininess: 0.2,
 		  vertexColors: THREE.FaceColors,
 		  transparent: true,
-		  opacity: 0,
+		  opacity: 0.4,
 		  side: true
 	  }) // APP.surface_opacity
 	  var mesh = new THREE.Mesh(bufferGeometry, meshMaterial);
@@ -52,6 +52,8 @@ APP.addSurfaceObject = function(id, objcolor) {
       mesh.material.side = THREE.DoubleSide;
       APP.scene.add(mesh);
 
+	  // console.log(mesh.name);
+
 	  updateColorOptionsOnAnnotator();
 	});
 }
@@ -59,7 +61,7 @@ APP.addSurfaceObject = function(id, objcolor) {
 // Change the color of the stl object specified by a name after generation.
 APP.changeSurfaceObjectOpacity = function(opacity) {
 	APP.surface_opacity = opacity;
-	console.log('Change opacity to: ', APP.surface_opacity)
+	// console.log('Change opacity to: ', APP.surface_opacity)
 	APP.scene.traverse(function(obj) {
 	if (obj instanceof THREE.Mesh === true) {
 		obj.opacity = APP.surface_opacity;

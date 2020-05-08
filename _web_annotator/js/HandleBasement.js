@@ -267,6 +267,9 @@ export function launchAnnotator() {
 	cursor.isCursor = true;
 	APP.cursor = cursor;
 	APP.scene.add( cursor );
+	
+	
+	// console.log('Annotator is launched.')
 }
 
 
