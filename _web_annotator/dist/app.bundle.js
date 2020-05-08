@@ -590,9 +590,9 @@ class BTreeRawDataChunks {
     return chunk_buffer_out;
   }
   /*
-    var shape = [_padded_size(i, j) for i, j in zip(data_shape, chunk_shape)]
+   var shape = [_padded_size(i, j) for i, j in zip(data_shape, chunk_shape)]
   var data = np.zeros(shape, dtype=dtype)
-    //# loop over chunks reading each into the full data array
+   //# loop over chunks reading each into the full data array
   var count = chunk_shape.reduce(function(a,b) { return a * b }, 1); // np.prod(chunk_shape)
   itemsize = np.dtype(dtype).itemsize
   chunk_buffer_size = count * itemsize
@@ -606,17 +606,17 @@ class BTreeRawDataChunks {
               filter_mask = node_key['filter_mask']
               chunk_buffer = self._filter_chunk(
                   chunk_buffer, filter_mask, filter_pipeline, itemsize)
-            chunk_data = np.frombuffer(chunk_buffer, dtype=dtype)
+           chunk_data = np.frombuffer(chunk_buffer, dtype=dtype)
           start = node_key['chunk_offset'][:-1]
           region = [slice(i, i+j) for i, j in zip(start, chunk_shape)]
           data[region] = chunk_data.reshape(chunk_shape)
-    if isinstance(true_dtype, tuple):
+   if isinstance(true_dtype, tuple):
       if dtype_class == 'REFERENCE':
           to_reference = np.vectorize(Reference)
           data = to_reference(data)
       else:
           raise NotImplementedError('datatype not implemented')
-    non_padded_region = [slice(i) for i in data_shape]
+   non_padded_region = [slice(i) for i in data_shape]
   return data[non_padded_region]
   */
 
@@ -7657,16 +7657,16 @@ function inflate_table(type, lens, lens_index, codes, table, table_index, work, 
    from their more natural integer increment ordering, and so when the
    decoding tables are built in the large loop below, the integer codes
    are incremented backwards.
-     This routine assumes, but does not check, that all of the entries in
+    This routine assumes, but does not check, that all of the entries in
    lens[] are in the range 0..MAXBITS.  The caller must assure this.
    1..MAXBITS is interpreted as that code length.  zero means that that
    symbol does not occur in this code.
-     The codes are sorted by computing a count of codes for each length,
+    The codes are sorted by computing a count of codes for each length,
    creating from that a table of starting indices for each length in the
    sorted table, and then entering the symbols in order in the sorted
    table.  The sorted table is work[], with that space being provided by
    the caller.
-     The length counts are used for other purposes as well, i.e. finding
+    The length counts are used for other purposes as well, i.e. finding
    the minimum and maximum length codes, determining if there are any
    codes at all, checking for a valid set of lengths, and looking ahead
    at length counts to determine sub-table sizes when building the
@@ -7764,21 +7764,21 @@ function inflate_table(type, lens, lens_index, codes, table, table_index, work, 
    bits off of the bottom.  For codes where len is less than drop + curr,
    those top drop + curr - len bits are incremented through all values to
    fill the table with replicated entries.
-     root is the number of index bits for the root table.  When len exceeds
+    root is the number of index bits for the root table.  When len exceeds
    root, sub-tables are created pointed to by the root entry with an index
    of the low root bits of huff.  This is saved in low to check for when a
    new sub-table should be started.  drop is zero when the root table is
    being filled, and drop is root when sub-tables are being filled.
-     When a new sub-table is needed, it is necessary to look ahead in the
+    When a new sub-table is needed, it is necessary to look ahead in the
    code lengths to determine what size sub-table is needed.  The length
    counts are used for this, and so count[] is decremented as codes are
    entered in the tables.
-     used keeps track of how many table entries have been allocated from the
+    used keeps track of how many table entries have been allocated from the
    provided *table space.  It is checked for LENS and DIST tables against
    the constants ENOUGH_LENS and ENOUGH_DISTS to guard against changes in
    the initial root table size constants.  See the comments in inftrees.h
    for more information.
-     sym increments through all symbols, and the loop terminates when
+    sym increments through all symbols, and the loop terminates when
    all codes of length max, i.e. all codes, have been processed.  This
    routine permits incomplete codes, so another loop after this one fills
    in the rest of the decoding tables with invalid code markers.
@@ -98783,7 +98783,7 @@ THREE.STLLoader.prototype = Object.assign( Object.create( THREE.Loader.prototype
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\uraku\Desktop\UNI-EM\_web_annotator/app/index.js */"./app/index.js");
+module.exports = __webpack_require__(/*! C:\Users\uraku\Documents\GitHub\UNI-EM\_web_annotator/app/index.js */"./app/index.js");
 
 
 /***/ })

@@ -175,15 +175,18 @@ var annotate = (event) => {
 
 
 const updateCursor = position => {
+	if (APP.cursor.visible === false) {
+		return;
+	}
 	const radius = APP.AnnotatorRadius || 3;
 	const cursor = APP.cursor;
 	if (position) {
 		cursor.position.copy(position);
 		const zoom = radius / cursor.geometry.boundingSphere.radius;
 		cursor.scale.set(zoom, zoom, zoom);
-		cursor.visible = true;
+		cursor.opacity = 0.3;
 	  } else {
-		cursor.visible = false;
+		cursor.opacity = 0;
 	  }
 }
 
@@ -257,6 +260,7 @@ export function launchAnnotator() {
 	cursor.isCursor = true;
 	cursor.name = 'cursor';
 	APP.cursor = cursor;
+	APP.cursor.visible = false;
 	APP.scene.add( cursor );
 
     // Marker

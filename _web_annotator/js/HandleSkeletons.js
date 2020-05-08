@@ -59,8 +59,8 @@ APP.addSkeletonObject = function(id, col) {
 		var v1 = undefined;
 		var v2 = undefined;
 		// console.log(data_vertices)
-		console.log('Length vertices: ' + data_vertices.length);
-		console.log('Length edges   : ' + data_edges.length);
+		// console.log('Length vertices: ' + data_vertices.length);
+		// console.log('Length edges   : ' + data_edges.length);
 		if (isNaN(data_vertices[0][0]) == true) {
 			// console.log(data_vertices);
 			console.log('No morphological data.');
@@ -95,7 +95,7 @@ APP.addSkeletonObject = function(id, col) {
 		
 		
 		line.name = 'line' + ( '0000000000' + id ).slice( -10 );
-		console.log(line.name);
+		// console.log(line.name);
 		APP.scene.add( line );	    
 	    //
 	    //

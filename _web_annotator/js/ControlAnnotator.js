@@ -8,6 +8,7 @@ window.ChangeMode = function (mode) {
 		case "view":
 			APP.MarkerMode   = 0;
 			APP.SkeletonMode = 0;
+			APP.cursor.visible = false;
 			switchAnnotation(0);
 			APP.changeSurfaceObjectOpacity(-1);
 			APP.removeSkeletons();
@@ -15,6 +16,7 @@ window.ChangeMode = function (mode) {
 		case "point":
 			APP.MarkerMode   = 1;
 			APP.SkeletonMode = 0;
+			APP.cursor.visible = false;
 			switchAnnotation(0);
 			APP.changeSurfaceObjectOpacity(-1);
 			APP.removeSkeletons();
@@ -22,6 +24,7 @@ window.ChangeMode = function (mode) {
 		case "paint":
 			APP.MarkerMode   = 0;
 			APP.SkeletonMode = 0;
+			APP.cursor.visible = true;
 			switchAnnotation(1);
 			APP.changeSurfaceObjectOpacity(-1);
 			APP.removeSkeletons();
@@ -29,6 +32,7 @@ window.ChangeMode = function (mode) {
 		case "skeleton":
 			APP.MarkerMode   = 0;
 			APP.SkeletonMode = 1;
+			APP.cursor.visible = false;
 			switchAnnotation(0);
 			APP.changeSurfaceObjectOpacity(0);
 			APP.addSkeletons();

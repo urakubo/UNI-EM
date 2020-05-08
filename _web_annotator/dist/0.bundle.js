@@ -308,6 +308,7 @@ window.ChangeMode = function (mode) {
     case "view":
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerMode = 0;
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SkeletonMode = 0;
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].cursor.visible = false;
       switchAnnotation(0);
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectOpacity(-1);
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSkeletons();
@@ -316,6 +317,7 @@ window.ChangeMode = function (mode) {
     case "point":
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerMode = 1;
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SkeletonMode = 0;
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].cursor.visible = false;
       switchAnnotation(0);
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectOpacity(-1);
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSkeletons();
@@ -324,6 +326,7 @@ window.ChangeMode = function (mode) {
     case "paint":
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerMode = 0;
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SkeletonMode = 0;
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].cursor.visible = true;
       switchAnnotation(1);
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectOpacity(-1);
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSkeletons();
@@ -332,6 +335,7 @@ window.ChangeMode = function (mode) {
     case "skeleton":
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerMode = 0;
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SkeletonMode = 1;
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].cursor.visible = false;
       switchAnnotation(0);
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectOpacity(0);
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletons();
@@ -609,6 +613,10 @@ var annotate = event => {
 };
 
 const updateCursor = position => {
+  if (_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].cursor.visible === false) {
+    return;
+  }
+
   const radius = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].AnnotatorRadius || 3;
   const cursor = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].cursor;
 
@@ -616,9 +624,9 @@ const updateCursor = position => {
     cursor.position.copy(position);
     const zoom = radius / cursor.geometry.boundingSphere.radius;
     cursor.scale.set(zoom, zoom, zoom);
-    cursor.visible = true;
+    cursor.opacity = 0.3;
   } else {
-    cursor.visible = false;
+    cursor.opacity = 0;
   }
 };
 
@@ -690,6 +698,7 @@ function launchAnnotator() {
   cursor.isCursor = true;
   cursor.name = 'cursor';
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].cursor = cursor;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].cursor.visible = false;
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(cursor); // Marker
 
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerMode = 0;
@@ -947,9 +956,8 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject = function (id, col) 
     var i2 = undefined;
     var v1 = undefined;
     var v2 = undefined; // console.log(data_vertices)
-
-    console.log('Length vertices: ' + data_vertices.length);
-    console.log('Length edges   : ' + data_edges.length);
+    // console.log('Length vertices: ' + data_vertices.length);
+    // console.log('Length edges   : ' + data_edges.length);
 
     if (isNaN(data_vertices[0][0]) == true) {
       // console.log(data_vertices);
@@ -979,8 +987,8 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject = function (id, col) 
     }
 
     var line = new THREE.LineSegments(geometry, material);
-    line.name = 'line' + ('0000000000' + id).slice(-10);
-    console.log(line.name);
+    line.name = 'line' + ('0000000000' + id).slice(-10); // console.log(line.name);
+
     _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(line); //
     //
     //
