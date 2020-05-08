@@ -11,7 +11,7 @@ import { parseCSV, csvFormatter } from "./csv";
 
 APP.addSkeletons = function() {
 	APP.scene.traverse(function(obj) {
-		if ( (obj instanceof THREE.Mesh === true) && (obj.name.length === 10) ) {
+		if ( (obj instanceof THREE.Mesh === true) && (obj.visible === true) && (obj.name.length === 10) ) {
 			var id  = obj.name - 0;
 			var col = obj.material.color;
 			APP.addSkeletonObject(id, col)
@@ -22,7 +22,7 @@ APP.addSkeletons = function() {
 APP.removeSkeletons = function() {
 	APP.scene.traverse(function(obj) {
 		if ( obj.name.match(/line/) ) {
-			APP.scene.remove(obj);
+			obj.visible = false;
 		}
 	});
 }
@@ -37,6 +37,18 @@ APP.addSkeletonObject = function(id, col) {
 
 	const target_url = location.protocol+"//"+location.host+"/skeleton/whole/" + ( '0000000000' + id ).slice( -10 ) + ".hdf5";
 	const filename   = ( '0000000000' + id ).slice( -10 ) + ".hdf5";
+	const name       = 'line' + ( '0000000000' + id ).slice( -10 );
+	
+	// Revive it if already exists.
+	// console.log('Name: ', name)
+	var obj = APP.scene.getObjectByName(name);
+	if ( obj != undefined ) {
+		// console.log('Obj: ', obj)
+		obj.visible = true;
+		return true;
+		}
+	
+	//
 	fetch(target_url)
 	  .then(function(response) {
 	    return response.arrayBuffer() 
@@ -94,7 +106,7 @@ APP.addSkeletonObject = function(id, col) {
 		var line = new THREE.LineSegments( geometry, material );   
 		
 		
-		line.name = 'line' + ( '0000000000' + id ).slice( -10 );
+		line.name = name;
 		// console.log(line.name);
 		APP.scene.add( line );	    
 	    //
@@ -119,7 +131,8 @@ APP.removeSkeletonObject = function(id) {
 	name = 'line' + ( '0000000000' + id ).slice( -10 );
 	var obj = APP.scene.getObjectByName(name);
 	if ( obj != undefined ) {
-		APP.scene.remove(obj);
+		// APP.scene.remove(obj);
+		obj.visible = false;
 		}
 	}
 

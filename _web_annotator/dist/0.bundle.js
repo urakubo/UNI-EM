@@ -916,7 +916,7 @@ __webpack_require__.r(__webpack_exports__);
 
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletons = function () {
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.traverse(function (obj) {
-    if (obj instanceof THREE.Mesh === true && obj.name.length === 10) {
+    if (obj instanceof THREE.Mesh === true && obj.visible === true && obj.name.length === 10) {
       var id = obj.name - 0;
       var col = obj.material.color;
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject(id, col);
@@ -927,7 +927,7 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletons = function () {
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSkeletons = function () {
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.traverse(function (obj) {
     if (obj.name.match(/line/)) {
-      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.remove(obj);
+      obj.visible = false;
     }
   });
 }; // Add stl objects and a name
@@ -940,6 +940,18 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject = function (id, col) 
 
   const target_url = location.protocol + "//" + location.host + "/skeleton/whole/" + ('0000000000' + id).slice(-10) + ".hdf5";
   const filename = ('0000000000' + id).slice(-10) + ".hdf5";
+  const name = 'line' + ('0000000000' + id).slice(-10); // Revive it if already exists.
+  // console.log('Name: ', name)
+
+  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name);
+
+  if (obj != undefined) {
+    // console.log('Obj: ', obj)
+    obj.visible = true;
+    return true;
+  } //
+
+
   fetch(target_url).then(function (response) {
     return response.arrayBuffer();
   }).then(function (buffer) {
@@ -987,7 +999,7 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject = function (id, col) 
     }
 
     var line = new THREE.LineSegments(geometry, material);
-    line.name = 'line' + ('0000000000' + id).slice(-10); // console.log(line.name);
+    line.name = name; // console.log(line.name);
 
     _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(line); //
     //
@@ -1011,7 +1023,8 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSkeletonObject = function (id) {
   var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name);
 
   if (obj != undefined) {
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.remove(obj);
+    // APP.scene.remove(obj);
+    obj.visible = false;
   }
 };
 

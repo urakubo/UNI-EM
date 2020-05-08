@@ -11,9 +11,10 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 icon_dir = path.join(main_dir, "icons")
 sys.path.append(path.join(main_dir, "annotator"))
+
 from annotator.Annotator.AnnotatorServer import AnnotatorServerLogic
 from annotator.Annotator.ControlAnnotatorServer import ControlAnnotatorServer
-
+from annotator.Annotator.DialogOpenAnnotatorFolder import *
 
 # import wxglade_superpixel
 
@@ -28,31 +29,34 @@ class GenerateDialog(QWidget):
 
     def initUI(self):
 
-        ## Dialog: Is Dojo activated?
-        if self.u_info.files_found == False:
-            QMessageBox.information(self, "3D Annotator", "Please open Dojo file!")
-            return
-
         ## Dialog: Is the 3D Viewer already launched?
-        #print( self.parent.table_widget.appl )
         if 'annotator' in self.parent.table_widget.appl:
             QMessageBox.information(self, "3D Annotator", "3D Annotator has already been launched!")
             return
 
+        ## Dialog: Open annotator folder
+        tmp = DialogOpenAnnotatorFolder(self)
+        return True
+
+        ## Dialog: Is Dojo activated?
+        #if self.u_info.files_found == False:
+        #    QMessageBox.information(self, "3D Annotator", "Please open Dojo file!")
+        #    return
+
         ## New port
-        self.u_info.port_stl = self.u_info.port_stl + 1
+        #self.u_info.port_annotator = self.u_info.port_annotator + 1
         ##
         ## ? Params.SetUserInfo(self, user_path) ? 
         ##
-        self.u_info.url_stl  = 'http://' + self.u_info.ip + ':' + str(self.u_info.port_stl) + '/'
+        #self.u_info.url_annotator = 'http://' + self.u_info.ip + ':' + str(self.u_info.port_annotator) + '/'
 
         ## Initialize
-        self.parent.annotator = ControlAnnotatorServer(self.u_info)
+        #self.parent.annotator = ControlAnnotatorServer(self.u_info)
 
         ## Start StlServer
-        self.parent.annotator.LaunchAnnotator()
+        #self.parent.annotator.LaunchAnnotator()
 
         ## Call StlViewer
-        self.parent.table_widget.addTab('annotator', '3D Annotator', self.u_info.url_stl+'index.html' )
+        #self.parent.table_widget.addTab('annotator', '3D Annotator', self.u_info.url_annotator+'index.html' )
 
 

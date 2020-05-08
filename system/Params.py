@@ -26,16 +26,19 @@ class Params:
 
         user_path = main_dir
 
-        ## Server infos of Dojo and 3D Annotator
+        ## Server info of Dojo
         self.ip = socket.gethostbyname(socket.gethostname())
         self.configured = True
         self.port = 8887
         self.dojo_thread = None
         self.tensorboard_thread = None
         self.url  = 'http://' + self.ip + ':' + str(self.port) + '/dojo/'
-        self.port_stl = 3000
-        self.url_stl  = 'http://' + self.ip + ':' + str(self.port_stl) + '/'
-        self.stl_thread = None
+
+
+		### Server info of 3D Annotator
+        self.port_annotator = 3000
+        self.url_annotator  = 'http://' + self.ip + ':' + str(self.port_annotator) + '/'
+        self.annotator_thread = None
 
 
         # Mojo unit image size for import
@@ -71,12 +74,15 @@ class Params:
 
         self.fname_menu = 'menu.json'
 
-        # Mojo file paths
+        # Dojo file paths
         self.files_found = False
         self.files_path  = user_path
         self.flag_undo   = 0
         self.flag_redo   = 0
 
+
+        # Annotator file found
+        self.annotator_files_found = False
 
         ## File system
         self.max_num_recent_files = 5
@@ -128,12 +134,11 @@ class Params:
         self.tensorflow_model_path = os.path.normpath( path.join(self.data_path, "model_tensorflow") )
         self.parameters_path = os.path.normpath( path.join(self.data_path, "parameters") )
 
+    #
+    # User dependent variables
+    #
 
     def SetUserInfo(self, user_path):
-
-        #
-        # User dependent variables
-        #
 
         self.files_path                = user_path
         self.ids_path                  = self.files_path   + os.sep + 'ids'
@@ -148,11 +153,6 @@ class Params:
         self.tile_images_path          = self.images_path  + os.sep + 'tiles'
         self.tile_images_volume_file   = self.images_path  + os.sep + 'tiledVolumeDescription.xml'
 
-        self.skeletons_path            = self.files_path   + os.sep + 'skeletons'
-        self.surfaces_path             = self.files_path   + os.sep + 'surfaces'
-        self.skeletons_whole_path      = self.files_path   + os.sep + 'skeletons' + os.sep + 'whole'
-        self.surfaces_whole_path       = self.files_path   + os.sep + 'surfaces' + os.sep + 'whole'
-
         self.ids_files_undo             = []
         self.ids_files_redo             = []
         self.flag_undo                  = 0
@@ -166,4 +166,32 @@ class Params:
         ## Recheck current ip
         self.ip = socket.gethostbyname(socket.gethostname())
         self.url  = 'http://' + self.ip + ':' + str(self.port) + '/dojo/'
-        self.url_stl  = 'http://' + self.ip + ':' + str(self.port_stl) + '/'
+
+
+    def SetUserInfoAnnotator(self, user_path):
+
+        self.annotator_files_path                = user_path
+        self.annotator_ids_path                  = self.annotator_files_path   + os.sep + 'ids'
+        self.annotator_tile_ids_path             = self.annotator_ids_path     + os.sep + 'tiles'
+        self.annotator_tile_ids_volume_file      = self.annotator_ids_path     + os.sep + 'tiledVolumeDescription.xml'
+        self.annotator_color_map_file            = self.annotator_ids_path     + os.sep + 'colorMap.hdf5'
+        self.annotator_segment_info_db_file      = self.annotator_ids_path     + os.sep + 'segmentInfo.db'
+
+        self.annotator_images_path               = self.annotator_files_path   + os.sep + 'images'
+        self.annotator_tile_images_path          = self.annotator_images_path  + os.sep + 'tiles'
+        self.annotator_tile_images_volume_file   = self.annotator_images_path  + os.sep + 'tiledVolumeDescription.xml'
+
+        self.skeletons_path            = self.annotator_files_path   + os.sep + 'skeletons'
+        self.surfaces_path             = self.annotator_files_path   + os.sep + 'surfaces'
+        self.skeletons_whole_path      = self.annotator_files_path   + os.sep + 'skeletons' + os.sep + 'whole'
+        self.surfaces_whole_path       = self.annotator_files_path   + os.sep + 'surfaces' + os.sep + 'whole'
+
+        self.tmpdir = tempfile.mkdtemp()
+
+        ## Recheck current ip
+        self.ip = socket.gethostbyname(socket.gethostname())
+        self.url_annotator  = 'http://' + self.ip + ':' + str(self.port_annotator) + '/'
+
+
+
+
