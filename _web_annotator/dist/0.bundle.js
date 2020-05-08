@@ -407,11 +407,7 @@ function animate() {
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].dragging = false;
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].annotation_mode = false;
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].annotation_paint_mode = true;
-_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].annotation_overwrite = false;
-_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_x = 0.0;
-_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_y = 0.0;
-_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_z = 0.0;
-_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_max = 0.0; // ObtainWindowSize
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].annotation_overwrite = false; // ObtainWindowSize
 
 function onWindowResize() {
   var aspect = window.innerWidth / window.innerHeight;
@@ -437,7 +433,7 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addBoundingBox = function () {
     });
   }
 
-  var geometry = new THREE.BoxBufferGeometry(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_z, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_y, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_x);
+  var geometry = new THREE.BoxBufferGeometry(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX);
   var geo = new THREE.EdgesGeometry(geometry); // or WireframeGeometry( geometry )
 
   var boundingbox = new THREE.LineSegments(geo, mat);
@@ -445,9 +441,9 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addBoundingBox = function () {
   boundingbox.scale.set(1, 1, 1);
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(boundingbox);
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingBox = 'On';
-  boundingbox.translateX(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_z / 2);
-  boundingbox.translateY(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_y / 2);
-  boundingbox.translateZ(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_x / 2);
+  boundingbox.translateX(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2);
+  boundingbox.translateY(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2);
+  boundingbox.translateZ(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2);
 };
 
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeBoundingBox = function () {
@@ -638,13 +634,16 @@ function launchAnnotator() {
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerPrefix = "Marker";
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerSuffix = 0;
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerRadius = 2.0;
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerID = 1;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerID = 1; //
+
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity = 1.0;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity_reserved = 1.0;
   const call_url = location.protocol + "//" + location.host + "/surface/Boundingbox.json";
   $.getJSON(call_url).done(function (data) {
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_x = data.x;
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_y = data.y;
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_z = data.z;
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].boundingbox_max = Math.max(data.x, data.y, data.z);
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX = data.x;
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY = data.y;
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ = data.z;
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax = Math.max(data.x, data.y, data.z);
     window.CenterXY();
   }); // Cursor
 
@@ -657,8 +656,9 @@ function launchAnnotator() {
   });
   var cursor = new THREE.Mesh(geometry, material);
   cursor.isCursor = true;
+  cursor.name = 'cursor';
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].cursor = cursor;
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(cursor); // console.log('Annotator is launched.')
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(cursor);
 }
 window.addEventListener('resize', onWindowResize, false);
 
@@ -947,8 +947,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 
-
-_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity = 0.5; // Add surface objects and a name
+ // Add surface objects and a name
 
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject = function (id, objcolor) {
   const call_url = location.protocol + "//" + location.host + "/ws/surface?id=";
@@ -986,7 +985,7 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject = function (id, objcol
       shininess: 0.2,
       vertexColors: THREE.FaceColors,
       transparent: true,
-      opacity: 0.4,
+      opacity: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity,
       side: true
     }); // APP.surface_opacity
 
@@ -998,18 +997,29 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject = function (id, objcol
 
     Object(_AnnotationTable__WEBPACK_IMPORTED_MODULE_2__["updateColorOptionsOnAnnotator"])();
   });
-}; // Change the color of the stl object specified by a name after generation.
+}; // Change the opacity of all surface objects
 
 
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectOpacity = function (opacity) {
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity = opacity; // console.log('Change opacity to: ', APP.surface_opacity)
+  // console.log('Input opacity: ', opacity)
+  if (opacity == -1) {
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity = 1;
+  } else if (opacity == 0) {
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity_reserved;
+  } else {
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity = opacity;
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity_reserved = opacity;
+  }
 
+  ;
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.traverse(function (obj) {
-    if (obj instanceof THREE.Mesh === true) {
-      obj.opacity = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity;
+    if (obj instanceof THREE.Mesh === true && obj.name !== 'cursor') {
+      obj.material.opacity = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity;
     }
+
+    console.log('Obj name:', obj.name);
   });
-}; // Change the color of the stl object specified by a name after generation.
+}; // Change the color of a surface object specified by a name after generation.
 
 
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectColor = function (id, objcolor) {

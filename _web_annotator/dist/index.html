@@ -18,10 +18,10 @@
       Clicked object ID:
       <div class="contents InLineMessage" id="ClickedObjectID"></div>
       <div class="buttonGroup mode">
-        <button type="button" class="btn-top-radius" data-mode="view"  onClick="MarkerOffOn(0); switchAnnotation(0);">View</button> 
-        <button type="button" class="btn-top-radius" data-mode="point" onClick="MarkerOffOn(1); switchAnnotation(0);">Point</button>
-        <button type="button" class="btn-top-radius" data-mode="paint" onClick="MarkerOffOn(0); switchAnnotation(1);">Paint</button>
-        <button type="button" class="btn-top-radius" data-mode="skeleton" onClick="MarkerOffOn(0); switchAnnotation(0);">Skeleton</button>
+        <button type="button" class="btn-top-radius" data-mode="view"  onClick="MarkerOffOn(0); switchAnnotation(0);APP.changeSurfaceObjectOpacity(-1);">View</button> 
+        <button type="button" class="btn-top-radius" data-mode="point" onClick="MarkerOffOn(1); switchAnnotation(0);APP.changeSurfaceObjectOpacity(-1);">Point</button>
+        <button type="button" class="btn-top-radius" data-mode="paint" onClick="MarkerOffOn(0); switchAnnotation(1);APP.changeSurfaceObjectOpacity(-1);">Paint</button>
+        <button type="button" class="btn-top-radius" data-mode="skeleton" onClick="MarkerOffOn(0); switchAnnotation(0);APP.changeSurfaceObjectOpacity(0);">Skeleton</button>
       </div>
     </div>
     <ul id="menu">
@@ -127,7 +127,7 @@
         <ul  data-mode-show="skeleton" class="subMenu appearance-actions">
           <li>
             <div class="menu-label">Surface opacity:</div>
-            <input type="number" min="0.0" max="1.0" step="0.05" value="0.0" onchange="APP.changeSurfaceObjectOpacity(this.value);">
+            <input type="number" min="0.05" max="1.0" step="0.05" value="1.0" onchange="APP.changeSurfaceObjectOpacity(this.value);">
           </li>
         </ul>
         

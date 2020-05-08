@@ -7,8 +7,6 @@ import { APP } from "./APP";
 import { parseCSV, csvFormatter } from "./csv";
 import { updateColorOptionsOnAnnotator } from "./AnnotationTable";
 
-APP.surface_opacity = 0.5;
-
 // Add surface objects and a name
 APP.addSurfaceObject = function(id, objcolor) {
 	const call_url   = location.protocol+"//"+location.host+"/ws/surface?id=";
@@ -43,7 +41,7 @@ APP.addSurfaceObject = function(id, objcolor) {
 		  shininess: 0.2,
 		  vertexColors: THREE.FaceColors,
 		  transparent: true,
-		  opacity: 0.4,
+		  opacity: APP.surface_opacity,
 		  side: true
 	  }) // APP.surface_opacity
 	  var mesh = new THREE.Mesh(bufferGeometry, meshMaterial);
@@ -58,18 +56,29 @@ APP.addSurfaceObject = function(id, objcolor) {
 	});
 }
 
-// Change the color of the stl object specified by a name after generation.
+// Change the opacity of all surface objects
+
 APP.changeSurfaceObjectOpacity = function(opacity) {
-	APP.surface_opacity = opacity;
-	// console.log('Change opacity to: ', APP.surface_opacity)
+	// console.log('Input opacity: ', opacity)
+	if ( opacity == -1 ){
+		APP.surface_opacity = 1;
+	} else if (opacity == 0) {
+		APP.surface_opacity = APP.surface_opacity_reserved;
+	} else {
+		APP.surface_opacity = opacity;
+		APP.surface_opacity_reserved = opacity;
+	};
+
 	APP.scene.traverse(function(obj) {
-	if (obj instanceof THREE.Mesh === true) {
-		obj.opacity = APP.surface_opacity;
-    	}
+		if (obj instanceof THREE.Mesh === true && obj.name !== 'cursor' ) {
+			obj.material.opacity = APP.surface_opacity;
+		}
+		// console.log('Obj name:', obj.name );
 	});
 }
 
-// Change the color of the stl object specified by a name after generation.
+
+// Change the color of a surface object specified by a name after generation.
 APP.changeSurfaceObjectColor = function(id, objcolor) {
 
 	name = ( '0000000000' + id ).slice( -10 );
