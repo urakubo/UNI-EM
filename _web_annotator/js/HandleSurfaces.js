@@ -83,11 +83,11 @@ APP.changeSurfaceObjectOpacity = function(opacity) {
 	};
 
 	APP.scene.traverse(function(obj) {
-		if (obj instanceof THREE.Mesh === true && obj.name !== 'cursor' ) {
+		if (obj instanceof THREE.Mesh === true && /^\d*$/.test(obj.name) && obj.name.length === 10 ) {
 			obj.material.opacity = APP.surface_opacity;
-		}
+			}
 		// console.log('Obj name:', obj.name );
-	});
+		});
 }
 
 

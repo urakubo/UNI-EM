@@ -99,7 +99,6 @@ class Params:
             self.gfx_path     = os.path.normpath(os.path.join(main_dir, "..","..", "_web_dojo","gfx"))
             self.web_path     = os.path.normpath(os.path.join(main_dir, "..","..", "_web_dojo"))
             self.web_annotator_path = os.path.normpath(os.path.join(main_dir, "..","..", "_web_annotator"))
-#            self.data_annotator_path = os.path.normpath(os.path.join(main_dir, "..","..", "data", "annotator"))
             
             ext_os = lambda prg: f'{prg}.exe' if(os.name == 'nt') else prg
             self.exec_translate = os.path.join(main_dir, ext_os('translate'))
@@ -117,7 +116,6 @@ class Params:
             self.gfx_path     = os.path.join(main_dir, "_web_dojo","gfx")
             self.web_path     = os.path.join(main_dir, "_web_dojo")
             self.web_annotator_path = os.path.normpath(os.path.join(main_dir, "_web_annotator"))
-#            self.data_annotator_path = os.path.normpath(os.path.join(main_dir, "data", "annotator"))
 
             _2D_DNN_dir = os.path.join(main_dir, 'segment', '_2D_DNN')
             _3D_FFN_dir = os.path.join(main_dir, 'segment', '_3D_FFN', 'ffn')

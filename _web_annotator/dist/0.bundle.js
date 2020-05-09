@@ -527,29 +527,38 @@ function clickPosition(event) {
 
   raycaster.setFromCamera(mouse, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera); // Indetify crossing objects.
 
-  var intersects_org = raycaster.intersectObjects(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.children);
-  var intersected_filtered = [];
+  var intersects = raycaster.intersectObjects(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.children); // Obtain crossing surface objects.
 
-  for (let i = 0; i < intersects_org.length; i++) {
-    var name = intersects_org[i].object.name; // console.log(name)
+  var intersected_surfaces = [];
 
-    if (name !== 'cursor' && name !== 'BoundingBox') {
-      intersected_filtered.push(intersects_org[i]);
+  for (let i = 0; i < intersects.length; i++) {
+    var name = intersects[i].object.name;
+
+    if (/^\d*$/.test(name) && name.length === 10) {
+      intersected_surfaces.push(intersects[i]);
     }
-  } // Put a marker if in the marker mode (this should be moved to HandleMarker.js).
+  }
+  /*
+  intersects.traverse(function(obj) {
+  	if (/^\d*$/.test(obj.object.name) && obj.object.name.length === 10 ) {
+  		intersected_surfaces.push(intersects[i]);
+  		}
+  	})
+  */
+  // Put a marker if in the marker mode (this should be moved to HandleMarker.js).
   // Show the ID if not.
 
 
-  if (intersected_filtered.length > 0) {
+  if (intersected_surfaces.length > 0) {
     // Get the most proximal one
-    var name = intersected_filtered[0].object.name;
+    var name = intersected_surfaces[0].object.name;
     const target = document.getElementById("ClickedObjectID");
     target.innerHTML = name;
 
     if (_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerMode == 1) {
-      var x = intersected_filtered[0].point.x;
-      var y = intersected_filtered[0].point.y;
-      var z = intersected_filtered[0].point.z; //Append Jsontable
+      var x = intersected_surfaces[0].point.x;
+      var y = intersected_surfaces[0].point.y;
+      var z = intersected_surfaces[0].point.z; //Append Jsontable
 
       var markerName = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerPrefix + String(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerSuffix);
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addMarker({
@@ -1138,7 +1147,7 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectOpacity = function (
 
   ;
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.traverse(function (obj) {
-    if (obj instanceof THREE.Mesh === true && obj.name !== 'cursor') {
+    if (obj instanceof THREE.Mesh === true && /^\d*$/.test(obj.name) && obj.name.length === 10) {
       obj.material.opacity = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity;
     } // console.log('Obj name:', obj.name );
 

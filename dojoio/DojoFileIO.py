@@ -91,9 +91,8 @@ class DojoFileIO():
         # Unlock Folder
         m.UnlockFolder(self.u_info, self.u_info.files_path)
 
-        # Python3
         self.u_info.port = self.u_info.port + 1
-        print('Port Num: ', self.u_info.port)
+        #print('Port Num: ', self.u_info.port)
         #self.u_info.worker_loop = asyncio.new_event_loop()
         self.u_info.dojo_thread = threading.Thread(target=self.StartThreadDojo)
         self.u_info.dojo_thread.setDaemon(True) # Stops if control-C
