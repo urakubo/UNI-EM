@@ -37,6 +37,15 @@ class ControlAnnotatorServer:
 
     def LaunchAnnotator(self):  # wxGlade: ControlPanel.<event_handler>
 
+		#
+        if ( self.u_info.annotator_files_found != True ):
+            print("Annotator has not been specified.\n")
+            return False
+
+		# Window title
+        frame_statusbar_fields = "Annotator: " + self.u_info.annotator_files_path
+        self.parent.setWindowTitle(frame_statusbar_fields)
+        
         # Unlock Folder
         m.UnlockFolder(self.u_info, self.u_info.annotator_files_path)
 

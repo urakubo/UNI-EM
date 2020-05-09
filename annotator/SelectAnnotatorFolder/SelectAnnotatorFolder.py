@@ -105,10 +105,8 @@ class GenerateDialog(QDialog):
             return False
 
         self.u_info.port_annotator = self.u_info.port_annotator + 1
-        self.u_info.annotator_files_found = True
         self.u_info.SetUserInfoAnnotator(dir_Annotator)
-        frame_statusbar_fields = "Annotator: " + self.u_info.annotator_files_path
-        self.parent.setWindowTitle(frame_statusbar_fields)
+        self.u_info.annotator_files_found = True
         ##
         ##
         self.parent.annotator = ControlAnnotatorServer(self.parent)
