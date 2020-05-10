@@ -97,17 +97,6 @@ class AnnotatorServerLogic:
     return None
 
 
-  def rangeexpand(self, txt):
-      lst = []
-      for r in txt.split(','):
-          if '-' in r[1:]:
-              r0, r1 = r[1:].split('-', 1)
-              lst += range(int(r[0] + r0), int(r1) + 1)
-          else:
-              lst.append(int(r))
-      return lst
-
-
   def run( self ):
     ####
     web_path = os.path.join(self.u_info.web_annotator_path, "dist")

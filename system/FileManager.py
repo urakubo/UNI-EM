@@ -138,7 +138,6 @@ class FileManager():
         SyncListQComboBoxOnlyDojoManager.get().removeModel(fileName)
 
 
-
     def OpenImageFolder(self, folder_name):
 
         #### Check open file status
