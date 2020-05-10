@@ -40,7 +40,7 @@ APP.addBoundingBox = function(){
 		var mat = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 2 } );
 		}
 
-	var geometry = new THREE.BoxBufferGeometry( APP.BoundingboxZ, APP.BoundingboxY, APP.BoundingboxX );
+	var geometry = new THREE.BoxBufferGeometry( APP.BoundingboxX, APP.BoundingboxY, APP.BoundingboxZ );
 	var geo = new THREE.EdgesGeometry( geometry ); // or WireframeGeometry( geometry )
 
 	var boundingbox = new THREE.LineSegments( geo, mat );
@@ -48,9 +48,9 @@ APP.addBoundingBox = function(){
 	boundingbox.scale.set(1,1,1);
 	APP.scene.add(boundingbox);
 	APP.BoundingBox = 'On';
-	boundingbox.translateX( APP.BoundingboxZ / 2 );
+	boundingbox.translateX( APP.BoundingboxX / 2 );
 	boundingbox.translateY( APP.BoundingboxY / 2 );
-	boundingbox.translateZ( APP.BoundingboxX / 2 );
+	boundingbox.translateZ( APP.BoundingboxZ / 2 );
 	}
 
 APP.removeBoundingBox = function(){
@@ -289,12 +289,15 @@ export function launchAnnotator() {
 	APP.SkeletonMode = 0;
 
 	//Boundingbox
-	const call_url   = location.protocol+"//"+location.host+"/surface/Boundingbox.json";
+	const call_url   = location.protocol+"//"+location.host+"/surface/VolumeDescription.json";
 	$.getJSON(call_url).done(function(data) {
-        APP.BoundingboxX = data.x;
-		APP.BoundingboxY = data.y;
-		APP.BoundingboxZ = data.z;
-		APP.BoundingboxMax = Math.max(data.x, data.y, data.z);
+		//data_parsed = JSON.parse(data);
+		console.log(data)
+        APP.BoundingboxX = data.boundingbox_um.x;
+		APP.BoundingboxY = data.boundingbox_um.y;
+		APP.BoundingboxZ = data.boundingbox_um.z;
+		APP.BoundingboxMax = Math.max(APP.BoundingboxX, APP.BoundingboxY, APP.BoundingboxZ);
+		console.log('APP.BoundingboxMax: ', APP.BoundingboxMax)
 		window.CenterXY()
     });
 }

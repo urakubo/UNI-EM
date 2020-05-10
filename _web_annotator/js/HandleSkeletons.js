@@ -87,11 +87,6 @@ APP.addSkeletonObject = function(id, col) {
 		});
 		
 		
-		var scale_factor_xy = 5;
-		var xscale = 1.0 / Math.pow(2, scale_factor_xy);
-		var yscale = 1.0 / Math.pow(2, scale_factor_xy);
-		var zscale = 1.0 / 40;
-
 		
 		for(var i=0;i< data_edges.length;i++){
 			i1 = data_edges[i][0];
@@ -99,8 +94,8 @@ APP.addSkeletonObject = function(id, col) {
 
 			// console.log('Vertices ID: ', i1, i2 );
 
-			v1 = new THREE.Vector3( data_vertices[i1][0]*zscale, data_vertices[i1][2]*yscale, data_vertices[i1][1]*xscale);
-			v2 = new THREE.Vector3( data_vertices[i2][0]*zscale, data_vertices[i2][2]*yscale, data_vertices[i2][1]*xscale);
+			v1 = new THREE.Vector3( data_vertices[i1][0], data_vertices[i1][1], data_vertices[i1][2]);
+			v2 = new THREE.Vector3( data_vertices[i2][0], data_vertices[i2][1], data_vertices[i2][2]);
 			geometry.vertices.push(v1, v2);
 			}
 		var line = new THREE.LineSegments( geometry, material );   
