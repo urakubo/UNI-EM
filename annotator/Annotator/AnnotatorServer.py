@@ -11,8 +11,9 @@ import json
 import socketio
 
 # from marching_cubes import march
-from stl import mesh
+# from stl import mesh
 import mcubes
+import trimesh
 
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
@@ -46,6 +47,7 @@ class SurfaceHandler(tornado.web.RequestHandler):
   ###
   def GenerateStl(self, id):
     mask = (self.ids_volume == id)
+    # mask = mcubes.smooth(mask)
     # print('self.small_ids: ', self.small_ids)
     try:
         # vertices, normals, faces = march(mask, 2)
@@ -58,12 +60,20 @@ class SurfaceHandler(tornado.web.RequestHandler):
     vertices[:, 1] *= self.pitch[1]
     vertices[:, 2] *= self.pitch[2]
     vertices = vertices[:, [2,0,1]]
-    our_mesh = mesh.Mesh(np.zeros(faces.shape[0], dtype=mesh.Mesh.dtype))
-    for i, f in enumerate(faces):
-        for j in range(3):
-            our_mesh.vectors[i][j] = vertices[f[j], :]
+
     ###
-    our_mesh.save(os.path.join(self.surfaces_whole_path, str(id).zfill(10)+'.stl' ))
+    #our_mesh = mesh.Mesh(np.zeros(faces.shape[0], dtype=mesh.Mesh.dtype))
+    #for i, f in enumerate(faces):
+    #    for j in range(3):
+    #        our_mesh.vectors[i][j] = vertices[f[j], :]
+    #our_mesh.save(os.path.join(self.surfaces_whole_path, str(id).zfill(10)+'.stl' ))
+    ###
+
+    filename = os.path.join(self.surfaces_whole_path, str(id).zfill(10)+'.stl')
+    mesh = trimesh.Trimesh(vertices=vertices, faces=faces)
+    #mesh = trimesh.smoothing.filter_humphrey(mesh)
+    mesh = trimesh.smoothing.filter_laplacian(mesh, iterations=4)
+    mesh.export(file_obj=filename)
     return True
   ###
 
