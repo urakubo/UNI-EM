@@ -20,7 +20,6 @@ mahotas==1.4.5
 Markdown==3.0.1
 networkx==2.2
 numpy==1.16.1
-numpy-stl==2.9.0
 opencv-python==4.0.0.21
 pefile==2018.8.8
 Pillow==6.2.0
@@ -45,3 +44,8 @@ toolz==0.9.0
 tornado==5.1.1
 Werkzeug==0.15.3
 wincertstore==0.2
+
+trimesh==3.6.36
+PyMCubes==0.1.0
+python-socketio==4.3.1
+# kimimaro==1.4.1.dev1
