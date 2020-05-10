@@ -12,10 +12,8 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(path.join(main_dir, "annotator"))
 sys.path.append(os.path.join(main_dir, "system"))
-# sys.path.append(os.path.join(main_dir, "dojoio"))
 
 from Annotator.AnnotatorServer import AnnotatorServerLogic
-# from DB import DB
 from Params import Params
 import miscellaneous.Miscellaneous as m
 ##
@@ -46,8 +44,6 @@ class ControlAnnotatorServer:
         m.UnlockFolder(self.u_info, self.u_info.annotator_files_path)
 
         ## Close
-        # self.u_info.port_annotator = self.u_info.port_annotator + 1
-
         # self.u_info.worker_loop_stl = asyncio.new_event_loop()
         self.u_info.annotator_thread = threading.Thread(target=self.StartThreadAnnotatorServer)
         self.u_info.annotator_thread.setDaemon(True) # Stops if control-C

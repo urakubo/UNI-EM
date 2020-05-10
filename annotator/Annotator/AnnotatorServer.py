@@ -4,14 +4,12 @@ import tornado
 import tornado.websocket
 import tornado.httpserver
 import asyncio
-import h5py
 
 import numpy as np
 import json
 import socketio
 
 # from marching_cubes import march
-# from stl import mesh
 import mcubes
 import trimesh
 
@@ -19,7 +17,6 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
 sys.path.append(path.join(main_dir, "system"))
-# sys.path.append(path.join(main_dir, "dojoio"))
 
 from Params import Params
 from annotator.Annotator.sio import sio
@@ -47,8 +44,6 @@ class SurfaceHandler(tornado.web.RequestHandler):
   ###
   def GenerateStl(self, id):
     mask = (self.ids_volume == id)
-    # mask = mcubes.smooth(mask)
-    # print('self.small_ids: ', self.small_ids)
     try:
         # vertices, normals, faces = march(mask, 2)
         vertices, faces = mcubes.marching_cubes(mask, 0)
@@ -60,14 +55,6 @@ class SurfaceHandler(tornado.web.RequestHandler):
     vertices[:, 1] *= self.pitch[1]
     vertices[:, 2] *= self.pitch[2]
     vertices = vertices[:, [2,0,1]]
-
-    ###
-    #our_mesh = mesh.Mesh(np.zeros(faces.shape[0], dtype=mesh.Mesh.dtype))
-    #for i, f in enumerate(faces):
-    #    for j in range(3):
-    #        our_mesh.vectors[i][j] = vertices[f[j], :]
-    #our_mesh.save(os.path.join(self.surfaces_whole_path, str(id).zfill(10)+'.stl' ))
-    ###
 
     filename = os.path.join(self.surfaces_whole_path, str(id).zfill(10)+'.stl')
     mesh = trimesh.Trimesh(vertices=vertices, faces=faces)
