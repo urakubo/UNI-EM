@@ -67,14 +67,14 @@ class GenerateDialog(QDialog):
 
         layout = QGridLayout()  #  self.xpitch, self.ypitch, self.zpitch
 
-        layout.addWidget(dojo_lbl,  0, 0)
+        layout.addWidget(dojo_lbl,  0, 0, 1, 2)
         layout.addWidget(self.dojo_edit, 1, 0, 1, 2)
         layout.addWidget(dojo_btn,  1, 2)
 
-        layout.addWidget(QLabel('Image pitch (in um).'),  2, 0, alignment=(Qt.AlignRight))
-        layout.addWidget(QLabel('X: '),  3, 0, alignment=(Qt.AlignRight))
-        layout.addWidget(QLabel('Y: '),  4, 0, alignment=(Qt.AlignRight))
-        layout.addWidget(QLabel('Z: '),  5, 0, alignment=(Qt.AlignRight))
+        layout.addWidget(QLabel('Specify voxel size in um.'),  2, 0, 1, 2)
+        layout.addWidget(QLabel('X (in-slice width) : '),  3, 0, alignment=(Qt.AlignRight))
+        layout.addWidget(QLabel('Y (in-slice height) : '),  4, 0, alignment=(Qt.AlignRight))
+        layout.addWidget(QLabel('Z (slice thickness) : '),  5, 0, alignment=(Qt.AlignRight))
 
         obj_xpitch = self._PitchEdit(self.xpitch)
         obj_ypitch = self._PitchEdit(self.ypitch)
