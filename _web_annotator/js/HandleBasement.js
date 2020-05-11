@@ -278,7 +278,7 @@ export function launchAnnotator() {
 	APP.MarkerB = 0;
 	APP.MarkerPrefix = "Marker";
 	APP.MarkerSuffix = 0;
-	APP.MarkerRadius = 2.0;
+	APP.MarkerRadius = 0.1;
 	APP.MarkerID     = 1;
 
 	// Surface opacity

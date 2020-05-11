@@ -476,7 +476,7 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addBoundingBox = function () {
     });
   }
 
-  var geometry = new THREE.BoxBufferGeometry(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX);
+  var geometry = new THREE.BoxBufferGeometry(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ);
   var geo = new THREE.EdgesGeometry(geometry); // or WireframeGeometry( geometry )
 
   var boundingbox = new THREE.LineSegments(geo, mat);
@@ -484,9 +484,9 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addBoundingBox = function () {
   boundingbox.scale.set(1, 1, 1);
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(boundingbox);
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingBox = 'On';
-  boundingbox.translateX(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2);
+  boundingbox.translateX(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2);
   boundingbox.translateY(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2);
-  boundingbox.translateZ(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2);
+  boundingbox.translateZ(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2);
 };
 
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeBoundingBox = function () {
@@ -716,7 +716,7 @@ function launchAnnotator() {
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerB = 0;
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerPrefix = "Marker";
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerSuffix = 0;
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerRadius = 2.0;
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerRadius = 0.1;
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerID = 1; // Surface opacity
 
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity = 1.0;
@@ -996,17 +996,13 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject = function (id, col) 
       linewidth: 3,
       fog: true
     });
-    var scale_factor_xy = 5;
-    var xscale = 1.0 / Math.pow(2, scale_factor_xy);
-    var yscale = 1.0 / Math.pow(2, scale_factor_xy);
-    var zscale = 1.0 / 40;
 
     for (var i = 0; i < data_edges.length; i++) {
       i1 = data_edges[i][0];
       i2 = data_edges[i][1]; // console.log('Vertices ID: ', i1, i2 );
 
-      v1 = new THREE.Vector3(data_vertices[i1][2], data_vertices[i1][0], data_vertices[i1][1]);
-      v2 = new THREE.Vector3(data_vertices[i2][2], data_vertices[i2][0], data_vertices[i2][1]);
+      v1 = new THREE.Vector3(data_vertices[i1][0], data_vertices[i1][1], data_vertices[i1][2]);
+      v2 = new THREE.Vector3(data_vertices[i2][0], data_vertices[i2][1], data_vertices[i2][2]);
       geometry.vertices.push(v1, v2);
     }
 
@@ -1257,9 +1253,9 @@ const MarkerTable = new Tabulator("#MarkerTable", {
     hozAlign: "right",
     editor: "number",
     editorParams: {
-      min: 0.2,
-      max: 24,
-      step: 0.2
+      min: 0.01,
+      max: 1,
+      step: 0.01
     }
   }, {
     title: "R",

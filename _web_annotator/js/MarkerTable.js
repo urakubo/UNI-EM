@@ -27,7 +27,7 @@ export const MarkerTable = new Tabulator("#MarkerTable", {
     }},
 
 		{title:"Parent ID", field:"parentid", width: 70},
-		{title:"Radius", field:"radius", width: 60, hozAlign:"right", editor:"number",editorParams:{min:0.2, max:24, step:0.2}},
+		{title:"Radius", field:"radius", width: 60, hozAlign:"right", editor:"number",editorParams:{min:0.01, max:1, step:0.01}},
 		{title:"R", field:"r", minWidth: 30, width: 35, hozAlign:"right", editor:"range",editorParams:{min:0, max:255, step:1}},
 		{title:"G", field:"g", minWidth: 30, width: 35, hozAlign:"right", editor:"range",editorParams:{min:0, max:255, step:1}},
 		{title:"B", field:"b", minWidth: 30, width: 35, hozAlign:"right", editor:"range",editorParams:{min:0, max:255, step:1}},
