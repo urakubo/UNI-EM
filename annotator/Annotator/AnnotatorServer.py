@@ -54,7 +54,7 @@ class SurfaceHandler(tornado.web.RequestHandler):
     vertices[:, 0] *= self.pitch[0]
     vertices[:, 1] *= self.pitch[1]
     vertices[:, 2] *= self.pitch[2]
-    vertices = vertices[:, [2,0,1]]
+#    vertices = vertices[:, [2,0,1]]
 
     filename = os.path.join(self.surfaces_whole_path, str(id).zfill(10)+'.stl')
     mesh = trimesh.Trimesh(vertices=vertices, faces=faces)
