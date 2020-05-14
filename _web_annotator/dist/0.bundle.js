@@ -397,20 +397,32 @@ window.AmbLight = function (isnum) {
 };
 
 window.CenterXY = function () {
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.up.set(0, 0, 1);
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.position.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax * 3.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0);
+  // APP.camera.up.set(0,0,1);
+  // APP.camera.position.set(APP.BoundingboxMax*3.0,  APP.BoundingboxY/2.0, APP.BoundingboxX/2.0);
+  // APP.controls.target.set( APP.BoundingboxZ/2.0, APP.BoundingboxY/2.0, APP.BoundingboxX/2.0 );
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.up.set(0, 1, 0);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.position.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax * 3.0); // APP.controls.target.set( APP.BoundingboxX/2.0, APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0 );
+  // APP.controls.target.set( APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0, APP.BoundingboxX/2.0 );
+
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].controls.target.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0);
 };
 
 window.CenterYZ = function () {
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.up.set(0, 1, 0);
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.position.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax * 3.0);
+  // APP.camera.up.set(0,1,0);
+  // APP.camera.position.set(APP.BoundingboxZ/2.0,  APP.BoundingboxY/2.0, APP.BoundingboxMax*3.0);
+  // APP.controls.target.set( APP.BoundingboxZ/2.0, APP.BoundingboxY/2.0, APP.BoundingboxX/2.0 );
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.up.set(0, 0, 1);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.position.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax * 3.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0); // APP.controls.target.set( APP.BoundingboxX/2.0, APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0 );
+  // APP.controls.target.set( APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0, APP.BoundingboxX/2.0 );
+
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].controls.target.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0);
 };
 
 window.CenterZX = function () {
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.up.set(1, 0, 0);
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.position.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax * 3.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.position.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax * 3.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0); // APP.controls.target.set( APP.BoundingboxX/2.0, APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0 );
+  // APP.controls.target.set( APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0, APP.BoundingboxX/2.0 );
+
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].controls.target.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0);
 }; //
 // Skeleton
