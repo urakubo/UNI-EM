@@ -104,7 +104,8 @@ module.exports = env => {
           target: apiUrl,
           ws: true,
         },
-        '/img': apiUrl
+        '/img': apiUrl,
+        '/surface': apiUrl
       } : null
     },
     plugins: [

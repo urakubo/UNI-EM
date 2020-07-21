@@ -174,28 +174,29 @@ var annotate = (event) => {
 		camera: APP.camera,
 		meshes: APP.getMeshes(),
 		container: APP.renderer.domElement,
-		radius: APP.AnnotatorRadius || 3,
+		radius: getCursorRadius(APP.AnnotatorRadius),
 		ignoreBackFace: null,
   });
   updateCursor(intersect && intersect.point);
   updateMetricsOnAnnotationTable(AnnotationTable)
 };
 
+const getCursorRadius = annotatorRadius => (annotatorRadius || 0.3);
 
 const updateCursor = position => {
 	if (APP.cursor.visible === false) {
 		return;
 	}
-	const radius = APP.AnnotatorRadius || 3;
+	const radius = getCursorRadius(APP.AnnotatorRadius);
 	const cursor = APP.cursor;
 	if (position) {
 		cursor.position.copy(position);
-		const zoom = radius / cursor.geometry.boundingSphere.radius;
+		const zoom = radius;
 		cursor.scale.set(zoom, zoom, zoom);
-		cursor.opacity = 0.3;
-	  } else {
-		cursor.opacity = 0;
-	  }
+		cursor.material.opacity = 0.3;
+	} else {
+		cursor.material.opacity = 0;
+	}
 }
 
 
@@ -204,7 +205,7 @@ const updateMetricsOnAnnotationTable = (annotationTable) => {
 	const areas = params.areas;
 	const newRows = annotationTable.getData("active").map(_item => {
 		const item = Object.assign({}, _item);
-		item.area =  areas[item.id] && areas[item.id].toFixed(0);
+		item.area =  areas[item.id] && areas[item.id].toFixed(4);
 		return item;
 	})
 	annotationTable.updateData(newRows);
@@ -262,8 +263,8 @@ export function launchAnnotator() {
 
 	// Paint
 	// Cursor
-	var geometry = new THREE.SphereBufferGeometry( 3, 32, 32 );
-	var material = new THREE.MeshLambertMaterial( {color: 0xffffff, opacity: 0.3, transparent: true, depthWrite: false} );
+	var geometry = new THREE.SphereBufferGeometry( 1, 32, 32 );
+	var material = new THREE.MeshLambertMaterial( {color: 0xffffff, opacity: 0, transparent: true, depthWrite: false} );
 	var cursor = new THREE.Mesh( geometry, material );
 	cursor.isCursor = true;
 	cursor.name = 'cursor';
