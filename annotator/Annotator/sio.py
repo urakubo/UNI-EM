@@ -43,6 +43,7 @@ async def update_paint(sid, data):
 async def update(sid, data):
   print("update", data)
   room_id = data["room_id"];
+  data["sid"] = sid
   write_file(room_id, data)
   await sio.emit('update', data, room=room_id)
 

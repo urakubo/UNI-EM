@@ -76,9 +76,8 @@ export const AnnotationTable = new Tabulator('#AnnotationTable', {
 	pagination:"local",
 	paginationSize:10,
 	resizableRows:true,
-	//selectable: 1,
 	movableRows: true,
-	initialSort:[{column:"id", dir:"dsc"},],
+	initialSort:[],
 	columns:[
       {title: "Delete", formatter: "buttonCross",  hozAlign: "center", cellClick: (e, cell) => {cell.getRow().delete()}, headerSort:false},
       {title: "Visible", field:"visibility", width: 73, hozAlign:"center", formatter:"tickCross", headerSort:false, cellClick: (e, cell)=>{
@@ -98,26 +97,30 @@ export const AnnotationTable = new Tabulator('#AnnotationTable', {
         }))
         updateColorOptionsOnAnnotator();
       }},
-	    {title: "ID", field:"id", width: 40},
-	    {title: "Name", field: "name"},
+	    {title: "ID", field:"id", width: 40, headerSort:false},
+	    {title: "Name", field: "name", headerSort:false},
    	  {title: "R", field: "r", minWidth: 30, width: 35, hozAlign: "right", visible: true, editor: "number", editorParams: {min:0, max: 255, step: 1}, mutator: mutatorClip, mutatorParams: mutatorParamsClip, headerSort:false},
 	    {title: "G", field: "g", minWidth: 30, width: 35, hozAlign: "right", visible: true, editor: "number", editorParams: {min:0, max: 255, step: 1}, mutator: mutatorClip, mutatorParams: mutatorParamsClip, headerSort:false},
 	    {title: "B", field: "b", minWidth: 30, width: 35, hozAlign: "right", visible: true, editor: "number", editorParams: {min:0, max: 255, step: 1}, mutator: mutatorClip, mutatorParams: mutatorParamsClip, headerSort:false},
-	    {title: "Area", field: "area"},
-	    {title: "Volume", field: "volume"}
+	    {title: "Area", field: "area", headerSort:false},
+	    {title: "Volume", field: "volume", headerSort:false}
 	],  
   rowMoved: (row) => {
-    updateColorOptionsOnAnnotator()
-    paintManager.updateList({ list: AnnotationTable.getData(), lastPaintId })
+    updateColor();
   },
   rowDeleted: (row) => {
-    updateColorOptionsOnAnnotator()
-    paintManager.updateList({ list: AnnotationTable.getData(), lastPaintId })
+    updateColor();
   },
   rowAdded: (row) => {
-    paintManager.updateList({ list: AnnotationTable.getData(), lastPaintId })
+    updateColor();
   }
 });
+
+
+const updateColor = () => {
+  updateColorOptionsOnAnnotator()
+  paintManager.updateList({ list: AnnotationTable.getData(), lastPaintId })
+};
 
 window.switchAnnotation = (checked) => {
 	APP.annotation_mode = checked;
