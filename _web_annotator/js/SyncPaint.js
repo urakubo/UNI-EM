@@ -12,11 +12,6 @@ console.log("socket.id", socket.id);
 socket.on('system', data => {
   console.log('system', data);
 });
-// socket.on('listUpdate', data => {
-//   console.log('listUpdate', data);
-// });
-// socket.on('update', onUpdateData);
-// socket.on('current', onUpdateData);
 
 const subtract  = function *(a, b) {
   for(const item of a) {

@@ -98,10 +98,10 @@ export const AnnotationTable = new Tabulator('#AnnotationTable', {
         updateColorOptionsOnAnnotator();
       }},
 	    {title: "ID", field:"id", width: 40, headerSort:false},
-	    {title: "Name", field: "name", headerSort:false},
-   	  {title: "R", field: "r", minWidth: 30, width: 35, hozAlign: "right", visible: true, editor: "number", editorParams: {min:0, max: 255, step: 1}, mutator: mutatorClip, mutatorParams: mutatorParamsClip, headerSort:false},
-	    {title: "G", field: "g", minWidth: 30, width: 35, hozAlign: "right", visible: true, editor: "number", editorParams: {min:0, max: 255, step: 1}, mutator: mutatorClip, mutatorParams: mutatorParamsClip, headerSort:false},
-	    {title: "B", field: "b", minWidth: 30, width: 35, hozAlign: "right", visible: true, editor: "number", editorParams: {min:0, max: 255, step: 1}, mutator: mutatorClip, mutatorParams: mutatorParamsClip, headerSort:false},
+	    {title: "Name", field: "name", editor: "input", headerSort:false, cellEdited: () => updateColor()},
+   	  {title: "R", field: "r", minWidth: 30, width: 35, hozAlign: "right", visible: true, editor: "number", editorParams: {min:0, max: 255, step: 1}, mutator: mutatorClip, mutatorParams: mutatorParamsClip, headerSort:false, cellEdited: () => updateColor()},
+	    {title: "G", field: "g", minWidth: 30, width: 35, hozAlign: "right", visible: true, editor: "number", editorParams: {min:0, max: 255, step: 1}, mutator: mutatorClip, mutatorParams: mutatorParamsClip, headerSort:false, cellEdited: () => updateColor()},
+	    {title: "B", field: "b", minWidth: 30, width: 35, hozAlign: "right", visible: true, editor: "number", editorParams: {min:0, max: 255, step: 1}, mutator: mutatorClip, mutatorParams: mutatorParamsClip, headerSort:false, cellEdited: () => updateColor()},
 	    {title: "Area", field: "area", headerSort:false},
 	    {title: "Volume", field: "volume", headerSort:false}
 	],  
@@ -169,10 +169,58 @@ const downloadAnnotationTableAsCSV = () => {
   link.click();
 };
 
+const syncSequence = true;
+
 paintManager.emitter.on("update", data => {
   if(data.room_id === "list") {
-    AnnotationTable.setData(data.list || []);
+    console.log("list update");
+    const currentRows = AnnotationTable.getData() || [];
+    const incomingRows = data.list || [];
+    if(syncSequence) { 
+      const currentRowsMap = new Map(currentRows.map(currentRow => [currentRow.id, currentRow]));
+      AnnotationTable.setData(incomingRows.map(incomingRow => {
+        const currentRow = currentRowsMap.get(incomingRow.id);
+        return {
+          visibility: true,
+          ...currentRow,
+          id: incomingRow.id,
+          name: incomingRow.name,
+          r: incomingRow.r,
+          g: incomingRow.g,
+          b: incomingRow.b,
+        }
+      }));
+    } else {
+      const incomingRowsMap = new Map(incomingRows.map(incomingRow => [incomingRow.id, incomingRow]));
+      const newRows = [];
+      for(const currentRow of currentRows) {
+        if(incomingRowsMap.has(currentRow.id)) {
+          const incomingRow = incomingRowsMap.get(currentRow.id);
+          newRows.push({
+            ...currentRow,
+            name: incomingRow.name,
+            r: incomingRow.r,
+            g: incomingRow.g,
+            b: incomingRow.b,
+          })
+          incomingRowsMap.delete(currentRow.id);
+        }
+      }
+      for(const [id, incomingRow] of incomingRowsMap) {
+        console.log(id, incomingRow);
+        newRows.push({
+          id: incomingRow.id,
+          visibility: true,
+          name: incomingRow.name,
+          r: incomingRow.r,
+          g: incomingRow.g,
+          b: incomingRow.b,
+        });
+      }
+      AnnotationTable.setData(newRows);
+    }
     lastPaintId = data.lastPaintId;
+    updateColorOptionsOnAnnotator()
   }
 })
 
