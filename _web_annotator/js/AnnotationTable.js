@@ -1,4 +1,5 @@
 import { APP } from "./APP";
+import { updatePaintObservation, paintManager } from "./SyncPaint";
 
 const mutatorClip = (value, data, type, mutatorParams, component) => {
   const min = mutatorParams.min;
@@ -37,6 +38,7 @@ const getRandomColor = (index) => {
 }
 
 export const updateColorOptionsOnAnnotator = () => {
+  updatePaintObservation();
   const activeColors = [];
   const colorParams = {
     eraser: {r: 1, g: 1, b: 1},
@@ -61,7 +63,6 @@ export const updateColorOptionsOnAnnotator = () => {
     eraser: !APP.annotation_paint_mode,
     overwrite: APP.annotation_overwrite
   }
-  console.log(colorOptions);
   setColorOptions(colorOptions, {meshes: APP.getMeshes()});
 };
 
@@ -107,9 +108,14 @@ export const AnnotationTable = new Tabulator('#AnnotationTable', {
 	],  
   rowMoved: (row) => {
     updateColorOptionsOnAnnotator()
+    paintManager.updateList({ list: AnnotationTable.getData(), lastPaintId })
   },
   rowDeleted: (row) => {
     updateColorOptionsOnAnnotator()
+    paintManager.updateList({ list: AnnotationTable.getData(), lastPaintId })
+  },
+  rowAdded: (row) => {
+    paintManager.updateList({ list: AnnotationTable.getData(), lastPaintId })
   }
 });
 
@@ -128,11 +134,11 @@ window.setAnnotationOverwrite = (checked) => {
   updateColorOptionsOnAnnotator()
 }
 
-let annotationId = 0;
+let lastPaintId = 0;
 $('#button-add-annotation-layer').on('click', (event) => {
-    annotationId++;
+    lastPaintId++;
     const hasTarget = AnnotationTable.getData("active").some(item => item.target);
-    var layer = Object.assign({id: annotationId, name: "Layer" + String(annotationId), area:0, volume: 0, visibility: true, target: !hasTarget}, getRandomColor(annotationId));
+    var layer = Object.assign({id: lastPaintId, name: "Layer" + String(lastPaintId), area:0, volume: 0, visibility: true, target: !hasTarget}, getRandomColor(lastPaintId));
     AnnotationTable.addData(layer);
     updateColorOptionsOnAnnotator()
 });
@@ -159,3 +165,13 @@ const downloadAnnotationTableAsCSV = () => {
   document.body.appendChild(link);
   link.click();
 };
+
+paintManager.emitter.on("update", data => {
+  if(data.room_id === "list") {
+    AnnotationTable.setData(data.list || []);
+    lastPaintId = data.lastPaintId;
+  }
+})
+
+window._AnnotationTable = AnnotationTable;
+

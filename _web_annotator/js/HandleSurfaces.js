@@ -6,6 +6,7 @@
 import { APP } from "./APP";
 import { parseCSV, csvFormatter } from "./csv";
 import { updateColorOptionsOnAnnotator } from "./AnnotationTable";
+import { paintManager } from "./SyncPaint";
 
 // Add surface objects and a name
 APP.addSurfaceObject = function(id, col) {
@@ -20,6 +21,7 @@ APP.addSurfaceObject = function(id, col) {
 	if ( obj != undefined ) {
 		// console.log('Obj: ', obj)
 		obj.visible = true;
+		paintManager.addSurface(name);
 		return true;
 		}
 
@@ -66,6 +68,7 @@ APP.addSurfaceObject = function(id, col) {
 	  // console.log(mesh.name);
 
 	  updateColorOptionsOnAnnotator();
+	  paintManager.addSurface(name);
 	});
 }
 
@@ -109,6 +112,7 @@ APP.removeSurfaceObject = function(id) {
 		// APP.scene.remove(obj);
 		obj.visible = false;
 		}
+		paintManager.removeSurface(name);
 	}
 
 

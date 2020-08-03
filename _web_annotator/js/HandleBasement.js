@@ -1,5 +1,7 @@
 import { APP } from "./APP";
 import { AnnotationTable } from "./AnnotationTable";
+import _ from "lodash";
+import { paintManager } from "./SyncPaint";
 
 var xratio = 0.6;
 var yratio = 0.95;
@@ -179,7 +181,27 @@ var annotate = (event) => {
   });
   updateCursor(intersect && intersect.point);
   updateMetricsOnAnnotationTable(AnnotationTable)
+  syncAnnotation();
 };
+
+const syncAnnotation = _.debounce(() => {
+	const diff = getDiff({meshes: APP.getMeshes()});
+	if(Object.keys(diff).length > 0) {
+		console.log("emit changes", diff);
+		paintManager.update({diff})
+	}
+}, 1000, { maxWait: 1000 });
+
+paintManager.emitter.on("update", data => {
+	if(data.room_id !== "list") {
+		const [surfaceId, colorId] = data.room_id.split("-");
+		const mesh = APP.getMeshes().find(mesh => mesh.name === surfaceId);
+		console.log("setAnnotation", mesh, colorId, data);
+		if(mesh) {
+			setAnnotation({ mesh, colorId, data })
+		}
+	}
+})
 
 const getCursorRadius = annotatorRadius => (annotatorRadius || 0.3);
 

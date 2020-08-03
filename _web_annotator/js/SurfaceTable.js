@@ -1,7 +1,7 @@
 import { APP } from "./APP";
 import { csvFormatter } from "./csv";
 
-var SurfaceTable = new Tabulator("#SurfaceTable", {
+export const SurfaceTable = new Tabulator("#SurfaceTable", {
 	ajaxURL:"./surface/segmentInfo.json",
 	layout:"fitColumns",      //fit columns to width of table
 	autoResize:true,

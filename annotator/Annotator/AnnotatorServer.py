@@ -19,7 +19,7 @@ sys.path.append(main_dir)
 sys.path.append(path.join(main_dir, "system"))
 
 from Params import Params
-from annotator.Annotator.sio import sio
+from annotator.Annotator.sio import sio, set_u_info
 import miscellaneous.Miscellaneous as m
 
 
@@ -116,6 +116,8 @@ class AnnotatorServerLogic:
     # asyncio.set_event_loop(self.u_info.worker_loop_stl)
     ev_loop = asyncio.new_event_loop()
     asyncio.set_event_loop(ev_loop)
+
+    set_u_info(self.u_info)
 
     annotator = tornado.web.Application([
       (r'/css/(.*)', tornado.web.StaticFileHandler, {'path': css_path}),
