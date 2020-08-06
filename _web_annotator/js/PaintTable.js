@@ -224,6 +224,3 @@ paintManager.emitter.on("update", data => {
     updateColorOptionsOnAnnotator()
   }
 })
-
-window._PaintTable = PaintTable;
-
