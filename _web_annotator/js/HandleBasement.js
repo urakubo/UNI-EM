@@ -188,8 +188,8 @@ var annotate = (event) => {
 };
 
 
-const compress = paintData => zlib.gzipSync(Buffer.from(paintData)).buffer;
-const decompress = compressedData => new Uint8Array(zlib.gunzipSync(Buffer.from(compressedData)).buffer);
+const compress = paintData => paintData && zlib.gzipSync(Buffer.from(paintData)).buffer;
+const decompress = compressedData => compressedData && new Uint8Array(zlib.gunzipSync(Buffer.from(compressedData)).buffer);
 
 const syncAnnotation = _.debounce(() => {
 	const changes = getChanges({meshes: APP.getMeshes()});
@@ -199,7 +199,6 @@ const syncAnnotation = _.debounce(() => {
 				colorChanges.painted = compress(colorChanges.painted);
 			}
 		}
-		console.log("emit changes", changes);
 		paintManager.update({changes})
 	}
 }, 1000, { maxWait: 1000 });
@@ -208,7 +207,6 @@ paintManager.emitter.on("update", data => {
 	if(data.room_id !== "list") {
 		const [surfaceId, colorId] = data.room_id.split("-");
 		const mesh = APP.getMeshes().find(mesh => mesh.name === surfaceId);
-		console.log("setAnnotation", mesh, colorId, data);
 		if(!mesh) {
 			console.error("mesh not found")
 			return;
@@ -245,7 +243,6 @@ export const updateMetricsOnPaintTable = () => {
 		.map(row => getSurfaceName(row.id))
 	);
 	const meshes = APP.getMeshes().filter(mesh => activeSurfaces.has(mesh.name));
-	console.log("updateMetricsOnPaintTable#2", meshes, APP.getMeshes(), activeSurfaces);
 	const params = getCurrentParams({ meshes });
 	const areas = params.areas;
 	const newRows = PaintTable.getData("active").map((item = {}) => {

@@ -3,12 +3,7 @@ import { SurfaceTable } from "./SurfaceTable";
 import crypto from "crypto";
 import EventEmitter from "events";
 
-console.log("EventEmitter", EventEmitter)
-
-const clientId = crypto.randomBytes(8).toString("hex");
-
 export const socket = io(`${location.origin}/`);
-console.log("socket.id", socket.id);
 socket.on('system', data => {
   console.log('system', data);
 });
@@ -31,13 +26,9 @@ class RoomManager {
   }
   onUpdateData = data => {
     const currentData = this.values.get(data.room_id);
-    console.log(currentData?.sid || this.socket.id, this.socket.id);
     if(!currentData || (currentData.sid || this.socket.id) !== this.socket.id || data.sid !== this.socket.id) {
-      console.log("onUpdateData", currentData, data, this.socket.id);
       this.values.set(data.room_id, data);
       this.emitter.emit("update", data);
-    } else {
-      console.log("onUpdateData ignored", currentData, data, this.socket.id);
     }
   }
   enterRoom(roomId) {
@@ -82,7 +73,6 @@ class PaintManager extends RoomManager{
     this.surfaces.delete(surface);
   }
   update(data) {
-    console.log("update", data)
     for(const [objectId, objectData] of Object.entries(data.changes)) {
       for(const [colorId, colorData] of Object.entries(objectData)) {
         const roomId = objectId + "-" + colorId;
@@ -113,11 +103,9 @@ export const updatePaintObservation = () => {
     }
   }
   for(const item of subtract(oldActiveColors, activeColors)) {
-    console.log("removed color", item);
     paintManager.removeColor(item);
   }
   for(const item of subtract(activeColors, oldActiveColors)) {
-    console.log("add color", item);
     paintManager.addColor(item);
   } 
   oldActiveColors = activeColors;
