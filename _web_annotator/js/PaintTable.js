@@ -174,7 +174,6 @@ const syncSequence = true;
 
 paintManager.emitter.on("update", data => {
   if(data.room_id === "list") {
-    console.log("list update");
     const currentRows = PaintTable.getData() || [];
     const incomingRows = data.list || [];
     if(syncSequence) { 
@@ -208,7 +207,6 @@ paintManager.emitter.on("update", data => {
         }
       }
       for(const [id, incomingRow] of incomingRowsMap) {
-        console.log(id, incomingRow);
         newRows.push({
           id: incomingRow.id,
           visibility: true,
