@@ -1,5 +1,7 @@
 import { APP } from "./APP";
 import { updatePaintObservation, paintManager } from "./SyncPaint";
+import { setColorOptions } from "three-annotator"
+import * as Tabulator from "tabulator-tables";
 
 const mutatorClip = (value, data, type, mutatorParams, component) => {
   const min = mutatorParams.min;

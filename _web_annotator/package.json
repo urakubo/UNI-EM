@@ -29,7 +29,6 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.12.0",
-    "agh.sprintf": "0.0.11",
     "express": "^4.17.1",
     "jquery": "^3.4.1",
     "jsfive": "^0.2.1",

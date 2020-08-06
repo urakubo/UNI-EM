@@ -1,5 +1,6 @@
 import { APP } from "./APP";
 import { parseCSV, csvFormatter } from "./csv";
+import * as Tabulator from "tabulator-tables";
 
 export const MarkerTable = new Tabulator("#MarkerTable", {
 	layout:"fitColumns",      //fit columns to width of table

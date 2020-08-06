@@ -61,4 +61,4 @@ segmentInfo.json
 
 # Web Application
 _web_annotator/node_modules
-!_web_annotator/dist
+_web_annotator/dist

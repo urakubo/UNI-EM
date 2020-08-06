@@ -5,6 +5,13 @@ import { paintManager } from "./SyncPaint";
 import { SurfaceTable } from "./SurfaceTable";
 import { getSurfaceName } from "./HandleSurfaces";
 import * as zlib from "zlib";
+import {
+	getIntersect,
+	annotateBySphere,
+	getCurrentParams,
+	getChanges,
+	setAnnotation
+} from "three-annotator"
 
 var xratio = 0.6;
 var yratio = 0.95;

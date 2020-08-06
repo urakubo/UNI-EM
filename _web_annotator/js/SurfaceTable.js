@@ -1,6 +1,7 @@
 import { APP } from "./APP";
 import { csvFormatter } from "./csv";
 import { updateMetricsOnPaintTable } from "./HandleBasement";
+import * as Tabulator from "tabulator-tables";
 
 export const SurfaceTable = new Tabulator("#SurfaceTable", {
 	ajaxURL:"./surface/segmentInfo.json",

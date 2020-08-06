@@ -5,7 +5,7 @@
 //
 import { APP } from "./APP";
 import { parseCSV, csvFormatter } from "./csv";
-
+import * as hdf5 from 'jsfive';
 
 // Change the opacity of all surface objects
 
