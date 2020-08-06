@@ -2,6 +2,8 @@ import { APP } from "./APP";
 import { AnnotationTable } from "./AnnotationTable";
 import _ from "lodash";
 import { paintManager } from "./SyncPaint";
+import { SurfaceTable } from "./SurfaceTable";
+import { getSurfaceName } from "./HandleSurfaces";
 
 var xratio = 0.6;
 var yratio = 0.95;
@@ -197,9 +199,12 @@ paintManager.emitter.on("update", data => {
 		const [surfaceId, colorId] = data.room_id.split("-");
 		const mesh = APP.getMeshes().find(mesh => mesh.name === surfaceId);
 		console.log("setAnnotation", mesh, colorId, data);
-		if(mesh) {
-			setAnnotation({ mesh, colorId, data })
+		if(!mesh) {
+			console.error("mesh not found")
+			return;
 		}
+		setAnnotation({ mesh, colorId, data })
+		updateMetricsOnAnnotationTable(AnnotationTable);
 	}
 })
 
@@ -221,16 +226,22 @@ const updateCursor = position => {
 	}
 }
 
-
-const updateMetricsOnAnnotationTable = (annotationTable) => {
-	const params = getCurrentParams({ meshes: APP.getMeshes() });
+export const updateMetricsOnAnnotationTable = (_annotationTable) => {
+	const activeSurfaces = new Set(SurfaceTable.getData()
+		.filter(row => row.act)
+		.map(row => getSurfaceName(row.id))
+	);
+	const meshes = APP.getMeshes().filter(mesh => activeSurfaces.has(mesh.name));
+	console.log("updateMetricsOnAnnotationTable#2", meshes, APP.getMeshes(), activeSurfaces);
+	const params = getCurrentParams({ meshes });
 	const areas = params.areas;
-	const newRows = annotationTable.getData("active").map(_item => {
-		const item = Object.assign({}, _item);
-		item.area =  areas[item.id] && areas[item.id].toFixed(4);
-		return item;
+	const newRows = AnnotationTable.getData("active").map((item = {}) => {
+		return {
+			...item,
+			area: areas[item.id] && areas[item.id].toFixed(4)
+		}
 	})
-	annotationTable.updateData(newRows);
+	AnnotationTable.updateData(newRows);
 };
 
 

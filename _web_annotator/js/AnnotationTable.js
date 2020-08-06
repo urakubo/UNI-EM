@@ -84,6 +84,7 @@ export const AnnotationTable = new Tabulator('#AnnotationTable', {
         const value = cell.getRow().getData();
         cell.setValue(!value.visibility || value.target);
         updateColorOptionsOnAnnotator();
+        updateMetricsOnAnnotationTable(AnnotationTable);
     }},
       {title: "Target", field:"target", width: 73, hozAlign:"center", formatter:"tickCross", headerSort:false, cellClick: (e, cell)=>{
         const table = AnnotationTable;

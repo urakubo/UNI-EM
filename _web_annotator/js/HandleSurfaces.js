@@ -8,10 +8,14 @@ import { parseCSV, csvFormatter } from "./csv";
 import { updateColorOptionsOnAnnotator } from "./AnnotationTable";
 import { paintManager } from "./SyncPaint";
 
+export const getSurfaceName = id => {
+	return ( '0000000000' + id ).slice( -10 );
+}
+
 // Add surface objects and a name
 APP.addSurfaceObject = function(id, col) {
 
-	const name =  ( '0000000000' + id ).slice( -10 );
+	const name =  getSurfaceName(id);
 	const call_url   = location.protocol+"//"+location.host+"/ws/surface?id=";
 	const target_url = location.protocol+"//"+location.host+"/surface/whole/" + name + ".stl";
 
@@ -96,7 +100,7 @@ APP.changeSurfaceObjectOpacity = function(opacity) {
 
 // Change the color of a surface object specified by the name.
 APP.changeSurfaceObjectColor = function(id, objcolor) {
-	name = ( '0000000000' + id ).slice( -10 );
+	const name =  getSurfaceName(id);
 	var obj = APP.scene.getObjectByName(name);
 	if ( obj != undefined ) {
     		obj.material.color.setHex( objcolor );
@@ -106,7 +110,7 @@ APP.changeSurfaceObjectColor = function(id, objcolor) {
 
 // Remove a stl object by a name after generation.
 APP.removeSurfaceObject = function(id) {
-	name = ( '0000000000' + id ).slice( -10 );
+	const name =  getSurfaceName(id);
 	var obj = APP.scene.getObjectByName(name);
 	if ( obj != undefined ) {
 		// APP.scene.remove(obj);

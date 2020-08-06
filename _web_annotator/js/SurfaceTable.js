@@ -1,5 +1,6 @@
 import { APP } from "./APP";
 import { csvFormatter } from "./csv";
+import { updateMetricsOnAnnotationTable } from "./HandleBasement";
 
 export const SurfaceTable = new Tabulator("#SurfaceTable", {
 	ajaxURL:"./surface/segmentInfo.json",
@@ -60,6 +61,7 @@ export const SurfaceTable = new Tabulator("#SurfaceTable", {
 			APP.removeSurfaceObject(id);
 			APP.removeSkeletonObject(id);
 			}
+			updateMetricsOnAnnotationTable(AnnotationTable);
 		}
 	  if(columnField == 'r' || columnField == 'g' || columnField == 'b') {
 	  	console.log("Changecolor ID:", id )
