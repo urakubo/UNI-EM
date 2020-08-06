@@ -5,7 +5,7 @@
 //
 import { APP } from "./APP";
 import { parseCSV, csvFormatter } from "./csv";
-import { updateColorOptionsOnAnnotator } from "./AnnotationTable";
+import { updateColorOptionsOnAnnotator } from "./PaintTable";
 import { paintManager } from "./SyncPaint";
 
 export const getSurfaceName = id => {

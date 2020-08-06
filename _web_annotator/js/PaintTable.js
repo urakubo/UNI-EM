@@ -43,7 +43,7 @@ export const updateColorOptionsOnAnnotator = () => {
   const colorParams = {
     eraser: {r: 1, g: 1, b: 1},
   };
-  const tableData = AnnotationTable.getData("active");
+  const tableData = PaintTable.getData("active");
   let targetColorId = null;
   for (const row of tableData) {
     colorParams[row.id] = {r: row.r / 255, g: row.g / 255, b: row.b / 255};
@@ -60,13 +60,13 @@ export const updateColorOptionsOnAnnotator = () => {
   let colorOptions = {
     activeColors: activeColors,
     colorParams: colorParams,
-    eraser: !APP.annotation_paint_mode,
-    overwrite: APP.annotation_overwrite
+    eraser: !APP.paint_on,
+    overwrite: APP.paint_overwriteB
   }
   setColorOptions(colorOptions, {meshes: APP.getMeshes()});
 };
 
-export const AnnotationTable = new Tabulator('#AnnotationTable', {
+export const PaintTable = new Tabulator('#PaintTable', {
 	layout:"fitColumns",
 	autoResize:true,
 	responsiveLayout:"hide",
@@ -84,10 +84,10 @@ export const AnnotationTable = new Tabulator('#AnnotationTable', {
         const value = cell.getRow().getData();
         cell.setValue(!value.visibility || value.target);
         updateColorOptionsOnAnnotator();
-        updateMetricsOnAnnotationTable(AnnotationTable);
+        updateMetricsOnPaintTable();
     }},
       {title: "Target", field:"target", width: 73, hozAlign:"center", formatter:"tickCross", headerSort:false, cellClick: (e, cell)=>{
-        const table = AnnotationTable;
+        const table = PaintTable;
         const value = cell.getRow().getData();
         table.setData(table.getData("active").map(item => { 
           item = Object.assign({}, item);
@@ -120,39 +120,39 @@ export const AnnotationTable = new Tabulator('#AnnotationTable', {
 
 const updateColor = () => {
   updateColorOptionsOnAnnotator()
-  paintManager.updateList({ list: AnnotationTable.getData(), lastPaintId })
+  paintManager.updateList({ list: PaintTable.getData(), lastPaintId })
 };
 
 window.switchAnnotation = (checked) => {
-	APP.annotation_mode = checked;
+	APP.paint_mode = checked;
 	APP.controls.noRotate = checked;
 }; 
 
 window.switchEraserAnnotation = (checked) => {
-	APP.annotation_paint_mode = checked;
+	APP.paint_on = checked;
   updateColorOptionsOnAnnotator()
 };
 
 window.setAnnotationOverwrite = (checked) => {
-  APP.annotation_overwrite = checked;
+  APP.paint_overwriteB = checked;
   updateColorOptionsOnAnnotator()
 }
 
 let lastPaintId = 0;
-$('#button-add-annotation-layer').on('click', (event) => {
+$('#button-add-paint-layer').on('click', (event) => {
     lastPaintId++;
-    const hasTarget = AnnotationTable.getData("active").some(item => item.target);
+    const hasTarget = PaintTable.getData("active").some(item => item.target);
     var layer = Object.assign({id: lastPaintId, name: "Layer" + String(lastPaintId), area:0, volume: 0, visibility: true, target: !hasTarget}, getRandomColor(lastPaintId));
-    AnnotationTable.addData(layer);
+    PaintTable.addData(layer);
     updateColorOptionsOnAnnotator()
 });
 
-$('#save-annotation-table-csv').on('click', (event) => {
-  downloadAnnotationTableAsCSV();
+$('#save-paint-table-csv').on('click', (event) => {
+  downloadPaintTableAsCSV();
 });
 
-const downloadAnnotationTableAsCSV = () => {
-  const tableData = AnnotationTable.getData("active");
+const downloadPaintTableAsCSV = () => {
+  const tableData = PaintTable.getData("active");
   const csvData = [["id", "name", "r", "g", "b", "area"]]
   for (const row of tableData) {
     csvData.push([row.id, row.name, row.r, row.g, row.b]);
@@ -165,7 +165,7 @@ const downloadAnnotationTableAsCSV = () => {
   
   const link = document.createElement("a");
   link.setAttribute("href", encodeUri);
-  link.setAttribute("download", "annotation.csv");
+  link.setAttribute("download", "paint.csv");
   document.body.appendChild(link);
   link.click();
 };
@@ -175,11 +175,11 @@ const syncSequence = true;
 paintManager.emitter.on("update", data => {
   if(data.room_id === "list") {
     console.log("list update");
-    const currentRows = AnnotationTable.getData() || [];
+    const currentRows = PaintTable.getData() || [];
     const incomingRows = data.list || [];
     if(syncSequence) { 
       const currentRowsMap = new Map(currentRows.map(currentRow => [currentRow.id, currentRow]));
-      AnnotationTable.setData(incomingRows.map(incomingRow => {
+      PaintTable.setData(incomingRows.map(incomingRow => {
         const currentRow = currentRowsMap.get(incomingRow.id);
         return {
           visibility: true,
@@ -218,12 +218,12 @@ paintManager.emitter.on("update", data => {
           b: incomingRow.b,
         });
       }
-      AnnotationTable.setData(newRows);
+      PaintTable.setData(newRows);
     }
     lastPaintId = data.lastPaintId;
     updateColorOptionsOnAnnotator()
   }
 })
 
-window._AnnotationTable = AnnotationTable;
+window._PaintTable = PaintTable;
 

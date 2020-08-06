@@ -1,4 +1,4 @@
-import { AnnotationTable } from "./AnnotationTable";
+import { PaintTable } from "./PaintTable";
 import { SurfaceTable } from "./SurfaceTable";
 import crypto from "crypto";
 import EventEmitter from "events";
@@ -106,7 +106,7 @@ export const paintManager = new PaintManager(socket);
 let oldActiveColors = new Set();
 export const updatePaintObservation = () => {
   const activeColors = new Set();
-  const tableData = AnnotationTable.getData("active");
+  const tableData = PaintTable.getData("active");
   for (const row of tableData) {
     if (row.visibility) {
       activeColors.add(row.id);

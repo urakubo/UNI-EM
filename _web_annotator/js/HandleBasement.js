@@ -1,5 +1,5 @@
 import { APP } from "./APP";
-import { AnnotationTable } from "./AnnotationTable";
+import { PaintTable } from "./PaintTable";
 import _ from "lodash";
 import { paintManager } from "./SyncPaint";
 import { SurfaceTable } from "./SurfaceTable";
@@ -17,9 +17,9 @@ function animate() {
 
 
 APP.dragging = false;
-APP.annotation_mode = false;
-APP.annotation_paint_mode = true;
-APP.annotation_overwrite = false;
+APP.paint_mode = false;
+APP.paint_on = true;
+APP.paint_overwriteB = false;
 
 
 // ObtainWindowSize
@@ -171,7 +171,7 @@ var annotate = (event) => {
 	updateCursor(intersect && intersect.point);
 	return;
   };
-  if (!APP.annotation_mode) return;
+  if (!APP.paint_mode) return;
   const { intersect } = annotateBySphere({
 		x: event.offsetX,
 		y: event.offsetY,
@@ -182,7 +182,7 @@ var annotate = (event) => {
 		ignoreBackFace: null,
   });
   updateCursor(intersect && intersect.point);
-  updateMetricsOnAnnotationTable(AnnotationTable)
+  updateMetricsOnPaintTable()
   syncAnnotation();
 };
 
@@ -204,7 +204,7 @@ paintManager.emitter.on("update", data => {
 			return;
 		}
 		setAnnotation({ mesh, colorId, data })
-		updateMetricsOnAnnotationTable(AnnotationTable);
+		updateMetricsOnPaintTable();
 	}
 })
 
@@ -226,22 +226,22 @@ const updateCursor = position => {
 	}
 }
 
-export const updateMetricsOnAnnotationTable = (_annotationTable) => {
+export const updateMetricsOnPaintTable = () => {
 	const activeSurfaces = new Set(SurfaceTable.getData()
 		.filter(row => row.act)
 		.map(row => getSurfaceName(row.id))
 	);
 	const meshes = APP.getMeshes().filter(mesh => activeSurfaces.has(mesh.name));
-	console.log("updateMetricsOnAnnotationTable#2", meshes, APP.getMeshes(), activeSurfaces);
+	console.log("updateMetricsOnPaintTable#2", meshes, APP.getMeshes(), activeSurfaces);
 	const params = getCurrentParams({ meshes });
 	const areas = params.areas;
-	const newRows = AnnotationTable.getData("active").map((item = {}) => {
+	const newRows = PaintTable.getData("active").map((item = {}) => {
 		return {
 			...item,
 			area: areas[item.id] && areas[item.id].toFixed(4)
 		}
 	})
-	AnnotationTable.updateData(newRows);
+	PaintTable.updateData(newRows);
 };
 
 
