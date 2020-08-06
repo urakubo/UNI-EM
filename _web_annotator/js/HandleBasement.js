@@ -4,6 +4,7 @@ import _ from "lodash";
 import { paintManager } from "./SyncPaint";
 import { SurfaceTable } from "./SurfaceTable";
 import { getSurfaceName } from "./HandleSurfaces";
+import * as zlib from "zlib";
 
 var xratio = 0.6;
 var yratio = 0.95;
@@ -186,11 +187,20 @@ var annotate = (event) => {
   syncAnnotation();
 };
 
+
+const compress = paintData => zlib.gzipSync(Buffer.from(paintData)).buffer;
+const decompress = compressedData => new Uint8Array(zlib.gunzipSync(Buffer.from(compressedData)).buffer);
+
 const syncAnnotation = _.debounce(() => {
-	const diff = getDiff({meshes: APP.getMeshes()});
-	if(Object.keys(diff).length > 0) {
-		console.log("emit changes", diff);
-		paintManager.update({diff})
+	const changes = getChanges({meshes: APP.getMeshes()});
+	if(Object.keys(changes).length > 0) {
+		for(const objectChanges of Object.values(changes)) {
+			for(const colorChanges of Object.values(objectChanges)) {
+				colorChanges.painted = compress(colorChanges.painted);
+			}
+		}
+		console.log("emit changes", changes);
+		paintManager.update({changes})
 	}
 }, 1000, { maxWait: 1000 });
 
@@ -203,7 +213,10 @@ paintManager.emitter.on("update", data => {
 			console.error("mesh not found")
 			return;
 		}
-		setAnnotation({ mesh, colorId, data })
+		setAnnotation({ mesh, colorId, data: {
+			...data,
+			painted: decompress(data.painted),
+		}})
 		updateMetricsOnPaintTable();
 	}
 })

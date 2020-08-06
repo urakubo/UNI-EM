@@ -29,7 +29,7 @@ def write_file(room_id, data):
 
 @sio.event
 async def update_paint(sid, data):
-  for object_id, object_data in data["diff"].items():
+  for object_id, object_data in data["changes"].items():
     for color_id, color_data in object_data.items():
       room_id = object_id + "-" + color_id
       # await sio.emit('update', color_data, room=room_id, skip_sid=sid)

@@ -83,7 +83,7 @@ class PaintManager extends RoomManager{
   }
   update(data) {
     console.log("update", data)
-    for(const [objectId, objectData] of Object.entries(data.diff)) {
+    for(const [objectId, objectData] of Object.entries(data.changes)) {
       for(const [colorId, colorData] of Object.entries(objectData)) {
         const roomId = objectId + "-" + colorId;
         this.values.set(roomId, colorData);
