@@ -2,6 +2,7 @@ import { PaintTable } from "./PaintTable";
 import { SurfaceTable } from "./SurfaceTable";
 import crypto from "crypto";
 import EventEmitter from "events";
+import io from "socket.io-client";
 
 export const socket = io(`${location.origin}/`);
 socket.on('system', data => {
