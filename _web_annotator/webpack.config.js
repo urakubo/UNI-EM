@@ -51,7 +51,7 @@ module.exports = env => {
               [require.resolve("@babel/preset-env"),
               {
                 "targets": {
-                  "browsers": ["chrome >= 73"]
+                  "browsers": ["chrome >= 69"]
                 }
               }],
             ],
