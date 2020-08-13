@@ -449,7 +449,7 @@ const updateMetricsOnPaintTable = () => {
   const areas = params.areas;
   const newRows = _PaintTable__WEBPACK_IMPORTED_MODULE_1__["PaintTable"].getData("active").map((item = {}) => {
     return { ...item,
-      area: areas[item.id] && areas[item.id].toFixed(5)
+      area: areas[item.id]
     };
   });
   _PaintTable__WEBPACK_IMPORTED_MODULE_1__["PaintTable"].updateData(newRows);
@@ -1635,7 +1635,11 @@ const PaintTable = new tabulator_tables__WEBPACK_IMPORTED_MODULE_3__('#PaintTabl
   }, {
     title: "Area",
     field: "area",
-    headerSort: false
+    headerSort: false,
+    formatter: "money",
+    formatterParams: {
+      precision: 5
+    }
   }, {
     title: "Volume",
     field: "volume",

@@ -255,7 +255,7 @@ export const updateMetricsOnPaintTable = () => {
 	const newRows = PaintTable.getData("active").map((item = {}) => {
 		return {
 			...item,
-			area: areas[item.id] && areas[item.id].toFixed(5)
+			area: areas[item.id]
 		}
 	})
 	PaintTable.updateData(newRows);

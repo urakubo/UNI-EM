@@ -105,7 +105,7 @@ export const PaintTable = new Tabulator('#PaintTable', {
    	  {title: "R", field: "r", minWidth: 30, width: 35, hozAlign: "right", visible: true, editor: "number", editorParams: {min:0, max: 255, step: 1}, mutator: mutatorClip, mutatorParams: mutatorParamsClip, headerSort:false, cellEdited: () => updateColor()},
 	    {title: "G", field: "g", minWidth: 30, width: 35, hozAlign: "right", visible: true, editor: "number", editorParams: {min:0, max: 255, step: 1}, mutator: mutatorClip, mutatorParams: mutatorParamsClip, headerSort:false, cellEdited: () => updateColor()},
 	    {title: "B", field: "b", minWidth: 30, width: 35, hozAlign: "right", visible: true, editor: "number", editorParams: {min:0, max: 255, step: 1}, mutator: mutatorClip, mutatorParams: mutatorParamsClip, headerSort:false, cellEdited: () => updateColor()},
-	    {title: "Area", field: "area", headerSort:false},
+	    {title: "Area", field: "area", headerSort:false, formatter: "money", formatterParams: {precision: 5}},
 	    {title: "Volume", field: "volume", headerSort:false}
 	],  
   rowMoved: (row) => {
