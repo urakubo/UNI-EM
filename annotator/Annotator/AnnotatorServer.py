@@ -22,7 +22,9 @@ from Params import Params
 from annotator.Annotator.sio import sio, set_u_info
 import miscellaneous.Miscellaneous as m
 
-
+class CustomStaticFileHandler(tornado.web.StaticFileHandler):
+    def set_extra_headers(self, path):
+        self.set_header('Cache-Control', 'no-cache')
 
 class SurfaceHandler(tornado.web.RequestHandler):
   ###
@@ -120,14 +122,14 @@ class AnnotatorServerLogic:
     set_u_info(self.u_info)
 
     annotator = tornado.web.Application([
-      (r'/css/(.*)', tornado.web.StaticFileHandler, {'path': css_path}),
-      (r'/js/(.*)', tornado.web.StaticFileHandler, {'path': js_path}),
-      (r'/surface/(.*)', tornado.web.StaticFileHandler, {'path': surfaces_path}),
-      (r'/surface/whole/(.*)', tornado.web.StaticFileHandler, {'path': surfaces_whole_path}),
-      (r'/skeleton/(.*)', tornado.web.StaticFileHandler, {'path': skeletons_path}),
+      (r'/css/(.*)', CustomStaticFileHandler, {'path': css_path}),
+      (r'/js/(.*)', CustomStaticFileHandler, {'path': js_path}),
+      (r'/surface/(.*)', CustomStaticFileHandler, {'path': surfaces_path}),
+      (r'/surface/whole/(.*)', CustomStaticFileHandler, {'path': surfaces_whole_path}),
+      (r'/skeleton/(.*)', CustomStaticFileHandler, {'path': skeletons_path}),
       (r'/ws/surface', SurfaceHandler, {'3Dmap': self.ids_volume, 'pitch': self.pitch ,'path': surfaces_whole_path}),
       (r'/socket.io/', socketio.get_tornado_handler(sio)),
-      (r'/(.*)', tornado.web.StaticFileHandler, {'path': web_path})
+      (r'/(.*)', CustomStaticFileHandler, {'path': web_path})
     ],debug=True,autoreload=True)
 
 
