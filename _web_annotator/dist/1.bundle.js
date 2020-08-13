@@ -1767,7 +1767,7 @@ _SyncPaint__WEBPACK_IMPORTED_MODULE_1__["paintManager"].emitter.on("update", dat
       PaintTable.setData(newRows);
     }
 
-    lastPaintId = data.lastPaintId;
+    lastPaintId = data.lastPaintId || 0;
     updateColorOptionsOnAnnotator();
   }
 });
