@@ -108,8 +108,6 @@ class AnnotatorServerLogic:
   def run( self ):
     ####
     web_path = os.path.join(self.u_info.web_annotator_path, "dist")
-    css_path = os.path.join(self.u_info.web_annotator_path, "css")
-    js_path  = os.path.join(self.u_info.web_annotator_path, "js")
     skeletons_path  = self.u_info.skeletons_path
     surfaces_path   = self.u_info.surfaces_path
     skeletons_whole_path = self.u_info.skeletons_whole_path
@@ -122,8 +120,6 @@ class AnnotatorServerLogic:
     set_u_info(self.u_info)
 
     annotator = tornado.web.Application([
-      (r'/css/(.*)', CustomStaticFileHandler, {'path': css_path}),
-      (r'/js/(.*)', CustomStaticFileHandler, {'path': js_path}),
       (r'/surface/(.*)', CustomStaticFileHandler, {'path': surfaces_path}),
       (r'/surface/whole/(.*)', CustomStaticFileHandler, {'path': surfaces_whole_path}),
       (r'/skeleton/(.*)', CustomStaticFileHandler, {'path': skeletons_path}),
