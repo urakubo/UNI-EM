@@ -220,7 +220,7 @@ paintManager.emitter.on("update", data => {
       }
       PaintTable.setData(newRows);
     }
-    lastPaintId = data.lastPaintId;
+    lastPaintId = data.lastPaintId || 0;
     updateColorOptionsOnAnnotator()
   }
 })
