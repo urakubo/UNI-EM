@@ -157,7 +157,7 @@ const downloadPaintTableAsCSV = () => {
   const tableData = PaintTable.getData("active");
   const csvData = [["id", "name", "r", "g", "b", "area"]]
   for (const row of tableData) {
-    csvData.push([row.id, row.name, row.r, row.g, row.b]);
+    csvData.push([row.id, row.name, row.r, row.g, row.b, row.area]);
   }
 
   const csvContent = "data:text/csv;charset=utf-8," +
