@@ -87473,6 +87473,7 @@ class GeometryColor {
   constructor(length) {
     this.painted = new Int8Array(length);
     this.totalArea = 0;
+    this.updated = false;
   }
 
   clear() {
@@ -87529,6 +87530,34 @@ class GeometryState {
     }
   }
 
+  getChanges() {
+    const response = {};
+
+    for (const colorId of this.activeColors) {
+      const geometryColor = this.geometryColors[colorId];
+
+      if (geometryColor === null || geometryColor === void 0 ? void 0 : geometryColor.updated) {
+        response[colorId] = {
+          painted: geometryColor.painted,
+          totalArea: geometryColor.totalArea
+        };
+        geometryColor.updated = false;
+      }
+    }
+
+    return response;
+  }
+
+  setAnnotation(colorId, data) {
+    const geometryColor = this.getGeometryColor(colorId);
+
+    if (data.painted) {
+      geometryColor.painted = data.painted;
+      geometryColor.totalArea = data.totalArea;
+      this.updateAllColor();
+    }
+  }
+
   getGeometryColor(colorId) {
     if (!this.geometryColors[colorId]) {
       const vertexCount = this.geometry.attributes.position.count;
@@ -87578,11 +87607,13 @@ class GeometryState {
           if (geometryColor.painted[vertexIndex] === 0) {
             geometryColor.painted[vertexIndex] = 1;
             geometryColor.totalArea += this.areas[Math.floor(vertexIndex / 3)];
+            geometryColor.updated = true;
           }
         } else {
           if (geometryColor.painted[vertexIndex] === 1) {
             geometryColor.painted[vertexIndex] = 0;
             geometryColor.totalArea -= this.areas[Math.floor(vertexIndex / 3)];
+            geometryColor.updated = true;
           }
         }
       }
@@ -87599,6 +87630,7 @@ class GeometryState {
       if (geometryColor.painted[vertexIndex] === 1) {
         geometryColor.painted[vertexIndex] = 0;
         geometryColor.totalArea -= this.areas[Math.floor(vertexIndex / 3)];
+        geometryColor.updated = true;
         this.updateColor(vertexIndex);
         return true;
       }
@@ -87608,6 +87640,7 @@ class GeometryState {
       if (geometryColor.painted[vertexIndex] === 0) {
         geometryColor.painted[vertexIndex] = 1;
         geometryColor.totalArea += this.areas[Math.floor(vertexIndex / 3)];
+        geometryColor.updated = true;
         this.updateColor(vertexIndex);
         return true;
       }
@@ -87744,7 +87777,7 @@ const calcArea = (x1, y1, z1, x2, y2, z2, x3, y3, z3) => {
 /*!***********************************************!*\
   !*** ./node_modules/three-annotator/index.js ***!
   \***********************************************/
-/*! exports provided: getIntersect, annotateBySphere, getCurrentParams, setColorOptions */
+/*! exports provided: getIntersect, annotateBySphere, getCurrentParams, setColorOptions, getChanges, setAnnotation */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -87753,6 +87786,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "annotateBySphere", function() { return annotateBySphere; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCurrentParams", function() { return getCurrentParams; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setColorOptions", function() { return setColorOptions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getChanges", function() { return getChanges; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setAnnotation", function() { return setAnnotation; });
 /* harmony import */ var _geometryState__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./geometryState */ "./node_modules/three-annotator/geometryState.js");
 
 
@@ -87883,6 +87918,35 @@ const setColorOptions = (options, {
     const geometryState = Object(_geometryState__WEBPACK_IMPORTED_MODULE_0__["getGeometryState"])(geometry);
     geometryState.setColorOptions(options);
   });
+};
+const getChanges = ({
+  meshes
+}) => {
+  const response = {};
+  meshes.forEach(mesh => {
+    const geometry = mesh.geometry;
+
+    if (!geometry.isBufferGeometry) {
+      return;
+    }
+
+    const geometryState = Object(_geometryState__WEBPACK_IMPORTED_MODULE_0__["getGeometryState"])(geometry);
+    const changes = geometryState.getChanges();
+
+    if (Object.keys(changes).length > 0) {
+      response[mesh.name] = changes;
+    }
+  });
+  return response;
+};
+const setAnnotation = ({
+  mesh,
+  colorId,
+  data
+}) => {
+  const geometry = mesh.geometry;
+  const geometryState = Object(_geometryState__WEBPACK_IMPORTED_MODULE_0__["getGeometryState"])(geometry);
+  geometryState.setAnnotation(colorId, data);
 };
 
 /***/ }),
