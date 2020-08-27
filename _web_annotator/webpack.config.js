@@ -51,7 +51,9 @@ module.exports = env => {
               [require.resolve("@babel/preset-env"),
               {
                 "targets": {
-                  "browsers": ["chrome >= 73"]
+                  "chrome": "69",
+                  "edge": "83",
+                  "firefox": "78",
                 }
               }],
             ],
@@ -104,7 +106,8 @@ module.exports = env => {
           target: apiUrl,
           ws: true,
         },
-        '/img': apiUrl
+        '/img': apiUrl,
+        '/surface': apiUrl
       } : null
     },
     plugins: [

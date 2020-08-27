@@ -1,5 +1,17 @@
 import { APP } from "./APP";
-import { AnnotationTable } from "./AnnotationTable";
+import { PaintTable } from "./PaintTable";
+import _ from "lodash";
+import { paintManager } from "./SyncPaint";
+import { SurfaceTable } from "./SurfaceTable";
+import { getSurfaceName } from "./HandleSurfaces";
+import * as zlib from "zlib";
+import {
+	getIntersect,
+	annotateBySphere,
+	getCurrentParams,
+	getChanges,
+	setAnnotation
+} from "three-annotator"
 
 var xratio = 0.6;
 var yratio = 0.95;
@@ -13,9 +25,9 @@ function animate() {
 
 
 APP.dragging = false;
-APP.annotation_mode = false;
-APP.annotation_paint_mode = true;
-APP.annotation_overwrite = false;
+APP.paint_mode = false;
+APP.paint_on = true;
+APP.paint_overwriteB = false;
 
 
 // ObtainWindowSize
@@ -167,47 +179,86 @@ var annotate = (event) => {
 	updateCursor(intersect && intersect.point);
 	return;
   };
-  if (!APP.annotation_mode) return;
+  if (!APP.paint_mode) return;
   const { intersect } = annotateBySphere({
 		x: event.offsetX,
 		y: event.offsetY,
 		camera: APP.camera,
 		meshes: APP.getMeshes(),
 		container: APP.renderer.domElement,
-		radius: APP.AnnotatorRadius || 3,
+		radius: getCursorRadius(APP.AnnotatorRadius),
 		ignoreBackFace: null,
   });
   updateCursor(intersect && intersect.point);
-  updateMetricsOnAnnotationTable(AnnotationTable)
+  updateMetricsOnPaintTable()
+  syncAnnotation();
 };
 
+
+const compress = paintData => paintData && zlib.gzipSync(Buffer.from(paintData)).buffer;
+const decompress = compressedData => compressedData && new Uint8Array(zlib.gunzipSync(Buffer.from(compressedData)).buffer);
+
+const syncAnnotation = _.debounce(() => {
+	const changes = getChanges({meshes: APP.getMeshes()});
+	if(Object.keys(changes).length > 0) {
+		for(const objectChanges of Object.values(changes)) {
+			for(const colorChanges of Object.values(objectChanges)) {
+				colorChanges.painted = compress(colorChanges.painted);
+			}
+		}
+		paintManager.update({changes})
+	}
+}, 1000, { maxWait: 1000 });
+
+paintManager.emitter.on("update", data => {
+	if(data.room_id !== "list") {
+		const [surfaceId, colorId] = data.room_id.split("-");
+		const mesh = APP.getMeshes().find(mesh => mesh.name === surfaceId);
+		if(!mesh) {
+			console.error("mesh not found")
+			return;
+		}
+		setAnnotation({ mesh, colorId, data: {
+			...data,
+			painted: decompress(data.painted),
+		}})
+		updateMetricsOnPaintTable();
+	}
+})
+
+const getCursorRadius = annotatorRadius => (annotatorRadius || 0.3);
 
 const updateCursor = position => {
 	if (APP.cursor.visible === false) {
 		return;
 	}
-	const radius = APP.AnnotatorRadius || 3;
+	const radius = getCursorRadius(APP.AnnotatorRadius);
 	const cursor = APP.cursor;
 	if (position) {
 		cursor.position.copy(position);
-		const zoom = radius / cursor.geometry.boundingSphere.radius;
+		const zoom = radius;
 		cursor.scale.set(zoom, zoom, zoom);
-		cursor.opacity = 0.3;
-	  } else {
-		cursor.opacity = 0;
-	  }
+		cursor.material.opacity = 0.3;
+	} else {
+		cursor.material.opacity = 0;
+	}
 }
 
-
-const updateMetricsOnAnnotationTable = (annotationTable) => {
-	const params = getCurrentParams({ meshes: APP.getMeshes() });
+export const updateMetricsOnPaintTable = () => {
+	const activeSurfaces = new Set(SurfaceTable.getData()
+		.filter(row => row.act)
+		.map(row => getSurfaceName(row.id))
+	);
+	const meshes = APP.getMeshes().filter(mesh => activeSurfaces.has(mesh.name));
+	const params = getCurrentParams({ meshes });
 	const areas = params.areas;
-	const newRows = annotationTable.getData("active").map(_item => {
-		const item = Object.assign({}, _item);
-		item.area =  areas[item.id] && areas[item.id].toFixed(0);
-		return item;
+	const newRows = PaintTable.getData("active").map((item = {}) => {
+		return {
+			...item,
+			area: areas[item.id]
+		}
 	})
-	annotationTable.updateData(newRows);
+	PaintTable.updateData(newRows);
 };
 
 
@@ -262,8 +313,8 @@ export function launchAnnotator() {
 
 	// Paint
 	// Cursor
-	var geometry = new THREE.SphereBufferGeometry( 3, 32, 32 );
-	var material = new THREE.MeshLambertMaterial( {color: 0xffffff, opacity: 0.3, transparent: true, depthWrite: false} );
+	var geometry = new THREE.SphereBufferGeometry( 1, 32, 32 );
+	var material = new THREE.MeshLambertMaterial( {color: 0xffffff, opacity: 0, transparent: true, depthWrite: false} );
 	var cursor = new THREE.Mesh( geometry, material );
 	cursor.isCursor = true;
 	cursor.name = 'cursor';

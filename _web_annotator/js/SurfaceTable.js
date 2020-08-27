@@ -1,7 +1,9 @@
 import { APP } from "./APP";
 import { csvFormatter } from "./csv";
+import { updateMetricsOnPaintTable } from "./HandleBasement";
+import * as Tabulator from "tabulator-tables";
 
-var SurfaceTable = new Tabulator("#SurfaceTable", {
+export const SurfaceTable = new Tabulator("#SurfaceTable", {
 	ajaxURL:"./surface/segmentInfo.json",
 	layout:"fitColumns",      //fit columns to width of table
 	autoResize:true,
@@ -60,6 +62,7 @@ var SurfaceTable = new Tabulator("#SurfaceTable", {
 			APP.removeSurfaceObject(id);
 			APP.removeSkeletonObject(id);
 			}
+			updateMetricsOnPaintTable();
 		}
 	  if(columnField == 'r' || columnField == 'g' || columnField == 'b') {
 	  	console.log("Changecolor ID:", id )

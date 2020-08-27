@@ -19,10 +19,12 @@ sys.path.append(main_dir)
 sys.path.append(path.join(main_dir, "system"))
 
 from Params import Params
-from annotator.Annotator.sio import sio
+from annotator.Annotator.sio import sio, set_u_info
 import miscellaneous.Miscellaneous as m
 
-
+class CustomStaticFileHandler(tornado.web.StaticFileHandler):
+    def set_extra_headers(self, path):
+        self.set_header('Cache-Control', 'no-cache')
 
 class SurfaceHandler(tornado.web.RequestHandler):
   ###
@@ -106,8 +108,6 @@ class AnnotatorServerLogic:
   def run( self ):
     ####
     web_path = os.path.join(self.u_info.web_annotator_path, "dist")
-    css_path = os.path.join(self.u_info.web_annotator_path, "css")
-    js_path  = os.path.join(self.u_info.web_annotator_path, "js")
     skeletons_path  = self.u_info.skeletons_path
     surfaces_path   = self.u_info.surfaces_path
     skeletons_whole_path = self.u_info.skeletons_whole_path
@@ -117,15 +117,15 @@ class AnnotatorServerLogic:
     ev_loop = asyncio.new_event_loop()
     asyncio.set_event_loop(ev_loop)
 
+    set_u_info(self.u_info)
+
     annotator = tornado.web.Application([
-      (r'/css/(.*)', tornado.web.StaticFileHandler, {'path': css_path}),
-      (r'/js/(.*)', tornado.web.StaticFileHandler, {'path': js_path}),
-      (r'/surface/(.*)', tornado.web.StaticFileHandler, {'path': surfaces_path}),
-      (r'/surface/whole/(.*)', tornado.web.StaticFileHandler, {'path': surfaces_whole_path}),
-      (r'/skeleton/(.*)', tornado.web.StaticFileHandler, {'path': skeletons_path}),
+      (r'/surface/(.*)', CustomStaticFileHandler, {'path': surfaces_path}),
+      (r'/surface/whole/(.*)', CustomStaticFileHandler, {'path': surfaces_whole_path}),
+      (r'/skeleton/(.*)', CustomStaticFileHandler, {'path': skeletons_path}),
       (r'/ws/surface', SurfaceHandler, {'3Dmap': self.ids_volume, 'pitch': self.pitch ,'path': surfaces_whole_path}),
       (r'/socket.io/', socketio.get_tornado_handler(sio)),
-      (r'/(.*)', tornado.web.StaticFileHandler, {'path': web_path})
+      (r'/(.*)', CustomStaticFileHandler, {'path': web_path})
     ],debug=True,autoreload=True)
 
 

@@ -6,6 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server",
     "build": "webpack",
+    "build.watch": "webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -28,11 +29,13 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.12.0",
-    "agh.sprintf": "0.0.11",
     "express": "^4.17.1",
     "jquery": "^3.4.1",
+    "jsfive": "^0.2.1",
+    "lodash": "^4.17.19",
+    "socket.io-client": "^2.3.0",
     "tabulator-tables": "^4.5.3",
     "three": "^0.112.1",
-    "three-annotator": "github:honeysol/three-annotator#bd2dcd650924774222cbbfc9fe75dee626e87fe0"
+    "three-annotator": "github:honeysol/three-annotator#b45e293c53e76e7841516c38a9faefc692a35194"
   }
 }

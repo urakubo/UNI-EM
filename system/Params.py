@@ -183,6 +183,7 @@ class Params:
         self.surfaces_path             = self.annotator_files_path   + os.sep + 'surfaces'
         self.skeletons_whole_path      = self.annotator_files_path   + os.sep + 'skeletons' + os.sep + 'whole'
         self.surfaces_whole_path       = self.annotator_files_path   + os.sep + 'surfaces' + os.sep + 'whole'
+        self.paint_path                = self.annotator_files_path   + os.sep + 'paint'
 
         self.surfaces_segment_info_json_file 	= self.surfaces_path + os.sep + 'segmentInfo.json'
         self.surfaces_volume_description_json_file 	= self.surfaces_path + os.sep + 'VolumeDescription.json'
