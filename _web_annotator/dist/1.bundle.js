@@ -123,40 +123,25 @@ window.AmbLight = function (isnum) {
 };
 
 window.CenterXY = function () {
-  // APP.camera.up.set(0,0,1);
-  // APP.camera.position.set(APP.BoundingboxMax*3.0,  APP.BoundingboxY/2.0, APP.BoundingboxX/2.0);
-  // APP.controls.target.set( APP.BoundingboxZ/2.0, APP.BoundingboxY/2.0, APP.BoundingboxX/2.0 );
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.up.set(0, 1, 0);
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.position.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax * 3.0); // APP.controls.target.set( APP.BoundingboxX/2.0, APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0 );
-  // APP.controls.target.set( APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0, APP.BoundingboxX/2.0 );
-
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].controls.target.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.position.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax * 3.0);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.lookAt(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].controls.target.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0); // APP.renderer.render(APP.scene, APP.camera);
 };
 
 window.CenterYZ = function () {
-  // APP.camera.up.set(0,1,0);
-  // APP.camera.position.set(APP.BoundingboxZ/2.0,  APP.BoundingboxY/2.0, APP.BoundingboxMax*3.0);
-  // APP.controls.target.set( APP.BoundingboxZ/2.0, APP.BoundingboxY/2.0, APP.BoundingboxX/2.0 );
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.up.set(0, 0, 1);
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.position.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax * 3.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0); // APP.controls.target.set( APP.BoundingboxX/2.0, APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0 );
-  // APP.controls.target.set( APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0, APP.BoundingboxX/2.0 );
-
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].controls.target.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.position.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax * 3.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.lookAt(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].controls.target.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0); // APP.renderer.render(APP.scene, APP.camera);
 };
 
 window.CenterZX = function () {
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.up.set(1, 0, 0);
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.position.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax * 3.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0); // APP.controls.target.set( APP.BoundingboxX/2.0, APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0 );
-  // APP.controls.target.set( APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0, APP.BoundingboxX/2.0 );
-
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].controls.target.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0);
-}; //
-// Skeleton
-//
-//
-// Paint
-//
-// Eraser, Radius, Overwrite
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.position.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax * 3.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.lookAt(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].controls.target.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0); // APP.renderer.render(APP.scene, APP.camera);
+};
 
 /***/ }),
 
@@ -206,13 +191,23 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].paint_on = true;
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].paint_overwriteB = false; // ObtainWindowSize
 
 function onWindowResize() {
-  var aspect = window.innerWidth / window.innerHeight;
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.left = -frustumSize * aspect / 2;
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.right = frustumSize * aspect / 2;
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.top = frustumSize / 2;
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.bottom = -frustumSize / 2;
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.updateProjectionMatrix();
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.setSize(window.innerWidth * xratio, window.innerHeight * yratio);
+  //   var aspect = window.innerWidth / window.innerHeight;
+  //   APP.camera.left   = - frustumSize * aspect / 2;
+  //   APP.camera.right  =   frustumSize * aspect / 2;
+  //   APP.camera.top    =   frustumSize / 2;
+  //APP.camera.bottom = - frustumSize / 2;
+  //APP.camera.updateProjectionMatrix();
+  // APP.renderer.setSize( window.innerWidth * xratio, window.innerHeight * yratio);
+  //APP.renderer.setPixelRatio(window.devicePixelRatio);
+  // サイズを取得
+  const width = window.innerWidth;
+  const height = window.innerHeight; // カメラのアスペクト比を正す
+
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.aspect = width * xratio / (height * yratio);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.updateProjectionMatrix(); // レンダラーのサイズを調整する
+
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.setPixelRatio(window.devicePixelRatio);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.setSize(width * xratio, height * yratio);
 } // Draw bounding box
 
 
@@ -237,9 +232,9 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addBoundingBox = function () {
   boundingbox.scale.set(1, 1, 1);
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(boundingbox);
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingBox = 'On';
-  boundingbox.translateX(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2);
-  boundingbox.translateY(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2);
-  boundingbox.translateZ(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2);
+  boundingbox.translateX(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0);
+  boundingbox.translateY(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0);
+  boundingbox.translateZ(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0);
 };
 
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeBoundingBox = function () {
@@ -525,7 +520,14 @@ function launchAnnotator() {
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity = 1.0;
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity_reserved = 0.5; // Skeleton
 
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SkeletonMode = 0; //Boundingbox
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SkeletonMode = 0; // Add sphere tmp
+  // var geometry = new THREE.SphereGeometry(0.1, 32, 32);
+  // var material = new THREE.MeshBasicMaterial({color: 0x6699FF});
+  // var sphere = new THREE.Mesh(geometry, material);
+  // sphere.position.set(0, 0, 0);
+  // APP.scene.add(sphere);
+  // Add sphere tmp
+  //Boundingbox
 
   const call_url = location.protocol + "//" + location.host + "/surface/VolumeDescription.json";
   $.getJSON(call_url).done(function (data) {
@@ -535,7 +537,14 @@ function launchAnnotator() {
     _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY = data.boundingbox_um.y;
     _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ = data.boundingbox_um.z;
     _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax = Math.max(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ);
-    console.log('APP.BoundingboxMax: ', _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax);
+    console.log('APP.BoundingboxMax: ', _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax); // Add sphere tmp2
+    // var geometry = new THREE.SphereGeometry(0.1, 32, 32);
+    // var material = new THREE.MeshBasicMaterial({color: 0xFF9955});
+    // var sphere = new THREE.Mesh(geometry, material);
+    // sphere.position.set(APP.BoundingboxX/2.0, APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0);
+    // APP.scene.add(sphere);
+    // Add sphere tmp2
+
     window.CenterXY();
   });
 }

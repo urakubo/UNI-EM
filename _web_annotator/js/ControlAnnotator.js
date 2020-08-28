@@ -96,46 +96,27 @@ window.AmbLight = function (isnum) {
       }
 
 window.CenterXY = function () {
-	// APP.camera.up.set(0,0,1);
-	// APP.camera.position.set(APP.BoundingboxMax*3.0,  APP.BoundingboxY/2.0, APP.BoundingboxX/2.0);
-	// APP.controls.target.set( APP.BoundingboxZ/2.0, APP.BoundingboxY/2.0, APP.BoundingboxX/2.0 );
 	APP.camera.up.set(0,1,0);
 	APP.camera.position.set( APP.BoundingboxX/2.0, APP.BoundingboxY/2.0, APP.BoundingboxMax*3.0);
-	// APP.controls.target.set( APP.BoundingboxX/2.0, APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0 );
-	// APP.controls.target.set( APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0, APP.BoundingboxX/2.0 );
-	APP.controls.target.set( APP.BoundingboxZ/2.0, APP.BoundingboxY/2.0, APP.BoundingboxX/2.0 );
+	APP.camera.lookAt(APP.BoundingboxZ/2.0, APP.BoundingboxY/2.0, APP.BoundingboxX/2.0);
+	APP.controls.target.set( APP.BoundingboxX/2.0 , APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0);
+	// APP.renderer.render(APP.scene, APP.camera);
 	}
 
 window.CenterYZ = function () {
-	// APP.camera.up.set(0,1,0);
-	// APP.camera.position.set(APP.BoundingboxZ/2.0,  APP.BoundingboxY/2.0, APP.BoundingboxMax*3.0);
-	// APP.controls.target.set( APP.BoundingboxZ/2.0, APP.BoundingboxY/2.0, APP.BoundingboxX/2.0 );
 	APP.camera.up.set(0,0,1);
 	APP.camera.position.set( APP.BoundingboxMax*3.0  , APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0);
-	// APP.controls.target.set( APP.BoundingboxX/2.0, APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0 );
-	// APP.controls.target.set( APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0, APP.BoundingboxX/2.0 );
-	APP.controls.target.set( APP.BoundingboxZ/2.0, APP.BoundingboxY/2.0, APP.BoundingboxX/2.0 );
+	APP.camera.lookAt(APP.BoundingboxZ/2.0, APP.BoundingboxY/2.0, APP.BoundingboxX/2.0);
+	APP.controls.target.set( APP.BoundingboxX/2.0 , APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0);
+	// APP.renderer.render(APP.scene, APP.camera);
 	}
 
 window.CenterZX = function () {
 	APP.camera.up.set(1,0,0);
 	APP.camera.position.set( APP.BoundingboxX/2.0, APP.BoundingboxMax*3.0, APP.BoundingboxZ/2.0);
-	// APP.controls.target.set( APP.BoundingboxX/2.0, APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0 );
-	// APP.controls.target.set( APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0, APP.BoundingboxX/2.0 );
-	APP.controls.target.set( APP.BoundingboxZ/2.0, APP.BoundingboxY/2.0, APP.BoundingboxX/2.0 );
+	APP.camera.lookAt(APP.BoundingboxZ/2.0, APP.BoundingboxY/2.0, APP.BoundingboxX/2.0);
+	APP.controls.target.set( APP.BoundingboxX/2.0 , APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0);
+	// APP.renderer.render(APP.scene, APP.camera);
 	}
 
-
-
-//
-// Skeleton
-//
-
-
-
-//
-// Paint
-//
-
-// Eraser, Radius, Overwrite
 
