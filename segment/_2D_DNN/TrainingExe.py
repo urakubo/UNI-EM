@@ -12,6 +12,7 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
 sys.path.append(os.path.join(main_dir, "segment"))
+import miscellaneous.Miscellaneous as m
 ##
 ##
 ##
@@ -31,7 +32,7 @@ class TrainingExe():
         input_tif = glob.glob(os.path.join(params['Image Folder'], "*.tif"))
         input_files.extend(input_png)
         input_files.extend(input_tif)
-        im = cv2.imread(input_files[0], cv2.IMREAD_UNCHANGED)
+        im = m.imread(input_files[0], cv2.IMREAD_UNCHANGED)
         print('Target file to check color type : ', input_files[0])
         print('Image dimensions                : ', im.shape)
         print('Image filetype                  : ', im.dtype)
@@ -41,11 +42,11 @@ class TrainingExe():
                 shutil.rmtree(tmpdir)
             os.mkdir(tmpdir)
             for input_file in input_files:
-                im_col = cv2.imread(input_file)
+                im_col = m.imread(input_file)
                 filename = os.path.basename(input_file)
                 filename = filename.replace('.tif', '.png')
                 converted_input_file = os.path.join( tmpdir, filename )
-                cv2.imwrite(converted_input_file, im_col)
+                m.imwrite(converted_input_file, im_col)
             params['Image Folder'] = tmpdir
             print('Filetype of images was changed to RGB 8bit, and stored in ', tmpdir)
 
@@ -58,7 +59,8 @@ class TrainingExe():
         input_files.extend(input_png)
         input_files.extend(input_tif)
 
-        im = cv2.imread(input_files[0], cv2.IMREAD_UNCHANGED)
+        print(input_files)
+        im = m.imread(input_files[0], cv2.IMREAD_UNCHANGED)
         print('Target file to check color type : ', input_files[0])
         print('Segmentation image dimensions   : ', im.shape)
         print('Segmentation filetype           : ', im.dtype)
@@ -68,11 +70,11 @@ class TrainingExe():
                 shutil.rmtree(tmpdir)
             os.mkdir(tmpdir)
             for input_file in input_files:
-                im_col = cv2.imread(input_file)
+                im_col = m.imread(input_file)
                 filename = os.path.basename(input_file)
                 filename = filename.replace('.tif', '.png')
                 converted_input_file = os.path.join( tmpdir, filename )
-                cv2.imwrite(converted_input_file, im_col)
+                m.imwrite(converted_input_file, im_col)
             params['Segmentation Folder'] = tmpdir
             print('Filetype of segmentation was changed to RGB 8bit, and stored in', tmpdir)
 
