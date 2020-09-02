@@ -10,7 +10,10 @@ import json
 import socketio
 
 # from marching_cubes import march
-import mcubes
+# import mcubes
+from skimage import measure
+# import zmesh
+
 import trimesh
 
 from os import path, pardir
@@ -21,6 +24,7 @@ sys.path.append(path.join(main_dir, "system"))
 from Params import Params
 from annotator.Annotator.sio import sio, set_u_info
 import miscellaneous.Miscellaneous as m
+
 
 class CustomStaticFileHandler(tornado.web.StaticFileHandler):
     def set_extra_headers(self, path):
@@ -46,22 +50,44 @@ class SurfaceHandler(tornado.web.RequestHandler):
   ###
   def GenerateStl(self, id):
     mask = (self.ids_volume == id)
+#    mesher = zmesh.Mesher( tuple(self.pitch) )
+#    mesher.mesh( mask )
+#    mesh = mesher.get_mesh(1, normals=False)
+#    vertices = mesh.vertices
+#    faces = mesh.faces 
+
+
     try:
         # vertices, normals, faces = march(mask, 2)
-        vertices, faces = mcubes.marching_cubes(mask, 0)
+        # vertices, faces = mcubes.marching_cubes(mask, 0)
+        vertices, faces, normals, values = measure.marching_cubes_lewiner(mask, 0.5, spacing=tuple(self.pitch))
+        # print('vertices:', vertices.shape)
+        # print('faces   :', faces.shape)
+        # verts and normals have x and z flipped because skimage uses zyx ordering
     except:
         print('Mesh was not generated.')
         return False
-    print('Generated face number: ', faces.shape)
-    vertices[:, 0] *= self.pitch[0]
-    vertices[:, 1] *= self.pitch[1]
-    vertices[:, 2] *= self.pitch[2]
+    # trimesh.constants.tol.merge = 1e-7
+
+    trimesh.constants.tol.merge = 1e-7
+    mesh = trimesh.Trimesh(vertices=vertices, faces=faces)
+    mesh.merge_vertices()
+    mesh.remove_degenerate_faces()
+    mesh.remove_duplicate_faces()
+    print('Processed vertices:', mesh.vertices.shape)
+    print('Processed faces   :', mesh.faces.shape)
+
+    # mesh.vertices[:, 0] *= self.pitch[0]
+    # mesh.vertices[:, 1] *= self.pitch[1]
+    # mesh.vertices[:, 2] *= self.pitch[2]
 #    vertices = vertices[:, [2,0,1]]
 
     filename = os.path.join(self.surfaces_whole_path, str(id).zfill(10)+'.stl')
-    mesh = trimesh.Trimesh(vertices=vertices, faces=faces)
+
     #mesh = trimesh.smoothing.filter_humphrey(mesh)
     mesh = trimesh.smoothing.filter_laplacian(mesh, iterations=4)
+    #mesh.fill_holes()
+    #mesh.export(file_obj=filename,file_type='stl_ascii')
     mesh.export(file_obj=filename)
     return True
   ###

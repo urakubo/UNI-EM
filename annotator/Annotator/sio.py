@@ -52,7 +52,7 @@ async def enter(sid, room_id):
   print('Enter', sid, room_id)
   sio.enter_room(sid, room_id)
   data = read_file(room_id)
-  print(data)
+  # print(data)
   data["room_id"] = room_id
   await sio.emit('current', data, to=sid)
   await sio.emit('system', { "type": "enter", "room_id": room_id }, to=sid)
