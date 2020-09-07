@@ -153,6 +153,21 @@ $('#save-paint-table-csv').on('click', (event) => {
   downloadPaintTableAsCSV();
 });
 
+
+//// 200907
+
+$('#calc-volumes').on('click', (event) => {
+	const call_url   = location.protocol+"//"+location.host+"/ws/paintvolume";
+	var req = new XMLHttpRequest();
+	req.open("get", call_url, false);
+	req.send(null);
+	if (req.responseText == "False") {
+		alert("No paintvolume.");
+		return false;
+		}
+});
+////
+
 const downloadPaintTableAsCSV = () => {
   const tableData = PaintTable.getData("active");
   const csvData = [["id", "name", "r", "g", "b", "area"]]

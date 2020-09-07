@@ -61,7 +61,7 @@ APP.addSurfaceObject = function(id, col) {
 		  vertexColors: THREE.FaceColors,
 		  transparent: true,
 		  opacity: APP.surface_opacity,
-		  side: THREE.DoubleSide;
+		  side: THREE.DoubleSide
 	  }) // APP.surface_opacity
 	  var mesh = new THREE.Mesh(bufferGeometry, meshMaterial);
       mesh.name = name;

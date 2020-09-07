@@ -32,13 +32,12 @@ class Segmentation(Datasource):
     out = None
     out_is_there = False
 
-    for i,f in enumerate(files):
+    for i,file in enumerate(files):
 
-      hdf5_file = h5py.File(f)
       list_of_names = []
-      hdf5_file.visit(list_of_names.append)
-      image_data = hdf5_file[list_of_names[0]].value
-      hdf5_file.close()
+      with h5py.File(file, 'r') as f:
+        f.visit(list_of_names.append)
+        image_data = f[list_of_names[0]][()]
 
       if out_is_there:
         out = np.dstack([out, image_data])
@@ -63,10 +62,9 @@ class Segmentation(Datasource):
     for i in np.linspace(0,len(files)-1, num=min(len(files),self._Datasource__zSample_max)).astype('int'):
 
       list_of_names = []
-      hdf5_file = h5py.File(files[i])
-      hdf5_file.visit(list_of_names.append)
-      image_data = hdf5_file[list_of_names[0]].value
-      hdf5_file.close()
+      with h5py.File(files[i], 'r') as f:
+        f.visit(list_of_names.append)
+        image_data = f[list_of_names[0]][()]
 
       if out_is_there:
         #out = np.dstack([out, input_image])
@@ -92,11 +90,10 @@ class Segmentation(Datasource):
 
     super(Segmentation, self).get_tile(file)
 
-    hdf5_file = h5py.File(file)
     list_of_names = []
-    hdf5_file.visit(list_of_names.append)
-    image_data = hdf5_file[list_of_names[0]].value
-    hdf5_file.close()
+    with h5py.File(file, 'r') as f:
+        f.visit(list_of_names.append)
+        image_data = f[list_of_names[0]][()]
 
     #print file, image_data[0][0], image_data.shape
     # print image_data.dtype

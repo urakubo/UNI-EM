@@ -941,13 +941,13 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject = function (id, col) {
       vertexColors: THREE.FaceColors,
       transparent: true,
       opacity: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity,
-      side: true
+      side: THREE.DoubleSide
     }); // APP.surface_opacity
 
     var mesh = new THREE.Mesh(bufferGeometry, meshMaterial);
     mesh.name = name;
-    mesh.scale.set(1, 1, 1);
-    mesh.material.side = THREE.DoubleSide;
+    mesh.scale.set(1, 1, 1); // mesh.material.side = THREE.DoubleSide;
+
     _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(mesh); // console.log(mesh.name);
 
     Object(_PaintTable__WEBPACK_IMPORTED_MODULE_2__["updateColorOptionsOnAnnotator"])();
@@ -1705,7 +1705,19 @@ $('#button-add-paint-layer').on('click', event => {
 });
 $('#save-paint-table-csv').on('click', event => {
   downloadPaintTableAsCSV();
-});
+}); //// 200907
+
+$('#calc-volumes').on('click', event => {
+  const call_url = location.protocol + "//" + location.host + "/ws/paintvolume";
+  var req = new XMLHttpRequest();
+  req.open("get", call_url, false);
+  req.send(null);
+
+  if (req.responseText == "False") {
+    alert("No paintvolume.");
+    return false;
+  }
+}); ////
 
 const downloadPaintTableAsCSV = () => {
   const tableData = PaintTable.getData("active");

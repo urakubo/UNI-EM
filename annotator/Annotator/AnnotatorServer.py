@@ -9,12 +9,12 @@ import numpy as np
 import json
 import socketio
 
+from skimage import measure
+import trimesh
 # from marching_cubes import march
 # import mcubes
-from skimage import measure
 # import zmesh
 
-import trimesh
 
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
@@ -24,6 +24,21 @@ sys.path.append(path.join(main_dir, "system"))
 from Params import Params
 from annotator.Annotator.sio import sio, set_u_info
 import miscellaneous.Miscellaneous as m
+
+
+### 200907 start
+
+from annotator.Annotator.GetVolumes import GetVolumes, GetOneVolume
+
+class PaintVolumeHandler(tornado.web.RequestHandler):
+  def __init__(self, *args, **kwargs):
+    self.surface_path = kwargs.pop('surface_path')
+    self.paint_path   = kwargs.pop('paint_path')
+    super(PaintVolumeHandler, self).__init__(*args, **kwargs)
+  def get(self):
+    GetVolumes(self.surface_path, self.paint_path)
+
+### 200907 end
 
 
 class CustomStaticFileHandler(tornado.web.StaticFileHandler):
@@ -50,12 +65,12 @@ class SurfaceHandler(tornado.web.RequestHandler):
   ###
   def GenerateStl(self, id):
     mask = (self.ids_volume == id)
+
 #    mesher = zmesh.Mesher( tuple(self.pitch) )
 #    mesher.mesh( mask )
 #    mesh = mesher.get_mesh(1, normals=False)
 #    vertices = mesh.vertices
 #    faces = mesh.faces 
-
 
     try:
         # vertices, normals, faces = march(mask, 2)
@@ -138,6 +153,9 @@ class AnnotatorServerLogic:
     surfaces_path   = self.u_info.surfaces_path
     skeletons_whole_path = self.u_info.skeletons_whole_path
     surfaces_whole_path  = self.u_info.surfaces_whole_path
+
+    ####
+    paint_path  = self.u_info.paint_path
     ####
     # asyncio.set_event_loop(self.u_info.worker_loop_stl)
     ev_loop = asyncio.new_event_loop()
@@ -150,6 +168,7 @@ class AnnotatorServerLogic:
       (r'/surface/whole/(.*)', CustomStaticFileHandler, {'path': surfaces_whole_path}),
       (r'/skeleton/(.*)', CustomStaticFileHandler, {'path': skeletons_path}),
       (r'/ws/surface', SurfaceHandler, {'3Dmap': self.ids_volume, 'pitch': self.pitch ,'path': surfaces_whole_path}),
+      (r'/ws/paintvolume', PaintVolumeHandler, {'surface_path': surfaces_whole_path, 'paint_path': paint_path}), ### 200907
       (r'/socket.io/', socketio.get_tornado_handler(sio)),
       (r'/(.*)', CustomStaticFileHandler, {'path': web_path})
     ],debug=True,autoreload=True)
