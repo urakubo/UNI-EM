@@ -1,5 +1,4 @@
 
-
 import os, sys
 from os import path
 import trimesh
@@ -8,7 +7,6 @@ import gzip
 import pickle
 import numpy as np
 import glob
-main_dir = path.abspath(path.dirname(sys.argv[0]))
 
 
 def GetVolumes(surface_path, paint_path):
@@ -29,16 +27,22 @@ def GetVolumes(surface_path, paint_path):
 		for part_mesh_name in part_mesh_names :
 			with open(part_mesh_name, 'rb') as file:
 				data = pickle.load(file)
-			# print(data)
+
+			"""
+			data['volume'] = None
+			with open(part_mesh_name, 'wb') as file:
+				pickle.dump(data, file)
+			print('Delete volume: ', part_mesh_name)
+			continue
+			"""
+
 			if ('volume' in data) and (data['volume'] != None): # 左の結果が偽の場合は、右の処理は実行されない。
-			#if (0): 
 				print('Volume already exists: ', part_mesh_name)
 				continue
 			else :
 				volume = GetOneVolume(v,f,data['painted'])
 				if volume is not None :
 					data['volume'] = volume
-					#data['volume'] = None
 					print('Volume of ' + part_mesh_name + ' : ', data['volume'])
 					with open(part_mesh_name, 'wb') as file:
 						pickle.dump(data, file)
@@ -54,11 +58,14 @@ def GetOneVolume(v,f,data):
 
 	part_mesh = pymeshfix.MeshFix(v, np.array(sub_face_id))
 	part_mesh.repair()
+	# part_mesh.plot() # Visualization of cloased meshes
+
 	closed_v = part_mesh.v # numpy np.float array
 	closed_f = part_mesh.f # numpy np.int32 array
 
 	closed_mesh = trimesh.Trimesh(vertices=closed_v, faces=closed_f)
 	# print("Volume: ", closed_mesh.volume) # Numpy-stl (mesh) にも同ルーチン有
+
 	return closed_mesh.volume
 
 
