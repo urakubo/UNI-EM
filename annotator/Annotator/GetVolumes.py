@@ -8,6 +8,9 @@ import pickle
 import numpy as np
 import glob
 
+#import annotator.Annotator.sio as s
+from annotator.Annotator.sio import sio, set_u_info
+
 
 def GetVolumes(surface_path, paint_path):
 
@@ -44,9 +47,13 @@ def GetVolumes(surface_path, paint_path):
 				if volume is not None :
 					data['volume'] = volume
 					print('Volume of ' + part_mesh_name + ' : ', data['volume'])
-					with open(part_mesh_name, 'wb') as file:
-						pickle.dump(data, file)
-
+					#with open(part_mesh_name, 'wb') as file:
+					#	pickle.dump(data, file)
+					room_id = os.path.basename(part_mesh_name) 
+					room_id = os.path.splitext(room_id)[0]
+					print('Room ID: ', room_id)
+					#print(data)
+					sio.emit_paint(room_id, data)
 
 def GetOneVolume(v,f,data):
 

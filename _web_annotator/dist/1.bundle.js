@@ -1652,7 +1652,11 @@ const PaintTable = new tabulator_tables__WEBPACK_IMPORTED_MODULE_3__('#PaintTabl
   }, {
     title: "Volume",
     field: "volume",
-    headerSort: false
+    headerSort: false,
+    formatter: "money",
+    formatterParams: {
+      precision: 5
+    }
   }],
   rowMoved: row => {
     updateColor();
@@ -1721,10 +1725,10 @@ $('#calc-volumes').on('click', event => {
 
 const downloadPaintTableAsCSV = () => {
   const tableData = PaintTable.getData("active");
-  const csvData = [["id", "name", "r", "g", "b", "area"]];
+  const csvData = [["id", "name", "r", "g", "b", "area", "volume"]];
 
   for (const row of tableData) {
-    csvData.push([row.id, row.name, row.r, row.g, row.b, row.area]);
+    csvData.push([row.id, row.name, row.r, row.g, row.b, row.area, row.volume]);
   }
 
   const csvContent = "data:text/csv;charset=utf-8," + csvData.map(e => e.join(",")).join("\n");

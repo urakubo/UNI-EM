@@ -106,7 +106,7 @@ export const PaintTable = new Tabulator('#PaintTable', {
 	    {title: "G", field: "g", minWidth: 30, width: 35, hozAlign: "right", visible: true, editor: "number", editorParams: {min:0, max: 255, step: 1}, mutator: mutatorClip, mutatorParams: mutatorParamsClip, headerSort:false, cellEdited: () => updateColor()},
 	    {title: "B", field: "b", minWidth: 30, width: 35, hozAlign: "right", visible: true, editor: "number", editorParams: {min:0, max: 255, step: 1}, mutator: mutatorClip, mutatorParams: mutatorParamsClip, headerSort:false, cellEdited: () => updateColor()},
 	    {title: "Area", field: "area", headerSort:false, formatter: "money", formatterParams: {precision: 5}},
-	    {title: "Volume", field: "volume", headerSort:false}
+	    {title: "Volume", field: "volume", headerSort:false, formatter: "money", formatterParams: {precision: 5}}
 	],  
   rowMoved: (row) => {
     updateColor();
@@ -170,9 +170,9 @@ $('#calc-volumes').on('click', (event) => {
 
 const downloadPaintTableAsCSV = () => {
   const tableData = PaintTable.getData("active");
-  const csvData = [["id", "name", "r", "g", "b", "area"]]
+  const csvData = [["id", "name", "r", "g", "b", "area", "volume"]]
   for (const row of tableData) {
-    csvData.push([row.id, row.name, row.r, row.g, row.b, row.area]);
+    csvData.push([row.id, row.name, row.r, row.g, row.b, row.area, row.volume]);
   }
 
   const csvContent = "data:text/csv;charset=utf-8," +
