@@ -193,6 +193,10 @@ paintManager.emitter.on("update", data => {
   if(data.room_id === "list") {
     const currentRows = PaintTable.getData() || [];
     const incomingRows = data.list || [];
+
+    console.log(incomingRows);
+
+
     if(syncSequence) { 
       const currentRowsMap = new Map(currentRows.map(currentRow => [currentRow.id, currentRow]));
       PaintTable.setData(incomingRows.map(incomingRow => {

@@ -1747,6 +1747,7 @@ _SyncPaint__WEBPACK_IMPORTED_MODULE_1__["paintManager"].emitter.on("update", dat
   if (data.room_id === "list") {
     const currentRows = PaintTable.getData() || [];
     const incomingRows = data.list || [];
+    console.log(incomingRows);
 
     if (syncSequence) {
       const currentRowsMap = new Map(currentRows.map(currentRow => [currentRow.id, currentRow]));
