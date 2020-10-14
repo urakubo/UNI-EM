@@ -24,12 +24,11 @@ def read_file(room_id):
 
 def write_file(room_id, data):
   os.makedirs(u_info.paint_path, exist_ok=True)
-#  print(data)
   with open_file(room_id, 'wb') as file:
     pickle.dump(data, file)
 
 #
-async def update_paint_volume(room_id, data):
+async def update_paint_volume(room_id, volume):
 #  print(data)
   write_file(room_id, data)
   await sio.emit('update', data, room=room_id)

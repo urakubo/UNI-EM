@@ -45,15 +45,15 @@ def GetVolumes(surface_path, paint_path):
 			else :
 				volume = GetOneVolume(v,f,data['painted'])
 				if volume is not None :
-					data['volume'] = volume
-					print('Volume of ' + part_mesh_name + ' : ', data['volume'])
+					#data['volume'] = volume
+					print('Volume of ' + part_mesh_name + ' : ', volume)
 					#with open(part_mesh_name, 'wb') as file:
 					#	pickle.dump(data, file)
 					room_id = os.path.basename(part_mesh_name) 
 					room_id = os.path.splitext(room_id)[0]
 					print('Room ID: ', room_id)
 					#print(data)
-					counter = s.update_paint_volume(room_id, data)
+					counter = s.update_paint_volume(room_id, volume)
 					loop = asyncio.get_event_loop()
 					result = loop.run_until_complete(counter)
 					loop.close()
