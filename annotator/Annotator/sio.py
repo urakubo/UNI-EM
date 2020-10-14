@@ -28,10 +28,9 @@ def write_file(room_id, data):
   with open_file(room_id, 'wb') as file:
     pickle.dump(data, file)
 
-# sio.py内に追加
-@sio.event
-async def emit_paint(room_id, data):
-  print(data)
+#
+async def update_paint_volume(room_id, data):
+#  print(data)
   write_file(room_id, data)
   await sio.emit('update', data, room=room_id)
 

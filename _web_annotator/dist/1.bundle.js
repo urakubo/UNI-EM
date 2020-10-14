@@ -396,6 +396,7 @@ const syncAnnotation = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.debounce(()
 
 _SyncPaint__WEBPACK_IMPORTED_MODULE_3__["paintManager"].emitter.on("update", data => {
   if (data.room_id !== "list") {
+    console.log(data.room_id);
     const [surfaceId, colorId] = data.room_id.split("-");
     const mesh = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].getMeshes().find(mesh => mesh.name === surfaceId);
 

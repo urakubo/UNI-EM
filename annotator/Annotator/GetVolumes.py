@@ -8,9 +8,9 @@ import pickle
 import numpy as np
 import glob
 
-#import annotator.Annotator.sio as s
-from annotator.Annotator.sio import sio, set_u_info
-
+import annotator.Annotator.sio as s
+#from annotator.Annotator.sio import sio, set_u_info
+import asyncio
 
 def GetVolumes(surface_path, paint_path):
 
@@ -53,7 +53,11 @@ def GetVolumes(surface_path, paint_path):
 					room_id = os.path.splitext(room_id)[0]
 					print('Room ID: ', room_id)
 					#print(data)
-					sio.emit_paint(room_id, data)
+					counter = s.update_paint_volume(room_id, data)
+					loop = asyncio.get_event_loop()
+					result = loop.run_until_complete(counter)
+					loop.close()
+
 
 def GetOneVolume(v,f,data):
 

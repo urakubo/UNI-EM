@@ -228,6 +228,7 @@ const syncAnnotation = _.debounce(() => {
 
 paintManager.emitter.on("update", data => {
 	if(data.room_id !== "list") {
+		console.log(data.room_id);
 		const [surfaceId, colorId] = data.room_id.split("-");
 		const mesh = APP.getMeshes().find(mesh => mesh.name === surfaceId);
 		if(!mesh) {
