@@ -356,6 +356,9 @@ export function launchAnnotator() {
 	// Skeleton
 	APP.SkeletonMode = 0;
 
+	// Sphere
+	APP.SphereMode   = 0;
+
 
     // Add sphere tmp
     // var geometry = new THREE.SphereGeometry(0.1, 32, 32);

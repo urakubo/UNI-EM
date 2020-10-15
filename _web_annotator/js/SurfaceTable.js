@@ -55,12 +55,14 @@ export const SurfaceTable = new Tabulator("#SurfaceTable", {
 	  		console.log("Requested ID:", id );
 			APP.addSurfaceObject(id, col);
 			APP.addSkeletonObject(id, col);
+			APP.addSphereObject(id, col);
 			}
 	  	if(act == false) {
 	  		console.log("Disappear ID:", id )
 			//const filename = sprintf("./stls/i%d.stl", id );
 			APP.removeSurfaceObject(id);
 			APP.removeSkeletonObject(id);
+			APP.removeSphereObject(id);
 			}
 			updateMetricsOnPaintTable();
 		}

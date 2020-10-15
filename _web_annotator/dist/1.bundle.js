@@ -545,7 +545,9 @@ function launchAnnotator() {
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity = 1.0;
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity_reserved = 0.5; // Skeleton
 
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SkeletonMode = 0; // Add sphere tmp
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SkeletonMode = 0; // Sphere
+
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SphereMode = 0; // Add sphere tmp
   // var geometry = new THREE.SphereGeometry(0.1, 32, 32);
   // var material = new THREE.MeshBasicMaterial({color: 0x6699FF});
   // var sphere = new THREE.Mesh(geometry, material);
@@ -900,23 +902,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _APP__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./APP */ "./js/APP.js");
 /* harmony import */ var _csv__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./csv */ "./js/csv.js");
 /* harmony import */ var jsfive__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jsfive */ "./node_modules/jsfive/index.js");
+/* harmony import */ var _SurfaceTable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SurfaceTable */ "./js/SurfaceTable.js");
 //
 //
 //
 //
 //
+
 
 
  // Change the opacity of all surface objects
 
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSpheres = function () {
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.traverse(function (obj) {
-    if (obj instanceof THREE.Mesh === true && obj.name.length === 10) {
-      var id = obj.name - 0;
-      var col = obj.material.color;
-      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSphereObject(id, col);
-    }
-  });
+  var rows = _SurfaceTable__WEBPACK_IMPORTED_MODULE_3__["SurfaceTable"].searchRows("act", "=", true);
+
+  for (var i in rows) {
+    var id = rows[i].getData().id;
+    var r = rows[i].getData().r;
+    var g = rows[i].getData().g;
+    var b = rows[i].getData().b;
+    var col = r * 256 * 256 + g * 256 + b * 1;
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSphereObject(id, col);
+  }
 };
 
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSpheres = function () {
@@ -995,17 +1002,22 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSphereObject = function (id, col) {
       var radius = data_radiuses[i1];
 
       if (i1 % 20 == 1 || radius < 0.1) {
-        console.log(data_vertices[i1][0], data_vertices[i1][1], data_vertices[i1][2]);
-        var geometry = new THREE.SphereGeometry(radius, 32, 32);
-        var material = new THREE.MeshLambertMaterial({
+        // if ( data_vertices[i1][2] <= APP.BoundingboxZ * 0.05 ) {continue;}
+        // if ( data_vertices[i1][1] <= APP.BoundingboxY * 0.05 ) {continue;}
+        // if ( data_vertices[i1][0] <= APP.BoundingboxX * 0.05 ) {continue;}
+        // if ( data_vertices[i1][2] >= APP.BoundingboxZ * 0.95 ) {continue;}
+        // if ( data_vertices[i1][1] >= APP.BoundingboxY * 0.95 ) {continue;}
+        // if ( data_vertices[i1][0] >= APP.BoundingboxX * 0.95 ) {continue;}
+        // console.log(data_vertices[i1][0], data_vertices[i1][1], data_vertices[i1][2]);
+        const geometry = new THREE.SphereGeometry(radius, 32, 32);
+        const material = new THREE.MeshLambertMaterial({
           color: col,
           opacity: 0.5,
           transparent: true,
           depthWrite: false
         });
-        var vertice_r = new THREE.Mesh(geometry, material);
-        vertice_r.position.set(data_vertices[i1][0], data_vertices[i1][1], data_vertices[i1][2]); // vertice_r.name = name + '_' + ( '0000000000' + i1 ).slice( -10 );
-
+        const vertice_r = new THREE.Mesh(geometry, material);
+        vertice_r.position.set(data_vertices[i1][0], data_vertices[i1][1], data_vertices[i1][2]);
         spheres.add(vertice_r);
       }
     }
@@ -1065,11 +1077,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _csv__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./csv */ "./js/csv.js");
 /* harmony import */ var _PaintTable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./PaintTable */ "./js/PaintTable.js");
 /* harmony import */ var _SyncPaint__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SyncPaint */ "./js/SyncPaint.js");
+/* harmony import */ var _SurfaceTable__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./SurfaceTable */ "./js/SurfaceTable.js");
 //
 //
 //
 //
 //
+
 
 
 
@@ -1079,6 +1093,10 @@ const getSurfaceName = id => {
 }; // Add surface objects and a name
 
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject = function (id, col) {
+  if (_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SphereMode == 1) {
+    return false;
+  }
+
   const name = getSurfaceName(id);
   const call_url = location.protocol + "//" + location.host + "/ws/surface?id=";
   const target_url = location.protocol + "//" + location.host + "/surface/whole/" + name + ".stl"; // Revive it if already exists.
@@ -1089,6 +1107,7 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject = function (id, col) {
   if (obj != undefined) {
     // console.log('Obj: ', obj)
     obj.visible = true;
+    obj.material.opacity = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity;
     _SyncPaint__WEBPACK_IMPORTED_MODULE_3__["paintManager"].addSurface(name);
     return true;
   } // Request the surface mesh generation to the server if it does not exist.
@@ -1160,17 +1179,25 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectOpacity = function (
   }
 
   ;
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.traverse(function (obj) {
-    if (obj instanceof THREE.Mesh === true && /^\d*$/.test(obj.name) && obj.name.length === 10) {
-      if (invisible == 1) {
-        obj.visible = false;
-      } else {
-        obj.visible = true;
-        obj.material.opacity = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity;
-      }
+  var rows = _SurfaceTable__WEBPACK_IMPORTED_MODULE_4__["SurfaceTable"].searchRows("act", "=", true);
+
+  for (var i in rows) {
+    var id = rows[i].getData().id;
+    var r = rows[i].getData().r;
+    var g = rows[i].getData().g;
+    var b = rows[i].getData().b;
+
+    if (invisible == 1) {
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSurfaceObject(id);
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSkeletonObject(id);
+    } else {
+      var col = r * 256 * 256 + g * 256 + b * 1;
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject(id, col);
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject(id, col);
     }
-  });
-}; // Change the color of a surface object specified by the name.
+  }
+}; // if (obj instanceof THREE.Mesh === true && /^\d*$/.test(obj.name) && obj.name.length === 10 ) {
+// Change the color of a surface object specified by the name.
 
 
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectColor = function (id, objcolor) {
@@ -2138,6 +2165,7 @@ const SurfaceTable = new tabulator_tables__WEBPACK_IMPORTED_MODULE_3__("#Surface
         console.log("Requested ID:", id);
         _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject(id, col);
         _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject(id, col);
+        _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSphereObject(id, col);
       }
 
       if (act == false) {
@@ -2145,6 +2173,7 @@ const SurfaceTable = new tabulator_tables__WEBPACK_IMPORTED_MODULE_3__("#Surface
 
         _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSurfaceObject(id);
         _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSkeletonObject(id);
+        _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSphereObject(id);
       }
 
       Object(_HandleBasement__WEBPACK_IMPORTED_MODULE_2__["updateMetricsOnPaintTable"])();

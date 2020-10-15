@@ -72,7 +72,7 @@ def GetOneVolume(v,f,data):
 
 	part_mesh = pymeshfix.MeshFix(v, np.array(sub_face_id))
 	part_mesh.repair()
-	# part_mesh.plot() # Visualization of cloased meshes
+	part_mesh.plot() # Visualization of cloased meshes
 
 	closed_v = part_mesh.v # numpy np.float array
 	closed_f = part_mesh.f # numpy np.int32 array

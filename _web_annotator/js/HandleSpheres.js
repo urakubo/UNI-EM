@@ -6,17 +6,22 @@
 import { APP } from "./APP";
 import { parseCSV, csvFormatter } from "./csv";
 import * as hdf5 from 'jsfive';
+import { SurfaceTable } from "./SurfaceTable";
 
 // Change the opacity of all surface objects
 
 APP.addSpheres = function() {
-	APP.scene.traverse(function(obj) {
-		if ( (obj instanceof THREE.Mesh === true) && (obj.name.length === 10) ) {
-			var id  = obj.name - 0;
-			var col = obj.material.color;
-			APP.addSphereObject(id, col)
-		}
-	});
+	
+	var rows = SurfaceTable.searchRows("act", "=",  true);
+	for (var i in rows) {
+		var id  = rows[i].getData().id;
+  		var r   = rows[i].getData().r;
+  		var g   = rows[i].getData().g;
+  		var b   = rows[i].getData().b;
+  		var col = r*256*256+g*256+b*1;
+  		APP.addSphereObject(id, col);
+  	}
+
 }
 
 APP.removeSpheres = function() {
@@ -105,14 +110,18 @@ APP.addSphereObject = function(id, col) {
 			// Create sphere object
 			var radius = data_radiuses[i1];
 			if ( (i1 % 20 == 1) || (radius < 0.1) ) {
+				// if ( data_vertices[i1][2] <= APP.BoundingboxZ * 0.05 ) {continue;}
+				// if ( data_vertices[i1][1] <= APP.BoundingboxY * 0.05 ) {continue;}
+				// if ( data_vertices[i1][0] <= APP.BoundingboxX * 0.05 ) {continue;}
+				// if ( data_vertices[i1][2] >= APP.BoundingboxZ * 0.95 ) {continue;}
+				// if ( data_vertices[i1][1] >= APP.BoundingboxY * 0.95 ) {continue;}
+				// if ( data_vertices[i1][0] >= APP.BoundingboxX * 0.95 ) {continue;}
+				// console.log(data_vertices[i1][0], data_vertices[i1][1], data_vertices[i1][2]);
 			
-				console.log(data_vertices[i1][0], data_vertices[i1][1], data_vertices[i1][2]);
-			
-				var geometry  = new THREE.SphereGeometry( radius,  32, 32);
-				var material  = new THREE.MeshLambertMaterial( {color: col, opacity: 0.5, transparent: true, depthWrite: false} );
-				var vertice_r = new THREE.Mesh( geometry, material );
+				const geometry  = new THREE.SphereGeometry( radius,  32, 32);
+				const material  = new THREE.MeshLambertMaterial( {color: col, opacity: 0.5, transparent: true, depthWrite: false} );
+				const vertice_r = new THREE.Mesh( geometry, material );
 				vertice_r.position.set(data_vertices[i1][0], data_vertices[i1][1], data_vertices[i1][2]);
-				// vertice_r.name = name + '_' + ( '0000000000' + i1 ).slice( -10 );
 				spheres.add( vertice_r )
 
 				}

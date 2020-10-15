@@ -7,6 +7,7 @@ import { APP } from "./APP";
 import { parseCSV, csvFormatter } from "./csv";
 import { updateColorOptionsOnAnnotator } from "./PaintTable";
 import { paintManager } from "./SyncPaint";
+import { SurfaceTable } from "./SurfaceTable";
 
 export const getSurfaceName = id => {
 	return ( '0000000000' + id ).slice( -10 );
@@ -14,6 +15,10 @@ export const getSurfaceName = id => {
 
 // Add surface objects and a name
 APP.addSurfaceObject = function(id, col) {
+
+	if (APP.SphereMode == 1){
+		return false;
+		}
 
 	const name =  getSurfaceName(id);
 	const call_url   = location.protocol+"//"+location.host+"/ws/surface?id=";
@@ -25,6 +30,7 @@ APP.addSurfaceObject = function(id, col) {
 	if ( obj != undefined ) {
 		// console.log('Obj: ', obj)
 		obj.visible = true;
+		obj.material.opacity = APP.surface_opacity;
 		paintManager.addSurface(name);
 		return true;
 		}
@@ -78,6 +84,7 @@ APP.addSurfaceObject = function(id, col) {
 
 // Change the opacity of all surface objects
 
+
 APP.changeSurfaceObjectOpacity = function(opacity) {
 	// console.log('Input opacity: ', opacity)
 	var invisible = 0;
@@ -92,17 +99,23 @@ APP.changeSurfaceObjectOpacity = function(opacity) {
 		APP.surface_opacity_reserved = opacity;
 	};
 
-	APP.scene.traverse(function(obj) {
-		if (obj instanceof THREE.Mesh === true && /^\d*$/.test(obj.name) && obj.name.length === 10 ) {
-			if (invisible == 1) {
-				obj.visible = false;
-				} else {
-				obj.visible = true;
-				obj.material.opacity = APP.surface_opacity;
-				}
-			}
-		});
+	var rows = SurfaceTable.searchRows("act", "=",  true);
+	for (var i in rows) {
+		var id  = rows[i].getData().id;
+  		var r   = rows[i].getData().r;
+  		var g   = rows[i].getData().g;
+  		var b   = rows[i].getData().b;
+		if (invisible == 1) {
+			APP.removeSurfaceObject(id);
+			APP.removeSkeletonObject(id);
+		} else {
+			var col = r*256*256+g*256+b*1 ;
+			APP.addSurfaceObject(id, col);
+			APP.addSkeletonObject(id, col);
+		}
+	}
 }
+		// if (obj instanceof THREE.Mesh === true && /^\d*$/.test(obj.name) && obj.name.length === 10 ) {
 
 
 // Change the color of a surface object specified by the name.
