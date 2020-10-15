@@ -1760,7 +1760,8 @@ _SyncPaint__WEBPACK_IMPORTED_MODULE_1__["paintManager"].emitter.on("update", dat
           name: incomingRow.name,
           r: incomingRow.r,
           g: incomingRow.g,
-          b: incomingRow.b
+          b: incomingRow.b,
+          volume: incomingRow.volume
         };
       }));
     } else {
@@ -1774,7 +1775,8 @@ _SyncPaint__WEBPACK_IMPORTED_MODULE_1__["paintManager"].emitter.on("update", dat
             name: incomingRow.name,
             r: incomingRow.r,
             g: incomingRow.g,
-            b: incomingRow.b
+            b: incomingRow.b,
+            volume: incomingRow.volume
           });
           incomingRowsMap.delete(currentRow.id);
         }
@@ -1787,7 +1789,8 @@ _SyncPaint__WEBPACK_IMPORTED_MODULE_1__["paintManager"].emitter.on("update", dat
           name: incomingRow.name,
           r: incomingRow.r,
           g: incomingRow.g,
-          b: incomingRow.b
+          b: incomingRow.b,
+          volume: incomingRow.volume
         });
       }
 

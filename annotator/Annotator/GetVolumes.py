@@ -1,5 +1,5 @@
 
-import os, sys
+import os, sys, time
 from os import path
 import trimesh
 import pymeshfix
@@ -8,13 +8,17 @@ import pickle
 import numpy as np
 import glob
 
+
 import annotator.Annotator.sio as s
 #from annotator.Annotator.sio import sio, set_u_info
 import asyncio
+import nest_asyncio
+nest_asyncio.apply()
 
 def GetVolumes(surface_path, paint_path):
 
 	whole_mesh_names = glob.glob(os.path.join(surface_path, "*.stl"))
+	ids_volumes  = {}
 	for whole_mesh_name in whole_mesh_names :
 		whole_mesh_name_wo_ext  = os.path.splitext(os.path.basename(whole_mesh_name))[0]
 		part_mesh_name_wildcard = os.path.normpath(os.path.join(paint_path, whole_mesh_name_wo_ext+"-*.pickle"))
@@ -32,31 +36,30 @@ def GetVolumes(surface_path, paint_path):
 				data = pickle.load(file)
 
 			"""
-			data['volume'] = None
-			with open(part_mesh_name, 'wb') as file:
-				pickle.dump(data, file)
-			print('Delete volume: ', part_mesh_name)
-			continue
-			"""
-
 			if ('volume' in data) and (data['volume'] != None): # 左の結果が偽の場合は、右の処理は実行されない。
 				print('Volume already exists: ', part_mesh_name)
 				continue
-			else :
-				volume = GetOneVolume(v,f,data['painted'])
-				if volume is not None :
-					#data['volume'] = volume
-					print('Volume of ' + part_mesh_name + ' : ', volume)
-					#with open(part_mesh_name, 'wb') as file:
-					#	pickle.dump(data, file)
-					room_id = os.path.basename(part_mesh_name) 
-					room_id = os.path.splitext(room_id)[0]
-					print('Room ID: ', room_id)
-					#print(data)
-					counter = s.update_paint_volume(room_id, volume)
-					loop = asyncio.get_event_loop()
-					result = loop.run_until_complete(counter)
-					loop.close()
+			"""
+
+			volume = GetOneVolume(v,f,data['painted'])
+			if volume is not None :
+				# print('Volume of ' + part_mesh_name + ' : ', volume)
+				id = os.path.basename(part_mesh_name) 
+				id = os.path.splitext(id)[0]
+				id = int( id.split('-')[1] )
+				print('ID: ', id,', Volume:', volume)
+				if id in ids_volumes:
+					ids_volumes[id] += volume
+				else:
+					ids_volumes[id] = volume
+
+	if ids_volumes is not {} :
+		counter = s.update_paint_volumes(ids_volumes)
+		loop = asyncio.get_event_loop()
+		result = loop.run_until_complete(counter)
+#		loop.stop()
+#		time.sleep(1)
+		loop.close()
 
 
 def GetOneVolume(v,f,data):
@@ -75,7 +78,8 @@ def GetOneVolume(v,f,data):
 	closed_f = part_mesh.f # numpy np.int32 array
 
 	closed_mesh = trimesh.Trimesh(vertices=closed_v, faces=closed_f)
-	# print("Volume: ", closed_mesh.volume) # Numpy-stl (mesh) にも同ルーチン有
+	# print("Volume: ", closed_mesh.volume)
+	# Numpy-stl (mesh) にも同ルーチン有
 
 	return closed_mesh.volume
 

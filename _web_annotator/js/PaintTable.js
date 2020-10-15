@@ -165,6 +165,7 @@ $('#calc-volumes').on('click', (event) => {
 		alert("No paintvolume.");
 		return false;
 		}
+	
 });
 ////
 
@@ -209,6 +210,7 @@ paintManager.emitter.on("update", data => {
           r: incomingRow.r,
           g: incomingRow.g,
           b: incomingRow.b,
+          volume: incomingRow.volume,
         }
       }));
     } else {
@@ -223,6 +225,7 @@ paintManager.emitter.on("update", data => {
             r: incomingRow.r,
             g: incomingRow.g,
             b: incomingRow.b,
+          	volume: incomingRow.volume,
           })
           incomingRowsMap.delete(currentRow.id);
         }
@@ -235,6 +238,7 @@ paintManager.emitter.on("update", data => {
           r: incomingRow.r,
           g: incomingRow.g,
           b: incomingRow.b,
+          volume: incomingRow.volume,
         });
       }
       PaintTable.setData(newRows);

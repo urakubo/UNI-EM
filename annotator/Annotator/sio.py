@@ -4,7 +4,6 @@ from urllib.parse import parse_qs
 import socketio
 import pickle
 import os
-
 from annotator.Annotator import room
 
 sio = socketio.AsyncServer(async_mode='tornado')
@@ -28,8 +27,17 @@ def write_file(room_id, data):
     pickle.dump(data, file)
 
 #
-async def update_paint_volume(room_id, volume):
-#  print(data)
+async def update_paint_volumes(ids_volumes):
+
+#  print('ids_volumes: ', ids_volumes)
+  room_id = 'list'
+  data = read_file(room_id)
+  for data_row in data[room_id]:
+#  	print('data_row: ', data_row)
+  	if data_row['id'] in ids_volumes.keys():
+  		data_row['volume'] = ids_volumes[data_row['id']]
+
+#   print('data: ', data)
   write_file(room_id, data)
   await sio.emit('update', data, room=room_id)
 

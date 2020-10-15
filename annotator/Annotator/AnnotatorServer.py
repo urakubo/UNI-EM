@@ -157,7 +157,6 @@ class AnnotatorServerLogic:
     ####
     paint_path  = self.u_info.paint_path
     ####
-    # asyncio.set_event_loop(self.u_info.worker_loop_stl)
     ev_loop = asyncio.new_event_loop()
     asyncio.set_event_loop(ev_loop)
 

@@ -62760,7 +62760,7 @@ THREE.STLLoader.prototype = Object.assign( Object.create( THREE.Loader.prototype
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\uraku\Documents\GitHub\UNI-EM\_web_annotator/app/index.js */"./app/index.js");
+module.exports = __webpack_require__(/*! C:\Users\uraku\Desktop\UNI-EM\_web_annotator/app/index.js */"./app/index.js");
 
 
 /***/ })
