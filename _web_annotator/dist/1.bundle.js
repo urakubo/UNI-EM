@@ -32,39 +32,63 @@ __webpack_require__.r(__webpack_exports__);
 window.ChangeMode = function (mode) {
   switch (mode) {
     case "view":
+      //			console.log("view")
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerMode = 0;
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SkeletonMode = 0;
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SphereMode = 0;
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].cursor.visible = false;
       switchAnnotation(0);
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectOpacity(-1);
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSkeletons();
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSpheres();
       break;
 
     case "point":
+      //			console.log("point")
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerMode = 1;
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SkeletonMode = 0;
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SphereMode = 0;
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].cursor.visible = false;
       switchAnnotation(0);
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectOpacity(-1);
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSkeletons();
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSpheres();
       break;
 
     case "paint":
+      //			console.log("paint")
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerMode = 0;
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SkeletonMode = 0;
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SphereMode = 0;
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].cursor.visible = true;
       switchAnnotation(1);
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectOpacity(-1);
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSkeletons();
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSpheres();
       break;
 
     case "skeleton":
+      //			console.log("skeleton")
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerMode = 0;
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SkeletonMode = 1;
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SphereMode = 0;
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].cursor.visible = false;
       switchAnnotation(0);
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectOpacity(0);
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletons();
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSpheres();
+      break;
+
+    case "sphere":
+      //			console.log("shpere")
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerMode = 0;
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SkeletonMode = 0;
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SphereMode = 1;
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].cursor.visible = false;
+      switchAnnotation(0);
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectOpacity(-2);
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSkeletons();
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSpheres();
       break;
 
     default:
@@ -768,7 +792,7 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject = function (id, col) 
 
   const target_url = location.protocol + "//" + location.host + "/skeleton/whole/" + ('0000000000' + id).slice(-10) + ".hdf5";
   const filename = ('0000000000' + id).slice(-10) + ".hdf5";
-  const name = 'line' + ('0000000000' + id).slice(-10); // Revive it if already exists.
+  const name = 'line' + ('0000000000' + id).slice(-10); // Revive if it already exists.
   // console.log('Name: ', name)
 
   var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name);
@@ -834,7 +858,7 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject = function (id, col) 
 
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSkeletonObjectColor = function (id, col) {
   name = 'line' + ('0000000000' + id).slice(-10);
-  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name_centerline);
+  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name);
 
   if (obj != undefined) {
     obj.material.color.setHex(col);
@@ -844,6 +868,169 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSkeletonObjectColor = function (i
 
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSkeletonObject = function (id) {
   name = 'line' + ('0000000000' + id).slice(-10);
+  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name);
+
+  if (obj != undefined) {
+    // APP.scene.remove(obj);
+    obj.visible = false;
+  }
+};
+
+function splitArray(array, part) {
+  var tmp = [];
+
+  for (var i = 0; i < array.length; i += part) {
+    tmp.push(array.slice(i, i + part));
+  }
+
+  return tmp;
+}
+
+/***/ }),
+
+/***/ "./js/HandleSpheres.js":
+/*!*****************************!*\
+  !*** ./js/HandleSpheres.js ***!
+  \*****************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _APP__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./APP */ "./js/APP.js");
+/* harmony import */ var _csv__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./csv */ "./js/csv.js");
+/* harmony import */ var jsfive__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jsfive */ "./node_modules/jsfive/index.js");
+//
+//
+//
+//
+//
+
+
+ // Change the opacity of all surface objects
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSpheres = function () {
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.traverse(function (obj) {
+    if (obj instanceof THREE.Mesh === true && obj.name.length === 10) {
+      var id = obj.name - 0;
+      var col = obj.material.color;
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSphereObject(id, col);
+    }
+  });
+};
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSpheres = function () {
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.traverse(function (obj) {
+    if (obj.name.match(/Spheres/)) {
+      obj.visible = false;
+    }
+  });
+}; // Add stl objects and a name
+
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSphereObject = function (id, col) {
+  if (_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SphereMode == 0) {
+    return false;
+  }
+
+  const target_url = location.protocol + "//" + location.host + "/skeleton/whole/" + ('0000000000' + id).slice(-10) + ".hdf5";
+  const filename = ('0000000000' + id).slice(-10) + ".hdf5";
+  const name = 'Spheres' + ('0000000000' + id).slice(-10); // Revive if it already exists.
+  // console.log('Name: ', name)
+
+  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name);
+
+  if (obj != undefined) {
+    // console.log('Obj: ', obj)
+    obj.visible = true;
+    return true;
+  } //
+
+
+  fetch(target_url).then(function (response) {
+    return response.arrayBuffer();
+  }).then(function (buffer) {
+    //
+    //
+    var f = new jsfive__WEBPACK_IMPORTED_MODULE_2__["File"](buffer, filename);
+    let g1 = f.get('vertices');
+    let g2 = f.get('edges');
+    let g3 = f.get('radiuses');
+    var data_vertices = g1.value;
+    var data_edges = g2.value;
+    var data_radiuses = g3.value;
+    data_vertices = splitArray(data_vertices, 3);
+    data_edges = splitArray(data_edges, 2);
+    data_radiuses = splitArray(data_radiuses, 1);
+    var i1 = undefined;
+    var i2 = undefined;
+    var v1 = undefined;
+    var v2 = undefined; // console.log(data_vertices)
+    // console.log('Length vertices: ' + data_vertices.length);
+    // console.log('Length edges   : ' + data_edges.length);
+
+    if (isNaN(data_vertices[0][0]) == true) {
+      // console.log(data_vertices);
+      console.log('No morphological data.');
+      return false;
+    }
+
+    var geometry = new THREE.Geometry();
+    var material = new THREE.LineBasicMaterial({
+      color: col,
+      //0x000000
+      linewidth: 3,
+      fog: true
+    });
+    var spheres = new THREE.Group();
+
+    for (var i = 0; i < data_edges.length; i++) {
+      i1 = data_edges[i][0];
+      i2 = data_edges[i][1]; // console.log('Vertices ID: ', i1, i2 );
+
+      v1 = new THREE.Vector3(data_vertices[i1][0], data_vertices[i1][1], data_vertices[i1][2]);
+      v2 = new THREE.Vector3(data_vertices[i2][0], data_vertices[i2][1], data_vertices[i2][2]);
+      geometry.vertices.push(v1, v2); // Create sphere object
+
+      var radius = data_radiuses[i1];
+
+      if (i1 % 20 == 1 || radius < 0.1) {
+        console.log(data_vertices[i1][0], data_vertices[i1][1], data_vertices[i1][2]);
+        var geometry = new THREE.SphereGeometry(radius, 32, 32);
+        var material = new THREE.MeshLambertMaterial({
+          color: col,
+          opacity: 0.5,
+          transparent: true,
+          depthWrite: false
+        });
+        var vertice_r = new THREE.Mesh(geometry, material);
+        vertice_r.position.set(data_vertices[i1][0], data_vertices[i1][1], data_vertices[i1][2]); // vertice_r.name = name + '_' + ( '0000000000' + i1 ).slice( -10 );
+
+        spheres.add(vertice_r);
+      }
+    }
+
+    var line = new THREE.LineSegments(geometry, material);
+    spheres.add(line);
+    spheres.name = name;
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(spheres); //
+    //
+  });
+}; // Change the color of a skeleton object specified by a name.
+
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSphereObjectColor = function (id, col) {
+  name = 'Spheres' + ('0000000000' + id).slice(-10);
+  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name);
+
+  if (obj != undefined) {
+    obj.material.color.setHex(col);
+  }
+}; // Remove a stl object by the name.
+
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSphereObject = function (id) {
+  name = 'Spheres' + ('0000000000' + id).slice(-10);
   var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name);
 
   if (obj != undefined) {
@@ -959,7 +1146,11 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject = function (id, col) {
 
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectOpacity = function (opacity) {
   // console.log('Input opacity: ', opacity)
-  if (opacity == -1) {
+  var invisible = 0;
+
+  if (opacity == -2) {
+    invisible = 1;
+  } else if (opacity == -1) {
     _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity = 1;
   } else if (opacity == 0) {
     _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity_reserved;
@@ -971,9 +1162,13 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].changeSurfaceObjectOpacity = function (
   ;
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.traverse(function (obj) {
     if (obj instanceof THREE.Mesh === true && /^\d*$/.test(obj.name) && obj.name.length === 10) {
-      obj.material.opacity = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity;
-    } // console.log('Obj name:', obj.name );
-
+      if (invisible == 1) {
+        obj.visible = false;
+      } else {
+        obj.visible = true;
+        obj.material.opacity = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].surface_opacity;
+      }
+    }
   });
 }; // Change the color of a surface object specified by the name.
 
@@ -2339,9 +2534,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _js_SurfaceTable__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../js/SurfaceTable */ "./js/SurfaceTable.js");
 /* harmony import */ var _js_HandleSurfaces__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../js/HandleSurfaces */ "./js/HandleSurfaces.js");
 /* harmony import */ var _js_HandleSkeletons__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../js/HandleSkeletons */ "./js/HandleSkeletons.js");
-/* harmony import */ var _js_HandleMarkers__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../js/HandleMarkers */ "./js/HandleMarkers.js");
-/* harmony import */ var _js_SyncPaint__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../js/SyncPaint */ "./js/SyncPaint.js");
-/* harmony import */ var _js_HandleBasement__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../js/HandleBasement */ "./js/HandleBasement.js");
+/* harmony import */ var _js_HandleSpheres__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../js/HandleSpheres */ "./js/HandleSpheres.js");
+/* harmony import */ var _js_HandleMarkers__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../js/HandleMarkers */ "./js/HandleMarkers.js");
+/* harmony import */ var _js_SyncPaint__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../js/SyncPaint */ "./js/SyncPaint.js");
+/* harmony import */ var _js_HandleBasement__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../js/HandleBasement */ "./js/HandleBasement.js");
 
 
 
@@ -2352,7 +2548,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-Object(_js_HandleBasement__WEBPACK_IMPORTED_MODULE_9__["launchAnnotator"])();
+
+Object(_js_HandleBasement__WEBPACK_IMPORTED_MODULE_10__["launchAnnotator"])();
 
 /***/ }),
 

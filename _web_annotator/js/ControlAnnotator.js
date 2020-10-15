@@ -6,37 +6,60 @@ import { APP } from "./APP";
 window.ChangeMode = function (mode) {
 	switch (mode) {
 		case "view":
+//			console.log("view")
 			APP.MarkerMode   = 0;
 			APP.SkeletonMode = 0;
+			APP.SphereMode   = 0;
 			APP.cursor.visible = false;
 			switchAnnotation(0);
 			APP.changeSurfaceObjectOpacity(-1);
 			APP.removeSkeletons();
+			APP.removeSpheres();
 			break;
 		case "point":
+//			console.log("point")
 			APP.MarkerMode   = 1;
 			APP.SkeletonMode = 0;
+			APP.SphereMode   = 0;
 			APP.cursor.visible = false;
 			switchAnnotation(0);
 			APP.changeSurfaceObjectOpacity(-1);
 			APP.removeSkeletons();
+			APP.removeSpheres();
 			break;
 		case "paint":
+//			console.log("paint")
 			APP.MarkerMode   = 0;
 			APP.SkeletonMode = 0;
+			APP.SphereMode   = 0;
 			APP.cursor.visible = true;
 			switchAnnotation(1);
 			APP.changeSurfaceObjectOpacity(-1);
 			APP.removeSkeletons();
+			APP.removeSpheres();
 			break;
 		case "skeleton":
+//			console.log("skeleton")
 			APP.MarkerMode   = 0;
 			APP.SkeletonMode = 1;
+			APP.SphereMode   = 0;
 			APP.cursor.visible = false;
 			switchAnnotation(0);
 			APP.changeSurfaceObjectOpacity(0);
 			APP.addSkeletons();
-		break;		
+			APP.removeSpheres();
+			break;
+		case "sphere":
+//			console.log("shpere")
+			APP.MarkerMode   = 0;
+			APP.SkeletonMode = 0;
+			APP.SphereMode   = 1;
+			APP.cursor.visible = false;
+			switchAnnotation(0);
+			APP.changeSurfaceObjectOpacity(-2);
+			APP.removeSkeletons();
+			APP.addSpheres();
+			break;		
 		default:
     		console.log(`Error. Mode ${mode} cannot be interpreted.`);
 		}

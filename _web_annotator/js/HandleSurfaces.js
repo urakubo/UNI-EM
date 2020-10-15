@@ -80,7 +80,10 @@ APP.addSurfaceObject = function(id, col) {
 
 APP.changeSurfaceObjectOpacity = function(opacity) {
 	// console.log('Input opacity: ', opacity)
-	if ( opacity == -1 ){
+	var invisible = 0;
+	if ( opacity == -2 ){
+		invisible = 1;
+	} else if ( opacity == -1 ){
 		APP.surface_opacity = 1;
 	} else if (opacity == 0) {
 		APP.surface_opacity = APP.surface_opacity_reserved;
@@ -91,9 +94,13 @@ APP.changeSurfaceObjectOpacity = function(opacity) {
 
 	APP.scene.traverse(function(obj) {
 		if (obj instanceof THREE.Mesh === true && /^\d*$/.test(obj.name) && obj.name.length === 10 ) {
-			obj.material.opacity = APP.surface_opacity;
+			if (invisible == 1) {
+				obj.visible = false;
+				} else {
+				obj.visible = true;
+				obj.material.opacity = APP.surface_opacity;
+				}
 			}
-		// console.log('Obj name:', obj.name );
 		});
 }
 

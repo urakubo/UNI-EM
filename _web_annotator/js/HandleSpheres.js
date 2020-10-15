@@ -9,19 +9,19 @@ import * as hdf5 from 'jsfive';
 
 // Change the opacity of all surface objects
 
-APP.addSkeletons = function() {
+APP.addSpheres = function() {
 	APP.scene.traverse(function(obj) {
-		if ( (obj instanceof THREE.Mesh === true) && (obj.visible === true) && (obj.name.length === 10) ) {
+		if ( (obj instanceof THREE.Mesh === true) && (obj.name.length === 10) ) {
 			var id  = obj.name - 0;
 			var col = obj.material.color;
-			APP.addSkeletonObject(id, col)
+			APP.addSphereObject(id, col)
 		}
 	});
 }
 
-APP.removeSkeletons = function() {
+APP.removeSpheres = function() {
 	APP.scene.traverse(function(obj) {
-		if ( obj.name.match(/line/) ) {
+		if ( obj.name.match(/Spheres/) ) {
 			obj.visible = false;
 		}
 	});
@@ -29,15 +29,15 @@ APP.removeSkeletons = function() {
 
 
 // Add stl objects and a name
-APP.addSkeletonObject = function(id, col) {
+APP.addSphereObject = function(id, col) {
 
-	if (APP.SkeletonMode == 0){
+	if (APP.SphereMode == 0){
 		return false;
 		}
 
 	const target_url = location.protocol+"//"+location.host+"/skeleton/whole/" + ( '0000000000' + id ).slice( -10 ) + ".hdf5";
 	const filename   = ( '0000000000' + id ).slice( -10 ) + ".hdf5";
-	const name       = 'line' + ( '0000000000' + id ).slice( -10 );
+	const name       = 'Spheres' + ( '0000000000' + id ).slice( -10 );
 	
 	// Revive if it already exists.
 	// console.log('Name: ', name)
@@ -59,11 +59,14 @@ APP.addSkeletonObject = function(id, col) {
 	    var f = new hdf5.File(buffer, filename);
 	    let g1 = f.get('vertices');
 	    let g2 = f.get('edges');
+	    let g3 = f.get('radiuses');
 	    var data_vertices = g1.value;
 	    var data_edges    = g2.value;
+	    var data_radiuses = g3.value;
 	    
 	    data_vertices = splitArray(data_vertices, 3);
 	    data_edges    = splitArray(data_edges, 2);
+	    data_radiuses = splitArray(data_radiuses, 1);
 	    
 	    
 		var i1 = undefined;
@@ -87,7 +90,7 @@ APP.addSkeletonObject = function(id, col) {
 		});
 		
 		
-		
+		var spheres = new THREE.Group();
 		for(var i=0;i< data_edges.length;i++){
 			i1 = data_edges[i][0];
 			i2 = data_edges[i][1];
@@ -97,14 +100,28 @@ APP.addSkeletonObject = function(id, col) {
 			v1 = new THREE.Vector3( data_vertices[i1][0], data_vertices[i1][1], data_vertices[i1][2]);
 			v2 = new THREE.Vector3( data_vertices[i2][0], data_vertices[i2][1], data_vertices[i2][2]);
 			geometry.vertices.push(v1, v2);
+
+
+			// Create sphere object
+			var radius = data_radiuses[i1];
+			if ( (i1 % 20 == 1) || (radius < 0.1) ) {
+			
+				console.log(data_vertices[i1][0], data_vertices[i1][1], data_vertices[i1][2]);
+			
+				var geometry  = new THREE.SphereGeometry( radius,  32, 32);
+				var material  = new THREE.MeshLambertMaterial( {color: col, opacity: 0.5, transparent: true, depthWrite: false} );
+				var vertice_r = new THREE.Mesh( geometry, material );
+				vertice_r.position.set(data_vertices[i1][0], data_vertices[i1][1], data_vertices[i1][2]);
+				// vertice_r.name = name + '_' + ( '0000000000' + i1 ).slice( -10 );
+				spheres.add( vertice_r )
+
+				}
 			}
-		var line = new THREE.LineSegments( geometry, material );   
-		
-		
-		line.name = name;
-		// console.log(line.name);
-		APP.scene.add( line );	    
-	    //
+		var line = new THREE.LineSegments( geometry, material );
+		spheres.add( line )
+
+		spheres.name = name;
+		APP.scene.add( spheres );
 	    //
 	    //
 	  });
@@ -112,8 +129,8 @@ APP.addSkeletonObject = function(id, col) {
 
 
 // Change the color of a skeleton object specified by a name.
-APP.changeSkeletonObjectColor = function(id, col) {
-	name = 'line' + ( '0000000000' + id ).slice( -10 );
+APP.changeSphereObjectColor = function(id, col) {
+	name = 'Spheres' + ( '0000000000' + id ).slice( -10 );
 	var obj = APP.scene.getObjectByName(name);
 	if ( obj != undefined ) {
 		obj.material.color.setHex( col );
@@ -122,8 +139,8 @@ APP.changeSkeletonObjectColor = function(id, col) {
 
 
 // Remove a stl object by the name.
-APP.removeSkeletonObject = function(id) {
-	name = 'line' + ( '0000000000' + id ).slice( -10 );
+APP.removeSphereObject = function(id) {
+	name = 'Spheres' + ( '0000000000' + id ).slice( -10 );
 	var obj = APP.scene.getObjectByName(name);
 	if ( obj != undefined ) {
 		// APP.scene.remove(obj);
