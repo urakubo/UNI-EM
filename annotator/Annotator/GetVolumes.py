@@ -9,12 +9,6 @@ import numpy as np
 import glob
 
 
-import annotator.Annotator.sio as s
-#from annotator.Annotator.sio import sio, set_u_info
-import asyncio
-import nest_asyncio
-nest_asyncio.apply()
-
 def GetVolumes(surface_path, paint_path):
 
 	whole_mesh_names = glob.glob(os.path.join(surface_path, "*.stl"))
@@ -53,14 +47,17 @@ def GetVolumes(surface_path, paint_path):
 				else:
 					ids_volumes[id] = volume
 
+		return ids_volumes
+"""
+
 	if ids_volumes is not {} :
+		counter = s.update_paint_volumes(ids_volumes)
+
 		counter = s.update_paint_volumes(ids_volumes)
 		loop = asyncio.get_event_loop()
 		result = loop.run_until_complete(counter)
-#		loop.stop()
-#		time.sleep(1)
 		loop.close()
-
+"""
 
 def GetOneVolume(v,f,data):
 

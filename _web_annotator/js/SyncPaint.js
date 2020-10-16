@@ -82,6 +82,13 @@ class PaintManager extends RoomManager{
     }
     this.socket.emit("update_paint", data)
   }
+  
+  // 200116 HU
+    updatePaintVolumes() {
+    this.socket.emit("update_paint_volumes")
+    }
+  //
+  
   updateList({ list, lastPaintId }) {
     this.socket.emit("update", {
       list,

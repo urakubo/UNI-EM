@@ -157,15 +157,7 @@ $('#save-paint-table-csv').on('click', (event) => {
 //// 200907
 
 $('#calc-volumes').on('click', (event) => {
-	const call_url   = location.protocol+"//"+location.host+"/ws/paintvolume";
-	var req = new XMLHttpRequest();
-	req.open("get", call_url, false);
-	req.send(null);
-	if (req.responseText == "False") {
-		alert("No paintvolume.");
-		return false;
-		}
-	
+	paintManager.updatePaintVolumes()
 });
 ////
 

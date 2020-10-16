@@ -1935,15 +1935,7 @@ $('#save-paint-table-csv').on('click', event => {
 }); //// 200907
 
 $('#calc-volumes').on('click', event => {
-  const call_url = location.protocol + "//" + location.host + "/ws/paintvolume";
-  var req = new XMLHttpRequest();
-  req.open("get", call_url, false);
-  req.send(null);
-
-  if (req.responseText == "False") {
-    alert("No paintvolume.");
-    return false;
-  }
+  _SyncPaint__WEBPACK_IMPORTED_MODULE_1__["paintManager"].updatePaintVolumes();
 }); ////
 
 const downloadPaintTableAsCSV = () => {
@@ -2337,7 +2329,13 @@ class PaintManager extends RoomManager {
     }
 
     this.socket.emit("update_paint", data);
-  }
+  } // 200116 HU
+
+
+  updatePaintVolumes() {
+    this.socket.emit("update_paint_volumes");
+  } //
+
 
   updateList({
     list,

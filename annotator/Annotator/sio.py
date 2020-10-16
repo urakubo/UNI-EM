@@ -8,6 +8,9 @@ from annotator.Annotator import room
 
 sio = socketio.AsyncServer(async_mode='tornado')
 
+from annotator.Annotator.GetVolumes import GetVolumes
+
+
 def open_file(room_id, type):
   return open(u_info.paint_path + os.sep + room_id + ".pickle", type)
 
@@ -26,20 +29,26 @@ def write_file(room_id, data):
   with open_file(room_id, 'wb') as file:
     pickle.dump(data, file)
 
-#
-async def update_paint_volumes(ids_volumes):
+# async def update_paint_volumes(ids_volumes):
+@sio.event
+async def update_paint_volumes(sid):
 
-#  print('ids_volumes: ', ids_volumes)
+  surface_path = u_info.surfaces_whole_path
+  paint_path   = u_info.paint_path
+  ids_volumes  = GetVolumes(surface_path, paint_path)
+
   room_id = 'list'
   data = read_file(room_id)
+  print('Before: ', data)
   for data_row in data[room_id]:
 #  	print('data_row: ', data_row)
   	if data_row['id'] in ids_volumes.keys():
   		data_row['volume'] = ids_volumes[data_row['id']]
-
-#   print('data: ', data)
+  data["sid"] = sid
+  print('After: ', data)
   write_file(room_id, data)
   await sio.emit('update', data, room=room_id)
+
 
 @sio.event
 async def update_paint(sid, data):

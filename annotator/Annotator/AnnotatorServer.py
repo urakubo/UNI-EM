@@ -26,20 +26,6 @@ from annotator.Annotator.sio import sio, set_u_info
 import miscellaneous.Miscellaneous as m
 
 
-### 200907 start
-
-from annotator.Annotator.GetVolumes import GetVolumes, GetOneVolume
-
-class PaintVolumeHandler(tornado.web.RequestHandler):
-  def __init__(self, *args, **kwargs):
-    self.surface_path = kwargs.pop('surface_path')
-    self.paint_path   = kwargs.pop('paint_path')
-    super(PaintVolumeHandler, self).__init__(*args, **kwargs)
-  def get(self):
-    GetVolumes(self.surface_path, self.paint_path)
-
-### 200907 end
-
 
 class CustomStaticFileHandler(tornado.web.StaticFileHandler):
     def set_extra_headers(self, path):
@@ -167,7 +153,6 @@ class AnnotatorServerLogic:
       (r'/surface/whole/(.*)', CustomStaticFileHandler, {'path': surfaces_whole_path}),
       (r'/skeleton/(.*)', CustomStaticFileHandler, {'path': skeletons_path}),
       (r'/ws/surface', SurfaceHandler, {'3Dmap': self.ids_volume, 'pitch': self.pitch ,'path': surfaces_whole_path}),
-      (r'/ws/paintvolume', PaintVolumeHandler, {'surface_path': surfaces_whole_path, 'paint_path': paint_path}), ### 200907
       (r'/socket.io/', socketio.get_tornado_handler(sio)),
       (r'/(.*)', CustomStaticFileHandler, {'path': web_path})
     ],debug=True,autoreload=True)
