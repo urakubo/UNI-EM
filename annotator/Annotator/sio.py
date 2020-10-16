@@ -39,13 +39,19 @@ async def update_paint_volumes(sid):
 
   room_id = 'list'
   data = read_file(room_id)
-  print('Before: ', data)
+#  print('Before: ', data)
   for data_row in data[room_id]:
 #  	print('data_row: ', data_row)
   	if data_row['id'] in ids_volumes.keys():
   		data_row['volume'] = ids_volumes[data_row['id']]
-  data["sid"] = sid
-  print('After: ', data)
+  data["sid"] = 0
+
+  # socket.id was intentionally destroyed so that
+  # the paint table of the requesting client is to be updated.
+  # HU does not know that this is a safe operation.
+  # Should ask some professional.
+
+#  print('After: ', data)
   write_file(room_id, data)
   await sio.emit('update', data, room=room_id)
 

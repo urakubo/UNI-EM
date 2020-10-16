@@ -154,7 +154,7 @@ $('#save-paint-table-csv').on('click', (event) => {
 });
 
 
-//// 200907
+//// 201016
 
 $('#calc-volumes').on('click', (event) => {
 	paintManager.updatePaintVolumes()
@@ -188,7 +188,6 @@ paintManager.emitter.on("update", data => {
     const incomingRows = data.list || [];
 
     console.log(incomingRows);
-
 
     if(syncSequence) { 
       const currentRowsMap = new Map(currentRows.map(currentRow => [currentRow.id, currentRow]));

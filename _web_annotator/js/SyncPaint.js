@@ -84,9 +84,9 @@ class PaintManager extends RoomManager{
   }
   
   // 200116 HU
-    updatePaintVolumes() {
+  updatePaintVolumes() {
     this.socket.emit("update_paint_volumes")
-    }
+  }
   //
   
   updateList({ list, lastPaintId }) {
