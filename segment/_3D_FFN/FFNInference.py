@@ -74,7 +74,7 @@ class FFNInference():
 
         try:
             target_image_files = m.ObtainImageFiles(params['Target Image Folder'])
-            images = [cv2.imread(i, cv2.IMREAD_GRAYSCALE) for i in target_image_files]
+            images = [m.imread(i, cv2.IMREAD_GRAYSCALE) for i in target_image_files]
             images = np.array(images)
             image_z    = images.shape[0]
             image_y    = images.shape[1]

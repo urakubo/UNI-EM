@@ -7,7 +7,6 @@ import copy
 from itertools import chain
 import subprocess as s
 import time
-import cv2
 import h5py
 import threading
 
