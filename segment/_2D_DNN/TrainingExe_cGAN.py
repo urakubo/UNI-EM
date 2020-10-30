@@ -33,7 +33,6 @@ class TrainingExe():
         input_files.extend(input_png)
         input_files.extend(input_tif)
         im = m.imread(input_files[0], cv2.IMREAD_UNCHANGED)
-        print('')
         print('Target file to check color type : ', input_files[0])
         print('Image dimensions                : ', im.shape)
         print('Image filetype                  : ', im.dtype)
@@ -60,7 +59,7 @@ class TrainingExe():
         input_files.extend(input_png)
         input_files.extend(input_tif)
 
-        #print(input_files)
+        print(input_files)
         im = m.imread(input_files[0], cv2.IMREAD_UNCHANGED)
         print('Target file to check color type : ', input_files[0])
         print('Segmentation image dimensions   : ', im.shape)
@@ -85,16 +84,14 @@ class TrainingExe():
         #
 
         aug = params['Augmentation']
-        if   aug == "fliplr, flipud, transpose":
-            augmentation = '--fliplr --flipud --transpose'
-        elif aug == "fliplr, flipud":
-            augmentation = '--fliplr --flipud --no_transpose'
-        elif aug == "fliplr":
-            augmentation = '--fliplr --no_flipud --no_transpose'
+        if   aug == "flipud, transpose":
+            augmentation = '--flipud --transpose'
         elif aug == "flipud":
-            augmentation = '--no_fliplr --flipud --no_transpose'
+            augmentation = '--flipud --no_transpose'
+        elif aug == "transpose":
+            augmentation = '--no_flipud --transpose'
         elif aug == "None":
-            augmentation = '--no_fliplr --no_flipud --no_transpose'
+            augmentation = '--no_flipud --no_transpose'
         else :
             print("Internal error at Augumentation of PartDialogTrainingExecutor.")
             self._Cancel()
@@ -104,13 +101,14 @@ class TrainingExe():
         #
 
         comm = parent.u_info.exec_translate +' ' \
-                + ' --batch_size 4 ' \
+                + ' --model pix2pix ' \
                 + ' --mode train ' \
                 + ' --input_dir ' + params['Image Folder'] + ' ' \
-                + ' --target_dir ' + params['Segmentation Folder'] + ' ' \
+                + ' --input_dir_B ' + params['Segmentation Folder'] + ' ' \
                 + ' --output_dir ' + params['Model Folder'] + ' ' \
-                + ' --loss ' + params['Loss Function'] + ' ' \
-                + ' --network ' + params['Network'] + ' ' \
+                + ' --X_loss ' + params['Loss Function'] + ' ' \
+                + ' --Y_loss ' + params['Loss Function'] + ' ' \
+                + ' --generator ' + params['Network'] + ' ' \
                 + ' ' + augmentation + ' ' \
                 + ' --max_epochs ' + params['Maximal Epochs'] + ' ' \
                 + ' --display_freq ' +  params['Display Frequency'] + ' ' \
@@ -120,9 +118,8 @@ class TrainingExe():
                 + ' --n_dense_blocks ' + params['N dense blocks'] + ' ' \
                 + ' --n_dense_layers ' + params['N dense layers'] + ' '
 
-        print('')
+
         print(comm)
-        print('')
         print('Start training.')
         try:
             s.call(comm.split())

@@ -32,7 +32,6 @@ class InferenceExe():
             return
 
         im = m.imread(input_files[0], cv2.IMREAD_UNCHANGED)
-        print('')
         print('Target file to check color type : ', input_files[0])
         print('Image dimensions                : ', im.shape)
         print('Image filetype                  : ', im.dtype)
@@ -94,7 +93,8 @@ class InferenceExe():
 
 
         comm = parent.u_info.exec_translate +' ' \
-            + ' --mode predict ' \
+            + ' --model pix2pix ' \
+            + ' --mode test ' \
             + ' --save_freq 0 ' \
             + ' --input_dir ' + params['Image Folder'] + ' ' \
             + ' --output_dir ' + params['Output Segmentation Folder'] + ' ' \
@@ -104,9 +104,7 @@ class InferenceExe():
 
 
         try:
-            print('')
             print(comm)
-            print('')
             print('Start inference.')
             m.UnlockFolder(parent.u_info, params['Output Segmentation Folder'])  # Only for shared folder/file
             s.call(comm.split())
