@@ -2,6 +2,10 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import warnings
+warnings.filterwarnings('ignore', category=DeprecationWarning)
+warnings.filterwarnings('ignore', category=FutureWarning)
+
 import tensorflow as tf
 import tensorflow.contrib as contrib
 import numpy as np
@@ -14,6 +18,8 @@ import collections
 import math
 import time
 
+
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--mode", required=True, choices=["train", "test", "predict"])
