@@ -113,7 +113,7 @@ class Datasource(object):
         list_of_names = []
         hdf5_file.visit(list_of_names.append) 
         self.__has_colormap = True
-        self.__colormap = hdf5_file[list_of_names[0]].value
+        self.__colormap = hdf5_file[list_of_names[0]][()]
         #print('This is a check of color data in datasource.py line 120')
         #print(list_of_names[0])
         #print(self.__colormap)
