@@ -95,7 +95,7 @@ class Segmentation(Datasource):
     hdf5_file = h5py.File(file)
     list_of_names = []
     hdf5_file.visit(list_of_names.append)
-    image_data = hdf5_file[list_of_names[0]].value
+    image_data = hdf5_file[list_of_names[0]][()]
     hdf5_file.close()
 
     #print file, image_data[0][0], image_data.shape
