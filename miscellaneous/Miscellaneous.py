@@ -11,9 +11,6 @@ import cv2
 import png
 from itertools import product
 import glob
-import lxml
-import lxml.etree
-import math
 
 from PyQt5.QtWidgets import QDialog, QDialogButtonBox,\
     QHBoxLayout, QLabel, QLineEdit, QMenu, QMenuBar, QPushButton, QVBoxLayout, \
@@ -121,41 +118,6 @@ def imwrite(filename, img, params=None):
         return False
 
 
-def ObtainTileProperty(tile_ids_volume_file):
-
-	p = {}
-	with open(tile_ids_volume_file, 'r') as file:
-	    id_tiled_vol_desc = lxml.etree.parse(file).getroot()
-	# "root.tag" and "root.attrib" to check them
-	    p['num_tiles_w'] = int(id_tiled_vol_desc.get('numTilesW'))  # 1
-	    p['num_tiles_x'] = int(id_tiled_vol_desc.get('numTilesX'))  # 1
-	    p['num_tiles_y'] = int(id_tiled_vol_desc.get('numTilesY'))  # 1
-	    p['num_tiles_z'] = int(id_tiled_vol_desc.get('numTilesZ'))  # 100
-	    p['num_voxels_per_tile_x'] = int(id_tiled_vol_desc.get('numVoxelsPerTileX'))  # 512
-	    p['num_voxels_per_tile_y'] = int(id_tiled_vol_desc.get('numVoxelsPerTileY'))  # 512
-	    p['num_voxels_per_tile_z'] = int(id_tiled_vol_desc.get('numVoxelsPerTileZ'))  # 1
-	    p['num_voxels_x'] = int(id_tiled_vol_desc.get('numVoxelsX'))  # 512 Import image size
-	    p['num_voxels_y'] = int(id_tiled_vol_desc.get('numVoxelsY'))  # 512
-	    p['num_voxels_z'] = int(id_tiled_vol_desc.get('numVoxelsZ'))  # 100
-
-	    p['canvas_size_x'] = p['num_tiles_x'] * p['num_voxels_per_tile_x'] # 512 Internal image size
-	    p['canvas_size_y'] = p['num_tiles_y'] * p['num_voxels_per_tile_y']
-
-	###
-	### Tile number at each zoom level
-	###
-	num_tiles_y_at_w = [p['num_tiles_y']]
-	num_tiles_x_at_w = [p['num_tiles_x']]
-	for iw in range(p['num_tiles_w'] - 1):
-	    num_tiles_y_at_w.append(int(math.ceil(num_tiles_y_at_w[-1] / 2)))
-	    num_tiles_x_at_w.append(int(math.ceil(num_tiles_x_at_w[-1] / 2)))
-
-	p['num_tiles_y_at_w'] = num_tiles_y_at_w
-	p['num_tiles_x_at_w'] = num_tiles_x_at_w
-
-	return p
-	###
-
 
 def ObtainFullSizeImagesPanel(u_info, db, iz):
 
@@ -175,7 +137,7 @@ def ObtainFullSizeImagesPanel(u_info, db, iz):
     return merged_ids
 
 
-def ObtainFullSizeIdsPanel(tile_ids_path, u_info, tp, iz):
+def ObtainFullSizeIdsPanel(u_info, db, iz):
 
     ## try the temporary data first
 #    data_path = u_info.tmp_tile_ids_path + u_info.tile_path_wz.format(0, iz)
@@ -184,18 +146,20 @@ def ObtainFullSizeIdsPanel(tile_ids_path, u_info, tp, iz):
 #    else:
 #        target_path = u_info.tmp_tile_ids_path
 
-    merged_ids = np.zeros(( tp['canvas_size_y'], tp['canvas_size_x'] ), u_info.ids_dtype)
+    target_path = u_info.tile_ids_path
+
+    merged_ids = np.zeros((db.canvas_size_y, db.canvas_size_x), u_info.ids_dtype)
     iw = 0
-    for iy, ix in product(range(tp['num_tiles_y']), range(tp['num_tiles_x'])):
+    for iy, ix in product(range(db.num_tiles_y), range(db.num_tiles_x)):
         ## Load panels
-        tile_ids_filename = tile_ids_path \
+        tile_ids_filename = target_path \
                             + u_info.tile_ids_filename_wzyx.format(iw, iz, iy, ix)
         tile_ids = load_hdf5(tile_ids_filename, u_info.tile_var_name)
 
         ## Obtain merged ids
-        y = iy * tp['num_voxels_per_tile_y']
-        x = ix * tp['num_voxels_per_tile_x']
-        merged_ids[y: y + tp['num_voxels_per_tile_y'], x: x + tp['num_voxels_per_tile_x']] = tile_ids
+        y = iy * db.num_voxels_per_tile_y
+        x = ix * db.num_voxels_per_tile_x
+        merged_ids[y: y + db.num_voxels_per_tile_y, x: x + db.num_voxels_per_tile_x] = tile_ids
     return merged_ids
 
 
@@ -320,5 +284,4 @@ def ObtainImageFiles(input_path):
     filestack.extend(sorted(glob.glob(search2)))
     filestack.extend(sorted(glob.glob(search3)))
     return filestack
-
 
