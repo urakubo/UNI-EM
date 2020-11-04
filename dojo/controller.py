@@ -755,11 +755,10 @@ class Controller(object):
         if not os.path.exists(os.path.join(ids_data_path,seg)):
           ids_data_path = self.__mojo_dir + '/ids/tiles/w=00000000/z='+str(self.z).zfill(8)
 
-        hdf5_file = h5py.File(os.path.join(ids_data_path,seg))
         list_of_names = []
-        hdf5_file.visit(list_of_names.append)
-        dicts[0][x][y] = hdf5_file[list_of_names[0]].value
-        hdf5_file.close()
+        with h5py.File(os.path.join(ids_data_path,seg), 'r') as f:
+          f.visit(list_of_names.append)
+          dicts[0][x][y] = f[list_of_names[0]][()]
 
     # Return the only dictionary or all dictionaries
     return dicts
@@ -1287,11 +1286,10 @@ class Controller(object):
               if not os.path.exists(os.path.join(ids_data_path,s)):
                 ids_data_path = self.__mojo_dir + '/ids/tiles/w='+str(w).zfill(8)+'/z='+str(self.z).zfill(8)
 
-              hdf5_file = h5py.File(os.path.join(ids_data_path,s))
               list_of_names = []
-              hdf5_file.visit(list_of_names.append)
-              image_data = hdf5_file[list_of_names[0]].value
-              hdf5_file.close()
+              with h5py.File(os.path.join(ids_data_path,s), 'r') as f:
+                  f.visit(list_of_names.append)
+                  image_data = f[list_of_names[0]][()]
 
               # let's grab the pixel coordinate of this tile
               tile_y = y*512
