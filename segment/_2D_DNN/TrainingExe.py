@@ -50,7 +50,9 @@ class TrainingExe():
         seg_files.extend(seg_png)
         seg_files.extend(seg_tif)
         if len(seg_files) == 0:
+            print('')
             print('No segmentation file.')
+            print('Aborted.')
             return
 
         sg = m.imread(seg_files[0], cv2.IMREAD_UNCHANGED)
@@ -59,9 +61,11 @@ class TrainingExe():
         print('Segmentation color type       : ', seg_files[0])
         print('Segmentation image dimensions : ', sg.shape)
         print('Segmentation filetype         : ', sg.dtype)
+        print('')
 
         if len(img_files) != len(seg_files):
             print('The number of images is not equal to that of segmenation images.')
+            print('Aborted.')
             return
 
         tmpdir = os.path.join(datadir, "tmp", "2D_CNN_paired")
@@ -83,6 +87,7 @@ class TrainingExe():
                 img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
             elif img.shape[2] != 3:
                 print('The file is broken: ', img_file)
+                print('Aborted.')
                 return
 
             if len(seg.shape) == 2:
@@ -91,6 +96,7 @@ class TrainingExe():
                 seg = cv2.cvtColor(seg, cv2.COLOR_BGRA2BGR)
             elif seg.shape[2] != 3:
                 print('The file is broken: ', seg_file)
+                print('Aborted.')
                 return
 
             paired = cv2.hconcat([img, seg])
@@ -99,8 +105,8 @@ class TrainingExe():
             filename_paired = os.path.join( tmpdir, tmpname + '.png' )
             m.imwrite(filename_paired, paired)
 
-        print('')
         print('Paired images (RGB 8bit) are stored in ', tmpdir)
+        print('')
 
         #
         # Dialog to specify directory
