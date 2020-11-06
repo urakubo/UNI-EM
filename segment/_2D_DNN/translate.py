@@ -2,6 +2,10 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import warnings
+warnings.filterwarnings('ignore', category=DeprecationWarning)
+warnings.filterwarnings('ignore', category=FutureWarning)
+
 import tensorflow as tf
 import tensorflow.contrib as contrib
 import numpy as np
@@ -13,6 +17,14 @@ import random
 import collections
 import math
 import time
+
+
+if tf.__version__ == '1.12.0':
+    from tensorflow.python.util import deprecation
+    deprecation._PRINT_DEPRECATION_WARNINGS = False
+
+if ('1.14' in tf.__version__) | ('1.15' in tf.__version__):
+    tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
 
 parser = argparse.ArgumentParser()

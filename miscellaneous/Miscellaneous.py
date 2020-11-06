@@ -266,7 +266,7 @@ def mkdir_safe( dir_to_make ):
 
 def load_hdf5(file_path, dataset_name):
     hdf5 = h5py.File(file_path, 'r')
-    array = hdf5[dataset_name].value
+    array = hdf5[dataset_name][()]
     hdf5.close()
     return array
 
@@ -284,5 +284,4 @@ def ObtainImageFiles(input_path):
     filestack.extend(sorted(glob.glob(search2)))
     filestack.extend(sorted(glob.glob(search3)))
     return filestack
-
 

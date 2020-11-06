@@ -7,11 +7,13 @@ import glob
 import cv2
 import shutil
 import subprocess as s
+import numpy as np
 from os import path, pardir
 
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
 sys.path.append(os.path.join(main_dir, "segment"))
+import miscellaneous.Miscellaneous as m
 ##
 ##
 ##
@@ -23,59 +25,88 @@ class TrainingExe():
         datadir = parent.u_info.data_path
 
         ##
-        ## Check bitdepth of EM images and segmentation in the target directory.
+        ## Transform bitdepth of EM images and segmentation in the target directory.
         ## Translate.py only accepts unit24 (RGB color).
         ##
-        input_files = glob.glob(os.path.join(params['Image Folder'], "*.jpg"))
-        input_png = glob.glob(os.path.join(params['Image Folder'], "*.png"))
-        input_tif = glob.glob(os.path.join(params['Image Folder'], "*.tif"))
-        input_files.extend(input_png)
-        input_files.extend(input_tif)
-        im = cv2.imread(input_files[0], cv2.IMREAD_UNCHANGED)
-        print('Target file to check color type : ', input_files[0])
-        print('Image dimensions                : ', im.shape)
-        print('Image filetype                  : ', im.dtype)
-        if not (im.dtype == "uint8" and len(im.shape) == 3 and input_tif == []) :
-            tmpdir = os.path.join(datadir, "tmp", "DNN_training_images")
-            if os.path.exists(tmpdir) :
-                shutil.rmtree(tmpdir)
-            os.mkdir(tmpdir)
-            for input_file in input_files:
-                im_col = cv2.imread(input_file)
-                filename = os.path.basename(input_file)
-                filename = filename.replace('.tif', '.png')
-                converted_input_file = os.path.join( tmpdir, filename )
-                cv2.imwrite(converted_input_file, im_col)
-            params['Image Folder'] = tmpdir
-            print('Filetype of images was changed to RGB 8bit, and stored in ', tmpdir)
+        img_files = glob.glob(os.path.join(params['Image Folder'], "*.jpg"))
+        img_png = glob.glob(os.path.join(params['Image Folder'], "*.png"))
+        img_tif = glob.glob(os.path.join(params['Image Folder'], "*.tif"))
+        img_files.extend(img_png)
+        img_files.extend(img_tif)
+        if len(img_files) == 0:
+            print('No image file.')
+            return
 
-        ##
-        ## Check and change filetype of input segmentation
-        ##
-        input_files = glob.glob(os.path.join(params['Segmentation Folder'], "*.jpg"))
-        input_png = glob.glob(os.path.join(params['Segmentation Folder'], "*.png"))
-        input_tif = glob.glob(os.path.join(params['Segmentation Folder'], "*.tif"))
-        input_files.extend(input_png)
-        input_files.extend(input_tif)
+        im = m.imread(img_files[0], cv2.IMREAD_UNCHANGED)
+        print('')
+        print('Number of images : ', len(img_files))
+        print('Image color type : ', img_files[0])
+        print('Image dimensions : ', im.shape)
+        print('Image filetype   : ', im.dtype)
 
-        im = cv2.imread(input_files[0], cv2.IMREAD_UNCHANGED)
-        print('Target file to check color type : ', input_files[0])
-        print('Segmentation image dimensions   : ', im.shape)
-        print('Segmentation filetype           : ', im.dtype)
-        if not (im.dtype == "uint8" and len(im.shape) == 3 and input_tif == []) :
-            tmpdir = os.path.join(datadir, "tmp", "DNN_ground_truth")
-            if os.path.exists(tmpdir) :
-                shutil.rmtree(tmpdir)
-            os.mkdir(tmpdir)
-            for input_file in input_files:
-                im_col = cv2.imread(input_file)
-                filename = os.path.basename(input_file)
-                filename = filename.replace('.tif', '.png')
-                converted_input_file = os.path.join( tmpdir, filename )
-                cv2.imwrite(converted_input_file, im_col)
-            params['Segmentation Folder'] = tmpdir
-            print('Filetype of segmentation was changed to RGB 8bit, and stored in', tmpdir)
+        seg_files = glob.glob(os.path.join(params['Segmentation Folder'], "*.jpg"))
+        seg_png = glob.glob(os.path.join(params['Segmentation Folder'], "*.png"))
+        seg_tif = glob.glob(os.path.join(params['Segmentation Folder'], "*.tif"))
+        seg_files.extend(seg_png)
+        seg_files.extend(seg_tif)
+        if len(seg_files) == 0:
+            print('')
+            print('No segmentation file.')
+            print('Aborted.')
+            return
 
+        sg = m.imread(seg_files[0], cv2.IMREAD_UNCHANGED)
+        print('')
+        print('Number of Segmentation images : ', len(seg_files))
+        print('Segmentation color type       : ', seg_files[0])
+        print('Segmentation image dimensions : ', sg.shape)
+        print('Segmentation filetype         : ', sg.dtype)
+        print('')
+
+        if len(img_files) != len(seg_files):
+            print('The number of images is not equal to that of segmenation images.')
+            print('Aborted.')
+            return
+
+        tmpdir = os.path.join(datadir, "tmp", "2D_CNN_paired")
+        if os.path.exists(tmpdir) :
+            shutil.rmtree(tmpdir)
+        os.mkdir(tmpdir)
+
+        for img_file, seg_file in zip(img_files, seg_files):
+
+            img = m.imread(img_file)
+            seg = m.imread(seg_file)
+
+            img = np.array(img, dtype=np.uint8)
+            seg = np.array(seg, dtype=np.uint8)
+
+            if len(img.shape) == 2:
+                img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+            elif img.shape[2] == 4:
+                img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
+            elif img.shape[2] != 3:
+                print('The file is broken: ', img_file)
+                print('Aborted.')
+                return
+
+            if len(seg.shape) == 2:
+                seg = cv2.cvtColor(seg, cv2.COLOR_GRAY2BGR)
+            elif seg.shape[2] == 4:
+                seg = cv2.cvtColor(seg, cv2.COLOR_BGRA2BGR)
+            elif seg.shape[2] != 3:
+                print('The file is broken: ', seg_file)
+                print('Aborted.')
+                return
+
+            paired = cv2.hconcat([img, seg])
+
+            tmpname = os.path.splitext(os.path.basename(img_file))[0]
+            filename_paired = os.path.join( tmpdir, tmpname + '.png' )
+            m.imwrite(filename_paired, paired)
+
+        print('Paired images (RGB 8bit) are stored in ', tmpdir)
+        print('')
 
         #
         # Dialog to specify directory
@@ -101,9 +132,9 @@ class TrainingExe():
         #
 
         comm = parent.u_info.exec_translate +' ' \
+                + ' --batch_size 4 ' \
                 + ' --mode train ' \
-                + ' --input_dir ' + params['Image Folder'] + ' ' \
-                + ' --target_dir ' + params['Segmentation Folder'] + ' ' \
+                + ' --input_dir ' + tmpdir + ' ' \
                 + ' --output_dir ' + params['Model Folder'] + ' ' \
                 + ' --loss ' + params['Loss Function'] + ' ' \
                 + ' --network ' + params['Network'] + ' ' \
@@ -116,8 +147,9 @@ class TrainingExe():
                 + ' --n_dense_blocks ' + params['N dense blocks'] + ' ' \
                 + ' --n_dense_layers ' + params['N dense layers'] + ' '
 
-
+        print('')
         print(comm)
+        print('')
         print('Start training.')
         try:
             s.call(comm.split())

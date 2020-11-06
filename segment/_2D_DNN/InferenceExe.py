@@ -31,7 +31,8 @@ class InferenceExe():
             print('No images in the Image Folder.')
             return
 
-        im = cv2.imread(input_files[0], cv2.IMREAD_UNCHANGED)
+        im = m.imread(input_files[0], cv2.IMREAD_UNCHANGED)
+        print('')
         print('Target file to check color type : ', input_files[0])
         print('Image dimensions                : ', im.shape)
         print('Image filetype                  : ', im.dtype)
@@ -71,7 +72,7 @@ class InferenceExe():
 
             # Image Conversion
             for input_file in input_files:
-                im_col = cv2.imread(input_file)
+                im_col = m.imread(input_file)
                 filename = path.basename(input_file)
                 filename = filename.replace('.tif', '.png')
                 converted_filename = os.path.join( tmpdir, filename )
@@ -85,7 +86,7 @@ class InferenceExe():
                 im_fringe_y = im_fringe_y[0:fringe_size_y, :]
                 converted_image = cv2.vconcat([converted_image, im_fringe_y])
                 # Save
-                cv2.imwrite(converted_filename, converted_image)
+                m.imwrite(converted_filename, converted_image)
 
             #Complete
             params['Image Folder'] = tmpdir
@@ -103,7 +104,9 @@ class InferenceExe():
 
 
         try:
+            print('')
             print(comm)
+            print('')
             print('Start inference.')
             m.UnlockFolder(parent.u_info, params['Output Segmentation Folder'])  # Only for shared folder/file
             s.call(comm.split())
@@ -114,9 +117,9 @@ class InferenceExe():
             output_files.extend(output_png)
             output_files.extend(output_tif)
             for output_file in output_files:
-                im_col = cv2.imread(output_file)
+                im_col = m.imread(output_file)
                 im_col = im_col[0:image_size_y, 0:image_size_x]
-                cv2.imwrite(output_file, im_col)
+                m.imwrite(output_file, im_col)
             ##
             m.LockFolder(parent.u_info, params['Output Segmentation Folder'])
             return

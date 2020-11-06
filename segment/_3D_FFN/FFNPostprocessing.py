@@ -3,21 +3,18 @@
 ###
 import sys, os, time, errno
 import numpy as np
-import copy
-from itertools import chain
-import subprocess as s
-import time
-import cv2
-import png
-import h5py
-import threading
+# import copy
+# from itertools import chain
+# import subprocess as s
+# import threading
+import miscellaneous.Miscellaneous as m
+
 
 from PyQt5.QtWidgets import QMessageBox
 
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
-import miscellaneous.Miscellaneous as m
 icon_dir = path.join(main_dir, "icons")
 sys.path.append(path.join(main_dir, "segment"))
 sys.path.append(path.join(main_dir, "system"))

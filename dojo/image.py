@@ -1,4 +1,3 @@
-
 import os
 import re
 from io import BytesIO
@@ -6,8 +5,7 @@ from datasource import Datasource
 import numpy as np
 import zlib
 import cv2
-
-
+import miscellaneous.Miscellaneous as m
 
 class Image(Datasource):
 
@@ -26,7 +24,7 @@ class Image(Datasource):
     '''
     @override
     '''
-    files = super(Image, self).get_volume(zoomlevel)
+    files = super().get_volume(zoomlevel)
 
     out = None
     out_is_there = False
@@ -35,7 +33,7 @@ class Image(Datasource):
     for i in np.linspace(0,len(files)-1, num=min(len(files),self._Datasource__zSample_max)).astype('int'):
 
       print(files[i])   ##################################################
-      input_image = cv2.imread(files[i])
+      input_image = m.imread(files[i], cv2.IMREAD_GRAYSCALE)
 
       if out_is_there:
         #out = np.dstack([out, input_image])
@@ -59,11 +57,13 @@ class Image(Datasource):
     '''
     @override
     '''
-    super(Image, self).get_tile(file)
+    super().get_tile(file)
 
-    image_data = cv2.imread(file,1)
+    image_data = m.imread(file, cv2.IMREAD_GRAYSCALE)
     #if image_data.mode != "RGB":	#####
-    #    image_data = image_data.convert("RGB") #####
+    # image_data = image_data.convert("RGB") #####
+
+    #print(image_data)
 
 
     content = cv2.imencode('.jpg', image_data, [cv2.IMWRITE_JPEG_QUALITY, 90])[1].tostring()
@@ -76,7 +76,7 @@ class Image(Datasource):
     '''
     @override
     '''
-    return super(Image, self).handle(request)
+    return super().handle(request)
 
 
 
