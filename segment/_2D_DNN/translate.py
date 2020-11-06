@@ -19,7 +19,13 @@ import math
 import time
 
 
-tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+if tf.__version__ == '1.12.0':
+    from tensorflow.python.util import deprecation
+    deprecation._PRINT_DEPRECATION_WARNINGS = False
+
+if ('1.14' in tf.__version__) | ('1.15' in tf.__version__):
+    tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--mode", required=True, choices=["train", "test", "predict"])
