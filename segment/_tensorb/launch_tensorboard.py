@@ -1,3 +1,7 @@
+import warnings
+warnings.filterwarnings('ignore', category=DeprecationWarning)
+warnings.filterwarnings('ignore', category=FutureWarning)
+
 from tensorboard import default
 from tensorboard import program
 from argparse import ArgumentParser
