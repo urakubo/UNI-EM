@@ -26,7 +26,8 @@ packaging==20.4
 pefile==2018.8.8
 Pillow==6.2.0
 protobuf==3.6.1
-PyInstaller==3.4
+pyinstaller==4.0
+pyinstaller-hooks-contrib==2020.10
 pyparsing==2.4.7
 pypng==0.0.19
 PyQt5==5.12.1
