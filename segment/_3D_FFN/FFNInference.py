@@ -132,7 +132,7 @@ class FFNInference():
         m.mkdir_safe(os.path.join( params['Output Inference Folder'] ,'0','0' ) )
         ##
         comm_inference = parent.u_info.exec_run_inference
-        comm_inference = comm_inference.split(' ')
+        # comm_inference = comm_inference.split(' ')
 
         params = ['--image_size_x', np.str( image_x ), 
                  '--image_size_y', np.str( image_y ),

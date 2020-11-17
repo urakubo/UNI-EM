@@ -93,8 +93,8 @@ class InferenceExe():
             print('Filetype of images was changed to RGB 8bit, and stored in ', tmpdir)
 
 
-        tmp = ['--mode'		, 'predict'	,\
-        	'--save_freq'	, '0'		,\
+        tmp = ['--mode'		, 'predict'	, \
+        	'--save_freq'	, '0'		, \
         	'--input_dir'	, params['Image Folder'], \
 			'--output_dir'	, params['Output Segmentation Folder'], \
 			'--checkpoint'	, params['Model Folder'], \

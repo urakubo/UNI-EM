@@ -26,18 +26,27 @@ sys.path.append(path.join(main_dir, "system"))
 class FFNPrepTraining():
 
     def _Run(self, parent, params, comm_title):
-        ##
-        comm_compute_partition = parent.u_info.exec_compute_partition +' ' \
-                + ' --input_volume '  + os.path.join(params['FFN File Folder'], "groundtruth.h5@stack")  + ' ' \
-                + ' --output_volume ' + os.path.join(params['FFN File Folder'], "af.h5@af") + ' ' \
-                + ' --thresholds 0.025,0.05,0.075,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9 ' \
-                + ' --lom_radius 24,24,24 ' \
-                + ' --min_size 10000 '
+        #
+        print('')
+        tmp = [ \
+                '--input_volume'	, os.path.join(params['FFN File Folder'], "groundtruth.h5@stack"), \
+                '--output_volume'	, os.path.join(params['FFN File Folder'], "af.h5@af"), \
+                '--thresholds'		, '0.025,0.05,0.075,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9', \
+                '--lom_radius'		, '24,24,24', \
+                '--min_size'		, '10000']
 
-        comm_build_coordinates = parent.u_info.exec_build_coordinates +' ' \
-                + ' --partition_volumes validation1@'  +  os.path.join(params['FFN File Folder'], "af.h5@af")  + ' ' \
-                + ' --coordinate_output ' + os.path.join(params['FFN File Folder'], "tf_record_file") + ' ' \
-                + ' --margin 24,24,24 '
+        comm_compute_partition = parent.u_info.exec_compute_partition
+        comm_compute_partition.extend( tmp )
+        #
+        #
+        tmp = [ \
+        		'--partition_volumes'	, 'validation1@'+os.path.join(params['FFN File Folder'], "af.h5@af") , \
+        		'--coordinate_output'	, os.path.join(params['FFN File Folder'], "tf_record_file") , \
+                '--margin'				, '24,24,24 ']
+
+        comm_build_coordinates = parent.u_info.exec_build_coordinates
+        comm_build_coordinates.extend( tmp )
+
         ##
         # try:
         ##
@@ -59,22 +68,18 @@ class FFNPrepTraining():
         #    print("Error: h5 files (ground truth) were not generated.")
         #    return False
         ##
-        try:
-            print(comm_title)
-            print('Start compute_partitions.')
-            print(comm_compute_partition)
-            s.run(comm_compute_partition.split())
-            print('Start build_coordinates.')
-            print(comm_build_coordinates)
-            s.run(comm_build_coordinates.split())
-            print(comm_title, 'was finished.')
-        ##
-        except :
-            print("Error: ", comm_title, " was not executed.")
-            return False
-        ##
+        print(comm_title)
+        print('Start compute_partitions.')
+        print( '  '.join(comm_compute_partition) )
+        s.run(comm_compute_partition)
+        print('Start build_coordinates.')
+        print( '  '.join(comm_build_coordinates) )
+        s.run(comm_build_coordinates)
+        print(comm_title, 'was finished.')
+        print('')
+
         return True
-        ##
+
 
     def __init__(self, u_info):
         ##

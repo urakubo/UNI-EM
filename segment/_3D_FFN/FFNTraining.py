@@ -24,6 +24,7 @@ class FFNTraining():
     #
     def _Run(self, parent, params, comm_title):
     #
+        print('')
         with h5py.File(params['Training Image h5 File'], 'r') as f:
             image = f['raw'].value
             image_mean = np.mean(image).astype(np.int16)
@@ -36,34 +37,34 @@ class FFNTraining():
         #    return False
         #
         if params['Sparse Z'] != Qt.Unchecked:
-            arg = ' {"depth":9,"fov_size":[33,33,17],"deltas":[8,8,4]} '
+            arg = '{"depth":9,"fov_size":[33,33,17],"deltas":[8,8,4]}'
         else:
-            arg = ' {"depth":12,"fov_size":[33,33,33],"deltas":[8,8,8]} '
+            arg = '{"depth":12,"fov_size":[33,33,33],"deltas":[8,8,8]}'
 
         ##
-        comm_train = parent.u_info.exec_train + ' ' \
-                    + ' --train_coords ' + params['Tensorflow Record File'] + ' ' \
-                    + ' --data_volumes validation1@' + params['Training Image h5 File'] + '@raw ' \
-                    + ' --label_volumes validation1@'+ params['Ground Truth h5 File']  + '@stack ' \
-                    + ' --model_name convstack_3d.ConvStack3DFFNModel ' \
-                    + ' --model_args '    + arg \
-                    + ' --image_mean '   + np.str( image_mean ) \
-                    + ' --image_stddev ' + np.str( image_std ) \
-                    + ' --train_dir ' + params['Tensorflow Model Folder'] \
-                    + ' --max_steps ' + np.str(np.int(params['Max Training Steps']))
+        tmp = [ \
+			'--train_coords'	, params['Tensorflow Record File']								, \
+			'--data_volumes'	, 'validation1@' + params['Training Image h5 File'] + '@raw' 	, \
+			'--label_volumes'	, 'validation1@' + params['Ground Truth h5 File']  + '@stack'	, \
+			'--model_name'		, 'convstack_3d.ConvStack3DFFNModel'							, \
+			'--model_args'		, arg															, \
+			'--image_mean'		, np.str( image_mean )											, \
+			'--image_stddev'	, np.str( image_std )											, \
+			'--train_dir'		, params['Tensorflow Model Folder'] 							, \
+			'--max_steps'		, np.str(np.int(params['Max Training Steps'])) ]
 
-        ##
-        try:
-        ##
-            print(comm_title)
-            #print(comm_train)
-            s.run(comm_train.split())
-            print(comm_title, ' was finished.')
-        ##
-        except :
-            print(comm_title, " was not executed.")
-            return False
-        ##
+        comm_train = parent.u_info.exec_train
+        comm_train.extend( tmp )
+
+
+        #
+        print(comm_title)
+        print('')
+        print('  '.join(comm_train))
+        print('')
+        s.run(comm_train)
+        print(comm_title, ' was finished.')
+        #
         return True
 
     def __init__(self, u_info):
