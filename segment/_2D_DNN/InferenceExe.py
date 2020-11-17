@@ -50,17 +50,17 @@ class InferenceExe():
             print('Image size is too small.')
             return
 
+        # Generate tmpdir
+        tmpdir = os.path.join(params['Output Segmentation Folder'], "standardized_images")
+        if os.path.exists(tmpdir) :
+            shutil.rmtree(tmpdir)
+        os.mkdir(tmpdir)
+
         ##
         ## Check whether the target images should be converted.
         ##
         if not (im.dtype == "uint8" and len(im.shape) == 3 and input_tif == [] and
                 image_size_x in std_sizes and image_size_y in std_sizes) :
-
-            # Generate tmpdir
-            tmpdir = os.path.join(datadir, "tmp", "DNN_test_images")
-            if os.path.exists(tmpdir) :
-                shutil.rmtree(tmpdir)
-            os.mkdir(tmpdir)
 
             # Check image size
             converted_size_x_id = np.min( np.where((np_std_sizes - image_size_x) > 0) )
@@ -103,7 +103,6 @@ class InferenceExe():
 
         comm = parent.u_info.exec_translate
         comm.extend( tmp )
-        comm.extend( augmentation )
 
         try:
             print('')
@@ -123,11 +122,17 @@ class InferenceExe():
                 im_col = im_col[0:image_size_y, 0:image_size_x]
                 m.imwrite(output_file, im_col)
             ##
-            m.LockFolder(parent.u_info, params['Output Segmentation Folder'])
-            return
+
         except s.CalledProcessError as e:
             print("Inference was not executed.")
+            if os.path.exists(tmpdir) :
+                shutil.rmtree(tmpdir)
             m.LockFolder(parent.u_info, params['Output Segmentation Folder'])
             return
 
+		# rm tmpdir
+        if os.path.exists(tmpdir) :
+            shutil.rmtree(tmpdir)
 
+        m.LockFolder(parent.u_info, params['Output Segmentation Folder'])
+        return
