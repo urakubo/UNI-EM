@@ -93,23 +93,25 @@ class InferenceExe():
             print('Filetype of images was changed to RGB 8bit, and stored in ', tmpdir)
 
 
-        comm = parent.u_info.exec_translate +' ' \
-            + ' --mode predict ' \
-            + ' --save_freq 0 ' \
-            + ' --input_dir ' + params['Image Folder'] + ' ' \
-            + ' --output_dir ' + params['Output Segmentation Folder'] + ' ' \
-            + ' --checkpoint ' + params['Model Folder'] + ' ' \
-            + ' --image_height ' + str(converted_size_y) + ' ' \
-            + ' --image_width ' + str(converted_size_x)
+        tmp = ['--mode'		, 'predict'	,\
+        	'--save_freq'	, '0'		,\
+        	'--input_dir'	, params['Image Folder'], \
+			'--output_dir'	, params['Output Segmentation Folder'], \
+			'--checkpoint'	, params['Model Folder'], \
+            '--image_height', str(converted_size_y), \
+            '--image_width'	, str(converted_size_x)]
 
+        comm = parent.u_info.exec_translate
+        comm.extend( tmp )
+        comm.extend( augmentation )
 
         try:
             print('')
-            print(comm)
+            print('  '.join(comm))
             print('')
             print('Start inference.')
             m.UnlockFolder(parent.u_info, params['Output Segmentation Folder'])  # Only for shared folder/file
-            s.call(comm.split())
+            s.call(comm)
             ## Cut out fringes
             output_files = glob.glob(os.path.join(params['Output Segmentation Folder'], "*.jpg"))
             output_png   = glob.glob(os.path.join(params['Output Segmentation Folder'], "*.png"))
