@@ -63,10 +63,15 @@ class TabGenerator(SharedFileDialogs):
                 lbl.append(QLabel(args[i][0] + ' :'))
                 lbl[-1].setToolTip(tips[i])
 
-        require_browse_dir = []
-        require_browse_dir_img = []
-        require_browse_file = []
-        require_browse_open_img = []
+        require_browse_dir       = []
+        require_browse_dir_img   = []
+        require_browse_file      = []
+        require_browse_open_img  = []
+
+        require_browse_dir_model = []
+        require_browse_dir_ffns  = []
+        require_browse_dir_empty = []
+
 
         tab_elem_count = 0
         id_sub_tab = []
@@ -125,9 +130,21 @@ class TabGenerator(SharedFileDialogs):
                     ttab[-1].setLayout(ttab[-1].layout)
             ##
             elif args[i][1] == 'SelectImageFolder':
-                obj_args.append(SyncListQComboBoxExcludeDojoMtifManager.get().create(att, i))
+                obj_args.append(SyncListQComboBoxImageManager.get().create(att, i))
                 if args[i][2] == 'OpenImageFolder':
                     require_browse_open_img.append(i)
+            elif args[i][1] == 'SelectModelFolder':
+                obj_args.append(SyncListQComboBoxModelManager.get().create(att, i))
+                if args[i][2] == 'OpenModelFolder':
+                    require_browse_dir_model.append(i)
+            elif args[i][1] == 'SelectFFNsFolder':
+                obj_args.append(SyncListQComboBoxModelManager.get().create(att, i))
+                if args[i][2] == 'OpenFFNsFolder':
+                    require_browse_dir_ffns.append(i)
+            elif args[i][1] == 'SelectEmptyFolder':
+                obj_args.append(SyncListQComboBoxModelManager.get().create(att, i))
+                if args[i][2] == 'OpenEmptyFolder':
+                    require_browse_dir_empty.append(i)
             else:
                 print('Internal error. No fucntion.')
 
@@ -148,6 +165,18 @@ class TabGenerator(SharedFileDialogs):
             elif id in require_browse_dir_img:
                 browse_button.append(QPushButton("Browse..."))
                 browse_button[-1].clicked.connect(lambda state, z=id: self.browse_dir_img(obj_args[z]))
+                tab.layout.addWidget(browse_button[-1], i + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
+            elif id in require_browse_dir_model: ########
+                browse_button.append(QPushButton("Browse..."))
+                browse_button[-1].clicked.connect(lambda state, z=id: self.browse_OpenSpecificFolder(obj_args[z], 'Model'))
+                tab.layout.addWidget(browse_button[-1], i + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
+            elif id in require_browse_dir_ffns:  ########
+                browse_button.append(QPushButton("Browse..."))
+                browse_button[-1].clicked.connect(lambda state, z=id: self.browse_OpenSpecificFolder(obj_args[z], 'FFNs'))
+                tab.layout.addWidget(browse_button[-1], i + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
+            elif id in require_browse_dir_empty: ########
+                browse_button.append(QPushButton("Browse..."))
+                browse_button[-1].clicked.connect(lambda state, z=id: self.browse_OpenSpecificFolder(obj_args[z], 'Empty'))
                 tab.layout.addWidget(browse_button[-1], i + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
             elif id in require_browse_file:
                 browse_button.append(QPushButton("Browse..."))

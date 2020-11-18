@@ -75,7 +75,7 @@ class SharedFileDialogs():
         return True
 
 
-    def browse_OpenDojoFolder(self, lineedit_obj):
+    def browse_OpenSpecificFolder(self, lineedit_obj, folder_type):
         currentdir = lineedit_obj.currentText()
         if len(currentdir) == 0:
             currentdir = os.path.normpath(main_dir)
@@ -88,7 +88,12 @@ class SharedFileDialogs():
         if len(open_folder_name) == 0:
             return
         open_folder_name = open_folder_name.replace('/', os.sep)
-        check_sucess = self.parent.parent.OpenDojoFolder(open_folder_name)
+
+        if   folder_type == 'Dojo':
+            check_sucess = self.parent.parent.OpenDojoFolder(open_folder_name)
+#        elif folder_type == 'Dojo':
+
+
         if check_sucess == False:
             id = lineedit_obj.findText(open_folder_name)
             if id >= 0:

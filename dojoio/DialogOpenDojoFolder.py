@@ -33,9 +33,9 @@ class _GenerateContents(SharedFileDialogs):
 
     def generate(self):
         lbl   = QLabel('Select Dojo Folder.')
-        edit  = SyncListQComboBoxOnlyDojoManager.get().create(self, 0)
+        edit  = SyncListQComboBoxDojoManager.get().create(self, 0)
         btn   = QPushButton("Open...")
-        btn.clicked.connect(lambda state : self.browse_OpenDojoFolder(edit) )
+        btn.clicked.connect(lambda state : self.browse_OpenSpecificFolder(edit, 'Dojo') )
         return lbl, edit, btn
 
 

@@ -1,7 +1,7 @@
 ###
 ###
 ###
-import sys, os, time, errno, copy
+import sys, os, time, errno, copy, fnmatch
 #from lockfile import LockFile
 #import portalocker
 
@@ -38,32 +38,41 @@ class FileManager():
         flag = self.OpenFileFolder(open_folder_name)
         if flag == False:
             return False
-        SyncListQComboBoxExcludeDojoMtifManager.get().addModel(open_folder_name)
-        SyncListQComboBoxOnlyDojoManager.get().addModel(open_folder_name)
+        SyncListQComboBoxEmptyManager.get().addModel(open_folder_name)
+        SyncListQComboBoxFFNsManager.get().addModel(open_folder_name)
+        SyncListQComboBoxModelManager.get().addModel(open_folder_name)
+        SyncListQComboBoxImageManager.get().addModel(open_folder_name)
+        SyncListQComboBoxDojoManager.get().addModel(open_folder_name)
 
 
     def OpenRecentFileFolder(self):
         action = self.sender()
         if not action:
             return
-        fileName = action.data()
-        if not os.path.exists( fileName ):
+        file_name  = action.data()
+        if not os.path.exists( file_name ):
             QMessageBox.warning(self, "Recent Files",
-                                "Cannot find file: %s" % fileName)
+                                "Cannot find file: %s" % file_name)
             return
-        flag = self.OpenFileFolder( fileName )
+        flag = self.OpenFileFolder( file_name )
         if flag == False:
             return False
-        SyncListQComboBoxExcludeDojoMtifManager.get().addModel(fileName)
-        SyncListQComboBoxOnlyDojoManager.get().addModel(fileName)
+        SyncListQComboBoxEmptyManager.get().addModel(file_name)
+        SyncListQComboBoxFFNsManager.get().addModel(file_name)
+        SyncListQComboBoxModelManager.get().addModel(file_name)
+        SyncListQComboBoxImageManager.get().addModel(file_name)
+        SyncListQComboBoxDojoManager.get().addModel(file_name)
 
 
     def OpenDropdownFileFolder(self, file_name):
         flag = self.OpenFileFolder( file_name )
         if flag == False:
             return False
-        SyncListQComboBoxExcludeDojoMtifManager.get().addModel(file_name)
-        SyncListQComboBoxOnlyDojoManager.get().addModel(file_name)
+        SyncListQComboBoxEmptyManager.get().addModel( file_name )
+        SyncListQComboBoxFFNsManager.get().addModel( file_name )
+        SyncListQComboBoxModelManager.get().addModel( file_name )
+        SyncListQComboBoxImageManager.get().addModel( file_name )
+        SyncListQComboBoxDojoManager.get().addModel( file_name )
 
 
     def OpenMultiTiffFile(self):
@@ -123,20 +132,22 @@ class FileManager():
 
 
     def CloseFileFolder(self, activeAction):
-        fileName = activeAction.data()
+        file_name = activeAction.data()
 
-        if os.path.isdir(fileName):
-            m.UnlockFolder(self.u_info, fileName)
+        if os.path.isdir(file_name):
+            m.UnlockFolder(self.u_info, file_name)
         else:
-            self.u_info.open_files4lock[fileName].close()
-            del self.u_info.open_files4lock[fileName]
+            self.u_info.open_files4lock[file_name].close()
+            del self.u_info.open_files4lock[file_name]
 
         self.u_info.open_files.remove(activeAction.data())
         self.UpdateOpenFileMenu()
 
-        SyncListQComboBoxExcludeDojoMtifManager.get().removeModel(fileName)
-        SyncListQComboBoxOnlyDojoManager.get().removeModel(fileName)
-
+        SyncListQComboBoxEmptyManager.get().removeModel(file_name)
+        SyncListQComboBoxFFNsManager.get().removeModel(file_name)
+        SyncListQComboBoxModelManager.get().removeModel(file_name)
+        SyncListQComboBoxImageManager.get().removeModel(file_name)
+        SyncListQComboBoxDojoManager.get().removeModel(file_name)
 
 
     def OpenImageFolder(self, folder_name):
@@ -246,16 +257,23 @@ class FileManager():
 
     def CheckFileType(self, file_name):
         if os.path.isdir(file_name) :
+
+            print('Enter CheckFileType')
+
             if self.CheckFolderDojo(file_name):
-                filetype = "Dojo"
-                return filetype
+                return "Dojo"
+            elif self.CheckFolderModelTensorflow(file_name):
+                return "Model"
+            elif self.CheckFolderFFNs(file_name):
+                return "FFNs"
+
             ext = self.CheckFolderImage(file_name)
             if   len(ext) > 1 :
                 filetype = "multiple type images"
             elif len(ext) == 1 :
                 filetype = ext[0]
             else :
-                filetype = "empty"
+                filetype = "Empty"
         else :
             filetype = "invalid"
             #
@@ -305,4 +323,49 @@ class FileManager():
             return 1
         else:
             return 0
+
+
+    def CheckFolderModelTensorflow(self, folder_path):
+
+        required_files = [ \
+            'model*.meta', \
+            'model*.index',\
+            'model*.data-00000-of-00001' ]
+        tmp = glob.glob( path.join(folder_path, "*") )
+        filenames_in_folder = [os.path.basename(r) for r in tmp]
+        # print('filenames_in_folder : ',filenames_in_folder)
+		#
+        cropped = []
+        for required_file in required_files:
+			#
+            tmp = fnmatch.filter(filenames_in_folder, required_file)
+            if len(tmp) == 0:
+                return 0
+			#
+            a, b = map(len, required_file.split('*'))
+            cropped.append( {t[a:-b] for t in tmp} ) 
+        intersection = cropped[0] & cropped[1] & cropped[2] 
+        # print('intersection : ' , intersection) 
+        return (len(intersection) > 0)
+
+
+    def CheckFolderFFNs(self, folder_path):
+
+        required_files = [ \
+            'af.h5', \
+            'grayscale_maps.h5', \
+            'groundtruth.h5', \
+            'tf_record_file' ]
+        tmp = glob.glob( path.join(folder_path, "*") )
+        filenames_in_folder = [os.path.basename(r) for r in tmp]
+
+        flags = []
+        for required_file in required_files:
+            match_fname = [fnmatch.fnmatch(fn, required_file) for fn in filenames_in_folder]
+            flags.append(any(match_fname))
+        if all(flags):
+            return 1
+        else:
+            return 0
+
 
