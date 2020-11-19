@@ -104,14 +104,16 @@ class FileManager():
 
     def CloseFileFolder(self, activeAction):
         file_name = activeAction.data()
+        self.ExecuteCloseFileFolder(file_name)
 
+    def ExecuteCloseFileFolder(self, file_name):
         if os.path.isdir(file_name):
             m.UnlockFolder(self.u_info, file_name)
         else:
             self.u_info.open_files4lock[file_name].close()
             del self.u_info.open_files4lock[file_name]
 
-        self.u_info.open_files.remove(activeAction.data())
+        self.u_info.open_files.remove(file_name)
         self.UpdateOpenFileMenu()
 
         SyncListQComboBoxEmptyManager.get().removeModel(file_name)
@@ -163,8 +165,6 @@ class FileManager():
 
 
     def CheckFolderType(self, folder_name):
-
-        print('CheckFolderType: ', folder_name)
 
         if self.CheckFolderDojo(folder_name):
             return "Dojo"

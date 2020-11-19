@@ -51,7 +51,7 @@ class InferenceExe():
             return
 
         # Generate tmpdir
-        tmpdir = os.path.join(params['Output Segmentation Folder'], "standardized_images")
+        tmpdir = os.path.join(params['Output Segmentation Folder (Empty)'], "standardized_images")
         if os.path.exists(tmpdir) :
             shutil.rmtree(tmpdir)
         os.mkdir(tmpdir)
@@ -96,7 +96,7 @@ class InferenceExe():
         tmp = ['--mode'		, 'predict'	, \
         	'--save_freq'	, '0'		, \
         	'--input_dir'	, params['Image Folder'], \
-			'--output_dir'	, params['Output Segmentation Folder'], \
+			'--output_dir'	, params['Output Segmentation Folder (Empty)'], \
 			'--checkpoint'	, params['Model Folder'], \
             '--image_height', str(converted_size_y), \
             '--image_width'	, str(converted_size_x)]
@@ -109,12 +109,15 @@ class InferenceExe():
             print('  '.join(comm))
             print('')
             print('Start inference.')
-            m.UnlockFolder(parent.u_info, params['Output Segmentation Folder'])  # Only for shared folder/file
+            m.UnlockFolder(parent.u_info, params['Output Segmentation Folder (Empty)'])  # Only for shared folder/file
             s.call(comm)
+            parent.parent.ExecuteCloseFileFolder(params['Output Segmentation Folder (Empty)'])
+            parent.parent.OpenFolder(params['Output Segmentation Folder (Empty)'])
+
             ## Cut out fringes
-            output_files = glob.glob(os.path.join(params['Output Segmentation Folder'], "*.jpg"))
-            output_png   = glob.glob(os.path.join(params['Output Segmentation Folder'], "*.png"))
-            output_tif   = glob.glob(os.path.join(params['Output Segmentation Folder'], "*.tif"))
+            output_files = glob.glob(os.path.join(params['Output Segmentation Folder (Empty)'], "*.jpg"))
+            output_png   = glob.glob(os.path.join(params['Output Segmentation Folder (Empty)'], "*.png"))
+            output_tif   = glob.glob(os.path.join(params['Output Segmentation Folder (Empty)'], "*.tif"))
             output_files.extend(output_png)
             output_files.extend(output_tif)
             for output_file in output_files:

@@ -3,6 +3,7 @@ import sys, os, time
 import glob
 import numpy as np
 import pickle
+import fnmatch
 from os import path, pardir
 
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
@@ -11,7 +12,6 @@ sys.path.append(os.path.join(main_dir, "segment"))
 sys.path.append(os.path.join(main_dir, "system"))
 import miscellaneous.DialogImageFolder as d
 from PyQt5.QtWidgets import QFileDialog
-
 
 
 class SharedFileDialogs():
@@ -135,7 +135,7 @@ class SharedFileDialogs():
                 param = obj_args[i].tabText(id)
             elif args[i][1] == 'CheckBox':
                 param = obj_args[i].checkState()
-            elif args[i][1] == 'SelectImageFolder':
+            elif fnmatch.fnmatch(args[i][1], 'Select*Folder') :
                 param = obj_args[i].currentText()
             params[args_header[i]] = param
         # print(params)
@@ -156,7 +156,7 @@ class SharedFileDialogs():
             elif args[i][1] == 'CheckBox':
                 param = obj_args[i].checkState()
                 print("{0:>20} : {1:d}".format(arg, param))
-            elif args[i][1] == 'SelectImageFolder':
+            elif fnmatch.fnmatch(args[i][1], 'Select*Folder') :
                 param = obj_args[i].currentText()
                 print("{0:>20} : {1:s}".format(arg, param))
 

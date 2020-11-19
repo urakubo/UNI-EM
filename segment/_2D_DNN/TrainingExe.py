@@ -21,7 +21,6 @@ import miscellaneous.Miscellaneous as m
 class TrainingExe():
 
     def _Run(self, parent, params, comm_title):
-
         ##
         ## Transform bitdepth of EM images and segmentation in the target directory.
         ## Translate.py only accepts unit24 (RGB color).
@@ -68,7 +67,7 @@ class TrainingExe():
 
 
 		# Generate tmpdir
-        tmpdir = os.path.join( params['Model Folder'], "paired_image_segmentation")
+        tmpdir = os.path.join( params['Empty Folder for Model'], "paired_image_segmentation")
         if os.path.exists(tmpdir) :
             shutil.rmtree(tmpdir)
         os.mkdir(tmpdir)
@@ -135,7 +134,7 @@ class TrainingExe():
         tmp = ['--batch_size'		, '4', \
             '--mode'			, 'train', \
 			'--input_dir'		, tmpdir, \
-			'--output_dir'		, params['Model Folder'], \
+			'--output_dir'		, params['Empty Folder for Model'], \
             '--loss'			, params['Loss Function'], \
 			'--network'		, params['Network'], \
         	'--max_epochs'		, str( params['Maximal Epochs']  ),  \
@@ -155,13 +154,21 @@ class TrainingExe():
         print('')
         print('Start training.')
         try:
-            parent.
+            #####SyncListQComboBoxEmptyManager.get().removeModel(params['Empty Folder for Model'])
             s.call(comm)
+            parent.parent.ExecuteCloseFileFolder(params['Empty Folder for Model'])
+            parent.parent.OpenFolder(params['Empty Folder for Model'])
+            # rm tmpdir
+            if os.path.exists(tmpdir) :
+            	shutil.rmtree(tmpdir)
         except s.CalledProcessError as e:
             print("Error ocurrs in Traslate.py.")
+
+            # rm tmpdir
+            if os.path.exists(tmpdir) :
+            	shutil.rmtree(tmpdir)
             return
 
-		# rm tmpdir
         if os.path.exists(tmpdir) :
             shutil.rmtree(tmpdir)
 
