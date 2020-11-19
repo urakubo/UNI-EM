@@ -27,8 +27,8 @@ class InferenceTab(InferenceExe):
 
         self.args = [
                         ['Image Folder',    'SelectImageFolder', 'OpenImageFolder'],
-                        ['Output Segmentation Folder',   'SelectImageFolder', 'OpenImageFolder'],
-                        ['Model Folder',      'LineEdit', modelpath, 'BrowseDir']
+                        ['Output Segmentation Folder (Empty)', 'SelectEmptyFolder', 'OpenEmptyFolder'],
+                        ['Model Folder',  'SelectModelFolder', 'OpenModelFolder']
                         ]
 
 

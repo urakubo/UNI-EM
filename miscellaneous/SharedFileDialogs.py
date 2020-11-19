@@ -60,7 +60,7 @@ class SharedFileDialogs():
         if len(open_folder_name) == 0:
             return
         open_folder_name = open_folder_name.replace('/', os.sep)
-        check_sucess = self.parent.parent.OpenImageFolder(open_folder_name)
+        check_sucess = self.parent.parent.OpenSpecificFolder(open_folder_name, ['png','tif','jpg'])
         if check_sucess == False:
             id = lineedit_obj.findText(open_folder_name)
             if id >= 0:
@@ -89,10 +89,7 @@ class SharedFileDialogs():
             return
         open_folder_name = open_folder_name.replace('/', os.sep)
 
-        if   folder_type == 'Dojo':
-            check_sucess = self.parent.parent.OpenDojoFolder(open_folder_name)
-#        elif folder_type == 'Dojo':
-
+        check_sucess = self.parent.parent.OpenSpecificFolder(open_folder_name, folder_type)
 
         if check_sucess == False:
             id = lineedit_obj.findText(open_folder_name)

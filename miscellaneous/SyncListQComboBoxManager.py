@@ -162,7 +162,6 @@ class SyncListQComboBoxImageManager(SyncListQComboBoxManager):
             return True
         
         filetype = self.my_u_info.open_files_type[fileName]
-        
         return filetype == 'tif' or  filetype == 'png' or  filetype == 'jpg'
 
 

@@ -79,8 +79,8 @@ class Params:
 
 
         ## File system
-        self.max_num_recent_files = 5
-        self.max_num_open_files   = 6
+        self.max_num_recent_files = 8
+        self.max_num_open_files   = 20
         self.open_files        = []
         self.open_files4lock   = {}
         self.open_files_type   = {}

@@ -155,6 +155,7 @@ class TrainingExe():
         print('')
         print('Start training.')
         try:
+            parent.
             s.call(comm)
         except s.CalledProcessError as e:
             print("Error ocurrs in Traslate.py.")
