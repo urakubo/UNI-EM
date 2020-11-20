@@ -101,7 +101,7 @@ class InferenceExe():
             '--image_height', str(converted_size_y), \
             '--image_width'	, str(converted_size_x)]
 
-        comm = parent.u_info.exec_translate
+        comm = parent.u_info.exec_translate[:]
         comm.extend( tmp )
 
 

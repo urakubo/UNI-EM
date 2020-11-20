@@ -145,7 +145,7 @@ class TrainingExe():
         	'--n_dense_blocks'	, str( params['N dense blocks'] ), \
         	'--n_dense_layers'	, str( params['N dense layers']) ]
 
-        comm = parent.u_info.exec_translate
+        comm = parent.u_info.exec_translate[:]
         comm.extend( tmp )
         comm.extend( augmentation )
 

@@ -2,9 +2,11 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+#HU{
 import warnings
 warnings.filterwarnings('ignore', category=DeprecationWarning)
 warnings.filterwarnings('ignore', category=FutureWarning)
+#}HU
 
 import tensorflow as tf
 import tensorflow.contrib as contrib
@@ -18,7 +20,7 @@ import collections
 import math
 import time
 
-
+#HU{
 if tf.__version__ == '1.12.0':
     from tensorflow.python.util import deprecation
     deprecation._PRINT_DEPRECATION_WARNINGS = False
@@ -26,6 +28,13 @@ if tf.__version__ == '1.12.0':
 if ('1.14' in tf.__version__) | ('1.15' in tf.__version__):
     tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
+config = tf.ConfigProto(
+    gpu_options=tf.GPUOptions(
+        allow_growth=True # True-> depends on neccesity, False->all
+    )
+)
+sess = sess = tf.Session(config=config)
+#}HU
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--mode", required=True, choices=["train", "test", "predict"])
