@@ -142,6 +142,10 @@ class TabGenerator(SharedFileDialogs):
                 obj_args.append(SyncListQComboBoxEmptyManager.get().create(att, i))
                 if args[i][2] == 'OpenEmptyFolder':
                     require_browse_dir_specific[i] = 'Empty'
+            elif args[i][1] == 'SelectEmptyModelFolder':
+                obj_args.append(SyncListQComboBoxEmptyModelManager.get().create(att, i))
+                if args[i][2] == 'OpenEmptyModelFolder':
+                    require_browse_dir_specific[i] = ['Empty','Model']
             else:
                 print('Internal error. No fucntion.')
 
@@ -174,7 +178,7 @@ class TabGenerator(SharedFileDialogs):
             elif id in require_browse_dir_specific.keys():
                 browse_button.append(QPushButton("Browse..."))
                 folder_type = require_browse_dir_specific[id]
-                browse_button[-1].clicked.connect(lambda state, z=id: self.browse_OpenSpecificFolder(obj_args[z], folder_type ))
+                browse_button[-1].clicked.connect(lambda state, z=id: self.browse_OpenSpecificFolder(obj_args[z], folder_type))
                 tab.layout.addWidget(browse_button[-1], i + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
 
             i = i + 1

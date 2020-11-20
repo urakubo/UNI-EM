@@ -51,7 +51,7 @@ class InferenceExe():
             return
 
         # Generate tmpdir
-        tmpdir = os.path.join(params['Output Segmentation Folder (Empty)'], "standardized_images")
+        tmpdir = os.path.join(params['Output Segmentation Folder (Empty)'], "standardized"+str(os.getpid()).zfill(6)[-6:] )
         if os.path.exists(tmpdir) :
             shutil.rmtree(tmpdir)
         os.mkdir(tmpdir)
@@ -104,38 +104,38 @@ class InferenceExe():
         comm = parent.u_info.exec_translate
         comm.extend( tmp )
 
-        try:
-            print('')
-            print('  '.join(comm))
-            print('')
-            print('Start inference.')
-            m.UnlockFolder(parent.u_info, params['Output Segmentation Folder (Empty)'])  # Only for shared folder/file
-            s.call(comm)
-            parent.parent.ExecuteCloseFileFolder(params['Output Segmentation Folder (Empty)'])
-            parent.parent.OpenFolder(params['Output Segmentation Folder (Empty)'])
 
-            ## Cut out fringes
-            output_files = glob.glob(os.path.join(params['Output Segmentation Folder (Empty)'], "*.jpg"))
-            output_png   = glob.glob(os.path.join(params['Output Segmentation Folder (Empty)'], "*.png"))
-            output_tif   = glob.glob(os.path.join(params['Output Segmentation Folder (Empty)'], "*.tif"))
-            output_files.extend(output_png)
-            output_files.extend(output_tif)
-            for output_file in output_files:
-                im_col = m.imread(output_file)
-                im_col = im_col[0:image_size_y, 0:image_size_x]
-                m.imwrite(output_file, im_col)
-            ##
+        print('')
+        print('  '.join(comm))
+        print('')
+        print('Start inference.')
+        print('')
+        m.UnlockFolder(parent.u_info, params['Output Segmentation Folder (Empty)'])  # Only for shared folder/file
+        s.run(comm)
+        parent.parent.ExecuteCloseFileFolder(params['Output Segmentation Folder (Empty)'])
+        parent.parent.OpenFolder(params['Output Segmentation Folder (Empty)'])
 
-        except s.CalledProcessError as e:
-            print("Inference was not executed.")
-            if os.path.exists(tmpdir) :
-                shutil.rmtree(tmpdir)
-            m.LockFolder(parent.u_info, params['Output Segmentation Folder'])
-            return
+        ## Cut out fringes
+        output_files = glob.glob(os.path.join(params['Output Segmentation Folder (Empty)'], "*.jpg"))
+        output_png   = glob.glob(os.path.join(params['Output Segmentation Folder (Empty)'], "*.png"))
+        output_tif   = glob.glob(os.path.join(params['Output Segmentation Folder (Empty)'], "*.tif"))
+        output_files.extend(output_png)
+        output_files.extend(output_tif)
+        for output_file in output_files:
+            im_col = m.imread(output_file)
+            im_col = im_col[0:image_size_y, 0:image_size_x]
+            m.imwrite(output_file, im_col)
+        ##
 
 		# rm tmpdir
         if os.path.exists(tmpdir) :
             shutil.rmtree(tmpdir)
 
-        m.LockFolder(parent.u_info, params['Output Segmentation Folder'])
+        m.LockFolder(parent.u_info, params['Output Segmentation Folder (Empty)'])
+        parent.parent.ExecuteCloseFileFolder(params['Output Segmentation Folder (Empty)'])
+        parent.parent.OpenFolder(params['Output Segmentation Folder (Empty)'])
+        print('')
+        print('Finish inference.')
+        print('')
+
         return

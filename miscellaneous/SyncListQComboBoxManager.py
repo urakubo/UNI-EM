@@ -152,6 +152,17 @@ class SyncListQComboBoxModelManager(SyncListQComboBoxManager):
         return self.my_u_info.open_files_type[fileName] == 'Model'
 
 
+class SyncListQComboBoxEmptyModelManager(SyncListQComboBoxManager):
+    
+    def isInclude(self, fileName):
+        if not fileName:
+            return True
+        if not fileName in self.my_u_info.open_files_type.keys():
+            return True
+        filetype = self.my_u_info.open_files_type[fileName]
+        return filetype == 'Empty' or  filetype == 'Model'
+
+
 class SyncListQComboBoxImageManager(SyncListQComboBoxManager):
     
     def isInclude(self, fileName):

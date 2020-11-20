@@ -67,7 +67,7 @@ class TrainingExe():
 
 
 		# Generate tmpdir
-        tmpdir = os.path.join( params['Empty Folder for Model'], "paired_image_segmentation")
+        tmpdir = os.path.join( params['Model Folder (Empty/Model)'], "paired"+str(os.getpid()).zfill(6)[-6:] )
         if os.path.exists(tmpdir) :
             shutil.rmtree(tmpdir)
         os.mkdir(tmpdir)
@@ -85,7 +85,7 @@ class TrainingExe():
             elif img.shape[2] == 4:
                 img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
             elif img.shape[2] != 3:
-                print('The file is broken: ', img_file)
+                print('File is broken: ', img_file)
                 print('Aborted.')
                 return
 
@@ -94,7 +94,7 @@ class TrainingExe():
             elif seg.shape[2] == 4:
                 seg = cv2.cvtColor(seg, cv2.COLOR_BGRA2BGR)
             elif seg.shape[2] != 3:
-                print('The file is broken: ', seg_file)
+                print('File is broken: ', seg_file)
                 print('Aborted.')
                 return
 
@@ -134,7 +134,7 @@ class TrainingExe():
         tmp = ['--batch_size'		, '4', \
             '--mode'			, 'train', \
 			'--input_dir'		, tmpdir, \
-			'--output_dir'		, params['Empty Folder for Model'], \
+			'--output_dir'		, params['Model Folder (Empty/Model)'], \
             '--loss'			, params['Loss Function'], \
 			'--network'		, params['Network'], \
         	'--max_epochs'		, str( params['Maximal Epochs']  ),  \
@@ -153,24 +153,18 @@ class TrainingExe():
         print('  '.join(comm))
         print('')
         print('Start training.')
-        try:
-            #####SyncListQComboBoxEmptyManager.get().removeModel(params['Empty Folder for Model'])
-            s.call(comm)
-            parent.parent.ExecuteCloseFileFolder(params['Empty Folder for Model'])
-            parent.parent.OpenFolder(params['Empty Folder for Model'])
-            # rm tmpdir
-            if os.path.exists(tmpdir) :
-            	shutil.rmtree(tmpdir)
-        except s.CalledProcessError as e:
-            print("Error ocurrs in Traslate.py.")
-
-            # rm tmpdir
-            if os.path.exists(tmpdir) :
-            	shutil.rmtree(tmpdir)
-            return
-
+        print('')
+        m.UnlockFolder(parent.u_info,  params['Model Folder (Empty/Model)'])
+        s.run(comm)
+        # rm tmpdir
         if os.path.exists(tmpdir) :
-            shutil.rmtree(tmpdir)
+        	shutil.rmtree(tmpdir)
+        m.LockFolder(parent.u_info,  params['Model Folder (Empty/Model)'])
+        parent.parent.ExecuteCloseFileFolder(params['Model Folder (Empty/Model)'])
+        parent.parent.OpenFolder(params['Model Folder (Empty/Model)'])
+        print('')
+        print('Finish training.')
+        print('')
 
         return
 

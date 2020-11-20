@@ -38,7 +38,7 @@ class TrainingTab(TrainingExe):
         self.args = [
                         ['Image Folder',    'SelectImageFolder', 'OpenImageFolder'],
                         ['Segmentation Folder',   'SelectImageFolder', 'OpenImageFolder'],
-                        ['Empty Folder for Model',  'SelectEmptyFolder', 'OpenEmptyFolder'],
+                        ['Model Folder (Empty/Model)',  'SelectEmptyModelFolder', 'OpenEmptyModelFolder'],
                         ['Network', 'Tab', ['unet', 'resnet', 'highwaynet', 'densenet'], [0,1,2,3,3] ],
                         ['U depth','SpinBox',[1,8,20]],
                         ['N res blocks','SpinBox',[1,9,255]],

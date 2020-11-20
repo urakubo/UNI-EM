@@ -119,6 +119,7 @@ class FileManager():
         SyncListQComboBoxEmptyManager.get().removeModel(file_name)
         SyncListQComboBoxFFNsManager.get().removeModel(file_name)
         SyncListQComboBoxModelManager.get().removeModel(file_name)
+        SyncListQComboBoxEmptyModelManager.get().removeModel(file_name)
         SyncListQComboBoxImageManager.get().removeModel(file_name)
         SyncListQComboBoxDojoManager.get().removeModel(file_name)
 
@@ -205,6 +206,7 @@ class FileManager():
         SyncListQComboBoxEmptyManager.get().addModel(folder_name)
         SyncListQComboBoxFFNsManager.get().addModel(folder_name)
         SyncListQComboBoxModelManager.get().addModel(folder_name)
+        SyncListQComboBoxEmptyModelManager.get().addModel(folder_name)
         SyncListQComboBoxImageManager.get().addModel(folder_name)
         SyncListQComboBoxDojoManager.get().addModel(folder_name)
 
