@@ -83,9 +83,6 @@ class FFNPostprocessing():
 
     def __init__(self, u_info):
         ##
-        datadir = u_info.data_path
-
-        
 
         self.paramfile = os.path.join(u_info.parameters_path, "FFN_Postprocessing.pickle")
 

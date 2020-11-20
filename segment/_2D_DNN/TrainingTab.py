@@ -13,7 +13,6 @@ from _2D_DNN.TrainingExe import TrainingExe
 class TrainingTab(TrainingExe):
     def __init__(self, u_info):
 
-        modelpath =  u_info.tensorflow_model_path
         self.paramfile =  os.path.join( u_info.parameters_path, "Training_2D.pickle")
 
         self.title = '2D Training'

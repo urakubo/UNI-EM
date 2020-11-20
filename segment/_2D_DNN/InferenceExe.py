@@ -8,6 +8,7 @@ import cv2
 import numpy as np
 from os import path, pardir
 import shutil
+import threading
 
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 sys.path.append(main_dir)
@@ -51,7 +52,7 @@ class InferenceExe():
             return
 
         # Generate tmpdir
-        tmpdir = os.path.join(params['Output Segmentation Folder (Empty)'], "standardized"+str(os.getpid()).zfill(6)[-6:] )
+        tmpdir = os.path.join(params['Output Segmentation Folder (Empty)'], "standardized"+str(threading.get_ident()).zfill(6)[-6:] )
         if os.path.exists(tmpdir) :
             shutil.rmtree(tmpdir)
         os.mkdir(tmpdir)

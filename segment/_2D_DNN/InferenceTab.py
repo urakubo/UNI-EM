@@ -13,7 +13,6 @@ class InferenceTab(InferenceExe):
 
     def __init__(self, u_info):
 
-        modelpath =  u_info.tensorflow_model_path
         self.paramfile =  os.path.join( u_info.parameters_path, "Inference_2D.pickle")
 
         self.title = '2D Inference'

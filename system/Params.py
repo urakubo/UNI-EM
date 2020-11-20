@@ -124,7 +124,6 @@ class Params:
 
 
 
-        self.tensorflow_model_path = os.path.normpath( path.join(self.data_path, "model_tensorflow") )
         self.parameters_path = os.path.normpath( path.join(self.data_path, "parameters") )
 
 

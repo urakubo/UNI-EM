@@ -209,7 +209,7 @@ class TabGenerator(SharedFileDialogs):
         thread = threading.Thread(target=_Run, args=( parent, params, comm_title ) )
         thread.daemon = True
         thread.start()
-        QMessageBox.about(parent, 'External function',  comm_title + ' runs on a different process.')
+        QMessageBox.about(parent, 'External function',  comm_title + ' runs on a different thread.')
         # parent.close()
         return
 

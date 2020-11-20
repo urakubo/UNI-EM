@@ -92,8 +92,6 @@ class FFNPrepTraining():
         ##
         datadir = u_info.data_path
 
-        processed_file_path   = os.path.join(datadir, "ffn")
-
         self.paramfile = os.path.join(u_info.parameters_path, "FFN_PrepTraining.pickle")
 
         self.title = 'FFN Preparation'

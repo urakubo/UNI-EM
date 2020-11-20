@@ -48,11 +48,11 @@ class FFNInference():
 
     def _Run(self, parent, params, comm_title):
 
-        m.UnlockFolder(parent.u_info,  params['FFNs Folder'])
 
         ##
         ## Remove preovious results.
         ##
+        m.UnlockFolder(parent.u_info,  params['FFNs Folder'])
         removal_file1 = os.path.join( params['FFNs Folder'] ,'0','0','seg-0_0_0.npz' )
         removal_file2 = os.path.join( params['FFNs Folder'], '0','0','seg-0_0_0.prob')
 
@@ -197,12 +197,6 @@ class FFNInference():
 
 
     def __init__(self, u_info):
-        ##
-        datadir = u_info.data_path
-
-#        ffn_file_path        = os.path.join(datadir, "ffn")
-
-#        tensorflow_file      = os.path.join(u_info.tensorflow_model_path, "model.ckpt-2000000")
 
         self.paramfile = os.path.join(u_info.parameters_path, "FFN_Inference.pickle")
 

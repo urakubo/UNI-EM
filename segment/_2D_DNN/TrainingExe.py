@@ -8,6 +8,7 @@ import cv2
 import shutil
 import subprocess as s
 import numpy as np
+# import threading
 from os import path, pardir
 
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
@@ -67,7 +68,7 @@ class TrainingExe():
 
 
 		# Generate tmpdir
-        tmpdir = os.path.join( params['Model Folder (Empty/Model)'], "paired"+str(os.getpid()).zfill(6)[-6:] )
+        tmpdir = os.path.join( params['Model Folder (Empty/Model)'], "paired" ) # +str(threading.get_ident()).zfill(6)[-6:] )
         if os.path.exists(tmpdir) :
             shutil.rmtree(tmpdir)
         os.mkdir(tmpdir)

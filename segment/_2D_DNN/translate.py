@@ -29,11 +29,14 @@ if ('1.14' in tf.__version__) | ('1.15' in tf.__version__):
     tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
 config = tf.ConfigProto(
-    gpu_options=tf.GPUOptions(
-        allow_growth=True # True-> depends on neccesity, False->all
-    )
+   gpu_options=tf.GPUOptions(
+       allow_growth=True # True-> depends on neccesity, False->all
+   )
 )
 sess = sess = tf.Session(config=config)
+
+# os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
+
 #}HU
 
 parser = argparse.ArgumentParser()
