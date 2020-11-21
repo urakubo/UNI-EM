@@ -74,6 +74,9 @@ class FFNTraining():
         #
         return True
 
+
+
+
     def __init__(self, u_info):
         ##
         datadir = u_info.data_path

@@ -57,8 +57,10 @@ class FFNInference():
         removal_file2 = os.path.join( params['FFNs Folder'], '0','0','seg-0_0_0.prob')
 
         if os.path.isfile(removal_file1) or os.path.isfile(removal_file2) :
-            Reply = QMessageBox.question(parent, 'FFN', 'seg-0_0_0 files were found in the FFNs Folder. Remove them?',  QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-            if Reply == QMessageBox.Yes:
+            question = "seg-0_0_0 files were found in the FFNs Folder. Remove them?"
+            reply = self.query_yes_no(question, default="yes")
+
+            if reply == True:
                 with contextlib.suppress(FileNotFoundError):
                     os.remove(removal_file1)
                 with contextlib.suppress(FileNotFoundError):
@@ -194,7 +196,30 @@ class FFNInference():
         max_id_name = os.path.join(folder_path, 'model.ckpt-' + str(max(map(int, intersection)))  )
         return max_id_name
 
+    def query_yes_no(self, question, default="yes"):
 
+        valid = {"yes":True,   "y":True,  "ye":True,
+            "no":False,     "n":False}
+        if default == None:
+            prompt = " [y/n] "
+        elif default == "yes":
+            prompt = " [Y/n] "
+        elif default == "no":
+            prompt = " [y/N] "
+        else:
+            raise ValueError("invalid default answer: '%s'" % default)
+
+        while True:
+            sys.stdout.write(question + prompt)
+            choice = input().lower()
+            if default is not None and choice == '':
+            	return valid[default]
+            elif choice in valid:
+            	return valid[choice]
+            else:
+            	sys.stdout.write("Please respond with 'yes' or 'no' "\
+		                         "(or 'y' or 'n').\n")
+# Usage example
 
     def __init__(self, u_info):
 

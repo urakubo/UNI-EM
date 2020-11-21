@@ -54,6 +54,8 @@ if ('1.14' in tf.__version__) | ('1.15' in tf.__version__):
     tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
 os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
+
+
 #}HU
 
 
