@@ -22,6 +22,12 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+# HU
+import warnings
+warnings.filterwarnings('ignore', category=DeprecationWarning)
+warnings.filterwarnings('ignore', category=FutureWarning)
+#
+
 import logging
 import os
 try:
@@ -50,11 +56,11 @@ if tf.__version__ == '1.12.0':
     from tensorflow.python.util import deprecation
     deprecation._PRINT_DEPRECATION_WARNINGS = False
 
-if ('1.14' in tf.__version__) | ('1.15' in tf.__version__):
-    tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+#if ('1.14' in tf.__version__) | ('1.15' in tf.__version__):
+#    tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
 os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
-
+tf.logging.set_verbosity(tf.logging.INFO)
 
 #}HU
 

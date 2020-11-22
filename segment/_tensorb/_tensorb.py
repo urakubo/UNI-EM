@@ -36,14 +36,14 @@ class GenerateDialog(QWidget):
             return
 
         ## Tensorboard launch.
-        self.StartTensorboard(newdir)
+        return self.StartTensorboard(newdir)
 
 
     def StartTensorboard(self, newdir):
 
         tmp = [ \
         		'--logdir'		, newdir				, \
-				'--host'		, socket.gethostbyname(socket.gethostname()) ]
+				'--host'		, socket.gethostbyname(socket.gethostname()), '--purge_orphaned_data', 'False' ]
         comm = self.u_info.exec_tensorboard[:]
         comm.extend( tmp )
 
@@ -55,10 +55,10 @@ class GenerateDialog(QWidget):
             self.parent.table_widget.addTab('tensorboard', 'Tensorboard',
                                      'http://' + socket.gethostbyname(socket.gethostname()) + ':6006')
             print("Start tensorboard")
-            return
+            return True
         except s.CalledProcessError as e:
             print("Error ocurrs in tensorboard")
-            return
+            return False
 
 #    def CloseTensorboard(self):
 #        self.p.terminate()

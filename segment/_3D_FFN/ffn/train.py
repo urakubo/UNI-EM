@@ -73,6 +73,7 @@ if tf.__version__ == '1.12.0':
 
 if ('1.14' in tf.__version__) | ('1.15' in tf.__version__):
     tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+tf.logging.set_verbosity(tf.logging.INFO)
 #
 
 
@@ -631,6 +632,7 @@ def save_flags():
 
 
 def train_ffn(model_cls, **model_kwargs):
+
   with tf.Graph().as_default():
     with tf.device(tf.train.replica_device_setter(FLAGS.ps_tasks, merge_devices=True)):
       # The constructor might define TF ops/placeholders, so it is important

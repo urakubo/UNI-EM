@@ -8,7 +8,7 @@ import cv2
 import shutil
 import subprocess as s
 import numpy as np
-# import threading
+import threading
 from os import path, pardir
 
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
@@ -68,7 +68,7 @@ class TrainingExe():
 
 
 		# Generate tmpdir
-        tmpdir = os.path.join( params['Model Folder (Empty/Model)'], "paired" ) # +str(threading.get_ident()).zfill(6)[-6:] )
+        tmpdir = os.path.join( params['Model Folder (Empty)'], "paired"+str(threading.get_ident()).zfill(6)[-6:] ) #  )
         if os.path.exists(tmpdir) :
             shutil.rmtree(tmpdir)
         os.mkdir(tmpdir)
@@ -135,7 +135,7 @@ class TrainingExe():
         tmp = ['--batch_size'		, '4', \
             '--mode'			, 'train', \
 			'--input_dir'		, tmpdir, \
-			'--output_dir'		, params['Model Folder (Empty/Model)'], \
+			'--output_dir'		, params['Model Folder (Empty)'], \
             '--loss'			, params['Loss Function'], \
 			'--network'		, params['Network'], \
         	'--max_epochs'		, str( params['Maximal Epochs']  ),  \
@@ -155,14 +155,14 @@ class TrainingExe():
         print('')
         print('Start training.')
         print('')
-        m.UnlockFolder(parent.u_info,  params['Model Folder (Empty/Model)'])
+        m.UnlockFolder(parent.u_info,  params['Model Folder (Empty)'])
         s.run(comm)
         # rm tmpdir
         if os.path.exists(tmpdir) :
         	shutil.rmtree(tmpdir)
-        m.LockFolder(parent.u_info,  params['Model Folder (Empty/Model)'])
-        parent.parent.ExecuteCloseFileFolder(params['Model Folder (Empty/Model)'])
-        parent.parent.OpenFolder(params['Model Folder (Empty/Model)'])
+        m.LockFolder(parent.u_info,  params['Model Folder (Empty)'])
+        parent.parent.ExecuteCloseFileFolder(params['Model Folder (Empty)'])
+        parent.parent.OpenFolder(params['Model Folder (Empty)'])
         print('')
         print('Finish training.')
         print('')

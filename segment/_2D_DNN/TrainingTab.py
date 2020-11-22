@@ -20,7 +20,7 @@ class TrainingTab(TrainingExe):
         self.tips = [
                         'Path to folder containing images',
                         'Path to folder containing segmentation',
-                        'Directory with checkpoint to resume training from or use for testing',
+                        'Empty folder tensorflow model. Currently, additional training is not allowed, so the only empty folder is accepted.',
                         'Network topology',
                         'Depth of U-net (maximum 8)',
                         'Number of residual blocks in res net',
@@ -37,7 +37,7 @@ class TrainingTab(TrainingExe):
         self.args = [
                         ['Image Folder',    'SelectImageFolder', 'OpenImageFolder'],
                         ['Segmentation Folder',   'SelectImageFolder', 'OpenImageFolder'],
-                        ['Model Folder (Empty/Model)',  'SelectEmptyModelFolder', 'OpenEmptyModelFolder'],
+                        ['Model Folder (Empty)',  'SelectEmptyFolder', 'OpenEmptyFolder'],
                         ['Network', 'Tab', ['unet', 'resnet', 'highwaynet', 'densenet'], [0,1,2,3,3] ],
                         ['U depth','SpinBox',[1,8,20]],
                         ['N res blocks','SpinBox',[1,9,255]],

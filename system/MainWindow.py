@@ -255,6 +255,8 @@ class PersephonepTableWidget(QWidget):
     def closeTab(self, index):
         ''' close Tab.
         '''
+
+        print('Close application: ', self.appl[index] )###
         ###
         if ('dojo' == self.appl[index]):
             flag = self.parent.CloseDojoFiles2()
