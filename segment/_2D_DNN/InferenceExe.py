@@ -21,7 +21,6 @@ class InferenceExe():
 
     def _Run(self, parent, params, comm_title):
 
-        datadir = parent.u_info.data_path
 
         input_files = glob.glob(os.path.join(params['Image Folder'], "*.jpg"))
         input_png = glob.glob(os.path.join(params['Image Folder'], "*.png"))
@@ -30,8 +29,7 @@ class InferenceExe():
         input_files.extend(input_tif)
         if len(input_files) == 0:
             print('No images in the Image Folder.')
-            return
-
+            return False
         im = m.imread(input_files[0], cv2.IMREAD_UNCHANGED)
         print('')
         print('Target file to check color type : ', input_files[0])
@@ -39,68 +37,105 @@ class InferenceExe():
         print('Image filetype                  : ', im.dtype)
         image_size_x = im.shape[1]
         image_size_y = im.shape[0]
-        converted_size_x = image_size_x
-        converted_size_y = image_size_y
-        std_sizes = [2 ** i for i in range(8, 15)] # 256, 512, ..., 16384
-        np_std_sizes = np.array(std_sizes)
 
-        if ( image_size_x > max(std_sizes) or image_size_y > max(std_sizes) ):
-            print('Image size is too big.')
-            return
-        if ( image_size_x < min(std_sizes) or image_size_y < min(std_sizes) ):
+        if ( image_size_x <= 256 or image_size_y <= 256 ):
             print('Image size is too small.')
-            return
+            return False
+
 
         # Generate tmpdir
-        tmpdir = os.path.join(params['Output Segmentation Folder (Empty)'], "standardized"+str(threading.get_ident()).zfill(6)[-6:] )
-        if os.path.exists(tmpdir) :
-            shutil.rmtree(tmpdir)
-        os.mkdir(tmpdir)
+        tmpdir_standardized = os.path.join(params['Output Segmentation Folder (Empty)'], "standardized"+str(threading.get_ident()).zfill(6)[-6:] )
+        if os.path.exists(tmpdir_standardized) :
+            shutil.rmtree(tmpdir_standardized)
+        os.mkdir(tmpdir_standardized)
+        #
+        tmpdir_output = os.path.join(params['Output Segmentation Folder (Empty)'], "output"+str(threading.get_ident()).zfill(6)[-6:] )
+        if os.path.exists(tmpdir_output) :
+            shutil.rmtree(tmpdir_output)
+        os.mkdir(tmpdir_output)
 
-        ##
-        ## Check whether the target images should be converted.
-        ##
-        if not (im.dtype == "uint8" and len(im.shape) == 3 and input_tif == [] and
-                image_size_x in std_sizes and image_size_y in std_sizes) :
 
-            # Check image size
-            converted_size_x_id = np.min( np.where((np_std_sizes - image_size_x) > 0) )
-            converted_size_y_id = np.min( np.where((np_std_sizes - image_size_y) > 0) )
-            converted_size_x    = np_std_sizes[converted_size_x_id]
-            converted_size_y    = np_std_sizes[converted_size_y_id]
-            fringe_size_x = converted_size_x - image_size_x
-            fringe_size_y = converted_size_y - image_size_y
+        ## Check image size
+        max_image_size = params['Maximal unit image size']
+        if max_image_size == '512' :
+            std_sizes = np.array([512])
+        elif max_image_size == '1024' :
+            std_sizes = np.array([512, 1024])
+        elif max_image_size == '2048' :
+            std_sizes = np.array([512, 1024, 2048])
+        else :
+            print('Internal error at Maximal unit image size.')
+            return False
 
-            # Image Conversion
-            for input_file in input_files:
-                im_col = m.imread(input_file)
-                filename = path.basename(input_file)
-                filename = filename.replace('.tif', '.png')
-                converted_filename = os.path.join( tmpdir, filename )
+        max_std_size = np.max(std_sizes)
+        if image_size_x > max_std_size :
+        	unit_image_size_x = max_std_size
+        	num_tiles_x      = np.int( np.ceil( float( image_size_x ) / max_std_size  ) )
+        else:
+        	unit_image_size_x = np.min(std_sizes[std_sizes>=image_size_x])
+        	num_tiles_x      = 1
 
-                # add fringe X
-                im_fringe_x = cv2.flip(im_col, 1) # flipcode > 0, left-right
-                im_fringe_x = im_fringe_x[ :, 0:fringe_size_x]
-                converted_image = cv2.hconcat([im_col, im_fringe_x])
-                # add fringe Y
-                im_fringe_y = cv2.flip(converted_image, 0) # flipcode = 0, top-bottom
-                im_fringe_y = im_fringe_y[0:fringe_size_y, :]
-                converted_image = cv2.vconcat([converted_image, im_fringe_y])
-                # Save
-                m.imwrite(converted_filename, converted_image)
+        if image_size_y > max_std_size :
+        	unit_image_size_y = max_std_size
+        	num_tiles_y      = np.int( np.ceil( float( image_size_y ) / max_std_size  ) )
+        else:
+        	unit_image_size_y = np.min(std_sizes[std_sizes>=image_size_y])
+        	num_tiles_y      = 1
+		#
+        converted_size_x = unit_image_size_x * num_tiles_x
+        converted_size_y = unit_image_size_y * num_tiles_y
+        fringe_size_x = converted_size_x - image_size_x
+        fringe_size_y = converted_size_y - image_size_y
 
-            #Complete
-            params['Image Folder'] = tmpdir
-            print('Filetype of images was changed to RGB 8bit, and stored in ', tmpdir)
+		#
+		#
+        output_files = []
+        print('Image standardization: ')
+        for input_file in input_files:
+            im_col = m.imread(input_file)
+            # im_col = self._ChangeIntoColor(im_col)
 
+            filename = path.basename(input_file)
+            print(filename+' ')
+            output_files.append(filename)
+            filename = filename.replace('.tif', '.png')
+
+            # add fringe X
+            im_fringe_x = cv2.flip(im_col, 1) # flipcode > 0, left-right
+            im_fringe_x = im_fringe_x[ :, 0:fringe_size_x]
+            converted_image = cv2.hconcat([im_col, im_fringe_x])
+            # add fringe Y
+            im_fringe_y = cv2.flip(converted_image, 0) # flipcode = 0, top-bottom
+            im_fringe_y = im_fringe_y[0:fringe_size_y, :]
+            converted_image = cv2.vconcat([converted_image, im_fringe_y])
+            # Save
+            if (num_tiles_x == 1) and (num_tiles_y == 1) :
+            	converted_filename = os.path.join( tmpdir_standardized, filename )
+            	m.imwrite(converted_filename, converted_image)
+            else :
+            	for iy in range( num_tiles_y ):
+            		for ix in range( num_tiles_x ):
+            			y0 = iy * unit_image_size_y
+            			y1 = y0 + unit_image_size_y
+            			x0 = ix * unit_image_size_x
+            			x1 = x0 + unit_image_size_x
+            			current_tile = converted_image[y0:y1, x0:x1]
+            			converted_filename = str(ix).zfill(3)[-3:]+'_'+ str(iy).zfill(3)[-3:]+'_'+filename
+            			converted_filename = os.path.join( tmpdir_standardized, converted_filename )
+            			m.imwrite(converted_filename, current_tile)
+
+        #Complete
+        print('')
+        print('Images were split and changed into RGB 8bit, and stored in ', tmpdir_standardized)
+        print('')
 
         tmp = ['--mode'		, 'predict'	, \
         	'--save_freq'	, '0'		, \
-        	'--input_dir'	, params['Image Folder'], \
-			'--output_dir'	, params['Output Segmentation Folder (Empty)'], \
+        	'--input_dir'	, tmpdir_standardized, \
+			'--output_dir'	, tmpdir_output, \
 			'--checkpoint'	, params['Model Folder'], \
-            '--image_height', str(converted_size_y), \
-            '--image_width'	, str(converted_size_x)]
+            '--image_height', str(unit_image_size_y), \
+            '--image_width'	, str(unit_image_size_x)]
 
         comm = parent.u_info.exec_translate[:]
         comm.extend( tmp )
@@ -113,30 +148,55 @@ class InferenceExe():
         print('')
         m.UnlockFolder(parent.u_info, params['Output Segmentation Folder (Empty)'])  # Only for shared folder/file
         s.run(comm)
-        parent.parent.ExecuteCloseFileFolder(params['Output Segmentation Folder (Empty)'])
-        parent.parent.OpenFolder(params['Output Segmentation Folder (Empty)'])
 
-        ## Cut out fringes
-        output_files = glob.glob(os.path.join(params['Output Segmentation Folder (Empty)'], "*.jpg"))
-        output_png   = glob.glob(os.path.join(params['Output Segmentation Folder (Empty)'], "*.png"))
-        output_tif   = glob.glob(os.path.join(params['Output Segmentation Folder (Empty)'], "*.tif"))
-        output_files.extend(output_png)
-        output_files.extend(output_tif)
+        print('Segmentation reconstruction: ')
         for output_file in output_files:
-            im_col = m.imread(output_file)
-            im_col = im_col[0:image_size_y, 0:image_size_x]
-            m.imwrite(output_file, im_col)
+			##
+        	print(output_file, ' ')
+        	if (num_tiles_x == 1) and (num_tiles_y == 1) :
+        	## Remove fringes
+        		filename = os.path.join( tmpdir_output, output_file )
+        		inferred_segmentation = m.imread(filename)
+        	else :
+        	## Merge split images.
+        		inferred_segmentation = np.zeros((converted_size_y, converted_size_x, 3), dtype = int)
+        		for iy in range( num_tiles_y ):
+	        		for ix in range( num_tiles_x ):
+	        			y0 = iy * unit_image_size_y
+	        			y1 = y0 + unit_image_size_y
+	        			x0 = ix * unit_image_size_x
+	        			x1 = x0 + unit_image_size_x
+	        			current_tile_filename = str(ix).zfill(3)[-3:]+'_'+ str(iy).zfill(3)[-3:]+'_'+output_file
+	        			current_tile_filename = os.path.join( tmpdir_output, current_tile_filename )
+	        			current_tile = m.imread(current_tile_filename)
+	        			inferred_segmentation[y0:y1, x0:x1] = current_tile
+        	inferred_segmentation = inferred_segmentation[0:image_size_y, 0:image_size_x]
+        	filename = os.path.join( params['Output Segmentation Folder (Empty)'], output_file )
+        	m.imwrite(filename, inferred_segmentation)
+
         ##
 
 		# rm tmpdir
-        if os.path.exists(tmpdir) :
-            shutil.rmtree(tmpdir)
+        if os.path.exists(tmpdir_standardized) :
+            shutil.rmtree(tmpdir_standardized)
+        if os.path.exists(tmpdir_output) :
+            shutil.rmtree(tmpdir_output)
 
-        m.LockFolder(parent.u_info, params['Output Segmentation Folder (Empty)'])
         parent.parent.ExecuteCloseFileFolder(params['Output Segmentation Folder (Empty)'])
         parent.parent.OpenFolder(params['Output Segmentation Folder (Empty)'])
         print('')
         print('Finish inference.')
         print('')
+        return True
 
-        return
+
+    def _ChangeIntoColor(self, img):
+
+        if len(img.shape) == 2:
+            img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+        elif img.shape[2] == 4:
+            img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
+        return img
+
+               
+

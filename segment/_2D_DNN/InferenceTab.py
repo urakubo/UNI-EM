@@ -19,15 +19,17 @@ class InferenceTab(InferenceExe):
 
         self.tips = [
                         'Path to folder containing images',
-                        'Path to folder for storing segmentation',
-                        'Directory with checkpoint for training data'
+                        'Path to folder to store segmentation',
+                        'Tensorflow model folder',
+                        'Large image will be splited into pieces of the unit images'
                         ]
 
 
         self.args = [
                         ['Image Folder',    'SelectImageFolder', 'OpenImageFolder'],
                         ['Output Segmentation Folder (Empty)', 'SelectEmptyFolder', 'OpenEmptyFolder'],
-                        ['Model Folder',  'SelectModelFolder', 'OpenModelFolder']
+                        ['Model Folder',  'SelectModelFolder', 'OpenModelFolder'],
+                        ['Maximal unit image size',  'ComboBox', ["512", "1024", "2048"]]
                         ]
 
 
