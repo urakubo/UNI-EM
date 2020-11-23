@@ -43,9 +43,9 @@ scipy==1.2.0
 sip==5.4.0
 six==1.15.0
 tbb==2019.0
-tensorboard==1.15.0
-tensorflow-estimator==1.15.1
-tensorflow==1.15.4
+tensorboard==1.14.0
+tensorflow==1.14.0
+tensorflow-estimator==1.14.0
 termcolor==1.1.0
 toml==0.10.2
 toolz==0.9.0
