@@ -37,12 +37,20 @@ class _GenerateContents(SharedFileDialogs):
                         'Destination Dojo Folder:'
                     ]
 
-    def generate(self, i):
+    def GenerateComboboxDialog_Image(self, i):
         lbl   = QLabel(self.args[i])
-        edit  = SyncListQComboBoxExcludeDojoMtifManager.get().create(self, i)
+        edit  = SyncListQComboBoxImageManager.get().create(self, i)
         btn   = QPushButton("Open...")
         btn.clicked.connect(lambda state : self.browse_OpenImageFolder(edit) )
         return lbl, edit, btn
+
+    def GenerateComboboxDialog_Empty(self, i):
+        lbl   = QLabel(self.args[i])
+        edit  = SyncListQComboBoxEmptyManager.get().create(self, i)
+        btn   = QPushButton("Open...")
+        btn.clicked.connect(lambda state : self.browse_OpenSpecificFolder(edit, ['Empty']) )
+        return lbl, edit, btn
+
 
 
 #class DialogGenerateDojoFolder(QWidget):
@@ -67,8 +75,9 @@ class DialogGenerateDojoFolder(QDialog):
         btn         = [0,0,0]
 
         content = _GenerateContents(self)
-        for i in range(3):
-            lbl[i], self.edit[i], btn[i] = content.generate(i)
+        lbl[0], self.edit[0], btn[0] = content.GenerateComboboxDialog_Image(0)
+        lbl[1], self.edit[1], btn[1] = content.GenerateComboboxDialog_Image(1)
+        lbl[2], self.edit[2], btn[2] = content.GenerateComboboxDialog_Empty(2)
 
         ok_import = QPushButton("OK")
         cl_import = QPushButton("Cancel")
@@ -164,16 +173,7 @@ class DialogGenerateDojoFolder(QDialog):
 
 
     def _UpdateFileSystem(self, dir_dojo):
-        # Release
-        m.UnlockFolder(self.u_info, dir_dojo)
-        # Lock again
-        m.LockFolder(self.u_info, dir_dojo)
-        # Filetype
-        self.u_info.open_files_type[dir_dojo] = 'Dojo'
-        # Dropdown menu update
-        self.parent.UpdateOpenFileMenu()
-        # Combo box update
-        SyncListQComboBoxExcludeDojoMtifManager.get().removeModel(dir_dojo)
-        SyncListQComboBoxOnlyDojoManager.get().addModel(dir_dojo)
 
+        self.parent.ExecuteCloseFileFolder(dir_dojo)
+        self.parent.OpenFolder(dir_dojo)
 

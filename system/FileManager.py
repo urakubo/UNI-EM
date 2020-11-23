@@ -133,8 +133,20 @@ class FileManager():
 #    return  False
 ##
 
+    def OpenDialogOpenFolder(self):
+        initdir = os.path.normpath( path.join(main_dir, "..") )
+        open_folder_name = QFileDialog.getExistingDirectory(self, "Select folder (Dojo/Image/Model/Empty, etc)", initdir)
+        if len(open_folder_name) == 0:
+            print('No folder was selected.')
+            return
+        open_folder_name = open_folder_name.replace('/', os.sep)
+        flag = self.OpenFolder(open_folder_name)
+        return flag
+
+
     def OpenFolder(self, file_folder_name):
 
+        print('file_folder_name: ', file_folder_name)
         if self.InitialCheckOpenFolder(file_folder_name) == False:
             return False
 
@@ -146,7 +158,7 @@ class FileManager():
         if flag == False :
             return False
         self.AddDropDownMenu( file_folder_name )
-        return 
+        return True
 
 
     def OpenSpecificFolder(self, folder_name, required_folder_types):
