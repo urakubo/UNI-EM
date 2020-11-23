@@ -63,10 +63,12 @@ class TabGenerator(SharedFileDialogs):
                 lbl.append(QLabel(args[i][0] + ' :'))
                 lbl[-1].setToolTip(tips[i])
 
-        require_browse_dir = []
-        require_browse_dir_img = []
-        require_browse_file = []
-        require_browse_open_img = []
+        require_browse_dir       = []
+        require_browse_dir_img   = []
+        require_browse_file      = []
+        require_browse_open_img  = []
+
+        require_browse_dir_specific = {}
 
         tab_elem_count = 0
         id_sub_tab = []
@@ -125,9 +127,25 @@ class TabGenerator(SharedFileDialogs):
                     ttab[-1].setLayout(ttab[-1].layout)
             ##
             elif args[i][1] == 'SelectImageFolder':
-                obj_args.append(SyncListQComboBoxExcludeDojoMtifManager.get().create(att, i))
+                obj_args.append(SyncListQComboBoxImageManager.get().create(att, i))
                 if args[i][2] == 'OpenImageFolder':
                     require_browse_open_img.append(i)
+            elif args[i][1] == 'SelectModelFolder':
+                obj_args.append(SyncListQComboBoxModelManager.get().create(att, i))
+                if args[i][2] == 'OpenModelFolder':
+                    require_browse_dir_specific[i] = 'Model'
+            elif args[i][1] == 'SelectFFNsFolder':
+                obj_args.append(SyncListQComboBoxFFNsManager.get().create(att, i))
+                if args[i][2] == 'OpenFFNsFolder':
+                    require_browse_dir_specific[i] = 'FFNs'
+            elif args[i][1] == 'SelectEmptyFolder':
+                obj_args.append(SyncListQComboBoxEmptyManager.get().create(att, i))
+                if args[i][2] == 'OpenEmptyFolder':
+                    require_browse_dir_specific[i] = 'Empty'
+            elif args[i][1] == 'SelectEmptyModelFolder':
+                obj_args.append(SyncListQComboBoxEmptyModelManager.get().create(att, i))
+                if args[i][2] == 'OpenEmptyModelFolder':
+                    require_browse_dir_specific[i] = ['Empty','Model']
             else:
                 print('Internal error. No fucntion.')
 
@@ -157,6 +175,12 @@ class TabGenerator(SharedFileDialogs):
                 browse_button.append(QPushButton("Open..."))
                 browse_button[-1].clicked.connect(lambda state, z=id: self.browse_OpenImageFolder(obj_args[z]))
                 tab.layout.addWidget(browse_button[-1], i + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
+            elif id in require_browse_dir_specific.keys():
+                browse_button.append(QPushButton("Browse..."))
+                folder_type = require_browse_dir_specific[id]
+                browse_button[-1].clicked.connect(lambda state, z=id: self.browse_OpenSpecificFolder(obj_args[z], folder_type))
+                tab.layout.addWidget(browse_button[-1], i + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
+
             i = i + 1
                 # addWidget(*Widget, row, column, rowspan, colspan)
 
@@ -185,7 +209,7 @@ class TabGenerator(SharedFileDialogs):
         thread = threading.Thread(target=_Run, args=( parent, params, comm_title ) )
         thread.daemon = True
         thread.start()
-        QMessageBox.about(parent, 'External function',  comm_title + ' runs on a different process.')
+        QMessageBox.about(parent, 'External function',  comm_title + ' runs on a different thread.')
         # parent.close()
         return
 

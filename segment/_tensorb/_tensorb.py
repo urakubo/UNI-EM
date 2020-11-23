@@ -30,34 +30,35 @@ class GenerateDialog(QWidget):
             return
 
         ## Select Tensorboard Folder
-        newdir = QFileDialog.getExistingDirectory(self, "Select tensorboard folder", self.u_info.tensorflow_model_path)
+        newdir = QFileDialog.getExistingDirectory( self, "Select tensorboard folder", self.u_info.data_path )
         if len(newdir) == 0:
             print('No folder was selected.')
             return
-        self.u_info.tensorboard_path = newdir
 
         ## Tensorboard launch.
-        self.StartTensorboard()
+        return self.StartTensorboard(newdir)
 
 
-    def StartTensorboard(self):
+    def StartTensorboard(self, newdir):
 
-        comm = self.u_info.exec_tensorboard   + ' ' \
-                + ' --logdir ' + self.u_info.tensorboard_path + ' ' \
-                + ' --host ' + socket.gethostbyname(socket.gethostname())
+        tmp = [ \
+        		'--logdir'		, newdir				, \
+				'--host'		, socket.gethostbyname(socket.gethostname()), '--purge_orphaned_data', 'False' ]
+        comm = self.u_info.exec_tensorboard[:]
+        comm.extend( tmp )
+
         print(comm)
 
-
         try:
-            self.parent.process_tensorboard = s.Popen(comm.split(), stdout=s.PIPE)
+            self.parent.process_tensorboard = s.Popen(comm, stdout=s.PIPE)
             time.sleep(1)
             self.parent.table_widget.addTab('tensorboard', 'Tensorboard',
                                      'http://' + socket.gethostbyname(socket.gethostname()) + ':6006')
             print("Start tensorboard")
-            return
+            return True
         except s.CalledProcessError as e:
             print("Error ocurrs in tensorboard")
-            return
+            return False
 
 #    def CloseTensorboard(self):
 #        self.p.terminate()

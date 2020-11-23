@@ -34,14 +34,14 @@ class TableGenerator(MiscellaneousFilters):
         lbl      = []
         obj_args = []
 
-        lbl.append(QLabel('Target Folder:'))
+        lbl.append(QLabel('Target Folder (Image):'))
         lbl[-1].setToolTip('Path to folder containing images')
-        self.parent.targ_image_folder_qcombo = SyncListQComboBoxExcludeDojoMtifManager.get().create(self, 1)
+        self.parent.targ_image_folder_qcombo = SyncListQComboBoxImageManager.get().create(self, 1)
         obj_args.append( self.parent.targ_image_folder_qcombo )
 
-        lbl.append(QLabel('Output Folder:'))
-        lbl[-1].setToolTip('Path to folder containing images')
-        obj_args.append( SyncListQComboBoxExcludeDojoMtifManager.get().create(self, 2) )
+        lbl.append(QLabel('Output Folder (Empty):'))
+        lbl[-1].setToolTip('Path to empty folder')
+        obj_args.append( SyncListQComboBoxEmptyManager.get().create(self, 2) )
 
         lbl.append(QPushButton('Save Parameters'))
         lbl[-1].clicked.connect(lambda: self.SaveParamsFilter(args, obj_args))
@@ -61,15 +61,20 @@ class TableGenerator(MiscellaneousFilters):
             table.layout.addWidget(lbl[id], id + 1, 0, alignment=Qt.AlignRight)  # (Qt.AlignRight | Qt.AlignTop)
             table.layout.addWidget(obj_args[id], id + 1, 1, 1, ncol - 1)
 
-            if id in [0,1]: # require_browse_open_img
+            if id == 0: # require_browse_open_img
                 browse_button.append(QPushButton("Open..."))
                 browse_button[-1].clicked.connect(lambda state, z=id: self.browse_OpenImageFolder(obj_args[z]))
+                table.layout.addWidget(browse_button[-1], id + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
+            if id == 1: # require_browse_open_img
+                browse_button.append(QPushButton("Open..."))
+                browse_button[-1].clicked.connect(lambda state, z=id: self.browse_OpenSpecificFolder(obj_args[z], ['Empty']))
                 table.layout.addWidget(browse_button[-1], id + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
 
             elif id in [2,3] : # 'Browsefile'
                 browse_button.append(QPushButton("Browse..."))
                 browse_button[-1].clicked.connect(lambda state, x=id: self.browse_file(obj_args[x]))
                 table.layout.addWidget(browse_button[-1], id + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
+
 
 
         return table, obj_args, args

@@ -13,8 +13,8 @@ class SyncListQComboBoxManager():
     """
     
     singletonObj = None
-    
-    
+
+
     def __init__(self, u_info):
         self.selectedSaveIdx = dict()
         self.model = QStringListModel([""])
@@ -121,19 +121,62 @@ class SyncListQComboBoxManager():
             self.currentIndexChanged.connect(lambda idx: manager.saveSelected(self, idx, key))
 
 
-class SyncListQComboBoxExcludeDojoMtifManager(SyncListQComboBoxManager):
+
+class SyncListQComboBoxEmptyManager(SyncListQComboBoxManager):
     
-    def isExclude(self, fileName):
+    def isInclude(self, fileName):
         if not fileName:
-            return False
+            return True
+        if not fileName in self.my_u_info.open_files_type.keys():
+            return True
+        return self.my_u_info.open_files_type[fileName] == 'Empty'
+
+
+class SyncListQComboBoxFFNsManager(SyncListQComboBoxManager):
+    
+    def isInclude(self, fileName):
+        if not fileName:
+            return True
+        if not fileName in self.my_u_info.open_files_type.keys():
+            return True
+        return self.my_u_info.open_files_type[fileName] == 'FFNs'
+
+
+class SyncListQComboBoxModelManager(SyncListQComboBoxManager):
+    
+    def isInclude(self, fileName):
+        if not fileName:
+            return True
+        if not fileName in self.my_u_info.open_files_type.keys():
+            return True
+        return self.my_u_info.open_files_type[fileName] == 'Model'
+
+
+class SyncListQComboBoxEmptyModelManager(SyncListQComboBoxManager):
+    
+    def isInclude(self, fileName):
+        if not fileName:
+            return True
+        if not fileName in self.my_u_info.open_files_type.keys():
+            return True
+        filetype = self.my_u_info.open_files_type[fileName]
+        return filetype == 'Empty' or  filetype == 'Model'
+
+
+class SyncListQComboBoxImageManager(SyncListQComboBoxManager):
+    
+    def isInclude(self, fileName):
+        if not fileName:
+            return True
         
         if not fileName in self.my_u_info.open_files_type.keys():
-            return False
+            return True
         
-        return self.my_u_info.open_files_type[fileName] == 'Dojo' or self.my_u_info.open_files_type[fileName] == 'mtif'
+        filetype = self.my_u_info.open_files_type[fileName]
+        return filetype == 'tif' or  filetype == 'png' or  filetype == 'jpg'
 
-    
-class SyncListQComboBoxOnlyDojoManager(SyncListQComboBoxManager):
+
+class SyncListQComboBoxDojoManager(SyncListQComboBoxManager):
     
     def isInclude(self, fileName):
         if not fileName:
@@ -143,3 +186,16 @@ class SyncListQComboBoxOnlyDojoManager(SyncListQComboBoxManager):
             return True
         
         return self.my_u_info.open_files_type[fileName] == 'Dojo'
+
+
+#class SyncListQComboBoxExcludeDojoMtifManager(SyncListQComboBoxManager):
+#    
+#    def isExclude(self, fileName):
+#        if not fileName:
+#            return False
+#        
+#        if not fileName in self.my_u_info.open_files_type.keys():
+#            return False
+#        
+#        return self.my_u_info.open_files_type[fileName] == 'Dojo' or self.my_u_info.open_files_type[fileName] == 'mtif'
+

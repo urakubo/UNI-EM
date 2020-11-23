@@ -23,6 +23,12 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+# HU
+import warnings
+warnings.filterwarnings('ignore', category=DeprecationWarning)
+warnings.filterwarnings('ignore', category=FutureWarning)
+#
+
 from collections import deque
 from io import BytesIO
 from functools import partial
@@ -58,6 +64,19 @@ from ffn.training import augmentation
 # pylint: disable=unused-import
 #from ffn.training import optimizer
 # pylint: enable=unused-import
+
+
+#HU
+if tf.__version__ == '1.12.0':
+    from tensorflow.python.util import deprecation
+    deprecation._PRINT_DEPRECATION_WARNINGS = False
+
+if ('1.14' in tf.__version__) | ('1.15' in tf.__version__):
+    tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+tf.logging.set_verbosity(tf.logging.INFO)
+#
+
+
 
 FLAGS = flags.FLAGS
 
@@ -613,6 +632,7 @@ def save_flags():
 
 
 def train_ffn(model_cls, **model_kwargs):
+
   with tf.Graph().as_default():
     with tf.device(tf.train.replica_device_setter(FLAGS.ps_tasks, merge_devices=True)):
       # The constructor might define TF ops/placeholders, so it is important

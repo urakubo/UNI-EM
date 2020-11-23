@@ -24,7 +24,7 @@ tb.configure(argv=argv)
 tb.launch()
 try:
     while True:
-        time.sleep(10)
+        time.sleep(1)
 except KeyboardInterrupt:
     print('Tensorboard interrupted!')
 

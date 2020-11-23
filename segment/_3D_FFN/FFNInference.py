@@ -1,15 +1,14 @@
 ###
 ###
 ###
-import sys, os, time, errno
+import sys, os, errno
+import glob
 import numpy as np
-import copy
-from itertools import chain
 import subprocess as s
-import time
+import fnmatch
 import cv2
 import h5py
-import threading
+# import threading
 
 import contextlib
 
@@ -49,15 +48,19 @@ class FFNInference():
 
     def _Run(self, parent, params, comm_title):
 
+
         ##
         ## Remove preovious results.
         ##
-        removal_file1 = os.path.join( params['Output Inference Folder'] ,'0','0','seg-0_0_0.npz' )
-        removal_file2 = os.path.join( params['Output Inference Folder'], '0','0','seg-0_0_0.prob')
+        m.UnlockFolder(parent.u_info,  params['FFNs Folder'])
+        removal_file1 = os.path.join( params['FFNs Folder'] ,'0','0','seg-0_0_0.npz' )
+        removal_file2 = os.path.join( params['FFNs Folder'], '0','0','seg-0_0_0.prob')
 
         if os.path.isfile(removal_file1) or os.path.isfile(removal_file2) :
-            Reply = QMessageBox.question(parent, 'FFN', 'seg-0_0_0 files were found at the Output Inference Folder. Remove them?',  QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-            if Reply == QMessageBox.Yes:
+            question = "seg-0_0_0 files were found in the FFNs Folder. Remove them?"
+            reply = self.query_yes_no(question, default="yes")
+
+            if reply == True:
                 with contextlib.suppress(FileNotFoundError):
                     os.remove(removal_file1)
                 with contextlib.suppress(FileNotFoundError):
@@ -65,12 +68,13 @@ class FFNInference():
                 print('seg-0_0_0 files were removed.')
             else:
                 print('FFN inference was canceled.')
+                m.LockFolder(parent.u_info,  params['FFNs Folder'])
                 return
 
         ##
         ## h5 file (target image file) generation.
         ##
-        target_image_file_h5 = os.path.join(params['FFN File Folder'], "grayscale_inf.h5")
+        target_image_file_h5 = os.path.join(params['FFNs Folder'], "grayscale_inf.h5")
 
         try:
             target_image_files = m.ObtainImageFiles(params['Target Image Folder'])
@@ -81,13 +85,28 @@ class FFNInference():
             image_x    = images.shape[2]
             image_mean = np.mean(images).astype(np.int16)
             image_std  = np.std(images).astype(np.int16)
-            print('x: {}, y: {}, z: {}'.format(image_x, image_y, image_z))
 
+            print('')
+            print('x: {}, y: {}, z: {}'.format(image_x, image_y, image_z))
             with h5py.File( target_image_file_h5 , 'w') as f:
                 f.create_dataset('raw', data=images, compression='gzip')
             print('"grayscale_inf.h5" file (target inference image) was generated.')
+            print('')
         except:
+            print('')
             print("Error: Target Image h5 was not generated.")
+            m.LockFolder(parent.u_info,  params['FFNs Folder'])
+            return False
+
+        ##
+        ## Tensorflow model extracted
+        ##
+
+        max_id_model = self.SelectMaxModel(params['Model Folder'] )
+        print( 'Tensorflow model : ', max_id_model )
+        
+        if max_id_model == False:
+            print('Cannot find tensorflow model.')
             return False
 
         ##
@@ -99,7 +118,7 @@ class FFNInference():
         request['image_stddev'] = image_std
         request['checkpoint_interval'] = int(params['Checkpoint Interval'])
         request['seed_policy'] = "PolicyPeaks"
-        request['model_checkpoint_path'] = params['Tensorflow Model Files'].replace('\\', '/')
+        request['model_checkpoint_path'] = max_id_model.replace('\\', '/')
         request['model_name'] = "convstack_3d.ConvStack3DFFNModel"
 
         if params['Sparse Z'] != Qt.Unchecked:
@@ -109,7 +128,7 @@ class FFNInference():
             request['model_args'] = "{\\\"depth\\\": 12, \\\"fov_size\\\": [33, 33, 33], \\\"deltas\\\": [8, 8, 8]}"
             #request['model_args'] = ' {"depth":12,"fov_size":[33,33,33],"deltas":[8,8,8]} '
 
-        request['segmentation_output_dir'] = params['Output Inference Folder'].replace('\\', '/')
+        request['segmentation_output_dir'] = params['FFNs Folder'].replace('\\', '/')
         inference_options = {}
         inference_options['init_activation'] = 0.95
         inference_options['pad_value'] = 0.05
@@ -119,20 +138,21 @@ class FFNInference():
         inference_options['min_segment_size'] = 1000
         request['inference_options'] = inference_options
 
-        config_file = os.path.join(params['FFN File Folder'], "inference_params.pbtxt")
+
+        config_file = os.path.join(params['FFNs Folder'], "inference_params.pbtxt")
         with open(config_file, "w", encoding='utf-8') as f:
             self.write_call(f, request, "")
 
+        print('')
         print('Configuration file was saved at :')
         print(config_file)
-        print('\n')
+        print('')
         ##
         ## Inference start (I gave up the use of run_inference because of the augment parsing problem)
         ##
-        m.mkdir_safe(os.path.join( params['Output Inference Folder'] ,'0','0' ) )
+        m.mkdir_safe(os.path.join( params['FFNs Folder'] ,'0','0' ) )
         ##
-        comm_inference = parent.u_info.exec_run_inference
-        comm_inference = comm_inference.split(' ')
+        comm_inference = parent.u_info.exec_run_inference[:]
 
         params = ['--image_size_x', np.str( image_x ), 
                  '--image_size_y', np.str( image_y ),
@@ -144,40 +164,83 @@ class FFNInference():
 
         print(comm_title)
         # print(comm_inference)
-        print('\n')
-        s.call(comm_inference)
+        print('')
+        s.run(comm_inference)
+        print('')
         print(comm_title, 'was finished.')
+        print('')
         return True
         ##
 
+
+    def SelectMaxModel(self, folder_path):
+
+        required_files = [ \
+            'model.ckpt-*.meta', \
+            'model.ckpt-*.index',\
+            'model.ckpt-*.data-00000-of-00001' ]
+        tmp = glob.glob( path.join(folder_path, "*") )
+        filenames_in_folder = [os.path.basename(r) for r in tmp]
+        cropped = []
+        for required_file in required_files:
+			#
+            tmp = fnmatch.filter(filenames_in_folder, required_file)
+            if len(tmp) == 0:
+                return False
+			#
+            a, b = map(len, required_file.split('*'))
+            cropped.append( {t[a:-b] for t in tmp} ) 
+        intersection = cropped[0] & cropped[1] & cropped[2] 
+        if len(intersection) == 0:
+            return False
+        max_id_name = os.path.join(folder_path, 'model.ckpt-' + str(max(map(int, intersection)))  )
+        return max_id_name
+
+    def query_yes_no(self, question, default="yes"):
+
+        valid = {"yes":True,   "y":True,  "ye":True,
+            "no":False,     "n":False}
+        if default == None:
+            prompt = " [y/n] "
+        elif default == "yes":
+            prompt = " [Y/n] "
+        elif default == "no":
+            prompt = " [y/N] "
+        else:
+            raise ValueError("invalid default answer: '%s'" % default)
+
+        while True:
+            sys.stdout.write(question + prompt)
+            choice = input().lower()
+            if default is not None and choice == '':
+            	return valid[default]
+            elif choice in valid:
+            	return valid[choice]
+            else:
+            	sys.stdout.write("Please respond with 'yes' or 'no' "\
+		                         "(or 'y' or 'n').\n")
+# Usage example
+
     def __init__(self, u_info):
-        ##
-        datadir = u_info.data_path
-
-        ffn_file_path        = os.path.join(datadir, "ffn")
-
-        tensorflow_file      = os.path.join(u_info.tensorflow_model_path, "model.ckpt-2000000")
 
         self.paramfile = os.path.join(u_info.parameters_path, "FFN_Inference.pickle")
 
         self.title = 'FFN Inference'
 
         self.tips = [
-                        'Input: Path to folder containing target images',
-                        'Output: Path to folder storing inferred images',
-                        'Input: Tensorflow model Files. 3 files are required. Please remove their suffixes',
-                        'Click it if you used in the training process',
-                        'Output Checkpoint Interval',
-                        'Tensorflow file follder'
+                        'Input: Path to folder containing target images.',
+                        'Tensorflow model folder. The largest model.ckpt is automatically selected for inference.',
+                        'Folder that contains grayscale_maps.h5, groundtruth.h5, and tf_record_file. Inferred segmentation will be stored.',
+                        'Click it if you used in the training process.',
+                        'Output Checkpoint Interval.'
                         ]
 
         self.args = [
                         ['Target Image Folder',    'SelectImageFolder', 'OpenImageFolder'],
-                        ['Output Inference Folder',  'LineEdit', ffn_file_path, 'BrowseDir'],
-                        ['Tensorflow Model Files', 'LineEdit', tensorflow_file, 'BrowseFile'],
+                        ['Model Folder', 'SelectModelFolder', 'OpenModelFolder'],
+                        ['FFNs Folder',   'SelectFFNsFolder', 'OpenFFNsFolder'],
                         ['Sparse Z', 'CheckBox', False],
-                        ['Checkpoint Interval', 'SpinBox', [100, 1800, 65535]],
-                        ['FFN File Folder', 'LineEdit', ffn_file_path, 'BrowseDir']
+                        ['Checkpoint Interval', 'SpinBox', [100, 1800, 65535]]
             ]
 
 

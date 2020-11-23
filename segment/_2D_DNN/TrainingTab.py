@@ -13,7 +13,6 @@ from _2D_DNN.TrainingExe import TrainingExe
 class TrainingTab(TrainingExe):
     def __init__(self, u_info):
 
-        modelpath =  u_info.tensorflow_model_path
         self.paramfile =  os.path.join( u_info.parameters_path, "Training_2D.pickle")
 
         self.title = '2D Training'
@@ -21,7 +20,7 @@ class TrainingTab(TrainingExe):
         self.tips = [
                         'Path to folder containing images',
                         'Path to folder containing segmentation',
-                        'Directory with checkpoint to resume training from or use for testing',
+                        'Empty folder tensorflow model. Currently, additional training is not allowed, so the only empty folder is accepted.',
                         'Network topology',
                         'Depth of U-net (maximum 8)',
                         'Number of residual blocks in res net',
@@ -38,7 +37,7 @@ class TrainingTab(TrainingExe):
         self.args = [
                         ['Image Folder',    'SelectImageFolder', 'OpenImageFolder'],
                         ['Segmentation Folder',   'SelectImageFolder', 'OpenImageFolder'],
-                        ['Model Folder',      'LineEdit', modelpath, 'BrowseDir'],
+                        ['Model Folder (Empty)',  'SelectEmptyFolder', 'OpenEmptyFolder'],
                         ['Network', 'Tab', ['unet', 'resnet', 'highwaynet', 'densenet'], [0,1,2,3,3] ],
                         ['U depth','SpinBox',[1,8,20]],
                         ['N res blocks','SpinBox',[1,9,255]],

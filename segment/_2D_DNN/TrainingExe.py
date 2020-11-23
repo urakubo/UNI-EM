@@ -8,6 +8,7 @@ import cv2
 import shutil
 import subprocess as s
 import numpy as np
+import threading
 from os import path, pardir
 
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
@@ -21,9 +22,6 @@ import miscellaneous.Miscellaneous as m
 class TrainingExe():
 
     def _Run(self, parent, params, comm_title):
-
-        datadir = parent.u_info.data_path
-
         ##
         ## Transform bitdepth of EM images and segmentation in the target directory.
         ## Translate.py only accepts unit24 (RGB color).
@@ -68,7 +66,9 @@ class TrainingExe():
             print('Aborted.')
             return
 
-        tmpdir = os.path.join(datadir, "tmp", "2D_CNN_paired")
+
+		# Generate tmpdir
+        tmpdir = os.path.join( params['Model Folder (Empty)'], "paired"+str(threading.get_ident()).zfill(6)[-6:] ) #  )
         if os.path.exists(tmpdir) :
             shutil.rmtree(tmpdir)
         os.mkdir(tmpdir)
@@ -86,7 +86,7 @@ class TrainingExe():
             elif img.shape[2] == 4:
                 img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
             elif img.shape[2] != 3:
-                print('The file is broken: ', img_file)
+                print('File is broken: ', img_file)
                 print('Aborted.')
                 return
 
@@ -95,7 +95,7 @@ class TrainingExe():
             elif seg.shape[2] == 4:
                 seg = cv2.cvtColor(seg, cv2.COLOR_BGRA2BGR)
             elif seg.shape[2] != 3:
-                print('The file is broken: ', seg_file)
+                print('File is broken: ', seg_file)
                 print('Aborted.')
                 return
 
@@ -114,15 +114,15 @@ class TrainingExe():
 
         aug = params['Augmentation']
         if   aug == "fliplr, flipud, transpose":
-            augmentation = '--fliplr --flipud --transpose'
+            augmentation = ['--fliplr', '--flipud', '--transpose']
         elif aug == "fliplr, flipud":
-            augmentation = '--fliplr --flipud --no_transpose'
+            augmentation = ['--fliplr', '--flipud', '--no_transpose']
         elif aug == "fliplr":
-            augmentation = '--fliplr --no_flipud --no_transpose'
+            augmentation = ['--fliplr', '--no_flipud', '--no_transpose']
         elif aug == "flipud":
-            augmentation = '--no_fliplr --flipud --no_transpose'
+            augmentation = ['--no_fliplr', '--flipud', '--no_transpose']
         elif aug == "None":
-            augmentation = '--no_fliplr --no_flipud --no_transpose'
+            augmentation = ['--no_fliplr', '--no_flipud', '--no_transpose']
         else :
             print("Internal error at Augumentation of PartDialogTrainingExecutor.")
             self._Cancel()
@@ -130,32 +130,42 @@ class TrainingExe():
         #
         #   ' --model ' + params['Model'] + ' '
         #
+ 		# parent.u_info.exec_translate, \
+ 
+        tmp = ['--batch_size'		, '4', \
+            '--mode'			, 'train', \
+			'--input_dir'		, tmpdir, \
+			'--output_dir'		, params['Model Folder (Empty)'], \
+            '--loss'			, params['Loss Function'], \
+			'--network'		, params['Network'], \
+        	'--max_epochs'		, str( params['Maximal Epochs']  ),  \
+        	'--display_freq'	, str( params['Display Frequency'] ),  \
+        	'--u_depth'		, str( params['U depth'] ),  \
+        	'--n_res_blocks'	, str( params['N res blocks'] ), \
+        	'--n_highway_units', str( params['N highway units'] ), \
+        	'--n_dense_blocks'	, str( params['N dense blocks'] ), \
+        	'--n_dense_layers'	, str( params['N dense layers']) ]
 
-        comm = parent.u_info.exec_translate +' ' \
-                + ' --batch_size 4 ' \
-                + ' --mode train ' \
-                + ' --input_dir ' + tmpdir + ' ' \
-                + ' --output_dir ' + params['Model Folder'] + ' ' \
-                + ' --loss ' + params['Loss Function'] + ' ' \
-                + ' --network ' + params['Network'] + ' ' \
-                + ' ' + augmentation + ' ' \
-                + ' --max_epochs ' + params['Maximal Epochs'] + ' ' \
-                + ' --display_freq ' +  params['Display Frequency'] + ' ' \
-                + ' --u_depth ' + params['U depth'] + ' ' \
-                + ' --n_res_blocks ' + params['N res blocks'] + ' ' \
-                + ' --n_highway_units ' + params['N highway units'] + ' ' \
-                + ' --n_dense_blocks ' + params['N dense blocks'] + ' ' \
-                + ' --n_dense_layers ' + params['N dense layers'] + ' '
+        comm = parent.u_info.exec_translate[:]
+        comm.extend( tmp )
+        comm.extend( augmentation )
 
         print('')
-        print(comm)
+        print('  '.join(comm))
         print('')
         print('Start training.')
-        try:
-            s.call(comm.split())
-        except s.CalledProcessError as e:
-            print("Error ocurrs in Traslate.py.")
-            return
+        print('')
+        m.UnlockFolder(parent.u_info,  params['Model Folder (Empty)'])
+        s.run(comm)
+        # rm tmpdir
+        if os.path.exists(tmpdir) :
+        	shutil.rmtree(tmpdir)
+        m.LockFolder(parent.u_info,  params['Model Folder (Empty)'])
+        parent.parent.ExecuteCloseFileFolder(params['Model Folder (Empty)'])
+        parent.parent.OpenFolder(params['Model Folder (Empty)'])
+        print('')
+        print('Finish training.')
+        print('')
 
         return
 

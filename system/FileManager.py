@@ -1,7 +1,7 @@
 ###
 ###
 ###
-import sys, os, time, errno, copy
+import sys, os, time, errno, copy, fnmatch
 #from lockfile import LockFile
 #import portalocker
 
@@ -35,45 +35,25 @@ class FileManager():
             print('No folder was selected.')
             return
         open_folder_name = open_folder_name.replace('/', os.sep)
-        flag = self.OpenFileFolder(open_folder_name)
+        flag = self.OpenFolder(open_folder_name)
         if flag == False:
             return False
-        SyncListQComboBoxExcludeDojoMtifManager.get().addModel(open_folder_name)
-        SyncListQComboBoxOnlyDojoManager.get().addModel(open_folder_name)
 
 
     def OpenRecentFileFolder(self):
         action = self.sender()
         if not action:
             return
-        fileName = action.data()
-        if not os.path.exists( fileName ):
+        file_name  = action.data()
+        if not os.path.exists( file_name ):
             QMessageBox.warning(self, "Recent Files",
-                                "Cannot find file: %s" % fileName)
+                                "Cannot find file: %s" % file_name)
             return
-        flag = self.OpenFileFolder( fileName )
-        if flag == False:
-            return False
-        SyncListQComboBoxExcludeDojoMtifManager.get().addModel(fileName)
-        SyncListQComboBoxOnlyDojoManager.get().addModel(fileName)
+        return self.OpenFolder( file_name )
 
 
     def OpenDropdownFileFolder(self, file_name):
-        flag = self.OpenFileFolder( file_name )
-        if flag == False:
-            return False
-        SyncListQComboBoxExcludeDojoMtifManager.get().addModel(file_name)
-        SyncListQComboBoxOnlyDojoManager.get().addModel(file_name)
-
-
-    def OpenMultiTiffFile(self):
-        initdir = os.path.normpath( path.join(main_dir, "..") )
-        tiff_file = QFileDialog.getOpenFileName(self, "Select Multipage Tiff File", initdir, "TIFF (*.TIF *.tif *.TIFF *.tiff)")
-        tiff_file = tiff_file[0]
-        if len(tiff_file) == 0:
-            return False
-        tiff_file = tiff_file.replace('/', os.sep)
-        self.OpenFileFolder(tiff_file)
+        return self.OpenFolder( file_name )
 
 
     def Dummy(self):
@@ -123,100 +103,149 @@ class FileManager():
 
 
     def CloseFileFolder(self, activeAction):
-        fileName = activeAction.data()
+        file_name = activeAction.data()
+        self.ExecuteCloseFileFolder(file_name)
 
-        if os.path.isdir(fileName):
-            m.UnlockFolder(self.u_info, fileName)
+    def ExecuteCloseFileFolder(self, file_name):
+        if os.path.isdir(file_name):
+            m.UnlockFolder(self.u_info, file_name)
         else:
-            self.u_info.open_files4lock[fileName].close()
-            del self.u_info.open_files4lock[fileName]
+            self.u_info.open_files4lock[file_name].close()
+            del self.u_info.open_files4lock[file_name]
 
-        self.u_info.open_files.remove(activeAction.data())
+        self.u_info.open_files.remove(file_name)
         self.UpdateOpenFileMenu()
 
-        SyncListQComboBoxExcludeDojoMtifManager.get().removeModel(fileName)
-        SyncListQComboBoxOnlyDojoManager.get().removeModel(fileName)
+        SyncListQComboBoxEmptyManager.get().removeModel(file_name)
+        SyncListQComboBoxFFNsManager.get().removeModel(file_name)
+        SyncListQComboBoxModelManager.get().removeModel(file_name)
+        SyncListQComboBoxEmptyModelManager.get().removeModel(file_name)
+        SyncListQComboBoxImageManager.get().removeModel(file_name)
+        SyncListQComboBoxDojoManager.get().removeModel(file_name)
+
+######
+
+##
+# try:
+#    self.u_info.open_files4lock[fileName] = open(fileName, 'r+')
+# except:
+#    print("Cannot open file.")
+#    return  False
+##
+
+    def OpenDialogOpenFolder(self):
+        initdir = os.path.normpath( path.join(main_dir, "..") )
+        open_folder_name = QFileDialog.getExistingDirectory(self, "Select folder (Dojo/Image/Model/Empty, etc)", initdir)
+        if len(open_folder_name) == 0:
+            print('No folder was selected.')
+            return
+        open_folder_name = open_folder_name.replace('/', os.sep)
+        flag = self.OpenFolder(open_folder_name)
+        return flag
 
 
+    def OpenFolder(self, file_folder_name):
 
-    def OpenImageFolder(self, folder_name):
-
-        #### Check open file status
-        if not os.path.isdir(folder_name) :
-            print('Not a folder.')
+        print('file_folder_name: ', file_folder_name)
+        if self.InitialCheckOpenFolder(file_folder_name) == False:
             return False
 
-        if self.CheckFolderDojo(folder_name) :
-            print('Dojo folder.')
+        folder_type = self.CheckFolderType(file_folder_name)
+        if folder_type == False :
+            return False
+        print('Folder type: ', folder_type)
+        flag = self.ExecuteFolderOpen(file_folder_name, folder_type)
+        if flag == False :
+            return False
+        self.AddDropDownMenu( file_folder_name )
+        return True
+
+
+    def OpenSpecificFolder(self, folder_name, required_folder_types):
+
+        if self.InitialCheckOpenFolder(folder_name) == False:
             return False
 
-        return self.OpenFileFolder(folder_name)
-
-    def OpenDojoFolder(self, folder_name):
-
-        #### Check open file status
-        if not os.path.isdir(folder_name) :
-            print('Not a folder.')
+        folder_type = self.CheckFolderType(folder_name)
+        if folder_type == False :
             return False
+        elif folder_type not in required_folder_types :
+            print( 'Not a required folder type: ', required_folder_types )
+        else :
+            print( 'Folder type: ', folder_type)
 
-        if not self.CheckFolderDojo(folder_name) :
-            print('Not a Dojo folder.')
-            return False
-
-        return self.OpenFileFolder(folder_name)
+        return self.ExecuteFolderOpen(folder_name, folder_type)
 
 
-    def OpenFileFolder(self, fileName):
+    def CheckFolderType(self, folder_name):
 
-        #### Check open file status
-        if fileName in self.u_info.open_files:
-            return False
-        if len(self.u_info.open_files) >= self.u_info.max_num_open_files :
-            return False
-
-        #### Check file/folder type
-        filetype = self.CheckFileType(fileName)
-        print('Filetype: ', filetype)
-        if filetype == 'invalid':
-            print('Invalid file type.')
-            return False
-        elif filetype == 'multiple type images' :
-            print('Folder contains multiple image types.')
-            return False
-
-        #### File open
-        if os.path.isdir(fileName):
-            lock_result = m.LockFolder(self.u_info, fileName)
-            if lock_result == False:
+        if self.CheckFolderDojo(folder_name):
+            return "Dojo"
+        elif self.CheckFolderModelTensorflow(folder_name):
+            return "Model"
+        elif self.CheckFolderFFNs(folder_name):
+            return "FFNs"
+        elif self.CheckFolderImage(folder_name) != [] :
+            ext = self.CheckFolderImage(folder_name)
+            if   len(ext) > 1 :
+                filetype = "multiple type images"
+                print('We do not accpet the Folder contains multiple image types.')
                 return False
-        else:
-            try:
-                self.u_info.open_files4lock[fileName] = open(fileName, 'r+')
-            except:
-                print("Cannot open file.")
-                return  False
-
-        self.u_info.open_files_type[fileName] = filetype
-        self.u_info.open_files.insert(0, fileName)
+            else :
+                return ext[0]
+        else : 
+            return "Empty"
+        return False
 
 
-        #### Dropdown menu updated
+    def InitialCheckOpenFolder(self,folder_name):
+
+        if not os.path.isdir(folder_name) :
+            print('Curently, we do not accpet files, but only folders.')
+            return False
+        if folder_name in self.u_info.open_files:
+            print('Already open.')
+            return False
+        elif len(self.u_info.open_files) >= self.u_info.max_num_open_files :
+            print('Exceeding the maximal number of open folders: ', self.u_info.max_num_open_files)
+            return False
+
+
+    def AddDropDownMenu(self, folder_name):
+
+        ## Dropdown menu updated
         self.UpdateOpenFileMenu()
+        SyncListQComboBoxEmptyManager.get().addModel(folder_name)
+        SyncListQComboBoxFFNsManager.get().addModel(folder_name)
+        SyncListQComboBoxModelManager.get().addModel(folder_name)
+        SyncListQComboBoxEmptyModelManager.get().addModel(folder_name)
+        SyncListQComboBoxImageManager.get().addModel(folder_name)
+        SyncListQComboBoxDojoManager.get().addModel(folder_name)
 
-        #### Manage open file history
+    def ExecuteFolderOpen(self, folder_name, folder_type):
+
+        ## Folder open
+        lock_result = m.LockFolder(self.u_info, folder_name)
+        if lock_result == False:
+            return False
+        self.u_info.open_files_type[folder_name] = folder_type
+        self.u_info.open_files.insert(0, folder_name)
+
+        ## Manage open file history
         settings = QSettings('Trolltech', 'Recent Files Example')
-        files = settings.value('recentFileList', [])
+        recent_files = settings.value('recentFileList', [])
 
         try:
-            files.remove(fileName)
+            recent_files.remove(folder_name)
         except ValueError:
             pass
 
-        files.insert(0, fileName)
-        del files[self.u_info.max_num_recent_files:]
+        recent_files.insert(0, folder_name)
+        del recent_files[self.u_info.max_num_recent_files:]
 
-        settings.setValue('recentFileList', files)
+        settings.setValue('recentFileList', recent_files)
         self.UpdateRecentFileMenu()
+
 
 
     def strippedName(self, fullFileName):
@@ -242,32 +271,6 @@ class FileManager():
             else :
                 ofile.close()
         self.u_info.open_files4lock.clear()
-
-
-    def CheckFileType(self, file_name):
-        if os.path.isdir(file_name) :
-            if self.CheckFolderDojo(file_name):
-                filetype = "Dojo"
-                return filetype
-            ext = self.CheckFolderImage(file_name)
-            if   len(ext) > 1 :
-                filetype = "multiple type images"
-            elif len(ext) == 1 :
-                filetype = ext[0]
-            else :
-                filetype = "empty"
-        else :
-            filetype = "invalid"
-            #
-            # For future multipage tiff file
-            #
-            #root, ext = os.path.splitext(file_name)
-            #if ext in ['.TIF','.tif', '.TIFF', '.tiff'] :
-            #    filetype = "mtif"
-            #else :
-            #    filetype = "invalid"
-
-        return filetype
 
 
     def CheckFolderImage(self, folder_path):
@@ -306,3 +309,56 @@ class FileManager():
         else:
             return 0
 
+
+    def CheckFolderModelTensorflow(self, folder_path):
+
+        required_files = [ \
+            'model*.meta', \
+            'model*.index',\
+            'model*.data-00000-of-00001' ]
+        tmp = glob.glob( path.join(folder_path, "*") )
+        filenames_in_folder = [os.path.basename(r) for r in tmp]
+        # print('filenames_in_folder : ',filenames_in_folder)
+		#
+        cropped = []
+        for required_file in required_files:
+			#
+            tmp = fnmatch.filter(filenames_in_folder, required_file)
+            if len(tmp) == 0:
+                return 0
+			#
+            a, b = map(len, required_file.split('*'))
+            cropped.append( {t[a:-b] for t in tmp} ) 
+        intersection = cropped[0] & cropped[1] & cropped[2] 
+        # print('intersection : ' , intersection) 
+        return (len(intersection) > 0)
+
+
+    def CheckFolderFFNs(self, folder_path):
+
+        required_files = [ \
+            'af.h5', \
+            'grayscale_maps.h5', \
+            'groundtruth.h5', \
+            'tf_record_file' ]
+        tmp = glob.glob( path.join(folder_path, "*") )
+        filenames_in_folder = [os.path.basename(r) for r in tmp]
+
+        flags = []
+        for required_file in required_files:
+            match_fname = [fnmatch.fnmatch(fn, required_file) for fn in filenames_in_folder]
+            flags.append(any(match_fname))
+        if all(flags):
+            return 1
+        else:
+            return 0
+
+
+    def OpenMultiTiffFile(self):
+        initdir = os.path.normpath( path.join(main_dir, "..") )
+        tiff_file = QFileDialog.getOpenFileName(self, "Select Multipage Tiff File", initdir, "TIFF (*.TIF *.tif *.TIFF *.tiff)")
+        tiff_file = tiff_file[0]
+        if len(tiff_file) == 0:
+            return False
+        tiff_file = tiff_file.replace('/', os.sep)
+        self.OpenFileFolder(tiff_file)
