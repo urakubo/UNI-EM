@@ -7,7 +7,7 @@ import miscellaneous.Miscellaneous as m
 
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
-# exec_template = 'python ' + os.path.join(main_dir, 'plugins', 'Template', 'run_example.py')
+# exec_template = ['python', os.path.join(main_dir, 'plugins', 'Template', 'run_example.py')]
 
 
 class Training():
@@ -20,22 +20,22 @@ class Training():
         print('Checkpoint Interval: ', params['Checkpoint Interval'])
         print('Mode               : ', params['Mode'])
         ##
-        comm_run = self.u_info.exec_template + ' ' \
-                     + ' --training_image_folder '   + params['Training image folder'] + ' ' \
-                     + ' --ground_truth_folder '     + params['Ground truth folder'] + ' ' \
-                     + ' --tensorflow_model_folder ' + params['Tensorflow model folder']  + ' ' \
+        tmp = [		'--training_image_folder'   , params['Training image folder']	, \
+                    '--ground_truth_folder'     , params['Ground truth folder']	, \
+                    '--tensorflow_model_file'   , params['Model Folder (Empty/Model)'] ]
+        comm_run = self.u_info.exec_template[:]
+        comm_run.extend( tmp )
         ##
-        print(comm_run)
         print('')
-        s.run(comm_run.split())
+        print('  '.join(comm_run))
+        print('')
+        s.run(comm_run)
         print(comm_title, 'was finished.\n')
         return True
 
 
     def __init__(self, u_info):
         ##
-        tensorflow_path = u_info.tensorflow_model_path
-        
         self.u_info = u_info
         
         self.paramfile = os.path.join(u_info.parameters_path, "Training.pickle")
@@ -54,7 +54,7 @@ class Training():
         self.args = [
                         ['Training image folder', 'SelectImageFolder', 'OpenImageFolder'],
                         ['Ground truth folder', 'SelectImageFolder', 'OpenImageFolder'],
-                        ['Tensorflow model folder', 'LineEdit', tensorflow_path, 'BrowseDir'],
+                        ['Model Folder (Empty/Model)',  'SelectEmptyModelFolder', 'OpenEmptyModelFolder'],
                         ['Checkpoint Interval', 'SpinBox', [100, 1800, 65535]],
                         ['Sparse Z', 'CheckBox', False],
                         ['Mode', 'ComboBox', ['a','b','c']]
