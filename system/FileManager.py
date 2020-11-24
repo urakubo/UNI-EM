@@ -135,7 +135,7 @@ class FileManager():
 
     def OpenDialogOpenFolder(self):
         initdir = os.path.normpath( path.join(main_dir, "..") )
-        open_folder_name = QFileDialog.getExistingDirectory(self, "Select folder (Dojo/Image/Model/Empty, etc)", initdir)
+        open_folder_name = QFileDialog.getExistingDirectory(self, "Select folder (Dojo/Image/Model/Empty)", initdir)
         if len(open_folder_name) == 0:
             print('No folder was selected.')
             return
