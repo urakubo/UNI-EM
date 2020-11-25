@@ -97,7 +97,7 @@ class InferenceExe():
 
             filename = path.basename(input_file)
             print(filename+' ')
-            filename = filename.replace('.tif', '.png')
+            # filename = filename.replace('.tif', '.png')
             output_files.append(filename)
 
             # add fringe X
