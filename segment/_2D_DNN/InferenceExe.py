@@ -154,7 +154,6 @@ class InferenceExe():
         print('Segmentation reconstruction: ')
         for output_file in output_files:
 			##
-        	print(output_file, ' ')
         	if (num_tiles_x == 1) and (num_tiles_y == 1) :
         	## Remove fringes
         		filename = os.path.join( tmpdir_output, output_file )
@@ -175,6 +174,7 @@ class InferenceExe():
         	inferred_segmentation = inferred_segmentation[0:image_size_y, 0:image_size_x]
 
         	filename = os.path.splitext(os.path.basename(output_file))[0] + ext_image
+        	print(filename)
         	filename = os.path.join( params['Output Segmentation Folder (Empty)'], filename )
         	m.imwrite(filename, inferred_segmentation)
 
