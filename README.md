@@ -54,21 +54,19 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 1.	Download one of the following two versions, and unzip it:
 
 - Version 0.86:
-	- [CPU version (Ver0.86; 293 MB)](http://bit.ly/2wrxDF3)
-	- [GPU version (Ver0.86: 717 MB)](http://bit.ly/323xXp5)
+	- [CPU version (Ver0.88; 363 MB)](https://bit.ly/3nSmTVu)
+	- [GPU version (Ver0.88: 1,068 MB)](https://bit.ly/39cwi62)
 
 - Release summary:
 	- Bug fix.
-		- 2D CNNs accept any sized images between 256 – 16384 xy pixels in the inference process.
-		- Safe termination and re-launch of Dojo web applications.
-		- Safe re-execution of 2D CNNs 
-		- Rapid thumbnail appearance in the image folder selection dialogs.
-		- Internal file/folder re-arrangement.
-		- Newer pillow and werkzeug were utilized.
+		- 2D CNNs inference process was improved for large-size images.
+		- 2D CNNs handle multiple images in the process of training.
+		- Folder names with spaces are now accepted.
+		- The folders of "Tensorflow model" and "FFNs" are now managed by the folder manager.
 
 - Previous version:
-	- [CPU version (Ver0.84; 293 MB)](http://bit.ly/2ZX2jHz)
-	- [GPU version (Ver0.84: 726 MB)](http://bit.ly/2RP8k6l)
+	- [CPU version (Ver0.86; 293 MB)](http://bit.ly/2wrxDF3)
+	- [GPU version (Ver0.86: 717 MB)](http://bit.ly/323xXp5)
 
 
 2.	Download one of sample EM/segmentation dojo folders from the following link, and unzip it:
