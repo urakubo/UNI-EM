@@ -97,8 +97,8 @@ class InferenceExe():
 
             filename = path.basename(input_file)
             print(filename+' ')
-            output_files.append(filename)
             filename = filename.replace('.tif', '.png')
+            output_files.append(filename)
 
             # add fringe X
             im_fringe_x = cv2.flip(im_col, 1) # flipcode > 0, left-right
