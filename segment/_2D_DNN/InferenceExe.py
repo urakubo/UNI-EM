@@ -150,7 +150,7 @@ class InferenceExe():
         print('')
         m.UnlockFolder(parent.u_info, params['Output Segmentation Folder (Empty)'])  # Only for shared folder/file
         s.run(comm)
-
+        print('')
         print('Segmentation reconstruction: ')
         for output_file in output_files:
 			##
