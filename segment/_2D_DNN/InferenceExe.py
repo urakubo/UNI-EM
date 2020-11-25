@@ -31,6 +31,8 @@ class InferenceExe():
             print('No images in the Image Folder.')
             return False
         im = m.imread(input_files[0], cv2.IMREAD_UNCHANGED)
+        root, ext_image = os.path.splitext(os.path.basename(input_files[0]))
+
         print('')
         print('Target file to check color type : ', input_files[0])
         print('Image dimensions                : ', im.shape)
@@ -97,7 +99,7 @@ class InferenceExe():
 
             filename = path.basename(input_file)
             print(filename+' ')
-            # filename = filename.replace('.tif', '.png')
+            filename = filename.replace('.tif', '.png')
             output_files.append(filename)
 
             # add fringe X
@@ -171,7 +173,9 @@ class InferenceExe():
 	        			current_tile = m.imread(current_tile_filename)
 	        			inferred_segmentation[y0:y1, x0:x1] = current_tile
         	inferred_segmentation = inferred_segmentation[0:image_size_y, 0:image_size_x]
-        	filename = os.path.join( params['Output Segmentation Folder (Empty)'], output_file )
+
+        	filename = os.path.splitext(os.path.basename(output_file))[0] + ext_image
+        	filename = os.path.join( params['Output Segmentation Folder (Empty)'], filename )
         	m.imwrite(filename, inferred_segmentation)
 
         ##
