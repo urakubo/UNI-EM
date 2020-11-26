@@ -65,7 +65,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 		- The folders of "Tensorflow model" and "FFNs" are now managed by the folder manager.
 		- Tensorflow/Cuda versions are updated (1.12/9.0 -> 1.14/10.0). Note if you find it unexecutable/unstable. Please use the Python version below!
 
-- Previous version:
+- Previous version (2020/2/18):
 	- [CPU version (Ver0.86; 293 MB)](http://bit.ly/2wrxDF3)
 	- [GPU version (Ver0.86: 717 MB)](http://bit.ly/323xXp5)
 
