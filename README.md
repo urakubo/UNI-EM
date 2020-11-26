@@ -59,11 +59,11 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 
 - Release summary:
 	- Bug fix.
-		- 2D CNNs inference process are improved for large-size images.
+		- 2D CNNs inference process is improved for large-size images.
 		- 2D CNNs handle multiple images in the process of training.
 		- Folder names with spaces are now accepted.
-		- The folders of "Tensorflow model" and "FFNs" are now managed by the folder manager.
-		- Tensorflow/Cuda versions are updated (1.12/9.0 -> 1.14/10.0). Note if you find it unexecutable/unstable. Please use the Python version below!
+		- The folders of "Tensorflow model" and "FFNs" are managed by the folder manager.
+		- Tensorflow/Cuda versions are updated (1.12/9.0 -> 1.14/10.0). Note if you find it unexecutable/unstable, please use the Python version below!
 
 - Previous version (2020/2/18):
 	- [CPU version (Ver0.86; 293 MB)](http://bit.ly/2wrxDF3)
