@@ -21,8 +21,8 @@ class Training():
         print('Mode               : ', params['Mode'])
         ##
         tmp = [	'--training_image_folder'   , params['Training image folder']	, \
-                    '--ground_truth_folder'     , params['Ground truth folder']	, \
-                    '--tensorflow_model_file'   , params['Model Folder (Empty/Model)'] ]
+                '--ground_truth_folder'     , params['Ground truth folder']	, \
+                '--tensorflow_model_file'   , params['Model Folder (Empty/Model)'] ]
         comm_run = self.u_info.exec_template[:]
         comm_run.extend( tmp )
         ##
