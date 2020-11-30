@@ -13,9 +13,9 @@ class Inference():
 
     def _Run(self, parent, params, comm_title):
         ##
-        tmp = [		'--test_image_folder'   			, params['Test image folder'] , \
-					'--inferred_segmentation_folder'	, params['Inferred segmentation folder'] , \
-					'--tensorflow_model_file' 			, params['Model Folder'] ]
+        tmp = [		'--test_image_folder'   		, params['Test image folder'] , \
+			'--inferred_segmentation_folder'	, params['Inferred segmentation folder'] , \
+			'--tensorflow_model_file' 		, params['Model Folder'] ]
 
         comm_run = self.u_info.exec_template[:]
         comm_run.extend( tmp )
