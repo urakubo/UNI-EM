@@ -29,7 +29,8 @@ sys.path.append(os.path.join(main_dir, "annotator"))
 #
 # For Pyinstaller
 #
-import annotator.Annotator.Annotator  as d1
+import annotator.SelectAnnotatorFolder.SelectAnnotatorFolder as d0
+import annotator.CreateAnnotatorFolder.CreateAnnotatorFolder as d1
 import segment._2D_DNN._2D_DNN  as d2
 import segment._3D_FFN._3D_FFN  as d3
 import segment._tensorb._tensorb  as d4

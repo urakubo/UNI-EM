@@ -1,6 +1,10 @@
 {
-"Open": {
+"Open Annotator Folder": {
 	"Sub":		0,
-	"Func":		"Annotator"
+	"Func":		"SelectAnnotatorFolder"
+},
+"Create Annotator Folder": {
+	"Sub":		0,
+	"Func":		"CreateAnnotatorFolder"
 }
 }
