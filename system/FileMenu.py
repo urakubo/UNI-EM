@@ -20,17 +20,14 @@ class FileMenu(FileManager):
         # File menu
         self.file_menu = ['Open Folder',
                           'Open Multipage Tiff File',
-                          'Create Dojo Folder',
                           'Open Recent File/Folder',
                           'Exit from UNI-EM']
         self.file_icon = ['Folder_Open_16.png',
                           'Photo_Open_16.png',
-                          'Photo_Import_16.png',
                           'Search_16.png',
                           'Power_Off_16.png']
         self.file_action = [self.OpenDialogOpenFolder,
                           self.OpenMultiTiffFile,
-                          self.GenerateDojoFolder,
                           self.Dummy,
                           self.ExitUniEm]
 
@@ -83,7 +80,7 @@ class FileMenu(FileManager):
         ## File menu
         ##
 
-        ## "Open Image/Dojo Folder"
+        ## "Open Folder"
         id = self.MakeMenuItem(0)
         file_menu.addAction(id)
 
@@ -96,13 +93,9 @@ class FileMenu(FileManager):
         #file_menu.addAction(id)
 
 
-        ## Generate Dojo Folder
-        id = self.MakeMenuItem(2)
-        file_menu.addAction(id)
-
 
         ## "Open Recent File/Folder"
-        submenu = QMenu(self.file_menu[3], self)
+        submenu = QMenu(self.file_menu[2], self)
         file_menu.addMenu(submenu)
         for i in range(self.u_info.max_num_recent_files):
             submenu.addAction(self.menu_recent_files[i])
@@ -126,7 +119,7 @@ class FileMenu(FileManager):
 
 
         ## "Exit from UNI-EM"
-        id = self.MakeMenuItem(4)
+        id = self.MakeMenuItem(3)
         file_menu.addAction(id)
 
 

@@ -27,30 +27,34 @@ class DojoMenu( DojoFileIO ):
         # super(DojoMenu, self).__init__()
         DojoFileIO.__init__(self)
         # File menu
-        self.dojo_menu = ['Open Dojo Folder',
+        self.dojo_menu = ['Create Dojo Folder',
+                   'Open Dojo Folder',
                    'Close Dojo Folder',
                    'Save Dojo Folder',
                    'Export Dojo Folder',
                    'Export EM Stack',
                    'Export Segmentation']
 
-        self.dojo_icon = ['Folder_16.png',
+        self.dojo_icon = ['Photo_right_16.png',
+                  'Folder_16.png',
                   'Close_16.png',
                   'Save_16.png',
                   'Folder_Right_16.png',
                   'Photo_Right_16.png',
                   'Object_Right_16.png']
 
-        self.dojo_icon_diabled = ['Folder16.png',
+        self.dojo_icon_diabled = ['Photo16.png',
+                          'Folder16.png',
                           'Close16.png',
                           'Save16.png',
                           'Folder16.png',
                           'Photo16.png',
                           'Object16.png']
-        self.act_dojo_icon_init = [1, 0, 0, 0, 0, 0]
-        self.act_dojo_icon_open = [0, 1, 1, 1, 1, 1]
+        self.act_dojo_icon_init = [1, 1, 0, 0, 0, 0, 0]
+        self.act_dojo_icon_open = [1, 0, 1, 1, 1, 1, 1]
 
-        self.dojo_action = [self.SelectDojoFile,
+        self.dojo_action = [self.GenerateDojoFolder,
+                          self.SelectDojoFile,
                           self.CloseDojoFiles,
                           self.SaveDojoFiles,
                           self.ExportDojoFiles,
