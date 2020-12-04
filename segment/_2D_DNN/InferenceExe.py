@@ -27,6 +27,7 @@ class InferenceExe():
         input_tif = glob.glob(os.path.join(params['Image Folder'], "*.tif"))
         input_files.extend(input_png)
         input_files.extend(input_tif)
+        input_files = sorted(input_files)
         if len(input_files) == 0:
             print('No images in the Image Folder.')
             return False

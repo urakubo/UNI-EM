@@ -31,6 +31,7 @@ class TrainingExe():
         img_tif = glob.glob(os.path.join(params['Image Folder'], "*.tif"))
         img_files.extend(img_png)
         img_files.extend(img_tif)
+        img_files = sorted(img_files)
         if len(img_files) == 0:
             print('No image file.')
             return
@@ -47,6 +48,7 @@ class TrainingExe():
         seg_tif = glob.glob(os.path.join(params['Segmentation Folder'], "*.tif"))
         seg_files.extend(seg_png)
         seg_files.extend(seg_tif)
+        seg_files = sorted(seg_files)
         if len(seg_files) == 0:
             print('')
             print('No segmentation file.')
