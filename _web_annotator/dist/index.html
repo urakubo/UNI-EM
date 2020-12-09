@@ -118,10 +118,8 @@
         <!-- Sphere -->
         <ul  data-mode-show="sphere" class="subMenu appearance-actions">
         </ul>
-
-
-
         <li>
+          <button data-mode-show="skeleton" type="button" class="generate-skeleton btn btn4 font3" onClick="GenerateSkeleton(this.checked);">Generate Skeleton</button>
           <button type="button" class="save-image btn btn4 font3" onClick="SaveImage(this.checked);">Save Image</button>
         </li>
       </li>
@@ -136,6 +134,8 @@
         </div>
       </fieldset>
     </p>
+    
+    
     <p>
       <fieldset data-mode-show="paint" class="table-frame paint-table-frame">
         <legend>Paint labels</legend>
@@ -146,7 +146,7 @@
           <button type="button" id="calc-volumes" class="btn btn4 font3">Calc Volumes</button>
         </div>
       </fieldset>
-    </p
+    </p>
 
     <p>
       <fieldset data-mode-show="point" class="table-frame marker-table-frame">

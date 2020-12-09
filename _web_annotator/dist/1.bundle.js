@@ -1932,7 +1932,7 @@ $('#button-add-paint-layer').on('click', event => {
 });
 $('#save-paint-table-csv').on('click', event => {
   downloadPaintTableAsCSV();
-}); //// 200907
+}); //// 201016
 
 $('#calc-volumes').on('click', event => {
   _SyncPaint__WEBPACK_IMPORTED_MODULE_1__["paintManager"].updatePaintVolumes();
