@@ -89,7 +89,7 @@ class FolderCreater:
 	  ids_volume, 
 	  teasar_params={
 	    'scale': 4,
-	    'const': 500, # physical units
+	    'const': 50, # physical units default 500
 	    'pdrf_exponent': 4,
 	    'pdrf_scale': 100000,
 	    'soma_detection_threshold': 1100, # physical units
@@ -97,6 +97,7 @@ class FolderCreater:
 	    'soma_invalidation_scale': 1.0,
 	    'soma_invalidation_const': 300, # physical units
 	    'max_paths': 50, # default None
+	    'object_ids': 10
 	  },
 	  # object_ids=[ ... ], # process only the specified labels
 	  # extra_targets_before=[ (27,33,100), (44,45,46) ], # target points in voxels
