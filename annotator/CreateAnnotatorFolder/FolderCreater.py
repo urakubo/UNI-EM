@@ -97,7 +97,6 @@ class FolderCreater:
 	    'soma_invalidation_scale': 1.0,
 	    'soma_invalidation_const': 300, # physical units
 	    'max_paths': 50, # default None
-	    'object_ids': 10
 	  },
 	  # object_ids=[ ... ], # process only the specified labels
 	  # extra_targets_before=[ (27,33,100), (44,45,46) ], # target points in voxels
@@ -109,6 +108,7 @@ class FolderCreater:
 	  progress=True, # default False, show progress bar
 	  parallel=1, # <= 0 all cpu, 1 single process, 2+ multiprocess
 	  parallel_chunk_size=100, # how many skeletons to process before updating progress bar
+	  object_ids=[1,2,3,10]
     )
 
     skeleton_ids = self._GenerateSkeletonFiles(skels, tmp_info)
