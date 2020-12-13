@@ -116,7 +116,7 @@ class AnnotatorServerLogic:
     zmax	= volume_description['boundingbox_voxel']['z']
 
     ## Artifact
-    coarse_factor = 4
+    coarse_factor = 2
     xpitch *= coarse_factor
     ypitch *= coarse_factor
     self.pitch  = [xpitch, ypitch, zpitch]

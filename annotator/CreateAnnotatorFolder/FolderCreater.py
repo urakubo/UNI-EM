@@ -89,9 +89,9 @@ class FolderCreater:
 	  ids_volume, 
 	  teasar_params={
 	    'scale': 4,
-	    'const': 50, # physical units default 500
+	    'const': 500, # physical units default 500
 	    'pdrf_exponent': 4,
-	    'pdrf_scale': 100000,
+	    'pdrf_scale': 1000,
 	    'soma_detection_threshold': 1100, # physical units
 	    'soma_acceptance_threshold': 3500, # physical units
 	    'soma_invalidation_scale': 1.0,

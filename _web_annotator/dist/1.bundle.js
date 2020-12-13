@@ -837,9 +837,23 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject = function (id, col) 
       //0x000000
       linewidth: 3,
       fog: true
-    });
+    }); // Points
+
+    const geometry_points = new THREE.Geometry();
 
     for (var i = 0; i < data_edges.length; i++) {
+      i1 = data_edges[i][0];
+      geometry_points.vertices.push(new THREE.Vector3(data_vertices[i1][0], data_vertices[i1][1], data_vertices[i1][2]));
+    }
+
+    const material_points = new THREE.PointsMaterial({
+      size: 0.01,
+      color: 0x000000
+    });
+    const points = new THREE.Points(geometry_points, material_points);
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(points); //
+
+    for (let i = 0; i < data_edges.length; i++) {
       i1 = data_edges[i][0];
       i2 = data_edges[i][1]; // console.log('Vertices ID: ', i1, i2 );
 
