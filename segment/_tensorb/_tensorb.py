@@ -43,7 +43,7 @@ class GenerateDialog(QWidget):
 
         tmp = [ \
         		'--logdir'		, newdir				, \
-				'--host'		, socket.gethostbyname(socket.gethostname()), '--purge_orphaned_data', 'False' ]
+				'--host'		, socket.gethostbyname(socket.gethostname()) ]
         comm = self.u_info.exec_tensorboard[:]
         comm.extend( tmp )
 
