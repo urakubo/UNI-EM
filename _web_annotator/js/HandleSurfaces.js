@@ -21,7 +21,7 @@ APP.addSurfaceObject = function(id, col) {
 		}
 
 	const name =  getSurfaceName(id);
-	const call_url   = location.protocol+"//"+location.host+"/ws/surface?id=";
+	const call_url   = location.protocol+"//"+location.host+"/ws/surface_skeleton?id=";
 	const target_url = location.protocol+"//"+location.host+"/surface/whole/" + name + ".stl";
 
 	// Revive it if already exists.

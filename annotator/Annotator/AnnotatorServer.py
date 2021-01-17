@@ -31,12 +31,14 @@ class CustomStaticFileHandler(tornado.web.StaticFileHandler):
     def set_extra_headers(self, path):
         self.set_header('Cache-Control', 'no-cache')
 
-class SurfaceHandler(tornado.web.RequestHandler):
+class SurfaceSkeletonHandler(tornado.web.RequestHandler):
   ###
   def __init__(self, *args, **kwargs):
     self.ids_volume	= kwargs.pop('3Dmap')
     self.pitch		= kwargs.pop('pitch')
-    self.surfaces_whole_path = kwargs.pop('path')
+    self.surfaces_path  = kwargs.pop('surfaces_path')
+    self.skeletons_path = kwargs.pop('skeletons_path')
+    
     super(SurfaceHandler, self).__init__(*args, **kwargs)
   ###
   def get(self):
@@ -83,21 +85,16 @@ class SurfaceHandler(tornado.web.RequestHandler):
     # mesh.vertices[:, 2] *= self.pitch[2]
 #    vertices = vertices[:, [2,0,1]]
 
-    filename = os.path.join(self.surfaces_whole_path, str(id).zfill(10)+'.stl')
+    filename = os.path.join(self.surfaces_path, str(id).zfill(10)+'.stl')
 
     #mesh = trimesh.smoothing.filter_humphrey(mesh)
-    mesh = trimesh.smoothing.filter_laplacian(mesh, iterations=4)
+    mesh = trimesh.smoothing.filter_laplacian(mesh, iterations=5)
     #mesh.fill_holes()
     #mesh.export(file_obj=filename,file_type='stl_ascii')
     mesh.export(file_obj=filename)
     return True
   ###
 
-
-
-class AnnotatorHandler(tornado.web.RequestHandler):
-  def get(self):
-    self.render('index.html')
 
 class AnnotatorServerLogic:
   def __init__( self, u_info  ):
@@ -150,13 +147,14 @@ class AnnotatorServerLogic:
 
     annotator = tornado.web.Application([
       (r'/surface/(.*)', CustomStaticFileHandler, {'path': surfaces_path}),
-      (r'/surface/whole/(.*)', CustomStaticFileHandler, {'path': surfaces_whole_path}),
       (r'/skeleton/(.*)', CustomStaticFileHandler, {'path': skeletons_path}),
-      (r'/ws/surface', SurfaceHandler, {'3Dmap': self.ids_volume, 'pitch': self.pitch ,'path': surfaces_whole_path}),
+      (r'/ws/surface_skeleton', SurfaceSkeletonHandler, {'3Dmap': self.ids_volume, 'pitch': self.pitch,
+      		'surfaces_path': surfaces_whole_path},'skeletons_path': skeletons_whole_path}),
       (r'/socket.io/', socketio.get_tornado_handler(sio)),
       (r'/(.*)', CustomStaticFileHandler, {'path': web_path})
     ],debug=True,autoreload=True)
 
+#      (r'/surface/whole/(.*)', CustomStaticFileHandler, {'path': surfaces_whole_path}),
 
     server = tornado.httpserver.HTTPServer(annotator)
     server.listen(self.u_info.port_annotator)
