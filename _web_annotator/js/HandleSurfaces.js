@@ -37,7 +37,7 @@ APP.addSurfaceObject = function(id, col) {
 
 	// Request the surface mesh generation to the server if it does not exist.
 	var xhr = new XMLHttpRequest();
-	xhr.open("HEAD", target_url, false);  //同期モード
+	xhr.open("HEAD", target_url, false);  //同期モード promise method
 	xhr.send(null);
 	if(xhr.status == 404) {
 			var req = new XMLHttpRequest();

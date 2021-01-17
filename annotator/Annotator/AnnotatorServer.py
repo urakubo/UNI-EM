@@ -3,6 +3,7 @@ import sys, os, time, errno
 import tornado
 import tornado.websocket
 import tornado.httpserver
+import tornado.escape
 import asyncio
 
 import numpy as np
@@ -40,6 +41,20 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
     self.skeletons_path = kwargs.pop('skeletons_path')
     
     super(SurfaceHandler, self).__init__(*args, **kwargs)
+  ###
+  def post(self, *arg, **kwargs):
+    request_json = json_decode(self.request.body)
+    if request_json['type'] == 'surface':
+    	id = int(request_json['id'])
+    	print('Target object id:', id)
+    	result = self.GenerateStl(id)
+    	if result :
+    		self.write("True")
+    	else :
+    		self.write("False")
+    elif request_json['type'] == 'surface':
+
+
   ###
   def get(self):
     id = self.get_argument('id', 'null')
