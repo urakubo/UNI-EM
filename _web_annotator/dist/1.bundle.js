@@ -759,12 +759,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _APP__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./APP */ "./js/APP.js");
 /* harmony import */ var _csv__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./csv */ "./js/csv.js");
 /* harmony import */ var jsfive__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jsfive */ "./node_modules/jsfive/index.js");
-/* harmony import */ var _PaintTable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./PaintTable */ "./js/PaintTable.js");
+/* harmony import */ var _MarkerTable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./MarkerTable */ "./js/MarkerTable.js");
+/* harmony import */ var _SurfaceTable__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./SurfaceTable */ "./js/SurfaceTable.js");
 //
 //
 //
 //
 //
+
 
 
 
@@ -786,7 +788,76 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSkeletons = function () {
       obj.visible = false;
     }
   });
+};
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSkeletons = function () {
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.traverse(function (obj) {
+    if (obj.name.match(/line/)) {
+      obj.visible = false;
+    }
+  });
 }; // Add stl objects and a name
+
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].generateSkeletons = function () {
+  const call_url = location.protocol + "//" + location.host + "/ws/surface_skeleton";
+  var request = {};
+  request["mode"] = "skeleton";
+  request["element"] = []; // Get JSON variable that shows the skeletons "ids and colors", and associated markers.
+
+  var rows = _SurfaceTable__WEBPACK_IMPORTED_MODULE_4__["SurfaceTable"].searchRows("act", "=", true);
+
+  for (var i in rows) {
+    var id = rows[i].getData().id;
+    var r = rows[i].getData().r;
+    var g = rows[i].getData().g;
+    var b = rows[i].getData().b;
+    var col = r * 256 * 256 + g * 256 + b * 1; //console.log('Target id: ', id);
+
+    var element = {};
+    element.id = id;
+    element.color = col; // Get marker points
+
+    var rows_marker = _MarkerTable__WEBPACK_IMPORTED_MODULE_3__["MarkerTable"].searchRows("parentid", "=", id);
+    var markerlocs = [];
+
+    for (var j in rows_marker) {
+      var id_marker = rows_marker[j].getData().id;
+      var mx = rows_marker[j].getData().x;
+      var my = rows_marker[j].getData().y;
+      var mz = rows_marker[j].getData().z; //console.log('Marker id: ', id_marker);
+      //console.log('x,y,z: ',mx,my,mz);
+
+      markerlocs.push([mx, my, mz]);
+    }
+
+    element.markerlocs = markerlocs;
+    console.log('element: ', element);
+    request["element"].push(element);
+  } // console.log(request)
+  //Send request to Server
+
+
+  var req = new XMLHttpRequest();
+
+  req.onreadystatechange = function () {
+    var READYSTATE_COMPLETED = 4;
+    var HTTP_STATUS_OK = 200;
+
+    if (this.readyState == READYSTATE_COMPLETED && this.status == HTTP_STATUS_OK) {
+      // レスポンスの表示
+      if (this.responseText == "False") {
+        alert("No skeleton.");
+        return false;
+      }
+    }
+  };
+
+  req.open('POST', call_url, false);
+  req.setRequestHeader('Content-Type', 'application/json');
+  req.send(JSON.stringify(request));
+}; //
+// Add stl objects and a name
 
 
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject = function (id, col) {
@@ -794,7 +865,7 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject = function (id, col) 
     return false;
   }
 
-  const call_url = location.protocol + "//" + location.host + "/ws/surface_skeleton?id=";
+  const call_url = location.protocol + "//" + location.host + "/ws/surface_skeleton";
   const target_url = location.protocol + "//" + location.host + "/skeleton/whole/" + ('0000000000' + id).slice(-10) + ".hdf5";
   const filename = ('0000000000' + id).slice(-10) + ".hdf5";
   const name = 'line' + ('0000000000' + id).slice(-10); // Revive if it already exists.

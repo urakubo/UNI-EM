@@ -6,7 +6,9 @@
 import { APP } from "./APP";
 import { parseCSV, csvFormatter } from "./csv";
 import * as hdf5 from 'jsfive';
-import { PaintTable } from "./PaintTable";
+import { MarkerTable } from "./MarkerTable";
+import { SurfaceTable } from "./SurfaceTable";
+
 
 // Change the opacity of all surface objects
 
@@ -29,6 +31,76 @@ APP.removeSkeletons = function() {
 }
 
 
+APP.removeSkeletons = function() {
+	APP.scene.traverse(function(obj) {
+		if ( obj.name.match(/line/) ) {
+			obj.visible = false;
+		}
+	});
+}
+
+// Add stl objects and a name
+APP.generateSkeletons = function() {
+
+	const call_url   = location.protocol+"//"+location.host+"/ws/surface_skeleton";
+	var request = {};
+	request["mode"] = "skeleton"
+	request["element"] = [];
+	// Get JSON variable that shows the skeletons "ids and colors", and associated markers.
+	var rows = SurfaceTable.searchRows("act", "=",  true);
+	for (var i in rows) {
+		var id  = rows[i].getData().id;
+  		var r   = rows[i].getData().r;
+  		var g   = rows[i].getData().g;
+  		var b   = rows[i].getData().b;
+  		var col = r*256*256+g*256+b*1;
+		//console.log('Target id: ', id);
+		var element = {}
+		element.id = id
+		element.color = col
+		// Get marker points
+  		var rows_marker = MarkerTable.searchRows("parentid", "=",  id);
+  		var markerlocs = [];
+		for (var j in rows_marker) {
+				var id_marker  = rows_marker[j].getData().id;
+				var mx = rows_marker[j].getData().x;
+				var my = rows_marker[j].getData().y;
+				var mz = rows_marker[j].getData().z;
+				//console.log('Marker id: ', id_marker);
+				//console.log('x,y,z: ',mx,my,mz);
+				markerlocs.push([mx, my, mz])
+				}
+		element.markerlocs = markerlocs
+		console.log('element: ', element)
+		request["element"].push(element)
+		}
+	// console.log(request)
+
+
+	//Send request to Server
+	var req = new XMLHttpRequest();
+	req.onreadystatechange = function()
+	{
+	    var READYSTATE_COMPLETED = 4;
+	    var HTTP_STATUS_OK = 200;
+
+	    if( this.readyState == READYSTATE_COMPLETED
+	     && this.status == HTTP_STATUS_OK )
+	    {
+	        // レスポンスの表示
+	        if (this.responseText == "False") {
+				alert("No skeleton.");
+				return false;
+				}
+	    }
+	}
+	req.open( 'POST', call_url , false);
+	req.setRequestHeader( 'Content-Type', 'application/json' );
+	req.send(JSON.stringify(request));
+	}
+//
+
+
 // Add stl objects and a name
 APP.addSkeletonObject = function(id, col) {
 
@@ -36,7 +108,7 @@ APP.addSkeletonObject = function(id, col) {
 		return false;
 		}
 
-	const call_url   = location.protocol+"//"+location.host+"/ws/surface_skeleton?id=";
+	const call_url   = location.protocol+"//"+location.host+"/ws/surface_skeleton";
 	const target_url = location.protocol+"//"+location.host+"/skeleton/whole/" + ( '0000000000' + id ).slice( -10 ) + ".hdf5";
 	const filename   = ( '0000000000' + id ).slice( -10 ) + ".hdf5";
 	const name       = 'line' + ( '0000000000' + id ).slice( -10 );

@@ -25,12 +25,13 @@ sys.path.append(path.join(main_dir, "system"))
 from Params import Params
 from annotator.Annotator.sio import sio, set_u_info
 import miscellaneous.Miscellaneous as m
-
+from annotator.Annotator.GenerateSkeleton import GenerateSkeleton
 
 
 class CustomStaticFileHandler(tornado.web.StaticFileHandler):
     def set_extra_headers(self, path):
         self.set_header('Cache-Control', 'no-cache')
+
 
 class SurfaceSkeletonHandler(tornado.web.RequestHandler):
   ###
@@ -40,6 +41,8 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
     self.surfaces_path  = kwargs.pop('surfaces_path')
     self.skeletons_path = kwargs.pop('skeletons_path')
     
+    self.gen_skel = GenerateSkeleton(self.ids_volume, self.pitch, self.skeletons_path)
+    
     super(SurfaceSkeletonHandler, self).__init__(*args, **kwargs)
   ###
   def prepare(self):
@@ -47,75 +50,64 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
     	raise HTTPError(406)
   ###
   def post(self, *arg, **kwargs):
-    request_json = tornado.escape.json_decode(self.request.body)
-    print(request_json)
-    if request_json['mode'] == 'surface':
-    	id = int(request_json['id'])
-    	print('Target object id:', id)
-    	result = self.GenerateStl(id)
+    request = tornado.escape.json_decode(self.request.body)
+    if 'mode' in request:
+    	print('Bad request: ', request)
+    	self.write("False")
+    	return False
+
+    if request['mode'] == 'surface':
+    	id = int(request['id'])
+    	# print('Target object id:', id)
+    	result = self.GenerateSurface(id)
     	if result :
     		self.write("True")
     	else :
     		self.write("False")
-    elif request_json['type'] == 'surface':
-    	pass
 
-  ###
-  def get(self):
-    id = self.get_argument('id', 'null')
-    id = int(id)
-    print('Target object id:', id)
-    result = self.GenerateStl(id)
-    if result :
-        self.write("True")
+    elif request['mode'] == 'skeleton':
+    	print('Request skeleton: ', request['element'][0])
+    	for i in range(request['element'])
+	    	result = self.gen_skel(request['element'][i]['id'])
+	    	if not result :
+	    		self.write("False")
+		self.write("True")
+
     else :
-        self.write("False")
+    	print('Bad request: ', request)
+    	self.write("False")
+    	return False
   ###
-  def GenerateStl(self, id):
+  ###
+  def GenerateSurface(self, id):
     mask = (self.ids_volume == id)
-
-#    mesher = zmesh.Mesher( tuple(self.pitch) )
-#    mesher.mesh( mask )
-#    mesh = mesher.get_mesh(1, normals=False)
-#    vertices = mesh.vertices
-#    faces = mesh.faces 
-
     try:
-        # vertices, normals, faces = march(mask, 2)
-        # vertices, faces = mcubes.marching_cubes(mask, 0)
         vertices, faces, normals, values = measure.marching_cubes_lewiner(mask, 0.5, spacing=tuple(self.pitch))
-        # print('vertices:', vertices.shape)
-        # print('faces   :', faces.shape)
-        # verts and normals have x and z flipped because skimage uses zyx ordering
+        vertices = vertices - self.pitch
+        # Parameters: spacing : length-3 tuple of floats
+        # Voxel spacing in spatial dimensions corresponding to numpy array
+        # indexing dimensions (M, N, P) as in `volume`.
+        # Returns: verts : (V, 3) array matches input `volume` (M, N, P).
+        #
+        # ??? verts and normals have x and z flipped because skimage uses zyx ordering
+        # vertices = vertices[:, [2,0,1]]
     except:
         print('Mesh was not generated.')
         return False
-    # trimesh.constants.tol.merge = 1e-7
-
-    trimesh.constants.tol.merge = 1e-7
+#    trimesh.constants.tol.merge = 1e-7
     mesh = trimesh.Trimesh(vertices=vertices, faces=faces)
+    mesh = trimesh.smoothing.filter_laplacian(mesh, iterations=5)
     mesh.merge_vertices()
     mesh.remove_degenerate_faces()
     mesh.remove_duplicate_faces()
     print('Processed vertices:', mesh.vertices.shape)
     print('Processed faces   :', mesh.faces.shape)
 
-    # mesh.vertices[:, 0] *= self.pitch[0]
-    # mesh.vertices[:, 1] *= self.pitch[1]
-    # mesh.vertices[:, 2] *= self.pitch[2]
-#    vertices = vertices[:, [2,0,1]]
-
     filename = os.path.join(self.surfaces_path, str(id).zfill(10)+'.stl')
-
-    #mesh = trimesh.smoothing.filter_humphrey(mesh)
-    mesh = trimesh.smoothing.filter_laplacian(mesh, iterations=5)
-    #mesh.fill_holes()
-    #mesh.export(file_obj=filename,file_type='stl_ascii')
     mesh.export(file_obj=filename)
     return True
   ###
-
-
+  ###
 class AnnotatorServerLogic:
   def __init__( self, u_info  ):
     ## User info
@@ -138,7 +130,6 @@ class AnnotatorServerLogic:
     ypitch *= coarse_factor
     self.pitch  = [xpitch, ypitch, zpitch]
 
-	
     ## Obtain id volume
     tp = m.ObtainTileProperty(self.u_info.annotator_tile_ids_volume_file)
     self.ids_volume = np.zeros([xmax, ymax, zmax], dtype=self.u_info.ids_dtype)
@@ -174,7 +165,6 @@ class AnnotatorServerLogic:
       (r'/(.*)', CustomStaticFileHandler, {'path': web_path})
     ],debug=True,autoreload=True)
 
-#      (r'/surface/whole/(.*)', CustomStaticFileHandler, {'path': surfaces_whole_path}),
 
     server = tornado.httpserver.HTTPServer(annotator)
     server.listen(self.u_info.port_annotator)
