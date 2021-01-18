@@ -850,6 +850,8 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].generateSkeletons = function () {
         alert("No skeleton.");
         return false;
       }
+
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject(id);
     }
   };
 
@@ -877,6 +879,17 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject = function (id, col) 
     // console.log('Obj: ', obj)
     obj.visible = true;
     return true;
+  } // Request the surface mesh generation to the server if it does not exist.
+
+
+  var xhr = new XMLHttpRequest();
+  xhr.open("HEAD", target_url, false); //同期モード promise method
+
+  xhr.send(null);
+
+  if (xhr.status == 404) {
+    alert("No skeleton.");
+    return false;
   } //
 
 

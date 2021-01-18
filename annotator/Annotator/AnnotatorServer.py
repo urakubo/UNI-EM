@@ -51,7 +51,7 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
   ###
   def post(self, *arg, **kwargs):
     request = tornado.escape.json_decode(self.request.body)
-    if 'mode' in request:
+    if 'mode' not in request:
     	print('Bad request: ', request)
     	self.write("False")
     	return False
@@ -66,12 +66,13 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
     		self.write("False")
 
     elif request['mode'] == 'skeleton':
-    	print('Request skeleton: ', request['element'][0])
-    	for i in range(request['element'])
-	    	result = self.gen_skel(request['element'][i]['id'])
+    	# print('Request skeleton: ', request['element'][0])
+    	for elem in request['element']:
+	    	print('Skeleton: ', elem )
+	    	result = self.gen_skel.Run(elem['id'])
 	    	if not result :
 	    		self.write("False")
-		self.write("True")
+    	self.write("True")
 
     else :
     	print('Bad request: ', request)
