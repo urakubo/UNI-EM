@@ -81,14 +81,12 @@ class GenerateSkeleton:
 
 	num_pts = 200
 	large_value = 100000000
-	fig2 = plt.figure(2)
-	ax3d = fig2.add_subplot(111, projection='3d')
+	#fig2 = plt.figure(2)
+	#ax3d = fig2.add_subplot(111, projection='3d')
 	for segment in segments:
-
 		if len(segment) < 4:
 			print('segment: ', segment)
 			continue
-
 		x = vertices[segment,0]
 		y = vertices[segment,1]
 		z = vertices[segment,2]
