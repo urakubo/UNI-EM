@@ -759,11 +759,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _APP__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./APP */ "./js/APP.js");
 /* harmony import */ var _csv__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./csv */ "./js/csv.js");
 /* harmony import */ var jsfive__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jsfive */ "./node_modules/jsfive/index.js");
+/* harmony import */ var _PaintTable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./PaintTable */ "./js/PaintTable.js");
 //
 //
 //
 //
 //
+
 
 
  // Change the opacity of all surface objects
@@ -792,6 +794,7 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject = function (id, col) 
     return false;
   }
 
+  const call_url = location.protocol + "//" + location.host + "/ws/surface_skeleton?id=";
   const target_url = location.protocol + "//" + location.host + "/skeleton/whole/" + ('0000000000' + id).slice(-10) + ".hdf5";
   const filename = ('0000000000' + id).slice(-10) + ".hdf5";
   const name = 'line' + ('0000000000' + id).slice(-10); // Revive if it already exists.
@@ -1112,7 +1115,7 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject = function (id, col) {
   }
 
   const name = getSurfaceName(id);
-  const call_url = location.protocol + "//" + location.host + "/ws/surface?id=";
+  const call_url = location.protocol + "//" + location.host + "/ws/surface_skeleton";
   const target_url = location.protocol + "//" + location.host + "/surface/whole/" + name + ".stl"; // Revive it if already exists.
   // console.log('Name: ', name)
 
@@ -1128,19 +1131,45 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject = function (id, col) {
 
 
   var xhr = new XMLHttpRequest();
-  xhr.open("HEAD", target_url, false); //同期モード
+  xhr.open("HEAD", target_url, false); //同期モード promise method
 
   xhr.send(null);
 
   if (xhr.status == 404) {
-    var req = new XMLHttpRequest();
-    req.open("get", call_url + id, false);
-    req.send(null);
+    //
+    var data = {
+      mode: "surface",
+      id: id
+    }; // POSTメソッドで送信するデータ
 
-    if (req.responseText == "False") {
-      alert("No surface.");
-      return false;
-    }
+    var req = new XMLHttpRequest();
+
+    req.onreadystatechange = function () {
+      var READYSTATE_COMPLETED = 4;
+      var HTTP_STATUS_OK = 200;
+
+      if (this.readyState == READYSTATE_COMPLETED && this.status == HTTP_STATUS_OK) {
+        // レスポンスの表示
+        if (this.responseText == "False") {
+          alert("No surface.");
+          return false;
+        }
+      }
+    };
+
+    req.open('POST', call_url, false); // サーバに対して解析方法を指定する
+
+    req.setRequestHeader('Content-Type', 'application/json'); // データをリクエスト ボディに含めて送信する
+
+    req.send(JSON.stringify(data)); //
+    //			以前、GET methodで
+    //			var req = new XMLHttpRequest();
+    //			req.open("get", call_url+id, false);
+    //			req.send(null);
+    //			if (req.responseText == "False") {
+    //				alert("No surface.");
+    //				return false;
+    //				}
   } // console.log('Mesh prepared.');
   // Load the stl file then generate mesh object.
 

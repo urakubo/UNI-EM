@@ -21,7 +21,7 @@ APP.addSurfaceObject = function(id, col) {
 		}
 
 	const name =  getSurfaceName(id);
-	const call_url   = location.protocol+"//"+location.host+"/ws/surface_skeleton?id=";
+	const call_url   = location.protocol+"//"+location.host+"/ws/surface_skeleton";
 	const target_url = location.protocol+"//"+location.host+"/surface/whole/" + name + ".stl";
 
 	// Revive it if already exists.
@@ -40,14 +40,44 @@ APP.addSurfaceObject = function(id, col) {
 	xhr.open("HEAD", target_url, false);  //同期モード promise method
 	xhr.send(null);
 	if(xhr.status == 404) {
-			var req = new XMLHttpRequest();
-			req.open("get", call_url+id, false);
-			req.send(null);
-			if (req.responseText == "False") {
-				alert("No surface.");
-				return false;
-				}
+//
+		var data = { mode: "surface", id: id }; // POSTメソッドで送信するデータ
+		var req = new XMLHttpRequest();
+		req.onreadystatechange = function()
+		{
+		    var READYSTATE_COMPLETED = 4;
+		    var HTTP_STATUS_OK = 200;
+
+		    if( this.readyState == READYSTATE_COMPLETED
+		     && this.status == HTTP_STATUS_OK )
+		    {
+		        // レスポンスの表示
+		        if (this.responseText == "False") {
+					alert("No surface.");
+					return false;
+					}
+		    }
+		}
+		req.open( 'POST', call_url , false);
+		// サーバに対して解析方法を指定する
+		req.setRequestHeader( 'Content-Type', 'application/json' );
+		// データをリクエスト ボディに含めて送信する
+		req.send(JSON.stringify(data));
+//
+
+//			以前、GET methodで
+//			var req = new XMLHttpRequest();
+//			req.open("get", call_url+id, false);
+//			req.send(null);
+//			if (req.responseText == "False") {
+//				alert("No surface.");
+//				return false;
+//				}
 	}
+
+
+
+	
 	// console.log('Mesh prepared.');
 
 	// Load the stl file then generate mesh object.

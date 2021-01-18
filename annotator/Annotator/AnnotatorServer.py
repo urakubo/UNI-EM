@@ -40,11 +40,16 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
     self.surfaces_path  = kwargs.pop('surfaces_path')
     self.skeletons_path = kwargs.pop('skeletons_path')
     
-    super(SurfaceHandler, self).__init__(*args, **kwargs)
+    super(SurfaceSkeletonHandler, self).__init__(*args, **kwargs)
+  ###
+  def prepare(self):
+    if self.request.headers.get('Content-Type') != 'application/json':
+    	raise HTTPError(406)
   ###
   def post(self, *arg, **kwargs):
-    request_json = json_decode(self.request.body)
-    if request_json['type'] == 'surface':
+    request_json = tornado.escape.json_decode(self.request.body)
+    print(request_json)
+    if request_json['mode'] == 'surface':
     	id = int(request_json['id'])
     	print('Target object id:', id)
     	result = self.GenerateStl(id)
@@ -53,7 +58,7 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
     	else :
     		self.write("False")
     elif request_json['type'] == 'surface':
-
+    	pass
 
   ###
   def get(self):
@@ -164,7 +169,7 @@ class AnnotatorServerLogic:
       (r'/surface/(.*)', CustomStaticFileHandler, {'path': surfaces_path}),
       (r'/skeleton/(.*)', CustomStaticFileHandler, {'path': skeletons_path}),
       (r'/ws/surface_skeleton', SurfaceSkeletonHandler, {'3Dmap': self.ids_volume, 'pitch': self.pitch,
-      		'surfaces_path': surfaces_whole_path},'skeletons_path': skeletons_whole_path}),
+      		'surfaces_path': surfaces_whole_path,'skeletons_path': skeletons_whole_path}),
       (r'/socket.io/', socketio.get_tornado_handler(sio)),
       (r'/(.*)', CustomStaticFileHandler, {'path': web_path})
     ],debug=True,autoreload=True)

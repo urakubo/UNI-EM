@@ -36,6 +36,7 @@ APP.addSkeletonObject = function(id, col) {
 		return false;
 		}
 
+	const call_url   = location.protocol+"//"+location.host+"/ws/surface_skeleton?id=";
 	const target_url = location.protocol+"//"+location.host+"/skeleton/whole/" + ( '0000000000' + id ).slice( -10 ) + ".hdf5";
 	const filename   = ( '0000000000' + id ).slice( -10 ) + ".hdf5";
 	const name       = 'line' + ( '0000000000' + id ).slice( -10 );
