@@ -1,10 +1,9 @@
 import sys, os, time, errno
 import numpy as np
-import json
-import sqlite3
 import h5py
 import kimimaro
-
+from scipy import interpolate
+import collections
 
 class GenerateSkeleton:
   def __init__( self, ids_volume, pitch, skeletons_whole_path):
@@ -44,6 +43,65 @@ class GenerateSkeleton:
 	  parallel_chunk_size=100, # how many skeletons to process before updating progress bar
     )
 
+	##
+	## Smoothing
+	##
+
+    vertices = skels[id].vertices
+    edges    = skels[id].edges
+    radiuses = skels[id].radius
+
+	edges_ids         = edges.flatten().tolist()
+	edges_num_connect = collections.Counter(edges_ids)
+	edges_end   = [k for k, v in edges_num_connect.items() if v == 1]
+	edges_cross = [k for k, v in edges_num_connect.items() if v > 2]
+	edges_end.extend(edges_cross)
+
+	start_edge_pairs = []
+	start_edge_solo  = []
+
+	for id_cross in edges_cross:
+		tmp = edges[np.any(edges == id_cross, axis=1),:]
+		tmp_ = tmp.flatten()
+		start_points  = tmp_[tmp_ != id_cross]
+		base_crossing = np.ones(start_points.shape).astype(int)*id_cross
+		tmp__ = np.vstack([base_crossing, start_points]).transpose()
+		start_edge_solo.extend( start_points.tolist() )
+		start_edge_pairs.extend( tmp__.tolist() )
+
+	start_edge_solo = np.array(start_edge_solo)
+
+	cross_flag      = np.zeros(start_edge_solo.shape)
+	segments = []
+	for i in range(len(start_edge_pairs)):
+		if cross_flag[i] == 0 :
+			segment = obtain_segment(start_edge_pairs[i], edges)
+			segments.append( segment )
+			cross_flag = cross_flag + (start_edge_solo == segment[-2])
+
+	num_pts = 200
+	large_value = 100000000
+	fig2 = plt.figure(2)
+	ax3d = fig2.add_subplot(111, projection='3d')
+	for segment in segments:
+
+		if len(segment) < 4:
+			print('segment: ', segment)
+			continue
+
+		x = vertices[segment,0]
+		y = vertices[segment,1]
+		z = vertices[segment,2]
+		w = np.ones(x.shape[0])*10
+		w[0]  = large_value
+		w[-1] = large_value
+		
+		tck, u = interpolate.splprep([x,y,z], s=4, w=w )
+		u_fine = np.linspace(0,1,num_pts)
+		x_fit, y_fit, z_fit = interpolate.splev(u_fine, tck)
+
+
+	# Save skeleton
     skeleton_ids = self._SaveSkeletonFile(skels, id)
 
 
@@ -65,4 +123,17 @@ class GenerateSkeleton:
       f.create_dataset('radiuses', data=radiuses)
     print('Generated', id)
     return True
+
+
+
+def _ObtainSegment(start_pair, edges):
+	output_edges = start_pair # list
+	while True:
+		tmp = edges[np.any(edges == output_edges[-1], axis=1),:]
+		tmp = tmp[np.all(tmp != output_edges[-2], axis=1),:]
+		if (tmp.shape[0] == 1):
+			newid = tmp[tmp != output_edges[-1]].tolist()
+			output_edges.extend(newid)
+		else:
+			return output_edges
 
