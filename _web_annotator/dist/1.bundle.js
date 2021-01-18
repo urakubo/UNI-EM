@@ -788,14 +788,6 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSkeletons = function () {
       obj.visible = false;
     }
   });
-};
-
-_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSkeletons = function () {
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.traverse(function (obj) {
-    if (obj.name.match(/line/)) {
-      obj.visible = false;
-    }
-  });
 }; // Add stl objects and a name
 
 
@@ -816,7 +808,15 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].generateSkeletons = function () {
 
     var element = {};
     element.id = id;
-    element.color = col; // Get marker points
+    element.color = col; // Remove current skeleton
+
+    var name = 'line' + ('0000000000' + id).slice(-10);
+    var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name);
+
+    if (obj != undefined) {
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.remove(obj);
+    } // Get marker points
+
 
     var rows_marker = _MarkerTable__WEBPACK_IMPORTED_MODULE_3__["MarkerTable"].searchRows("parentid", "=", id);
     var markerlocs = [];
@@ -851,7 +851,7 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].generateSkeletons = function () {
         return false;
       }
 
-      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject(id);
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject(id, col);
     }
   };
 
@@ -888,7 +888,8 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject = function (id, col) 
   xhr.send(null);
 
   if (xhr.status == 404) {
-    alert("No skeleton.");
+    // alert("No skeleton.");
+    console.log('No skeleton data:', id);
     return false;
   } //
 
@@ -914,7 +915,7 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject = function (id, col) 
 
     if (isNaN(data_vertices[0][0]) == true) {
       // console.log(data_vertices);
-      console.log('No morphological data.');
+      console.log('No skeleton data.');
       return false;
     }
 
@@ -924,21 +925,22 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject = function (id, col) 
       //0x000000
       linewidth: 3,
       fog: true
-    }); // Points
-
+    });
+    /* Points
     const geometry_points = new THREE.Geometry();
-
-    for (var i = 0; i < data_edges.length; i++) {
-      i1 = data_edges[i][0];
-      geometry_points.vertices.push(new THREE.Vector3(data_vertices[i1][0], data_vertices[i1][1], data_vertices[i1][2]));
+    for (var i=0;i< data_edges.length;i++) {
+    	i1 = data_edges[i][0];
+    			geometry_points.vertices.push(
+    				new THREE.Vector3(data_vertices[i1][0], data_vertices[i1][1], data_vertices[i1][2])
+    			);
     }
-
     const material_points = new THREE.PointsMaterial({
-      size: 0.01,
-      color: 0x000000
+    	size: 0.01,
+    	color: 0x000000,
     });
     const points = new THREE.Points(geometry_points, material_points);
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(points); //
+    APP.scene.add(points);
+    */
 
     for (let i = 0; i < data_edges.length; i++) {
       i1 = data_edges[i][0];

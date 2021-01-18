@@ -76,8 +76,6 @@ APP.addSurfaceObject = function(id, col) {
 	}
 
 
-
-	
 	// console.log('Mesh prepared.');
 
 	// Load the stl file then generate mesh object.

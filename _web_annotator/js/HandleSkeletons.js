@@ -31,14 +31,6 @@ APP.removeSkeletons = function() {
 }
 
 
-APP.removeSkeletons = function() {
-	APP.scene.traverse(function(obj) {
-		if ( obj.name.match(/line/) ) {
-			obj.visible = false;
-		}
-	});
-}
-
 // Add stl objects and a name
 APP.generateSkeletons = function() {
 	const call_url   = location.protocol+"//"+location.host+"/ws/surface_skeleton";
@@ -57,6 +49,12 @@ APP.generateSkeletons = function() {
 		var element = {}
 		element.id = id
 		element.color = col
+		// Remove current skeleton
+		var name = 'line' + ( '0000000000' + id ).slice( -10 );
+		var obj = APP.scene.getObjectByName(name);
+		if ( obj != undefined ) {
+    		APP.scene.remove(obj);
+		}
 		// Get marker points
   		var rows_marker = MarkerTable.searchRows("parentid", "=",  id);
   		var markerlocs = [];
@@ -91,7 +89,7 @@ APP.generateSkeletons = function() {
 				alert("No skeleton.");
 				return false;
 				}
-			APP.addSkeletonObject(id)
+			APP.addSkeletonObject(id, col)
 	    }
 	}
 	req.open( 'POST', call_url , false);
@@ -127,7 +125,8 @@ APP.addSkeletonObject = function(id, col) {
 	xhr.open("HEAD", target_url, false);  //同期モード promise method
 	xhr.send(null);
 	if(xhr.status == 404) {
-				alert("No skeleton.");
+				// alert("No skeleton.");
+				console.log('No skeleton data:', id);
 				return false;
 		}
 
@@ -158,7 +157,7 @@ APP.addSkeletonObject = function(id, col) {
 		// console.log('Length edges   : ' + data_edges.length);
 		if (isNaN(data_vertices[0][0]) == true) {
 			// console.log(data_vertices);
-			console.log('No morphological data.');
+			console.log('No skeleton data.');
 			return false;
 		}
 
@@ -170,7 +169,7 @@ APP.addSkeletonObject = function(id, col) {
 		});
 		
 		
-		// Points
+		/* Points
 		const geometry_points = new THREE.Geometry();
 		for (var i=0;i< data_edges.length;i++) {
 			i1 = data_edges[i][0];
@@ -184,7 +183,7 @@ APP.addSkeletonObject = function(id, col) {
 		});
 		const points = new THREE.Points(geometry_points, material_points);
 		APP.scene.add(points);
-		//
+		*/
 		
 		
 		
