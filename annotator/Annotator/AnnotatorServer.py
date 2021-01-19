@@ -12,6 +12,7 @@ import socketio
 
 from skimage import measure
 import trimesh
+
 # from marching_cubes import march
 # import mcubes
 # import zmesh
@@ -69,7 +70,7 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
     	# print('Request skeleton: ', request['element'][0])
     	for elem in request['element']:
 	    	print('Skeleton: ', elem )
-	    	result = self.gen_skel.Run(elem['id'])
+	    	result = self.gen_skel.Run(elem['id'], elem['markerlocs'])
 	    	if not result :
 	    		self.write("False")
     	self.write("True")

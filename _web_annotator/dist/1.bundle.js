@@ -850,14 +850,17 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].generateSkeletons = function () {
         alert("No skeleton.");
         return false;
       }
-
-      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject(id, col);
     }
   };
 
   req.open('POST', call_url, false);
   req.setRequestHeader('Content-Type', 'application/json');
   req.send(JSON.stringify(request));
+
+  for (const elem of request["element"]) {
+    console.log("Element: ", elem);
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject(elem.id, elem.color);
+  }
 }; //
 // Add stl objects and a name
 
@@ -912,10 +915,22 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSkeletonObject = function (id, col) 
     var v2 = undefined; // console.log(data_vertices)
     // console.log('Length vertices: ' + data_vertices.length);
     // console.log('Length edges   : ' + data_edges.length);
+    ////// Uncaught TypeError: Cannot read property '0' of undefined
+
+    if (typeof data_vertices !== "object") {
+      console.log('Not skeleton data.');
+      return false;
+    }
+
+    if (typeof data_vertices[0] === "undefined") {
+      console.log('Errornous skeleton data.');
+      console.log(data_vertices);
+      return false;
+    }
 
     if (isNaN(data_vertices[0][0]) == true) {
       // console.log(data_vertices);
-      console.log('No skeleton data.');
+      console.log('Errornous skeleton data.');
       return false;
     }
 
