@@ -814,6 +814,8 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].generateSkeletons = function () {
     var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name);
 
     if (obj != undefined) {
+      obj.geometry.dispose();
+      obj.material.dispose();
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.remove(obj);
     } // Get marker points
 
@@ -1560,7 +1562,7 @@ function onImportCSVFileSelect(event) {
 
     parsedData.shift(); // タイトルフィールドを変換
 
-    var markers = replaceColumnTitle(ObjMarkerTable, parsedData); // 同じ座標のためスキップした数
+    var markers = replaceColumnTitle(MarkerTable, parsedData); // 同じ座標のためスキップした数
 
     var sameCoordinatesCount = 0; // Parent ID のオブジェクトが非表示のためスキップした数
 
@@ -1612,7 +1614,7 @@ function onImportCSVFileSelect(event) {
 
 
 function isMarkerTableEmpty() {
-  return ObjMarkerTable.getDataCount() === 0;
+  return MarkerTable.getDataCount() === 0;
 }
 /**
  * MarkerTableをクリアする
@@ -1620,7 +1622,7 @@ function isMarkerTableEmpty() {
 
 
 function clearMarkerTable() {
-  var rows = ObjMarkerTable.getRows();
+  var rows = MarkerTable.getRows();
   rows.forEach(function (row) {
     _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeMarker(row.getData().id);
     row.delete();
@@ -1638,7 +1640,7 @@ function downloadMarkerTableAsCSV() {
  * テーブルカラムのタイトルとフィールドのペアを取得する
  *
  * @example
- * getColumnFieldTitlePairs(ObjMarkerTable)
+ * getColumnFieldTitlePairs(MarkerTable)
  * {
  *   "Act": "act"
  *   "ID": "id"
@@ -1668,7 +1670,7 @@ function getColumnFieldTitlePairs(table) {
  * CSVの1行目タイトルは表記用のものでスペースも含まれるため、内部キー名に変換する
  *
  * @example
- * replaceColumnTitle(ObjMarkerTable, {
+ * replaceColumnTitle(MarkerTable, {
  *   "Act": "1"
  *   "ID": "2"
  *   "Name": "Marker1"
@@ -1771,7 +1773,7 @@ function validateMarkerDataType(markerData) {
 
 
 function validateMarkerDataXYZ(markerData) {
-  var rows = ObjMarkerTable.getRows();
+  var rows = MarkerTable.getRows();
   return rows.every(function (row) {
     var rowData = row.getData();
     var rowX = rowData.x;

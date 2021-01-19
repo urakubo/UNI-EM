@@ -67,7 +67,7 @@ class GenerateSkeleton:
 	  self.ids_volume, 
 	  teasar_params=self.teasar_params,
 	  object_ids=[ id ], # process only the specified labels
-	  extra_targets_before=markerlocs_int, # target points in voxels
+	  #extra_targets_before=markerlocs_int, # target points in voxels
 	  extra_targets_after=markerlocs_int, # target points in voxels
 	  dust_threshold=300, # skip connected components with fewer than this many voxels
 	  anisotropy=( self.xpitch, self.ypitch, self.zpitch ), # default True

@@ -53,6 +53,8 @@ APP.generateSkeletons = function() {
 		var name = 'line' + ( '0000000000' + id ).slice( -10 );
 		var obj = APP.scene.getObjectByName(name);
 		if ( obj != undefined ) {
+			obj.geometry.dispose();
+			obj.material.dispose();
     		APP.scene.remove(obj);
 		}
 		// Get marker points

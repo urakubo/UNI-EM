@@ -100,7 +100,7 @@ function onImportCSVFileSelect(event) {
     // 1行目のタイトルを除外
     parsedData.shift();
     // タイトルフィールドを変換
-    var markers = replaceColumnTitle(ObjMarkerTable, parsedData);
+    var markers = replaceColumnTitle(MarkerTable, parsedData);
 
     // 同じ座標のためスキップした数
     var sameCoordinatesCount = 0;
@@ -149,14 +149,14 @@ function onImportCSVFileSelect(event) {
  * @return {bool}
  */
 function isMarkerTableEmpty() {
-  return ObjMarkerTable.getDataCount() === 0;
+  return MarkerTable.getDataCount() === 0;
 }
 
 /**
  * MarkerTableをクリアする
  */
 function clearMarkerTable() {
-  var rows = ObjMarkerTable.getRows();
+  var rows = MarkerTable.getRows();
   rows.forEach(function(row) {
     APP.removeMarker(row.getData().id);
     row.delete();
@@ -174,7 +174,7 @@ function downloadMarkerTableAsCSV() {
  * テーブルカラムのタイトルとフィールドのペアを取得する
  *
  * @example
- * getColumnFieldTitlePairs(ObjMarkerTable)
+ * getColumnFieldTitlePairs(MarkerTable)
  * {
  *   "Act": "act"
  *   "ID": "id"
@@ -203,7 +203,7 @@ function getColumnFieldTitlePairs(table) {
  * CSVの1行目タイトルは表記用のものでスペースも含まれるため、内部キー名に変換する
  *
  * @example
- * replaceColumnTitle(ObjMarkerTable, {
+ * replaceColumnTitle(MarkerTable, {
  *   "Act": "1"
  *   "ID": "2"
  *   "Name": "Marker1"
@@ -292,7 +292,7 @@ function validateMarkerDataType(markerData) {
  * @return {bool} すべての値が適切ならtrue,そうじゃないならfalse
  */
 function validateMarkerDataXYZ(markerData) {
-  var rows = ObjMarkerTable.getRows();
+  var rows = MarkerTable.getRows();
   return rows.every(function(row) {
     var rowData = row.getData();
     var rowX = rowData.x;
