@@ -2,20 +2,22 @@ import sys, os, time, errno
 import numpy as np
 import h5py
 import kimimaro
-from scipy import interpolate
+from scipy import interpolate, spatial
 import collections
 
 from skimage import morphology
+import trimesh
 
 
 class GenerateSkeleton:
-  def __init__( self, ids_volume, pitch, skeletons_whole_path):
+  def __init__( self, ids_volume, pitch, skeletons_path, surfaces_path):
 
     self.xpitch = pitch[0]
     self.ypitch = pitch[1]
     self.zpitch = pitch[2]
     self.ids_volume = ids_volume
-    self.skeletons_whole_path = skeletons_whole_path
+    self.skeletons_path = skeletons_path
+    self.surfaces_path  = surfaces_path
 
     self.teasar_params={\
 		'scale': 4,
@@ -35,24 +37,27 @@ class GenerateSkeleton:
 	##
 	## Markerpoint location correction.
 	##
+    xmax, ymax, zmax = self.ids_volume.shape
 
     markerlocs_int = [( int(loc[0]/self.xpitch), int(loc[1]/self.ypitch), int(loc[2]/self.zpitch) ) for loc in markerlocs];
     print("markerlocs_int: ", markerlocs_int)
     if markerlocs_int != []:
     	print("Targ ID: ", id)
-    	for i, org_loc in enumerate(markerlocs_int):
-    		if self.ids_volume[org_loc[0], org_loc[1], org_loc[2]] == id:
+    	for i, oloc in enumerate(markerlocs_int):
+    		if self.ids_volume[oloc[0], oloc[1], oloc[2]] == id:
     			continue
     		else:
     			j = 1
     			while (j < 10):
     				j += 1
     				locs = np.where(morphology.ball(j, dtype=np.bool))
-    				locs = [[ix+org_loc[0],iy+org_loc[1],iz+org_loc[2]] for ix,iy,iz in zip(locs[0], locs[1], locs[2])]
-    				print('j = ', j)
-    				for loc in locs:
-    					if self.ids_volume[loc[0], loc[1], loc[2]] == id:
-    						markerlocs_int[i] = loc
+    				locs = [[ix+oloc[0],iy+oloc[1],iz+oloc[2]] for ix,iy,iz in zip(locs[0], locs[1], locs[2])]
+    				#print('j = ', j)
+    				for l in locs:
+    					if (l[0] < 0) or (l[1] < 0) or (l[2] < 0) or (l[0]>=xmax) or (l[1]>=ymax) or (l[2]>=zmax):
+    						continue
+    					if self.ids_volume[l[0], l[1], l[2]] == id:
+    						markerlocs_int[i] = l
     						j = 10
     						break
 
@@ -104,9 +109,6 @@ class GenerateSkeleton:
     	tmp = edges[np.any(edges == id_cross, axis=1),:].flatten()
     	_neighbors_cross  = tmp[tmp != id_cross]
     	pairs = [[id_cross, neighbor]  for neighbor in _neighbors_cross]
-		# base_crossing = np.ones(start_points.shape).astype(int)*id_cross
-		# tmp__ = np.vstack([base_crossing, start_points]).transpose()
-		# start_edge_pairs.extend( tmp__.tolist() )
     	neighbors_cross.extend( _neighbors_cross.tolist() )
     	start_pairs.extend( pairs )
 
@@ -128,9 +130,12 @@ class GenerateSkeleton:
 
 
 	# Set new coordinate
-    vertices_list     = vertices.tolist()
-    new_vertices      = vertices[edges_cross,:].tolist()
-    new_edges		  = []
+    vertices_list = vertices.tolist()
+    new_vertices  = vertices[edges_cross,:].tolist()
+    new_lengths   = [0.0] * len(new_vertices)
+    new_edges	  = []
+
+    # print('new_lengths : ', new_lengths)
 
 	# Smoothing and mapping of segments
     for segment in segments:
@@ -148,53 +153,85 @@ class GenerateSkeleton:
     	tck, u = interpolate.splprep([x,y,z], s=4, w=w )
     	u_fine = np.linspace(0,1,num_pts)
     	x_fit, y_fit, z_fit = interpolate.splev(u_fine, tck)
-    	tmp_verts = [[ix,iy,iz] for ix,iy,iz in zip(x_fit, y_fit, z_fit) ]
-		
+    	
+    	## Segmental lengths
+    	x_diff = np.diff(x_fit)
+    	y_diff = np.diff(y_fit)
+    	z_diff = np.diff(z_fit)
+    	tmp_lengths = np.sqrt(x_diff*x_diff + y_diff*y_diff + z_diff*z_diff)/2
+    	tmp_lengths = np.append(tmp_lengths, 0) + np.append(0, tmp_lengths)
+    	tmp_lengths = tmp_lengths.tolist()
+    	# print('tmp_lengths: ', tmp_lengths)
+
+
+    	# print('Segmental lengths: ', tmp_lengths)
+    	
 		## Mapping
-    	new_edge_start = new_vertices.index(vertices_list[segment[0]])
+    	new_edge_start  = new_vertices.index(vertices_list[segment[0]])
+    	new_lengths[new_edge_start] += tmp_lengths[0]
     	ids_start_new   = len(new_vertices)
+
+    	# print('new_edge_start: ', new_edge_start)
+
     	new_edges.append([new_edge_start, ids_start_new])
 
-#    	new_end_edge   = new_vertices.index(vertices_list[segment[-1]])
-#    	if new_end_edge == []:
-
+    	tmp_verts = [[ix,iy,iz] for ix,iy,iz in zip(x_fit, y_fit, z_fit) ]
     	vert_end = vertices_list[segment[-1]]
     	if vert_end not in new_vertices:
     		new_vertices.extend(tmp_verts[1:])
+    		new_lengths.extend(tmp_lengths[1:])
     		ids_end_new = len(new_vertices)
     		tmp_edges = [[i, i+1] for i in range(ids_start_new,ids_end_new-1)]
     		new_edges.extend(tmp_edges)
     	else:
     		new_end_edge   = new_vertices.index(vert_end)
     		new_vertices.extend(tmp_verts[1:-1])
+    		new_lengths.extend(tmp_lengths[1:-1])
     		ids_end_new = len(new_vertices)
     		tmp_edges = [[i, i+1] for i in range(ids_start_new,ids_end_new-1)]
     		new_edges.extend(tmp_edges)
     		new_edges.append([len(new_vertices), new_end_edge])
+    		new_lengths[new_end_edge] += tmp_lengths[-1]
 	
     new_vertices      = np.array(new_vertices)
     new_edges		  = np.array(new_edges)
-    new_radiuses	  = np.ones((new_edges.shape[0], 1), dtype="float")*0.1
-	
     print('new_vertices: ', new_vertices.shape)
     print('new_edges   : ', new_edges.shape)
+    
+    ##
+	## Calculate radiuses for each vartices (k-nearst neighbor)
+	##
+    surface_vertices = self._LoadSurfaceVertices(id)
+    tree = spatial.cKDTree(surface_vertices)
+    dists, indexes = tree.query(new_vertices, k=5)
+    new_radiuses	 = np.mean(dists, axis=1)
     print('new_radiuses: ', new_radiuses.shape)
-	
-	# Save skeleton
-    skeleton_ids = self._SaveSkeletonFile(id, new_vertices, new_edges, new_radiuses)
+
+	##
+	## Save skeleton
+	##
+    skeleton_ids = self._SaveSkeletonFile(id, new_vertices, new_edges, new_radiuses, new_lengths)
 
 
-  def _SaveSkeletonFile(self, id, vertices, edges, radiuses):
+  def _LoadSurfaceVertices(self, id):
+    print('Loading surface, ID: ', id)
+    filename = self.surfaces_path + os.sep + str(id).zfill(10)+'.stl'
+    mesh = trimesh.load(filename)
+    vertices = mesh.vertices
     print('')
-    filename = self.skeletons_whole_path + os.sep + str(id).zfill(10)+'.hdf5'
+    return vertices
+
+
+  def _SaveSkeletonFile(self, id, vertices, edges, radiuses, lengths):
+    filename = self.skeletons_path + os.sep + str(id).zfill(10)+'.hdf5'
     with h5py.File( filename ,'w') as f:
     	f.create_dataset('vertices', data=vertices)
     	f.create_dataset('edges', data=edges)
     	f.create_dataset('radiuses', data=radiuses)
+    	f.create_dataset('lengths', data=lengths)
     print('Generated skeleton ID: ', id)
     print('')
     return True
-
 
 
   def _ObtainSegment(self, start_pair, edges):

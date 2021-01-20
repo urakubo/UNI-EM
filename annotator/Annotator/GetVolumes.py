@@ -48,8 +48,8 @@ def GetVolumes(surface_path, paint_path):
 					ids_volumes[id] = volume
 
 		return ids_volumes
-"""
 
+"""
 	if ids_volumes is not {} :
 		counter = s.update_paint_volumes(ids_volumes)
 

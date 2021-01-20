@@ -20,7 +20,6 @@ macholib==1.11
 mahotas==1.4.5
 Markdown==3.0.1
 networkx==2.2
-numpy-stl==2.9.0
 opencv-python==4.0.0.21
 pefile==2018.8.8
 Pillow==6.2.0

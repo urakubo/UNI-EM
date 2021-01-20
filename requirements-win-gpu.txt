@@ -26,7 +26,6 @@ Markdown==3.0.1
 meshio==4.3.6
 netifaces==0.10.6
 networkx==2.2
-numpy-stl==2.9.0
 opencv-python==4.4.0.46
 opt-einsum==3.3.0
 packaging==20.4

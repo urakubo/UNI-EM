@@ -9,7 +9,6 @@ import * as hdf5 from 'jsfive';
 import { MarkerTable } from "./MarkerTable";
 import { SurfaceTable } from "./SurfaceTable";
 
-
 // Change the opacity of all surface objects
 
 APP.addSkeletons = function() {
@@ -53,9 +52,10 @@ APP.generateSkeletons = function() {
 		var name = 'line' + ( '0000000000' + id ).slice( -10 );
 		var obj = APP.scene.getObjectByName(name);
 		if ( obj != undefined ) {
-			obj.geometry.dispose();
-			obj.material.dispose();
+			//obj.geometry.dispose();
+			//obj.material.dispose();
     		APP.scene.remove(obj);
+    		APP.disposeNode(obj);
 		}
 		// Get marker points
   		var rows_marker = MarkerTable.searchRows("parentid", "=",  id);

@@ -42,7 +42,7 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
     self.surfaces_path  = kwargs.pop('surfaces_path')
     self.skeletons_path = kwargs.pop('skeletons_path')
     
-    self.gen_skel = GenerateSkeleton(self.ids_volume, self.pitch, self.skeletons_path)
+    self.gen_skel = GenerateSkeleton(self.ids_volume, self.pitch, self.skeletons_path, self.surfaces_path)
     
     super(SurfaceSkeletonHandler, self).__init__(*args, **kwargs)
   ###

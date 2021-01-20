@@ -814,9 +814,10 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].generateSkeletons = function () {
     var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName(name);
 
     if (obj != undefined) {
-      obj.geometry.dispose();
-      obj.material.dispose();
+      //obj.geometry.dispose();
+      //obj.material.dispose();
       _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.remove(obj);
+      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].disposeNode(obj);
     } // Get marker points
 
 
@@ -2703,7 +2704,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _js_csv__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../js/csv */ "./js/csv.js");
 /* harmony import */ var _js_MarkerTable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../js/MarkerTable */ "./js/MarkerTable.js");
 /* harmony import */ var _js_util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../js/util */ "./js/util.js");
-/* harmony import */ var _js_util__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_js_util__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _js_SurfaceTable__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../js/SurfaceTable */ "./js/SurfaceTable.js");
 /* harmony import */ var _js_HandleSurfaces__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../js/HandleSurfaces */ "./js/HandleSurfaces.js");
 /* harmony import */ var _js_HandleSkeletons__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../js/HandleSkeletons */ "./js/HandleSkeletons.js");
@@ -2730,10 +2730,14 @@ Object(_js_HandleBasement__WEBPACK_IMPORTED_MODULE_10__["launchAnnotator"])();
 /*!********************!*\
   !*** ./js/util.js ***!
   \********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _APP__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./APP */ "./js/APP.js");
 var util = {};
+
 /**
  * 有効な数値かどうかチェックする。文字列なら数値として有効かチェックする
  *
@@ -2769,6 +2773,59 @@ util.isNumeric = function (n) {
 
 util.isMarkerName = function (string) {
   return /^(?:[a-zA-Z0-9_-]| )+$/.test(string);
+};
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].disposeNode = function (node) {
+  if (node instanceof THREE.Mesh) {
+    if (node.geometry) {
+      node.geometry.dispose();
+    }
+
+    if (node.material) {
+      if (node.material instanceof THREE.MeshFaceMaterial) {
+        $.each(node.material.materials, function (idx, mtrl) {
+          if (mtrl.map) mtrl.map.dispose();
+          if (mtrl.lightMap) mtrl.lightMap.dispose();
+          if (mtrl.bumpMap) mtrl.bumpMap.dispose();
+          if (mtrl.normalMap) mtrl.normalMap.dispose();
+          if (mtrl.specularMap) mtrl.specularMap.dispose();
+          if (mtrl.envMap) mtrl.envMap.dispose();
+          if (mtrl.alphaMap) mtrl.alphaMap.dispose();
+          if (mtrl.aoMap) mtrl.aoMap.dispose();
+          if (mtrl.displacementMap) mtrl.displacementMap.dispose();
+          if (mtrl.emissiveMap) mtrl.emissiveMap.dispose();
+          if (mtrl.gradientMap) mtrl.gradientMap.dispose();
+          if (mtrl.metalnessMap) mtrl.metalnessMap.dispose();
+          if (mtrl.roughnessMap) mtrl.roughnessMap.dispose();
+          mtrl.dispose(); // disposes any programs associated with the material
+        });
+      } else {
+        if (node.material.map) node.material.map.dispose();
+        if (node.material.lightMap) node.material.lightMap.dispose();
+        if (node.material.bumpMap) node.material.bumpMap.dispose();
+        if (node.material.normalMap) node.material.normalMap.dispose();
+        if (node.material.specularMap) node.material.specularMap.dispose();
+        if (node.material.envMap) node.material.envMap.dispose();
+        if (node.material.alphaMap) node.material.alphaMap.dispose();
+        if (node.material.aoMap) node.material.aoMap.dispose();
+        if (node.material.displacementMap) node.material.displacementMap.dispose();
+        if (node.material.emissiveMap) node.material.emissiveMap.dispose();
+        if (node.material.gradientMap) node.material.gradientMap.dispose();
+        if (node.material.metalnessMap) node.material.metalnessMap.dispose();
+        if (node.material.roughnessMap) node.material.roughnessMap.dispose();
+        node.material.dispose(); // disposes any programs associated with the material
+      }
+    }
+  }
+}; // disposeNode
+
+
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].disposeHierarchy = function (node, callback) {
+  for (var i = node.children.length - 1; i >= 0; i--) {
+    var child = node.children[i];
+    disposeHierarchy(child, callback);
+    callback(child);
+  }
 };
 
 /***/ }),
