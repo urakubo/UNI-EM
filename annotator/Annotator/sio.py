@@ -34,8 +34,9 @@ def write_file(room_id, data):
 async def update_paint_volumes(sid):
 
   surface_path = u_info.surfaces_whole_path
+  skeleton_path= u_info.skeletons_whole_path
   paint_path   = u_info.paint_path
-  ids_volumes  = GetVolumes(surface_path, paint_path)
+  ids_volumes  = GetVolumes(surface_path, paint_path, skeleton_path)
 
   room_id = 'list'
   data = read_file(room_id)
