@@ -43,7 +43,7 @@ class FolderCreater:
 	##
 
 	## Load color file
-    colordata = m.load_hdf5(tmp_info.annotator_color_map_file, tmp_info.hdf_color_name) 
+    colordata = m.load_hdf5(ref.color_map_file, ref.hdf_color_name)
     colnum = colordata.shape[0];
 
 

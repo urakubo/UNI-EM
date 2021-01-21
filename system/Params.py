@@ -166,16 +166,9 @@ class Params:
 
     def SetUserInfoAnnotator(self, user_path):
 
-        self.annotator_files_path                = user_path
-        self.annotator_ids_path                  = self.annotator_files_path   + os.sep + 'ids'
-        self.annotator_tile_ids_path             = self.annotator_ids_path     + os.sep + 'tiles'
-        self.annotator_tile_ids_volume_file      = self.annotator_ids_path     + os.sep + 'tiledVolumeDescription.xml'
-        self.annotator_color_map_file            = self.annotator_ids_path     + os.sep + 'colorMap.hdf5'
-        self.annotator_segment_info_db_file      = self.annotator_ids_path     + os.sep + 'segmentInfo.db'
-
-        self.annotator_images_path               = self.annotator_files_path   + os.sep + 'images'
-        self.annotator_tile_images_path          = self.annotator_images_path  + os.sep + 'tiles'
-        self.annotator_tile_images_volume_file   = self.annotator_images_path  + os.sep + 'tiledVolumeDescription.xml'
+        self.annotator_files_path      = user_path
+        self.volume_path               = self.annotator_files_path   + os.sep + 'volume'
+        self.volume_file               = self.volume_path + os.sep + 'volume.hdf5' 
 
         self.skeletons_path            = self.annotator_files_path   + os.sep + 'skeletons'
         self.surfaces_path             = self.annotator_files_path   + os.sep + 'surfaces'
@@ -183,7 +176,7 @@ class Params:
         self.surfaces_whole_path       = self.annotator_files_path   + os.sep + 'surfaces' + os.sep + 'whole'
         self.paint_path                = self.annotator_files_path   + os.sep + 'paint'
 
-        self.surfaces_segment_info_json_file 	= self.surfaces_path + os.sep + 'segmentInfo.json'
+        self.surfaces_segment_info_json_file 	    = self.surfaces_path + os.sep + 'segmentInfo.json'
         self.surfaces_volume_description_json_file 	= self.surfaces_path + os.sep + 'VolumeDescription.json'
 
         self.tmpdir = tempfile.mkdtemp()

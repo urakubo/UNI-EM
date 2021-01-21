@@ -160,6 +160,8 @@ class SharedFileDialogs():
             param = {}
             if args[i][1] == 'LineEdit':
                 param = obj_args[i].text()
+            if args[i][1] == 'LineEdit_number':
+                param = float(obj_args[i].text())
             elif args[i][1] == 'SpinBox':
                 param = np.str( obj_args[i].value() )
             elif args[i][1] == 'ComboBox':

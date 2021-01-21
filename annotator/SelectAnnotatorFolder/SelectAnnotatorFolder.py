@@ -31,7 +31,7 @@ class _GenerateContents(SharedFileDialogs):
 
     def generate(self):
         lbl   = QLabel('Select Annotator Folder.')
-        edit  = SyncListQComboBoxDojoManager.get().create(self, 0)
+        edit  = SyncListQComboBoxAnnotManager.get().create(self, 0)
         btn   = QPushButton("Open...")
         btn.clicked.connect(lambda state : self.browse_OpenSpecificFolder(edit, ['Annot']) )
         return lbl, edit, btn
@@ -100,7 +100,7 @@ class GenerateDialog(QDialog):
                 print('Folder unspecified.')
                 return False
 
-        if self.parent.CheckFolderDojo(dir_Annotator) != 1:
+        if self.parent.CheckFolderAnnot(dir_Annotator) != 1:
             print('Not a Annotator folder.')
             return False
 

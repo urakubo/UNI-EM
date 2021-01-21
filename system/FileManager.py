@@ -258,13 +258,12 @@ class FileManager():
     def CheckFolderAnnot(self, folder_path):
         tmp_info = Params()
         tmp_info.SetUserInfoAnnotator(folder_path)
-        if  os.path.exists(tmp_info.skeletons_path) and \
-            os.path.exists(tmp_info.surfaces_path) and \
-            os.path.exists(tmp_info.skeletons_whole_path) and \
+        if  os.path.exists(tmp_info.skeletons_whole_path) and \
             os.path.exists(tmp_info.surfaces_whole_path) and \
             os.path.exists(tmp_info.paint_path) and \
             os.path.isfile(tmp_info.surfaces_segment_info_json_file) and \
-            os.path.isfile(tmp_info.surfaces_volume_description_json_file) :
+            os.path.isfile(tmp_info.surfaces_volume_description_json_file) and \
+            os.path.isfile(tmp_info.volume_file) :
             return 1
         else:
             return 0

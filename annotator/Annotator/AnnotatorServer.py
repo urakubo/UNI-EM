@@ -12,6 +12,7 @@ import socketio
 
 from skimage import measure
 import trimesh
+import h5py
 
 # from marching_cubes import march
 # import mcubes
@@ -45,10 +46,12 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
     self.gen_skel = GenerateSkeleton(self.ids_volume, self.pitch, self.skeletons_path, self.surfaces_path)
     
     super(SurfaceSkeletonHandler, self).__init__(*args, **kwargs)
+
   ###
   def prepare(self):
     if self.request.headers.get('Content-Type') != 'application/json':
     	raise HTTPError(406)
+
   ###
   def post(self, *arg, **kwargs):
     request = tornado.escape.json_decode(self.request.body)
@@ -79,7 +82,7 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
     	print('Bad request: ', request)
     	self.write("False")
     	return False
-  ###
+
   ###
   def GenerateSurface(self, id):
     mask = (self.ids_volume == id)
@@ -110,7 +113,7 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
     filename = os.path.join(self.surfaces_path, str(id).zfill(10)+'.stl')
     mesh.export(file_obj=filename)
     return True
-  ###
+
   ###
 class AnnotatorServerLogic:
   def __init__( self, u_info  ):
@@ -127,19 +130,11 @@ class AnnotatorServerLogic:
     xmax	= volume_description['boundingbox_voxel']['x']
     ymax	= volume_description['boundingbox_voxel']['y']
     zmax	= volume_description['boundingbox_voxel']['z']
-
-    ## Artifact
-    coarse_factor = 2
-    xpitch *= coarse_factor
-    ypitch *= coarse_factor
     self.pitch  = [xpitch, ypitch, zpitch]
 
-    ## Obtain id volume
-    tp = m.ObtainTileProperty(self.u_info.annotator_tile_ids_volume_file)
-    self.ids_volume = np.zeros([xmax, ymax, zmax], dtype=self.u_info.ids_dtype)
-    for iz in range(zmax):
-    	self.ids_volume[:,:,iz] = m.ObtainFullSizeIdsPanel(self.u_info.annotator_tile_ids_path, self.u_info, tp, iz)
-    self.ids_volume = self.ids_volume[::coarse_factor,::coarse_factor,:]
+    ## Load volume file
+    with h5py.File(self.u_info.volume_file, 'r') as f:		
+      self.ids_volume = f['volume'][()]
 
     return None
 
