@@ -2,7 +2,7 @@
 import sys
 import os
 from os import path, pardir
-from PyQt5.QtWidgets import QAction, QMenu
+from PyQt5.QtWidgets import QAction, QMenu, QFileDialog, qApp, QMessageBox
 from PyQt5.QtGui import QIcon, QPixmap, QFont
 from PyQt5.QtCore import Qt, QPoint
 
@@ -19,7 +19,7 @@ class FileMenu(FileManager):
     def __init__(self):
         # File menu
         self.file_menu = ['Open Folder',
-                          'Open Multipage Tiff File',
+                          'Open File',
                           'Open Recent File/Folder',
                           'Exit from UNI-EM']
         self.file_icon = ['Folder_Open_16.png',
@@ -27,7 +27,7 @@ class FileMenu(FileManager):
                           'Search_16.png',
                           'Power_Off_16.png']
         self.file_action = [self.OpenDialogOpenFolder,
-                          self.OpenMultiTiffFile,
+                          self.OpenDialogOpenFile,
                           self.Dummy,
                           self.ExitUniEm]
 
@@ -85,13 +85,9 @@ class FileMenu(FileManager):
         file_menu.addAction(id)
 
 
-        #
-        # For future release
-        #
-        ## "Open Multipage Tiff File"
-        #id = self.MakeMenuItem(1)
-        #file_menu.addAction(id)
-
+        ## "Open File"
+        id = self.MakeMenuItem(1)
+        file_menu.addAction(id)
 
 
         ## "Open Recent File/Folder"
@@ -122,14 +118,56 @@ class FileMenu(FileManager):
         id = self.MakeMenuItem(3)
         file_menu.addAction(id)
 
-
-
     def MakeMenuItem(self, i):
         ii = QIcon()
         ii.addPixmap(QPixmap(path.join(icon_dir, self.file_icon[i])), QIcon.Normal, QIcon.On)
         id = QAction(ii, self.file_menu[i], self)
         id.triggered.connect(self.file_action[i])
         return id
+
+#####################
+
+    def OpenDialogOpenFolder(self):
+        initdir = os.path.normpath( path.join(main_dir, "..") )
+        open_folder_name = QFileDialog.getExistingDirectory(self, "Select folder (Dojo/Image/Model/Empty)", initdir)
+        if len(open_folder_name) == 0:
+            print('No folder was selected.')
+            return
+        open_folder_name = open_folder_name.replace('/', os.sep)
+        flag = self.OpenFolder(open_folder_name)
+        return flag
+
+
+    def OpenDialogOpenFile(self):
+        initdir = os.path.normpath( path.join(main_dir, "..") )
+        open_file_name = QFileDialog.getOpenFileName(self, "Select file (Hdf5)", initdir)
+        if len(open_file_name) == 0:
+            print('No file was selected.')
+            return
+        open_file_name = open_file_name.replace('/', os.sep)
+        flag = self.OpenFolder(open_file_name)
+        return flag
+
+    def OpenRecentFileFolder(self):
+        action = self.sender()
+        if not action:
+            return
+        file_name  = action.data()
+        if not os.path.exists( file_name ):
+            QMessageBox.warning(self, "Recent Files",
+                                "Cannot find file: %s" % file_name)
+            return
+        return self.OpenFolder( file_name )
+
+
+    def OpenDropdownFileFolder(self, file_name):
+        return self.OpenFolder( file_name )
+
+
+    def Dummy(self):
+        pass
+
+#####################
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls():
@@ -144,5 +182,4 @@ class FileMenu(FileManager):
             self.OpenDropdownFileFolder(f)
 
 
-# For future release
-#
+

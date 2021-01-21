@@ -30,10 +30,10 @@ class _GenerateContents(SharedFileDialogs):
         self.parent = parent
 
     def generate(self):
-        lbl   = QLabel('Select Dojo Folder.')
+        lbl   = QLabel('Select Annotator Folder.')
         edit  = SyncListQComboBoxDojoManager.get().create(self, 0)
         btn   = QPushButton("Open...")
-        btn.clicked.connect(lambda state : self.browse_OpenSpecificFolder(edit, ['Dojo']) )
+        btn.clicked.connect(lambda state : self.browse_OpenSpecificFolder(edit, ['Annot']) )
         return lbl, edit, btn
 
 

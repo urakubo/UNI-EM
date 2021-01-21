@@ -31,6 +31,8 @@ from ExportImageDialog import ExportImageDialog
 from ExportIdDialog import ExportIdDialog
 
 from DialogOpenDojoFolder import *
+from DialogGenerateDojoFolder import DialogGenerateDojoFolder
+
 import miscellaneous.Miscellaneous as m
 
 import ExportImgSeg
@@ -41,6 +43,10 @@ class DojoFileIO():
     def StartThreadDojo(self):
         logic = ServerLogic()
         logic.run(self.u_info)
+
+
+    def GenerateDojoFolder(self):
+        tmp = DialogGenerateDojoFolder(self, self.u_info)
 
 
     def SelectDojoFile(self):

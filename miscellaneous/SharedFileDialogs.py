@@ -68,8 +68,42 @@ class SharedFileDialogs():
             	return True
             return False
 
-        lineedit_obj.addItem(open_folder_name)
+#        lineedit_obj.addItem(open_folder_name)
         id = lineedit_obj.findText(open_folder_name)
+        lineedit_obj.setCurrentIndex(id)
+
+        return True
+
+
+
+
+    def browse_OpenSpecificFile(self, lineedit_obj, file_type):
+        currentdir = lineedit_obj.currentText()
+        if len(currentdir) == 0:
+            currentdir = os.path.normpath(main_dir)
+        else :
+            currentdir = os.path.dirname(currentdir)
+        ## Folder dialog.
+        open_file_name = QFileDialog.getOpenFileName(self.parent, "Select File", currentdir)
+
+#        print('open_file_name: ', open_file_name)
+
+        ## Check & open folder
+        if len(open_file_name) == 0:
+            return
+        open_file_name = open_file_name[0].replace('/', os.sep)
+
+        check_sucess = self.parent.parent.OpenSpecificFolder(open_file_name, file_type)
+
+        if check_sucess == False:
+            id = lineedit_obj.findText(open_file_name)
+            if id >= 0:
+            	lineedit_obj.setCurrentIndex(id)
+            	return True
+            return False
+
+#        lineedit_obj.addItem(open_file_name)
+        id = lineedit_obj.findText(open_file_name)
         lineedit_obj.setCurrentIndex(id)
 
         return True
@@ -98,7 +132,7 @@ class SharedFileDialogs():
             	return True
             return False
 
-        lineedit_obj.addItem(open_folder_name)
+#        lineedit_obj.addItem(open_folder_name)
         id = lineedit_obj.findText(open_folder_name)
         lineedit_obj.setCurrentIndex(id)
 

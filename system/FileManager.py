@@ -12,7 +12,6 @@ sys.path.append(main_dir)
 sys.path.append(os.path.join(main_dir, "system"))
 sys.path.append(os.path.join(main_dir, "dojoio"))
 
-from DialogGenerateDojoFolder import DialogGenerateDojoFolder
 
 #from PyQt5 import QtGui
 from PyQt5.QtGui import QFont
@@ -24,41 +23,6 @@ from miscellaneous.SyncListQComboBoxManager import *
 import miscellaneous.Miscellaneous as m
 
 class FileManager():
-
-    def GenerateDojoFolder(self):
-        tmp = DialogGenerateDojoFolder(self, self.u_info)
-
-    def OpenFolder(self):
-        initdir = os.path.normpath( path.join(main_dir, "..") )
-        open_folder_name = QFileDialog.getExistingDirectory(self, "Select Dojo/Image folder", initdir)
-        if len(open_folder_name) == 0:
-            print('No folder was selected.')
-            return
-        open_folder_name = open_folder_name.replace('/', os.sep)
-        flag = self.OpenFolder(open_folder_name)
-        if flag == False:
-            return False
-
-
-    def OpenRecentFileFolder(self):
-        action = self.sender()
-        if not action:
-            return
-        file_name  = action.data()
-        if not os.path.exists( file_name ):
-            QMessageBox.warning(self, "Recent Files",
-                                "Cannot find file: %s" % file_name)
-            return
-        return self.OpenFolder( file_name )
-
-
-    def OpenDropdownFileFolder(self, file_name):
-        return self.OpenFolder( file_name )
-
-
-    def Dummy(self):
-        pass
-
 
     def UpdateOpenFileMenu(self):
         font = QFont("Courier")
@@ -123,42 +87,20 @@ class FileManager():
         SyncListQComboBoxImageManager.get().removeModel(file_name)
         SyncListQComboBoxDojoManager.get().removeModel(file_name)
 
+        SyncListQComboBoxAnnotManager.get().removeModel(file_name)
+        SyncListQComboBoxHdf5Manager.get().removeModel(file_name)
+
+
 ######
 
-##
-# try:
-#    self.u_info.open_files4lock[fileName] = open(fileName, 'r+')
-# except:
-#    print("Cannot open file.")
-#    return  False
-##
 
-    def OpenDialogOpenFolder(self):
-        initdir = os.path.normpath( path.join(main_dir, "..") )
-        open_folder_name = QFileDialog.getExistingDirectory(self, "Select folder (Dojo/Image/Model/Empty)", initdir)
-        if len(open_folder_name) == 0:
-            print('No folder was selected.')
-            return
-        open_folder_name = open_folder_name.replace('/', os.sep)
-        flag = self.OpenFolder(open_folder_name)
-        return flag
-
-
-    def OpenFolder(self, file_folder_name):
-
-        print('file_folder_name: ', file_folder_name)
-        if self.InitialCheckOpenFolder(file_folder_name) == False:
+    def InitialCheckOpenFolder(self,folder_name):
+        if folder_name in self.u_info.open_files:
+            print('Already open.')
             return False
-
-        folder_type = self.CheckFolderType(file_folder_name)
-        if folder_type == False :
+        elif len(self.u_info.open_files) >= self.u_info.max_num_open_files :
+            print('Exceeding the maximal number of open folders: ', self.u_info.max_num_open_files)
             return False
-        print('Folder type: ', folder_type)
-        flag = self.ExecuteFolderOpen(file_folder_name, folder_type)
-        if flag == False :
-            return False
-        self.AddDropDownMenu( file_folder_name )
-        return True
 
 
     def OpenSpecificFolder(self, folder_name, required_folder_types):
@@ -177,6 +119,17 @@ class FileManager():
         return self.ExecuteFolderOpen(folder_name, folder_type)
 
 
+    def OpenFolder(self, file_folder_name):
+
+        if self.InitialCheckOpenFolder(file_folder_name) == False:
+            return False
+        folder_type = self.CheckFolderType(file_folder_name)
+        if folder_type == False :
+            return False
+        print('Folder type: ', folder_type)
+        return self.ExecuteFolderOpen(file_folder_name, folder_type)
+
+
     def CheckFolderType(self, folder_name):
 
         if self.CheckFolderDojo(folder_name):
@@ -185,6 +138,10 @@ class FileManager():
             return "Model"
         elif self.CheckFolderFFNs(folder_name):
             return "FFNs"
+        elif self.CheckFolderAnnot(folder_name): ###### New!
+            return "Annot"
+        elif self.CheckFileHdf5(folder_name): ###### New!
+            return "hdf5"
         elif self.CheckFolderImage(folder_name) != [] :
             ext = self.CheckFolderImage(folder_name)
             if   len(ext) > 1 :
@@ -193,22 +150,12 @@ class FileManager():
                 return False
             else :
                 return ext[0]
-        else : 
+        elif not os.path.isfile(folder_name):
             return "Empty"
+        else:
+            return False
+
         return False
-
-
-    def InitialCheckOpenFolder(self,folder_name):
-
-        if not os.path.isdir(folder_name) :
-            print('Curently, we do not accpet files, but only folders.')
-            return False
-        if folder_name in self.u_info.open_files:
-            print('Already open.')
-            return False
-        elif len(self.u_info.open_files) >= self.u_info.max_num_open_files :
-            print('Exceeding the maximal number of open folders: ', self.u_info.max_num_open_files)
-            return False
 
 
     def AddDropDownMenu(self, folder_name):
@@ -221,6 +168,10 @@ class FileManager():
         SyncListQComboBoxEmptyModelManager.get().addModel(folder_name)
         SyncListQComboBoxImageManager.get().addModel(folder_name)
         SyncListQComboBoxDojoManager.get().addModel(folder_name)
+
+        SyncListQComboBoxAnnotManager.get().addModel(folder_name)
+        SyncListQComboBoxHdf5Manager.get().addModel(folder_name)
+
 
     def ExecuteFolderOpen(self, folder_name, folder_type):
 
@@ -245,7 +196,8 @@ class FileManager():
 
         settings.setValue('recentFileList', recent_files)
         self.UpdateRecentFileMenu()
-
+        self.AddDropDownMenu( folder_name )
+        return True
 
 
     def strippedName(self, fullFileName):
@@ -273,6 +225,19 @@ class FileManager():
         self.u_info.open_files4lock.clear()
 
 
+########### Check folder/file type ############
+
+
+    def CheckFileHdf5(self, filename):
+        if not os.path.isfile(filename):
+            return 0
+        root, ext = os.path.splitext(filename)
+        if ext in ['.hdf5','.h5'] : 
+            return 1
+        else:
+            return 0
+
+
     def CheckFolderImage(self, folder_path):
         filetypes = set()
         files_in_folder = glob.glob(os.path.join(folder_path, "*"))
@@ -290,9 +255,23 @@ class FileManager():
         input_files.extend(tmp)
 
 
+    def CheckFolderAnnot(self, folder_path):
+        tmp_info = Params()
+        tmp_info.SetUserInfoAnnotator(folder_path)
+        if  os.path.exists(tmp_info.skeletons_path) and \
+            os.path.exists(tmp_info.surfaces_path) and \
+            os.path.exists(tmp_info.skeletons_whole_path) and \
+            os.path.exists(tmp_info.surfaces_whole_path) and \
+            os.path.exists(tmp_info.paint_path) and \
+            os.path.isfile(tmp_info.surfaces_segment_info_json_file) and \
+            os.path.isfile(tmp_info.surfaces_volume_description_json_file) :
+            return 1
+        else:
+            return 0
+
+
     def CheckFolderDojo(self, folder_path):
         tmp_info = Params()
-#        tmp_info = copy.copy(self.u_info)
         tmp_info.SetUserInfo(folder_path)
         # Check file existence
         if  os.path.exists(tmp_info.files_path) and \
@@ -352,7 +331,6 @@ class FileManager():
             return 1
         else:
             return 0
-
 
     def OpenMultiTiffFile(self):
         initdir = os.path.normpath( path.join(main_dir, "..") )

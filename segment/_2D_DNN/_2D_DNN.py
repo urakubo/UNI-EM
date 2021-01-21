@@ -10,7 +10,7 @@ main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 icon_dir = path.join(main_dir, "icons")
 sys.path.append(main_dir)
 sys.path.append(path.join(main_dir, "segment"))
-sys.path.append(path.join(main_dir, "filesystem"))
+sys.path.append(path.join(main_dir, "system"))
 
 from miscellaneous.TabGenerator import TabGenerator
 from segment._2D_DNN.TrainingTab  import TrainingTab

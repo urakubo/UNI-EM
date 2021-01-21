@@ -188,6 +188,30 @@ class SyncListQComboBoxDojoManager(SyncListQComboBoxManager):
         return self.my_u_info.open_files_type[fileName] == 'Dojo'
 
 
+class SyncListQComboBoxAnnotManager(SyncListQComboBoxManager):
+    
+    def isInclude(self, fileName):
+        if not fileName:
+            return True
+        
+        if not fileName in self.my_u_info.open_files_type.keys():
+            return True
+        
+        return self.my_u_info.open_files_type[fileName] == 'Annot'
+
+
+class SyncListQComboBoxHdf5Manager(SyncListQComboBoxManager):
+    
+    def isInclude(self, fileName):
+        if not fileName:
+            return True
+        
+        if not fileName in self.my_u_info.open_files_type.keys():
+            return True
+        
+        return self.my_u_info.open_files_type[fileName] == 'hdf5'
+
+
 #class SyncListQComboBoxExcludeDojoMtifManager(SyncListQComboBoxManager):
 #    
 #    def isExclude(self, fileName):

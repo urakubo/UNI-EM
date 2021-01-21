@@ -90,6 +90,9 @@ class MainWindow(QMainWindow, FileMenu, DojoMenu, DojoFileIO, Credit, Script):
         SyncListQComboBoxImageManager.build(self.u_info)
         SyncListQComboBoxDojoManager.build(self.u_info)
 
+        SyncListQComboBoxHdf5Manager.build(self.u_info)
+        SyncListQComboBoxAnnotManager.build(self.u_info)
+
         self.initUI()
 
 

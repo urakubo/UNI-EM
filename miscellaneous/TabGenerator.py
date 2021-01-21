@@ -12,7 +12,7 @@ import tornado.websocket
 from PyQt5.QtWidgets import QMainWindow, qApp, QApplication, QWidget, QTabWidget, QSizePolicy, QInputDialog, \
     QLineEdit, QComboBox, QDialog, QDialogButtonBox, QFormLayout, QGridLayout, QMessageBox, QSpinBox, QCheckBox, \
     QGroupBox, QHBoxLayout, QLabel, QLineEdit, QMenu, QMenuBar, QPushButton, QFileDialog, QTextEdit, QVBoxLayout
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon, QPixmap, QDoubleValidator
 from PyQt5.QtCore import Qt, pyqtSlot
 
 from os import path, pardir
@@ -69,6 +69,7 @@ class TabGenerator(SharedFileDialogs):
         require_browse_open_img  = []
 
         require_browse_dir_specific = {}
+        require_browse_file_specific = {}
 
         tab_elem_count = 0
         id_sub_tab = []
@@ -99,6 +100,15 @@ class TabGenerator(SharedFileDialogs):
                     require_browse_dir_img.append(i)
                 if args[i][3] == 'BrowseFile':
                     require_browse_file.append(i)
+            elif args[i][1] == 'LineEdit_number':
+                obj_args.append(QLineEdit())
+                # (min, Default value, max, Number of digits)
+                obj_args[-1].setValidator(QDoubleValidator(\
+                        	args[i][2][0],\
+        					args[i][2][2],\
+        					args[i][2][3],\
+        					notation=QDoubleValidator.StandardNotation))
+                obj_args[-1].setText(str(args[i][2][1]))
             elif args[i][1] == 'SpinBox':
                 obj_args.append(QSpinBox())
                 obj_args[-1].setMinimum(args[i][2][0])
@@ -134,10 +144,18 @@ class TabGenerator(SharedFileDialogs):
                 obj_args.append(SyncListQComboBoxModelManager.get().create(att, i))
                 if args[i][2] == 'OpenModelFolder':
                     require_browse_dir_specific[i] = 'Model'
+            elif args[i][1] == 'SelectDojoFolder':
+                obj_args.append(SyncListQComboBoxDojoManager.get().create(att, i))
+                if args[i][2] == 'OpenDojoFolder':
+                    require_browse_dir_specific[i] = 'Dojo'
             elif args[i][1] == 'SelectFFNsFolder':
                 obj_args.append(SyncListQComboBoxFFNsManager.get().create(att, i))
                 if args[i][2] == 'OpenFFNsFolder':
                     require_browse_dir_specific[i] = 'FFNs'
+            elif args[i][1] == 'SelectHdf5File':
+                obj_args.append(SyncListQComboBoxHdf5Manager.get().create(att, i))
+                if args[i][2] == 'OpenHdf5File':
+                    require_browse_file_specific[i] = 'hdf5'
             elif args[i][1] == 'SelectEmptyFolder':
                 obj_args.append(SyncListQComboBoxEmptyManager.get().create(att, i))
                 if args[i][2] == 'OpenEmptyFolder':
@@ -179,6 +197,12 @@ class TabGenerator(SharedFileDialogs):
                 browse_button.append(QPushButton("Browse..."))
                 folder_type = require_browse_dir_specific[id]
                 browse_button[-1].clicked.connect(lambda state, z=id: self.browse_OpenSpecificFolder(obj_args[z], folder_type))
+                tab.layout.addWidget(browse_button[-1], i + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
+            elif id in require_browse_file_specific.keys():
+                browse_button.append(QPushButton("Browse..."))
+                file_type = require_browse_file_specific[id]
+#                print('file_type : ',  file_type)
+                browse_button[-1].clicked.connect(lambda state, z=id: self.browse_OpenSpecificFile(obj_args[z], file_type))
                 tab.layout.addWidget(browse_button[-1], i + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
 
             i = i + 1
