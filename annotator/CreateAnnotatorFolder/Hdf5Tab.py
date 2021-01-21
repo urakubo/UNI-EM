@@ -13,20 +13,20 @@ class Hdf5Tab(Hdf5Exe):
 
     def __init__(self, u_info):
 
-        self.xpitch = 0.006 ## n um
-        self.ypitch = 0.006 ## n um
-        self.zpitch = 0.03  ## n um
+        self.xpitch = 0.02 ## n um
+        self.ypitch = 0.02 ## n um
+        self.zpitch = 0.02  ## n um
         min_pitch   = 0.001
         max_pitch   = 1.0
         num_digits  = 3
 
-        self.xsampling = 2 ## integer
-        self.ysampling = 2 ## integer
+        self.xsampling = 1 ## integer
+        self.ysampling = 1 ## integer
         self.zsampling = 1 ## integer
         min_sampling   = 1
         max_sampling   = 16
 		
-        default_container_name = 'volume'
+        default_container_name = 'dendrite'
 
 
         self.paramfile =  os.path.join( u_info.parameters_path, "CreateAnnot_Hdf5Tab.pickle")

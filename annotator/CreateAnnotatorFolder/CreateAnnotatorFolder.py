@@ -5,6 +5,8 @@ import sys, os, time, errno
 from PyQt5.QtWidgets import QWidget, QTabWidget, QVBoxLayout, QDialog
 from PyQt5.QtGui import QIcon
 from os import path, pardir
+import h5py
+import json
 
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 icon_dir = path.join(main_dir, "icons")
@@ -12,6 +14,8 @@ sys.path.append(main_dir)
 #sys.path.append(path.join(main_dir, "segment"))
 sys.path.append(path.join(main_dir, "annotator"))
 
+import miscellaneous.Miscellaneous as m
+from system.Params import Params
 from miscellaneous.TabGenerator import TabGenerator
 from annotator.CreateAnnotatorFolder.ImagesTab  import ImagesTab
 from annotator.CreateAnnotatorFolder.Hdf5Tab  import Hdf5Tab
@@ -71,4 +75,75 @@ class GenerateDialog(QDialog):
         self.setWindowIcon(QIcon(path.join(icon_dir, 'Mojo2_16.png')))
         self.show()
 
+#########################
+
+    def SharedPreprocess(self, params, comm_title):
+
+        print('Annotator folder is being generated for', comm_title)
+        targ = Params()
+        targ.SetUserInfoAnnotator(params['Empty Folder for Annotator'])
+
+        if os.path.isdir(targ.surfaces_path) == False:
+        	m.mkdir_safe(targ.surfaces_path)
+        	m.mkdir_safe(targ.surfaces_whole_path)
+        if os.path.isdir(targ.skeletons_path) == False:
+        	m.mkdir_safe(targ.skeletons_path)
+        	m.mkdir_safe(targ.skeletons_whole_path)
+        if os.path.isdir(targ.volume_path) == False:
+        	m.mkdir_safe(targ.volume_path)
+        if os.path.isdir(targ.paint_path) == False:
+        	m.mkdir_safe(targ.paint_path)
+
+        return targ
+
+
+    def SharedPostProcess(self, params, targ, ids_volume):
+		##
+        print("params['Pitch in X (um)']", params['Pitch in X (um)'])
+        print("params['Downsampling factor in X']", params['Downsampling factor in X'])
+		
+        ph = params['Pitch in X (um)']
+        pw = params['Pitch in Y (um)']
+        pz = params['Pitch in Z (um)']
+        ch = int(params['Downsampling factor in X'])
+        cw = int(params['Downsampling factor in Y'])
+        cz = int(params['Downsampling factor in Z'])
+        ph *= ch
+        pw *= cw
+        pz *= cz
+        ids_volume = ids_volume[::cw,::ch,::cz]
+        wmax = ids_volume.shape[0]
+        hmax = ids_volume.shape[1]
+        zmax = ids_volume.shape[2]
+		##
+        with h5py.File(targ.volume_file, 'w') as f:		
+        	f.create_dataset('volume', data=ids_volume)
+		##
+        data_dict = {
+		    	'boundingbox_voxel':{
+		    		'x': hmax,
+		    		'y': wmax,
+		    		'z': zmax
+		    		},
+		    	'boundingbox_um':{
+		    		'x': ph * hmax,
+		    		'y': pw * wmax,
+		    		'z': pz * zmax
+		    		},
+		    	'pitch_um':{
+		    		'x': ph,
+		    		'y': pw,
+		    		'z': pz
+		    		},
+				}
+        with open( targ.surfaces_volume_description_json_file , 'w') as f:
+        	json.dump(data_dict, f, indent=2, ensure_ascii=False)
+
+        self.parent.ExecuteCloseFileFolder(params['Empty Folder for Annotator'])
+        self.parent.OpenFolder(params['Empty Folder for Annotator'])
+        print('')
+        print('Annotator folder created.')
+        print('')
+
+        return True
 

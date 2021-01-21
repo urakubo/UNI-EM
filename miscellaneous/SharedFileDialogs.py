@@ -173,6 +173,8 @@ class SharedFileDialogs():
                 param = obj_args[i].checkState()
             elif fnmatch.fnmatch(args[i][1], 'Select*Folder') :
                 param = obj_args[i].currentText()
+            elif fnmatch.fnmatch(args[i][1], 'Select*File') :
+                param = obj_args[i].currentText()
             params[args_header[i]] = param
         # print(params)
         return params
