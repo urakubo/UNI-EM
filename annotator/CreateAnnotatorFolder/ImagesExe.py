@@ -21,27 +21,38 @@ import miscellaneous.Miscellaneous as m
 
 class ImagesExe():
 
-    def _Run(self, parent, params, comm_title):
+	def _Run(self, parent, params, comm_title):
+		##
+		targ = parent.SharedPreprocess(params, comm_title)
+		##
+		file_exts  = [ "*.tif", "*.tiff", "*.png", "*.PNG" ]
+		seg_files = []
+		for ext in file_exts:
+			seg_files.extend( glob.glob(os.path.join(params['Segmentation image Folder'], ext) ))
+		if len(seg_files) == 0:
+		    print('No tiff/png segmentation file.')
+		    return False
+		seg_files = sorted(seg_files)
 
-        print('Annotator folder is generated for', comm_title)
-        img_files = glob.glob(os.path.join(params['Segmentation image Folder'], "*.png"))# PNG
-        img_files.extend( glob.glob(os.path.join(params['Segmentation image Folder'], "*.PNG")) )# PNG
-        img_files.extend( glob.glob(os.path.join(params['Segmentation image Folder'], "*.tif")) )# TIFF
-        img_files.extend( glob.glob(os.path.join(params['Segmentation image Folder'], "*.tiff")) )# TIFF
-        img_files = sorted(img_files)
-        if len(img_files) == 0:
-            print('No tif/png file.')
-            return
+		sg = m.imread(seg_files[0], cv2.IMREAD_GRAYSCALE)
+		print('')
+		print('Number of Segmentation images : ', len(seg_files))
+		print('Segmentation image dimensions : ', sg.shape)
+		print('Segmentation datatype         : ', sg.dtype)
+		print('')
 
-        comm = parent.u_info.exec_translate[:]
-        comm.extend( tmp )
+		ch = int(params['Downsampling factor in X'])
+		cw = int(params['Downsampling factor in Y'])
+		cz = int(params['Downsampling factor in Z'])
+		xysize = sg[::cw,::ch].shape
+		seg_files = seg_files[::cz]
+		ids_volume = np.zeros((xysize[0], xysize[1], len(seg_files)), dtype=sg.dtype)
 
-        parent.parent.ExecuteCloseFileFolder(params['Empty Folder for Annotator'])
-        parent.parent.OpenFolder(params['Empty Folder for Annotator'])
-        print('')
-        print('Annotator folder created.')
-        print('')
-        return True
+		for i, seg_file in enumerate(seg_files):
+			seg = m.imread(seg_file, cv2.IMREAD_GRAYSCALE)
+			ids_volume[:,:,i] = seg[::cw,::ch]
 
+		parent.SharedGenerateInfoFile(ids_volume, targ.surfaces_segment_info_json_file)
+		return parent.SharedPostProcess(params, targ, ids_volume)
 
 

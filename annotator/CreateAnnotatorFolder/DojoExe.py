@@ -71,6 +71,12 @@ class DojoExe():
 			ids_volume[:,:,iz] = m.ObtainFullSizeIdsPanel(ref.tile_ids_path, ref, tp, iz)
 
 
+		## Should be improved to avoid memory consumption
+		ch = int(params['Downsampling factor in X'])
+		cw = int(params['Downsampling factor in Y'])
+		cz = int(params['Downsampling factor in Z'])
+		ids_volume = ids_volume[::cw,::ch,::cz]
+
 		## Postprocess
 		return parent.SharedPostProcess(params, targ, ids_volume)
 

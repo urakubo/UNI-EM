@@ -13,15 +13,15 @@ class ImagesTab(ImagesExe):
 
     def __init__(self, u_info):
 
-        self.xpitch = 0.006 ## n um
-        self.ypitch = 0.006 ## n um
-        self.zpitch = 0.03  ## n um
+        self.xpitch = 0.012 ## n um
+        self.ypitch = 0.012 ## n um
+        self.zpitch = 0.07  ## n um
         min_pitch   = 0.001
         max_pitch   = 1.0
         num_digits  = 3
 
-        self.xsampling = 2 ## integer
-        self.ysampling = 2 ## integer
+        self.xsampling = 1 ## integer
+        self.ysampling = 1 ## integer
         self.zsampling = 1 ## integer
         min_sampling   = 1
         max_sampling   = 16

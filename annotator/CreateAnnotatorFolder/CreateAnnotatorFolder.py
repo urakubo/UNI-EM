@@ -7,6 +7,8 @@ from PyQt5.QtGui import QIcon
 from os import path, pardir
 import h5py
 import json
+import numpy as np
+
 
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 icon_dir = path.join(main_dir, "icons")
@@ -75,7 +77,9 @@ class GenerateDialog(QDialog):
         self.setWindowIcon(QIcon(path.join(icon_dir, 'Mojo2_16.png')))
         self.show()
 
+
 #########################
+
 
     def SharedPreprocess(self, params, comm_title):
 
@@ -96,6 +100,44 @@ class GenerateDialog(QDialog):
 
         return targ
 
+    def SharedGenerateInfoFile(self, ids_volume, surfaces_segment_info_json_file):
+        ids_nums = np.unique(ids_volume, return_counts=True)
+        ids   = ids_nums[0]
+        names = [str(id).zfill(10) for id in ids]
+        sizes = ids_nums[1]
+        colormap = np.random.randint(255, size=(ids.shape[0], 3), dtype='int')
+
+        if ids[0] == 0:
+        	ids   = np.delete(ids, 0)
+        	names.pop(0)
+        	sizes = np.delete(sizes, 0)
+        	colormap = np.delete(colormap, 0, 0)
+
+        ids      = ids.tolist()
+        sizes    = sizes.tolist()
+        colormap = colormap.tolist()
+
+        print('Constainer shape: ', ids_volume.shape)
+        print('IDs  : ', ids)
+        print('names: ', names)
+        print('sizes: ', sizes)
+        print('cols : ', colormap)
+
+		##
+        keys = ['id', 'name', 'size']
+        data_dict = [dict(zip(keys, valuerecord)) for valuerecord in zip(ids, names, sizes)]
+
+        for i in range(len(data_dict)):
+        	col = {'confidence': 0, 'r': colormap[i][0], 'g': colormap[i][1],  'b': colormap[i][2],  'act': 0}
+        	data_dict[i].update(col)
+
+        print('data_dict: ', data_dict)
+
+        with open( surfaces_segment_info_json_file , 'w') as f:
+        	json.dump(data_dict, f, indent=2, ensure_ascii=False)
+
+        return True
+
 
     def SharedPostProcess(self, params, targ, ids_volume):
 		##
@@ -111,7 +153,6 @@ class GenerateDialog(QDialog):
         ph *= ch
         pw *= cw
         pz *= cz
-        ids_volume = ids_volume[::cw,::ch,::cz]
         wmax = ids_volume.shape[0]
         hmax = ids_volume.shape[1]
         zmax = ids_volume.shape[2]

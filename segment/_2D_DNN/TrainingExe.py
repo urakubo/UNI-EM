@@ -34,7 +34,7 @@ class TrainingExe():
         img_files = sorted(img_files)
         if len(img_files) == 0:
             print('No image file.')
-            return
+            return False
 
         im = m.imread(img_files[0], cv2.IMREAD_UNCHANGED)
         print('')
@@ -53,20 +53,20 @@ class TrainingExe():
             print('')
             print('No segmentation file.')
             print('Aborted.')
-            return
+            return False
 
         sg = m.imread(seg_files[0], cv2.IMREAD_UNCHANGED)
         print('')
         print('Number of Segmentation images : ', len(seg_files))
         print('Segmentation color type       : ', seg_files[0])
         print('Segmentation image dimensions : ', sg.shape)
-        print('Segmentation filetype         : ', sg.dtype)
+        print('Segmentation datatype         : ', sg.dtype)
         print('')
 
         if len(img_files) != len(seg_files):
             print('The number of images is not equal to that of segmenation images.')
             print('Aborted.')
-            return
+            return False
 
 
 		# Generate tmpdir
@@ -90,7 +90,7 @@ class TrainingExe():
             elif img.shape[2] != 3:
                 print('File is broken: ', img_file)
                 print('Aborted.')
-                return
+                return False
 
             if len(seg.shape) == 2:
                 seg = cv2.cvtColor(seg, cv2.COLOR_GRAY2BGR)
@@ -99,7 +99,7 @@ class TrainingExe():
             elif seg.shape[2] != 3:
                 print('File is broken: ', seg_file)
                 print('Aborted.')
-                return
+                return False
 
             paired = cv2.hconcat([img, seg])
 
@@ -128,7 +128,7 @@ class TrainingExe():
         else :
             print("Internal error at Augumentation of PartDialogTrainingExecutor.")
             self._Cancel()
-            return
+            return False
         #
         #   ' --model ' + params['Model'] + ' '
         #
@@ -169,6 +169,6 @@ class TrainingExe():
         print('Finish training.')
         print('')
 
-        return
+        return True
 
 
