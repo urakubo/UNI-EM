@@ -98,6 +98,8 @@ def GetVolume(v,f,data):
 
 def GetRadiusLength(closed_mesh, skel):
 
+	print('Calculating distances ... ')
+
 	obj = trimesh.proximity.ProximityQuery(closed_mesh)
 	dists = obj.signed_distance(skel['vertices'])
 	# print('skel["vertices"]: ', skel['vertices'])

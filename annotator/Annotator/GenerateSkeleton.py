@@ -20,7 +20,7 @@ class GenerateSkeleton:
     self.surfaces_path  = surfaces_path
 
     self.teasar_params={\
-		'scale': 4*4,
+		'scale': 4,
 		'const': 50, # physical units default 500
 		'pdrf_exponent': 4,
 		'pdrf_scale': 100000,
@@ -179,7 +179,7 @@ class GenerateSkeleton:
     	new_vertices.extend(tmp_verts)
     	new_lengths.extend(tmp_lengths)
     	ids_end_new = len(new_vertices)
-    	tmp_edges = [[i, i+1] for i in range(ids_start_new,ids_end_new)]
+    	tmp_edges = [[i, i+1] for i in range(ids_start_new,ids_end_new-1)]
     	new_edges.extend(tmp_edges)
 	
     new_vertices      = np.array(new_vertices)
