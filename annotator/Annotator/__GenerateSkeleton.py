@@ -20,7 +20,7 @@ class GenerateSkeleton:
     self.surfaces_path  = surfaces_path
 
     self.teasar_params={\
-		'scale': 4*4,
+		'scale': 4,
 		'const': 50, # physical units default 500
 		'pdrf_exponent': 4,
 		'pdrf_scale': 100000,
@@ -111,12 +111,12 @@ class GenerateSkeleton:
     for id_cross in edges_cross:
     	tmp = edges[np.any(edges == id_cross, axis=1),:].flatten()
     	_neighbors_cross  = tmp[tmp != id_cross]
-#    	print('id_cross: ', id_cross, ', neighbors_cross: ', _neighbors_cross)
+    	print('id_cross: ', id_cross, ', neighbors_cross: ', _neighbors_cross)
     	pairs = [[id_cross, neighbor]  for neighbor in _neighbors_cross]
     	neighbors_cross.extend( _neighbors_cross.tolist() )
     	start_pairs.extend( pairs )
 
-#    print('start_pairs: ',start_pairs)
+    print('start_pairs: ',start_pairs)
 
     flag_used       = np.zeros(len(neighbors_cross))
     neighbors_cross = np.array(neighbors_cross)
@@ -129,10 +129,10 @@ class GenerateSkeleton:
     		segment = self._ObtainSegment(pair, edges)
     		segments.append( segment )
     		flag_used += (neighbors_cross == segment[-2])
-#    	else:
-#    		print("segment already traced.")
+    	else:
+    		print("segment already traced.")
 
-#    print('flag_used: ', flag_used)
+    print('flag_used: ', flag_used)
 
     num_pts = 200
     large_value = 100000000
@@ -140,10 +140,11 @@ class GenerateSkeleton:
 
 	# Set new coordinate
     vertices_list = vertices.tolist()
-    new_vertices  = []
-    new_lengths   = []
+    new_vertices  = vertices[edges_cross,:].tolist()
+    new_lengths   = [0.0] * len(new_vertices)
     new_edges	  = []
 
+    new_vertices_cross = new_vertices
 
     # print('new_lengths : ', new_lengths)
 
@@ -173,14 +174,35 @@ class GenerateSkeleton:
     	tmp_lengths = tmp_lengths.tolist()
     	# print('tmp_lengths: ', tmp_lengths)
 
+
+    	# print('Segmental lengths: ', tmp_lengths)
+    	
 		## Mapping
+    	new_edge_start  = new_vertices_cross.index(vertices_list[segment[0]])
+    	new_lengths[new_edge_start] += tmp_lengths[0]
+    	ids_start_new   = len(new_vertices)
+
+    	# print('new_edge_start: ', new_edge_start)
+
+    	new_edges.append([new_edge_start, ids_start_new])
+
     	tmp_verts = [[ix,iy,iz] for ix,iy,iz in zip(x_fit, y_fit, z_fit) ]
-    	ids_start_new = len(new_vertices)
-    	new_vertices.extend(tmp_verts)
-    	new_lengths.extend(tmp_lengths)
-    	ids_end_new = len(new_vertices)
-    	tmp_edges = [[i, i+1] for i in range(ids_start_new,ids_end_new)]
-    	new_edges.extend(tmp_edges)
+    	vert_end = vertices_list[segment[-1]]
+    	if vert_end not in new_vertices:
+    		new_vertices.extend(tmp_verts[1:])
+    		new_lengths.extend(tmp_lengths[1:])
+    		ids_end_new = len(new_vertices)
+    		tmp_edges = [[i, i+1] for i in range(ids_start_new,ids_end_new-1)]
+    		new_edges.extend(tmp_edges)
+    	else:
+    		new_end_edge   = new_vertices_cross.index(vert_end)
+    		new_vertices.extend(tmp_verts[1:-2])
+    		new_lengths.extend(tmp_lengths[1:-2])
+    		ids_end_new = len(new_vertices)
+    		tmp_edges = [[i, i+1] for i in range(ids_start_new,ids_end_new-1)]
+    		new_edges.extend(tmp_edges)
+    		new_edges.append([len(new_vertices), new_end_edge])
+    		new_lengths[new_end_edge] += tmp_lengths[-1]
 	
     new_vertices      = np.array(new_vertices)
     new_edges		  = np.array(new_edges)

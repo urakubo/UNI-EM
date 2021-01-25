@@ -72,7 +72,7 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
     elif request['mode'] == 'skeleton':
     	# print('Request skeleton: ', request['element'][0])
     	for elem in request['element']:
-	    	print('Skeleton: ', elem )
+	    	# print('Skeleton: ', elem )
 	    	result = self.gen_skel.Run(elem['id'], elem['markerlocs'])
 	    	if not result :
 	    		self.write("False")
