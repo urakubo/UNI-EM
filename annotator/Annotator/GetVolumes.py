@@ -61,6 +61,8 @@ def GetVolumes(surface_path, paint_path, skeleton_path):
 
 			if skel != {}:
 				radiuses, length = GetRadiusLength(closed_mesh, skel)
+			else:
+				print('No skeleton file is detected for ', whole_mesh_filename)
 
 
 		return ids_volumes
