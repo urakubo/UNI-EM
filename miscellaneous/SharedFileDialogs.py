@@ -78,15 +78,24 @@ class SharedFileDialogs():
 
 
     def browse_OpenSpecificFile(self, lineedit_obj, file_type):
+
+        ## Folder dialog.
+        if (len(file_type) == 0):
+        	print('Filetype is not specified.')
+        	return False
+        elif(type(file_type) is str ):
+        	notice = "Select File ("+file_type+")"
+        else:
+        	notice = "Select File ("+"/".join(file_type) +")"
+
+		## Dir check
         currentdir = lineedit_obj.currentText()
         if len(currentdir) == 0:
             currentdir = os.path.normpath(main_dir)
         else :
             currentdir = os.path.dirname(currentdir)
         ## Folder dialog.
-        open_file_name = QFileDialog.getOpenFileName(self.parent, "Select File", currentdir)
-
-#        print('open_file_name: ', open_file_name)
+        open_file_name = QFileDialog.getOpenFileName(self.parent, notice, currentdir)
 
         ## Check & open folder
         if len(open_file_name) == 0:
@@ -110,13 +119,23 @@ class SharedFileDialogs():
 
 
     def browse_OpenSpecificFolder(self, lineedit_obj, folder_type):
+
+        ## Folder dialog.
+        if (len(folder_type) == 0):
+        	print('Foldertype is not specified.')
+        	return False
+        elif(type(folder_type) is str ):
+        	notice = "Select Folder ("+folder_type+")"
+        else:
+        	notice = "Select Folder ("+"/".join(folder_type) +")"
+
+		# Dir check
         currentdir = lineedit_obj.currentText()
         if len(currentdir) == 0:
             currentdir = os.path.normpath(main_dir)
         else :
             currentdir = os.path.dirname(currentdir)
-        ## Folder dialog.
-        open_folder_name = QFileDialog.getExistingDirectory(self.parent, "Select Folder", currentdir)
+        open_folder_name = QFileDialog.getExistingDirectory(self.parent, notice, currentdir)
 
         ## Check & open folder
         if len(open_folder_name) == 0:

@@ -196,14 +196,14 @@ class TabGenerator(SharedFileDialogs):
             elif id in require_browse_dir_specific.keys():
                 browse_button.append(QPushButton("Browse..."))
                 folder_type = require_browse_dir_specific[id]
-                print('folder_type : ',  folder_type)
-                browse_button[-1].clicked.connect(lambda state, z=id: self.browse_OpenSpecificFolder(obj_args[z], folder_type))
+#                print('folder_type : ',  folder_type, id)
+                browse_button[-1].clicked.connect(lambda state, z=id, f=folder_type: self.browse_OpenSpecificFolder(obj_args[z], f))
                 tab.layout.addWidget(browse_button[-1], i + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
             elif id in require_browse_file_specific.keys():
                 browse_button.append(QPushButton("Browse..."))
                 file_type = require_browse_file_specific[id]
-#                print('file_type : ',  file_type)
-                browse_button[-1].clicked.connect(lambda state, z=id: self.browse_OpenSpecificFile(obj_args[z], file_type))
+#                print('file_type : ',  file_type, id)
+                browse_button[-1].clicked.connect(lambda state, z=id, f=file_type: self.browse_OpenSpecificFile(obj_args[z], f))
                 tab.layout.addWidget(browse_button[-1], i + 1, ncol, 1, 1, alignment=(Qt.AlignRight))
 
             i = i + 1
