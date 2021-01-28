@@ -103,7 +103,7 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
         return False
 #    trimesh.constants.tol.merge = 1e-7
     mesh = trimesh.Trimesh(vertices=vertices, faces=faces)
-    mesh = trimesh.smoothing.filter_laplacian(mesh, iterations=5)
+#    mesh = trimesh.smoothing.filter_laplacian(mesh, iterations=5)
     mesh.merge_vertices()
     mesh.remove_degenerate_faces()
     mesh.remove_duplicate_faces()

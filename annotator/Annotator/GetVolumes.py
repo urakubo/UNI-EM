@@ -8,7 +8,7 @@ import pickle
 import numpy as np
 import glob
 import h5py
-
+import pyvista as pv
 
 def GetVolumes(surface_path, paint_path, skeleton_path):
 
@@ -53,14 +53,23 @@ def GetVolumes(surface_path, paint_path, skeleton_path):
 				id = os.path.basename(part_mesh_filename) 
 				id = os.path.splitext(id)[0]
 				id = int( id.split('-')[1] )
-				print('ID: ', id,', Volume:', closed_mesh.volume)
+				print('Surface ID          : ', whole_mesh_name_wo_ext)
+				print('Paint   ID          : ', id)
+				print('Volume (um3)        : ', closed_mesh.volume)
 				if id in ids_volumes:
 					ids_volumes[id] += closed_mesh.volume
 				else:
 					ids_volumes[id] = closed_mesh.volume
 
 			if skel != {}:
-				radiuses, length = GetRadiusLength(closed_mesh, skel)
+				len_enclosed, len_tot, min_radius, max_radius = GetRadiusLength2(closed_mesh, skel)
+
+				print('Total length (um)   : ', len_tot )
+				print('Enclosed length (um): ', len_enclosed )
+				print('Minimum radius (um) : ', min_radius )
+				print('Maximum radius (um) : ', max_radius )
+
+
 			else:
 				print('No skeleton file is detected for ', whole_mesh_filename)
 
@@ -96,6 +105,28 @@ def GetVolume(v,f,data):
 	# print("Volume: ", closed_mesh.volume)
 	# Numpy-stl (mesh) にも同ルーチン有
 	return closed_mesh
+
+def GetRadiusLength2(closed_mesh, skel):
+
+	closed_vertices = np.array( closed_mesh.vertices )
+	closed_faces    = np.array( closed_mesh.faces )
+	num = closed_faces.shape[0]
+	closed_faces = np.hstack([np.ones([num,1]).astype(int)*3,closed_faces])
+	closed_mesh_pv  = pv.PolyData(np.array(closed_vertices), np.array(closed_faces))
+
+	ugrid = pv.UnstructuredGrid()
+	ugrid.points = skel['vertices']
+
+	selection = ugrid.select_enclosed_points(closed_mesh_pv, tolerance=0.0, check_surface=False)
+	mask = selection.point_arrays['SelectedPoints'].view(np.bool)
+
+	len_enclosed = np.sum(skel['lengths'][mask == True])
+	len_tot      = np.sum(skel['lengths'][:])
+
+	min_radius    = np.min(skel['radiuses'][mask == True])
+	max_radius    = np.min(skel['radiuses'][mask == True])
+
+	return len_enclosed, len_tot, min_radius, max_radius
 
 
 def GetRadiusLength(closed_mesh, skel):
