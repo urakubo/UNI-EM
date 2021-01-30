@@ -87,6 +87,7 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 
 - (参考1) cuda 10.0, cuDNN v7.4のインストール方法。
 	- https://www.kkaneko.jp/tools/win/tensorflow1.html
+	- https://www.tensorflow.org/install/pip?hl=ja
 
 - (参考2) さらに詳細なマニュアル設定を行ってtrainingを実行したい場合は、Python スクリプトを作成したのち、コントロールパネル上端のプルダウンメニューよりScript → Run Scriptを選択して実行してください（実装中です。書き方も記述します）。およびTorsten Bullmann博士のGithubサイトを参照してください。
 	- <https://github.com/tbullmann/imagetranslation-tensorflow>
