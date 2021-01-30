@@ -28,11 +28,11 @@
 ## はじめに：
 近年、コネクトミクス（コネクトーム）呼ばれる脳神経の大規模解剖学が注目を浴びています。特に、電子顕微鏡（EM）に基づいて神経回路の具体的な配線図を明らかにするミクロコネクトミクスはその代表的なものです。ミクロコネクトミクスのためには電子顕微鏡(EM; ATUM SEM / SBF SEM / FIB SEM）により撮影された三次元神経画像（二次元画像のスタック）が必要ですが、さらに二次元画像間の位置合わせ（レジストレーション）・深層学習による細胞膜分割（セグメンテーション）・人手による校正（プルーフリード）・情報のタグ付け（アノテーション）などの情報処理が必要になります。
 
-　このような神経EM画像処理のためのソフトウェアは、Janelia research campus, Princeton大学, Harvard大学などアメリカはじめ、いくつかの研究機関において開発が進められています。複数のソフトウェアを連結して利用するためパイプラインと呼ばれます。ただし、これらパイプラインは各々独自のファイルフォーマットを採用していたり、複雑な設定が必要なサーバ・クライアントシステムであったりするなど、基本的にコンピュータエキスパートが利用することを前提としています。実験研究者が利用することは非常に困難です。
+　このような神経EM画像処理のためのソフトウェアは、Janelia research campus, Princeton大学, Harvard大学などアメリカはじめ、いくつかの研究機関において精力的に開発が進められています。複数のソフトウェアを連結して利用するためパイプラインと呼ばれます。ただし、これらパイプラインは各々独自のファイルフォーマットを採用していたり、複雑な設定が必要なサーバ・クライアントシステムであったりするなど、基本的にコンピュータエキスパートが利用することを前提としています。実験研究者が利用することは非常に困難です。
 
 　そこで、私たちはパイプライン上のソフトウェアのいくつかを実験研究者にも簡単に使えるように統合する作業を始めました。
 
-* まずHarvard 大学、Lichtman 研が開発した Rhoana パイプラインのDojoという校正ソフトウェア（サーバ＆クライアントシステム）に注目し、原作者(Daniel Haehn)の許可のもと改変してデスクトップアプリとしました。
+* Harvard 大学、Lichtman 研が開発した Rhoana パイプラインのDojoという校正ソフトウェア（サーバ＆クライアントシステム）に注目し、原作者(Daniel Haehn)の許可のもと改変してデスクトップアプリとしました。
 * さらに、同アプリに深層学習の基盤ソフトウェアであるTensorflow/ Tensorboard (Google) および深層学習に基づいた二種類のセグメンテーションソフトウェア"2D DNN (Resnetほか)", "3D FFN" を統合しました。
 * セグメンテーション結果を3Dで確認・アノテーションすることができるようにするために、3D annotatorを作成しました。
 * 推定画像の操作を行うために2D/3D フィルタを作成しました。
@@ -53,9 +53,9 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 ### Pyinstaller版 (Windows10のみ)：
 1. GPU 版とCPU版を用意しました。いずれかをダウンロードして展開してください。
 
-- Version 0.88 (2020/11/26):
-	- [CPU version (Ver0.88; 363 MB)](https://bit.ly/3nSmTVu)
-	- [GPU version (Ver0.88: 1,068 MB)](https://bit.ly/39cwi62)
+- Version 0.88 (2021/XX/XX):
+	- [CPU version (Ver0.90; 363 MB)](https://bit.ly/3nSmTVu)
+	- [GPU version (Ver0.90: 1,068 MB)](https://bit.ly/39cwi62)
 
 2. 公開サンプルデータkasthuri15をダウンロードして適当なフォルダに展開してください。
 	- https://www.dropbox.com/s/pxds28wdckmnpe8/ac3x75.zip?dl=0
@@ -67,17 +67,16 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 
 ### Python版：
 1. Windows10またはLinux (Ubuntu18.04 にて動作確認済)にて Python3.5-3.6 をインストールしてください。
-2. Tensorflow 1.12 のためにGPUを利用する場合はcuda 9.0 および cuDNN 7.4.2 (or later)をインスト―ルしてください **[参考1]** 。
+2. Tensorflow 1.15 のためにGPUを利用する場合はcuda 10.0 および cuDNN 7.4をインスト―ルしてください **[参考1]** 。
 3. 次の命令を実行してGithubより必要プログラムをダウンロードしてください。
 
 	- git clone https://github.com/urakubo/UNI-EM.git
 
 
-4. requirements-[os]-[cpu or gpu].txtを参考、Pythonに必要モジュール「Tensorflow-gpu 1.12, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl」を pip install -r requirements-[os]-[cpu or gpu].txt などのコマンドを用いてインストールしてください。
-5. **[UNI-EM]\marching_cubes\marching_cubes* を {$INSTALL_PYTHON}\Lib\site-packages へコピーしてください。**{$INSTALL_PYTHON} は、Python コマンド "import site; site.getsitepackages()" により分かります。
+4. requirements-[os]-[cpu or gpu].txtを参考、Pythonに必要モジュール「Tensorflow-gpu 1.15, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl, kimimaro」を pip install -r requirements-[os]-[cpu or gpu].txt などのコマンドを用いてインストールしてください。
 
-6. コマンドププロンプトにて[UNI-EM]フォルダへ移動して、 python main.py と実行してコントロールパネルを起動してください。
-7. 公開サンプルデータkasthuri15をダウンロードして適当なフォルダに展開してください。
+5. コマンドププロンプトにて[UNI-EM]フォルダへ移動して、 python main.py と実行してコントロールパネルを起動してください。
+6. 公開サンプルデータkasthuri15をダウンロードして適当なフォルダに展開してください。
 	- https://www.dropbox.com/s/pxds28wdckmnpe8/ac3x75.zip?dl=0
 	- https://www.dropbox.com/s/6nvu8o6she6rx9v/ISBI_Dojo.zip?dl=0
 
@@ -86,10 +85,8 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 ## お願い：
 日本国内の実験研究者、情報学研究者さまのフィードバックをお待ちします（hurakubo あっと gmail.com; **[参考3]** ）。私一人で開発を続けることは困難なので、共同開発者も募集いたします。本アプリは、自然画像のセグメンテーション等に利用することも可能と思われますので、多様なコメントをお待ちしております。本アプリの開発には、革新脳、新学術、基盤Cのご支援をいただいております。
 
-- (参考1) cuda 9.0, cuDNN v7のインストール方法。
-	- <https://qiita.com/spiderx_jp/items/8d863b087507cd4a56b0>
-	- <https://qiita.com/kattoyoshi/items/494238793824f25fa489>
-	- <https://haitenaipants.hatenablog.com/entry/2018/07/25/002118>
+- (参考1) cuda 10.0, cuDNN v7.4のインストール方法。
+	- https://www.kkaneko.jp/tools/win/tensorflow1.html
 
 - (参考2) さらに詳細なマニュアル設定を行ってtrainingを実行したい場合は、Python スクリプトを作成したのち、コントロールパネル上端のプルダウンメニューよりScript → Run Scriptを選択して実行してください（実装中です。書き方も記述します）。およびTorsten Bullmann博士のGithubサイトを参照してください。
 	- <https://github.com/tbullmann/imagetranslation-tensorflow>
