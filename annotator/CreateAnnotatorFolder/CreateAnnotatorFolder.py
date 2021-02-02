@@ -180,8 +180,8 @@ class GenerateDialog(QDialog):
         with open( targ.surfaces_volume_description_json_file , 'w') as f:
         	json.dump(data_dict, f, indent=2, ensure_ascii=False)
 
-        self.parent.ExecuteCloseFileFolder(params['Empty Folder for Annotator'])
-        self.parent.OpenFolder(params['Empty Folder for Annotator'])
+        self.parent.ExecuteCloseFileFolder(params['Empty folder for annotator'])
+        self.parent.OpenFolder(params['Empty folder for annotator'])
         print('')
         print('Annotator folder created.')
         print('')

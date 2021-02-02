@@ -124,7 +124,7 @@ def GetRadiusLength2(closed_mesh, skel):
 	len_tot      = np.sum(skel['lengths'][:])
 
 	min_radius    = np.min(skel['radiuses'][mask == True])
-	max_radius    = np.min(skel['radiuses'][mask == True])
+	max_radius    = np.max(skel['radiuses'][mask == True])
 
 	return len_enclosed, len_tot, min_radius, max_radius
 

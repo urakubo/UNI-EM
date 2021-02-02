@@ -43,8 +43,8 @@ class ImagesTab(ImagesExe):
                         ]
 
         self.args = [
-                        ['Segmentation image Folder',    'SelectImageFolder', 'OpenImageFolder'],
-                        ['Empty Folder for Annotator',  'SelectEmptyFolder', 'OpenEmptyFolder'],
+                        ['Segmentation image folder',    'SelectImageFolder', 'OpenImageFolder'],
+                        ['Empty folder for annotator',  'SelectEmptyFolder', 'OpenEmptyFolder'],
                         ['Pitch in X (um)', 'LineEdit_number', [ min_pitch, self.xpitch, max_pitch, num_digits]],
                         ['Pitch in Y (um)', 'LineEdit_number', [ min_pitch, self.ypitch, max_pitch, num_digits]],
                         ['Pitch in Z (um)', 'LineEdit_number', [ min_pitch, self.zpitch, max_pitch, num_digits]],

@@ -28,7 +28,7 @@ class ImagesExe():
 		file_exts  = [ "*.tif", "*.tiff", "*.png", "*.PNG" ]
 		seg_files = []
 		for ext in file_exts:
-			seg_files.extend( glob.glob(os.path.join(params['Segmentation image Folder'], ext) ))
+			seg_files.extend( glob.glob(os.path.join(params['Segmentation image folder'], ext) ))
 		if len(seg_files) == 0:
 		    print('No tiff/png segmentation file.')
 		    return False
@@ -36,7 +36,7 @@ class ImagesExe():
 
 		sg = m.imread(seg_files[0], cv2.IMREAD_GRAYSCALE)
 		print('')
-		print('Number of Segmentation images : ', len(seg_files))
+		print('Number of segmentation images : ', len(seg_files))
 		print('Segmentation image dimensions : ', sg.shape)
 		print('Segmentation datatype         : ', sg.dtype)
 		print('')

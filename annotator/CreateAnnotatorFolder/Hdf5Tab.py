@@ -48,7 +48,7 @@ class Hdf5Tab(Hdf5Exe):
         self.args = [
                         ['Hdf5 file containing segmentation volume', 'SelectHdf5File', 'OpenHdf5File'],
                         ['Container name', 'LineEdit', default_container_name, None],
-                        ['Empty Folder for Annotator',  'SelectEmptyFolder', 'OpenEmptyFolder'],
+                        ['Empty folder for annotator',  'SelectEmptyFolder', 'OpenEmptyFolder'],
                         ['Pitch in X (um)', 'LineEdit_number', [ min_pitch, self.xpitch, max_pitch, num_digits]],
                         ['Pitch in Y (um)', 'LineEdit_number', [ min_pitch, self.ypitch, max_pitch, num_digits]],
                         ['Pitch in Z (um)', 'LineEdit_number', [ min_pitch, self.zpitch, max_pitch, num_digits]],

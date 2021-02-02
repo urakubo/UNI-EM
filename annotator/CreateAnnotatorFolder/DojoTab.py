@@ -43,8 +43,8 @@ class DojoTab(DojoExe):
                         ]
 
         self.args = [
-                        ['Dojo Folder',    'SelectDojoFolder', 'OpenDojoFolder'],
-                        ['Empty Folder for Annotator',  'SelectEmptyFolder', 'OpenEmptyFolder'],
+                        ['Dojo folder',    'SelectDojoFolder', 'OpenDojoFolder'],
+                        ['Empty folder for annotator',  'SelectEmptyFolder', 'OpenEmptyFolder'],
                         ['Pitch in X (um)', 'LineEdit_number', [ min_pitch, self.xpitch, max_pitch, num_digits]],
                         ['Pitch in Y (um)', 'LineEdit_number', [ min_pitch, self.ypitch, max_pitch, num_digits]],
                         ['Pitch in Z (um)', 'LineEdit_number', [ min_pitch, self.zpitch, max_pitch, num_digits]],
