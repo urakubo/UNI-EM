@@ -85,7 +85,7 @@ class GenerateDialog(QDialog):
 
         print('Annotator folder is being generated for', comm_title)
         targ = Params()
-        targ.SetUserInfoAnnotator(params['Empty Folder for Annotator'])
+        targ.SetUserInfoAnnotator(params['Empty folder for annotator'])
 
         if os.path.isdir(targ.surfaces_path) == False:
         	m.mkdir_safe(targ.surfaces_path)
