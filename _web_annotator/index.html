@@ -132,6 +132,15 @@
         <div class="object-table-actions">
           <button type="button" id="save-object-table-csv" class="download-csv btn btn4 font3">Download CSV</button>
         </div>
+        <p>
+		<div class="menu-label">Smoothing:</div>
+            <input type="radio" name="SmoothingMethod" value="None">None
+            <input type="radio" name="SmoothingMethod" value="Humphrey" checked>Humphrey
+            <input type="radio" name="SmoothingMethod" value="Laplacian">Laplacian
+            <input type="radio" name="SmoothingMethod" value="Taubin">Taubin
+        <br>
+		<div class="menu-label">Num interations:</div>
+        <input type="number" min="0" max="64" step="1" value="15" id="SmoothingNumIters">
       </fieldset>
     </p>
     

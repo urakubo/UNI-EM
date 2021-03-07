@@ -1227,10 +1227,27 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addSurfaceObject = function (id, col) {
   xhr.send(null);
 
   if (xhr.status == 404) {
-    //
+    // Obtain smoothing option
+    const SmoothMeth = document.getElementsByName("SmoothingMethod"); // document.SmoothingMethod;
+
+    const NumIter = document.getElementById("SmoothingNumIters"); // SmoothingNumIters;
+
+    let Smeth = "";
+
+    for (let i = 0; i < SmoothMeth.length; i++) {
+      if (SmoothMeth[i].checked) {
+        //(SmoothMeth[i].checked === true)と同じ
+        Smeth = SmoothMeth[i].value;
+        break;
+      }
+    } //Send request
+
+
     var data = {
       mode: "surface",
-      id: id
+      id: id,
+      smooth_method: Smeth,
+      num_iter: String(NumIter.value)
     }; // POSTメソッドで送信するデータ
 
     var req = new XMLHttpRequest();

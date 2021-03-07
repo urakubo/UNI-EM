@@ -40,8 +40,20 @@ APP.addSurfaceObject = function(id, col) {
 	xhr.open("HEAD", target_url, false);  //同期モード promise method
 	xhr.send(null);
 	if(xhr.status == 404) {
-//
-		var data = { mode: "surface", id: id }; // POSTメソッドで送信するデータ
+
+		// Obtain smoothing option
+		const SmoothMeth = document.getElementsByName("SmoothingMethod"); // document.SmoothingMethod;
+		const NumIter = document.getElementById("SmoothingNumIters"); // SmoothingNumIters;
+		let Smeth = "";
+		for (let i = 0; i < SmoothMeth.length; i++){
+			if(SmoothMeth[i].checked){ //(SmoothMeth[i].checked === true)と同じ
+				Smeth = SmoothMeth[i].value;
+				break;
+			}
+		}
+
+		//Send request
+		var data = { mode: "surface", id: id, smooth_method: Smeth, num_iter: String(NumIter.value) }; // POSTメソッドで送信するデータ
 		var req = new XMLHttpRequest();
 		req.onreadystatechange = function()
 		{

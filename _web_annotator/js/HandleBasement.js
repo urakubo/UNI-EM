@@ -359,7 +359,6 @@ export function launchAnnotator() {
 	// Sphere
 	APP.SphereMode   = 0;
 
-
     // Add sphere tmp
     // var geometry = new THREE.SphereGeometry(0.1, 32, 32);
     // var material = new THREE.MeshBasicMaterial({color: 0x6699FF});

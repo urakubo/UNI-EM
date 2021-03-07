@@ -142,4 +142,3 @@ window.CenterZX = function () {
 	// APP.renderer.render(APP.scene, APP.camera);
 	}
 
-

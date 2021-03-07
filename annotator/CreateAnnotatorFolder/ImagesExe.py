@@ -25,7 +25,7 @@ class ImagesExe():
 		##
 		targ = parent.SharedPreprocess(params, comm_title)
 		##
-		file_exts  = [ "*.tif", "*.tiff", "*.png", "*.PNG" ]
+		file_exts  = [ "*.tif", "*.tiff", "*.png" ]
 		seg_files = []
 		for ext in file_exts:
 			seg_files.extend( glob.glob(os.path.join(params['Segmentation image folder'], ext) ))

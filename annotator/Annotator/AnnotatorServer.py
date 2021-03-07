@@ -61,9 +61,14 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
     	return False
 
     if request['mode'] == 'surface':
-    	id = int(request['id'])
+#    	print( str(request['smooth_method']) )
+#    	print( str(request['num_iter']) )
+    	id 				= int(request['id'])
+    	smooth_method 	= str(request['smooth_method'])
+    	num_iter 		= int(request['num_iter'])
+
     	# print('Target object id:', id)
-    	result = self.GenerateSurface(id)
+    	result = self.GenerateSurface(id, smooth_method, num_iter)
     	if result :
     		self.write("True")
     	else :
@@ -84,7 +89,7 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
     	return False
 
   ###
-  def GenerateSurface(self, id):
+  def GenerateSurface(self, id, smooth_method, num_iter):
     mask = (self.ids_volume == id)
     try:
         vertices, faces, normals, values = \
@@ -103,7 +108,18 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
         return False
 #    trimesh.constants.tol.merge = 1e-7
     mesh = trimesh.Trimesh(vertices=vertices, faces=faces)
-    mesh = trimesh.smoothing.filter_laplacian(mesh, iterations=5)
+
+    if smooth_method == "Humphrey":
+        mesh = trimesh.smoothing.filter_humphrey(mesh, iterations=num_iter)
+        print("Humphrey filter with ", num_iter, " iterations")
+    elif smooth_method == "Laplacian":
+        mesh = trimesh.smoothing.filter_laplacian(mesh, iterations=num_iter)
+        print("Laplacian filter with ", num_iter, " iterations")
+    elif smooth_method == "Taubin":
+        mesh = trimesh.smoothing.filter_taubin(mesh, iterations=num_iter)
+        print("Taubin filter with ", num_iter, " iterations")
+    else :
+        print("No smoothing.")
     mesh.merge_vertices()
     mesh.remove_degenerate_faces()
     mesh.remove_duplicate_faces()
@@ -136,6 +152,7 @@ class AnnotatorServerLogic:
     with h5py.File(self.u_info.volume_file, 'r') as f:		
       self.ids_volume = f['volume'][()]
 
+#    print('self.ids_volume.shape: ', self.ids_volume.shape)
     return None
 
 
