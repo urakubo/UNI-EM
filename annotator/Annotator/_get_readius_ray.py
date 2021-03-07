@@ -13,8 +13,7 @@ import scipy.spatial
 
 import ncollpyde
 
-def get_radius_ray(swc, mesh, n_rays=20, aggregate='mean', 
-                   fallback='knn'):
+def get_radius_ray(swc, mesh, n_rays=20, aggregate='mean', fallback=None):
     """Extract radii using ray casting.
     Parameters
     ----------
@@ -26,7 +25,7 @@ def get_radius_ray(swc, mesh, n_rays=20, aggregate='mean',
     aggregate :     "mean" | "median" | "max" | "min" | "percentile75"
                     Function used to aggregate radii for over all intersections
                     for a given node.
-    fallback :      "knn" | None | number
+    fallback :      None | number
                     If a point is outside or right on the surface of the mesh
                     the raycasting will return nonesense results. We can either
                     ignore those cases (``None``), assign a arbitrary number or
@@ -55,6 +54,7 @@ def get_radius_ray(swc, mesh, n_rays=20, aggregate='mean',
 
 	# Ray directions (Simplfied by HU)
     tangents, normals, binormals = frenet_frames(swc)
+    # tangent is not used. normals and binormals are used.
 
     v = np.arange(n_rays, dtype=np.float) / n_rays * 2 * np.pi
 
@@ -108,4 +108,74 @@ def get_radius_ray(swc, mesh, n_rays=20, aggregate='mean',
                 final_dist[needs_fix] = get_radius_kkn(points[needs_fix], mesh, aggregate=aggregate)
 
     return final_dist
+
+
+
+
+
+def frenet_frames(swc):
+    """Calculate tangents, normals and binormals for each parent->child segment."""
+    # Get node locations
+    points = swc[['x', 'y', 'z']].values
+
+    # Get the parent of each node
+    parents = swc.set_index('node_id').parent_id.to_dict()
+
+    # For roots just use their first child
+    roots = swc[swc.parent_id < 0].node_id.values
+    root_childs = swc[swc.parent_id.isin(roots)].set_index('parent_id').node_id.to_dict()
+    parents.update(root_childs)
+
+    # Get the second point for each node
+    parent_co = swc.set_index('node_id')[['x', 'y', 'z']].loc[swc.node_id.map(parents)].values
+
+    # Produce the tangents
+    tangents = (points - parent_co)
+
+    normals = np.zeros((len(points), 3))
+
+    epsilon = 0.0001
+
+    mags = np.sqrt(np.sum(tangents * tangents, axis=1))
+    tangents /= mags[:, np.newaxis]
+
+    # Get initial normal and binormal
+    t = np.abs(tangents[0])
+
+    smallest = np.argmin(t)
+    normal = np.zeros(3)
+    normal[smallest] = 1.
+
+    vec = np.cross(tangents[0], normal)
+    normals[0] = np.cross(tangents[0], vec)
+
+    all_vec = np.cross(tangents[:-1], tangents[1:])
+    all_vec_norm = np.linalg.norm(all_vec, axis=1)
+
+    # Normalise vectors if necessary
+    where = all_vec_norm > epsilon
+    all_vec[where, :] /= all_vec_norm[where].reshape((sum(where), 1))
+
+    # Precompute inner dot product
+    dp = np.sum(tangents[:-1] * tangents[1:], axis=1)
+    # Clip
+    cl = np.clip(dp, -1, 1)
+    # Get theta
+    th = np.arccos(cl)
+
+    # Compute normal and binormal vectors along the path
+    for i in range(1, len(points)):
+        normals[i] = normals[i-1]
+
+        vec_norm = all_vec_norm[i-1]
+        vec = all_vec[i-1]
+        if vec_norm > epsilon:
+            normals[i] = rotate(-np.degrees(th[i-1]),
+                                vec)[:3, :3].dot(normals[i])
+
+    binormals = np.cross(tangents, normals)
+
+    return tangents, normals, binormals
+
+
 
