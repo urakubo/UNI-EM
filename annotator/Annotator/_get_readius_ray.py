@@ -40,8 +40,7 @@ def get_radius_ray(swc, mesh, n_rays=20, aggregate='mean', fallback=None):
     assert aggregate in agg_map
     agg_func = agg_map[aggregate]
 
-    assert projection in ['sphere', 'tangents']
-    assert (fallback == 'knn') or isinstance(fallback, numbers.Number) or isinstance(fallback, type(None))
+    assert isinstance(fallback, numbers.Number) or isinstance(fallback, type(None))
 
     # Get max dimension of mesh
     dim = (swc[['x', 'y', 'z']].max() - swc[['x', 'y', 'z']].min()).values
