@@ -210,13 +210,19 @@ class GenerateSkeleton:
     print('Edges   : ', new_edges.shape)
     
     ##
-	## Calculate radiuses for each vartices (k-nearst neighbor)
+	## Calculate radiuses for each vartices (Mean distances of k-nearst neighbors)
+	## https://github.com/schlegelp/skeletor
 	##
     surface_vertices = self._LoadSurfaceVertices(id)
     tree = spatial.cKDTree(surface_vertices)
     dists, indexes = tree.query(new_vertices, k=5)
     new_radiuses	 = np.mean(dists, axis=1)
     print('new_radiuses: ', new_radiuses.shape)
+
+    ##
+	## Calculate radiuses for each vartices (raycaster)
+	##
+
 
 	##
 	## Save skeleton
