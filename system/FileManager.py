@@ -95,6 +95,10 @@ class FileManager():
 
 
     def InitialCheckOpenFolder(self,folder_name):
+
+#        print('Suggested file: ', folder_name)
+#        print('Opened files  : ', self.u_info.open_files)
+
         if folder_name in self.u_info.open_files:
             print('Already open.')
             return False

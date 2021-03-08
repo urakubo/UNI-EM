@@ -89,6 +89,19 @@ class GenerateSkeleton:
     )
     # skeleton_ids = self._SaveSkeletonFile(id, vertices, edges, radiuses)
 
+    # vertices = skels[id].vertices
+    # edges    = skels[id].edges
+
+    print('skels.keys()   : ', skels.keys())
+    print('len(skels)     : ', len(skels) )
+    if skels[id].vertices.shape[0] < 4:
+    	print('No skeleton')
+    	return False
+    if skels[id].edges.shape[0] < 4:
+    	print('No skeleton: ', id)
+    	return False
+
+
     vertices = skels[id].vertices
     edges    = skels[id].edges
     # radiuses = skels[id].radius

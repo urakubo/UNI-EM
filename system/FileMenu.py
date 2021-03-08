@@ -19,7 +19,7 @@ class FileMenu(FileManager):
     def __init__(self):
         # File menu
         self.file_menu = ['Open Folder',
-                          'Open File',
+                          'Open Hdf5 File',
                           'Open Recent File/Folder',
                           'Exit from UNI-EM']
         self.file_icon = ['Folder_Open_16.png',
@@ -130,6 +130,8 @@ class FileMenu(FileManager):
     def OpenDialogOpenFolder(self):
         initdir = os.path.normpath( path.join(main_dir, "..") )
         open_folder_name = QFileDialog.getExistingDirectory(self, "Select folder (Dojo/Image/Model/Empty)", initdir)
+#        open_folder_name = list(open_folder_name)
+        print(open_folder_name)
         if len(open_folder_name) == 0:
             print('No folder was selected.')
             return
@@ -141,10 +143,13 @@ class FileMenu(FileManager):
     def OpenDialogOpenFile(self):
         initdir = os.path.normpath( path.join(main_dir, "..") )
         open_file_name = QFileDialog.getOpenFileName(self, "Select file (Hdf5)", initdir)
-        if len(open_file_name) == 0:
+#        open_file_name = list(open_file_name)
+        print(open_file_name[0])
+
+        if len(open_file_name[0]) == 0:
             print('No file was selected.')
             return
-        open_file_name = open_file_name.replace('/', os.sep)
+        open_file_name = open_file_name[0].replace('/', os.sep)
         flag = self.OpenFolder(open_file_name)
         return flag
 
