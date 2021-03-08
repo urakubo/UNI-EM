@@ -93,15 +93,10 @@ def _get_radius_ray(vertices, tangents, mesh, n_rays=20, aggregate='mean', fallb
 
     if not isinstance(fallback, type(None)):
         # See if any needs fixing
-        inside = coll.contains(points)
+        inside = coll.contains(vertices)
         is_zero = final_dist == 0
         needs_fix = ~inside | is_zero
-
-        if any(needs_fix):
-            if isinstance(fallback, numbers.Number):
-                final_dist[needs_fix] = fallback
-            elif fallback == 'knn':
-                final_dist[needs_fix] = get_radius_kkn(points[needs_fix], mesh, aggregate=aggregate)
+        final_dist[needs_fix] = 0
 
     return final_dist
 

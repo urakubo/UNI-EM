@@ -47,7 +47,7 @@ def GetVolumes(surface_path, paint_path, skeleton_path):
 				print('Volume already exists: ', part_mesh_name)
 				continue
 			"""
-			closed_mesh = GetVolume(surf_vertices, surf_faces, data['painted'])
+			closed_mesh, closed_mesh_for_vtk = GetVolume(surf_vertices, surf_faces, data['painted'])
 			if closed_mesh.volume is not None :
 				# print('Volume of ' + part_mesh_name + ' : ', volume)
 				id = os.path.basename(part_mesh_filename) 
@@ -56,18 +56,26 @@ def GetVolumes(surface_path, paint_path, skeleton_path):
 				print('Surface ID          : ', whole_mesh_name_wo_ext)
 				print('Paint   ID          : ', id)
 				print('Volume (um3)        : ', closed_mesh.volume)
+				text_vtk = "Surface ID : {0}\nPaint ID: {1}\nVolume (um3): {2:.4f}\n".format(whole_mesh_name_wo_ext, id, closed_mesh.volume)
+				
 				if id in ids_volumes:
 					ids_volumes[id] += closed_mesh.volume
 				else:
 					ids_volumes[id] = closed_mesh.volume
 
-			if skel != {}:
-				len_enclosed, len_tot, min_radius, max_radius = GetRadiusLength2(closed_mesh, skel)
+				if skel != {}:
+					len_enclosed, len_tot, min_radius, max_radius = GetRadiusLength2(closed_mesh, skel)
+					print('Total length (um)   : ', len_tot )
+					print('Enclosed length (um): ', len_enclosed )
+					print('Minimum radius (um) : ', min_radius )
+					print('Maximum radius (um) : ', max_radius )
+					text_vtk2 = "Length (um) : {0:.4f}\nMin r (um) : {1:.4f}\nMax r (um) : {2:.4f}".format(len_enclosed, min_radius, max_radius)
+					text_vtk = text_vtk + text_vtk2
 
-				print('Total length (um)   : ', len_tot )
-				print('Enclosed length (um): ', len_enclosed )
-				print('Minimum radius (um) : ', min_radius )
-				print('Maximum radius (um) : ', max_radius )
+				plotter = pv.Plotter()
+				plotter.add_mesh(closed_mesh_for_vtk, label='mesh')
+				plotter.add_text(text_vtk)
+				plotter.show()
 
 
 			else:
@@ -96,7 +104,6 @@ def GetVolume(v,f,data):
 
 	part_mesh = pymeshfix.MeshFix(v, np.array(sub_face_id))
 	part_mesh.repair()
-	part_mesh.plot() # Visualization of cloased meshes
 
 	closed_v = part_mesh.v # numpy np.float array
 	closed_f = part_mesh.f # numpy np.int32 array
@@ -104,7 +111,7 @@ def GetVolume(v,f,data):
 	closed_mesh = trimesh.Trimesh(vertices=closed_v, faces=closed_f)
 	# print("Volume: ", closed_mesh.volume)
 	# Numpy-stl (mesh) にも同ルーチン有
-	return closed_mesh
+	return closed_mesh, part_mesh.mesh
 
 def GetRadiusLength2(closed_mesh, skel):
 
@@ -120,17 +127,16 @@ def GetRadiusLength2(closed_mesh, skel):
 	selection = ugrid.select_enclosed_points(closed_mesh_pv, tolerance=0.0, check_surface=False)
 	mask = selection.point_arrays['SelectedPoints'].view(np.bool)
 
+	len_tot       = np.sum(skel['lengths'][:])
 
 	if np.any(mask) :
 		len_enclosed  = np.sum(skel['lengths'][mask == True])
-		len_tot       = np.sum(skel['lengths'][:])
 		min_radius    = np.min(skel['radiuses'][mask == True])
 		max_radius    = np.max(skel['radiuses'][mask == True])
 	else :
-		len_enclosed  = None
-		len_tot       = None
-		min_radius    = None
-		max_radius    = None
+		len_enclosed  = 0
+		min_radius    = 0
+		max_radius    = 0
 
 	return len_enclosed, len_tot, min_radius, max_radius
 
