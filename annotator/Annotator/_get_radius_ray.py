@@ -10,7 +10,7 @@ import numpy as np
 
 import ncollpyde
 
-def _get_radius_ray(vertices, tangents, mesh, n_rays=20, aggregate='mean', fallback=None):
+def _get_radius_ray(vertices, tangents, mesh, n_rays=20, aggregate='mean', fallback=0):
     """Extract radii using ray casting.
     Parameters
     ----------

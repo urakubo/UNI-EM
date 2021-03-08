@@ -120,11 +120,17 @@ def GetRadiusLength2(closed_mesh, skel):
 	selection = ugrid.select_enclosed_points(closed_mesh_pv, tolerance=0.0, check_surface=False)
 	mask = selection.point_arrays['SelectedPoints'].view(np.bool)
 
-	len_enclosed = np.sum(skel['lengths'][mask == True])
-	len_tot      = np.sum(skel['lengths'][:])
 
-	min_radius    = np.min(skel['radiuses'][mask == True])
-	max_radius    = np.max(skel['radiuses'][mask == True])
+	if np.any(mask) :
+		len_enclosed  = np.sum(skel['lengths'][mask == True])
+		len_tot       = np.sum(skel['lengths'][:])
+		min_radius    = np.min(skel['radiuses'][mask == True])
+		max_radius    = np.max(skel['radiuses'][mask == True])
+	else :
+		len_enclosed  = None
+		len_tot       = None
+		min_radius    = None
+		max_radius    = None
 
 	return len_enclosed, len_tot, min_radius, max_radius
 
