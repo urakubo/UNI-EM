@@ -7,9 +7,6 @@ import numbers
 import random
 
 import numpy as np
-import pandas as pd
-import scipy.spatial
-
 
 import ncollpyde
 
@@ -17,8 +14,7 @@ def _get_radius_ray(vertices, tangents, mesh, n_rays=20, aggregate='mean', fallb
     """Extract radii using ray casting.
     Parameters
     ----------
-    swc :           pandas.DataFrame
-                    SWC table
+    vertices :      (N,3) numpy
     mesh :          trimesh.Trimesh
     n_rays :        int
                     Number of rays to cast for each node.
@@ -91,7 +87,7 @@ def _get_radius_ray(vertices, tangents, mesh, n_rays=20, aggregate='mean', fallb
     split = np.split(dist, split_ix)
 
     # Aggregate over each original ix
-    final_dist = np.zeros(points.shape[0])
+    final_dist = np.zeros(vertices.shape[0])
     for l, i in zip(split, np.unique(org_ix)):
         final_dist[i] = agg_func(l)
 
@@ -116,7 +112,7 @@ def _get_radius_ray(vertices, tangents, mesh, n_rays=20, aggregate='mean', fallb
 def get_normals(tangents):
     """Calculate tangents, normals and binormals for each parent->child segment."""
 
-    normals = np.zeros((len(points), 3))
+    normals = np.zeros_like(tangents)
 
     epsilon = 0.0001
 
@@ -148,7 +144,7 @@ def get_normals(tangents):
     th = np.arccos(cl)
 
     # Compute normal and binormal vectors along the path
-    for i in range(1, len(points)):
+    for i in range(1, tangents.shape[0]):
         normals[i] = normals[i-1]
 
         vec_norm = all_vec_norm[i-1]
@@ -161,5 +157,30 @@ def get_normals(tangents):
 
     return normals, binormals
 
+
+
+def rotate(angle, axis):
+    """Construct 3x3 rotation matrix for rotation about a vector.
+    Parameters
+    ----------
+    angle : float
+            The angle of rotation, in degrees.
+    axis :  ndarray
+            The x, y, z coordinates of the axis direction vector.
+    Returns
+    -------
+    M :     ndarray
+            Transformation matrix describing the rotation.
+    """
+    angle = np.radians(angle)
+    assert len(axis) == 3
+    x, y, z = axis / np.linalg.norm(axis)
+    c, s = math.cos(angle), math.sin(angle)
+    cx, cy, cz = (1 - c) * x, (1 - c) * y, (1 - c) * z
+    M = np.array([[cx * x + c, cy * x - z * s, cz * x + y * s, .0],
+                  [cx * y + z * s, cy * y + c, cz * y - x * s, 0.],
+                  [cx * z - y * s, cy * z + x * s, cz * z + c, 0.],
+                  [0., 0., 0., 1.]]).T
+    return M
 
 

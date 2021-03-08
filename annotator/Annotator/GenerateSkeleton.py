@@ -8,6 +8,7 @@ import collections
 from skimage import morphology
 import trimesh
 
+from annotator.Annotator._get_radius_ray import _get_radius_ray
 
 class GenerateSkeleton:
   def __init__( self, ids_volume, pitch, skeletons_path, surfaces_path):
@@ -90,7 +91,7 @@ class GenerateSkeleton:
 
     vertices = skels[id].vertices
     edges    = skels[id].edges
-    radiuses = skels[id].radius
+    # radiuses = skels[id].radius
     if edges.shape[0] < 4:
     	print('No skeleton: ', id)
     	return False
@@ -98,6 +99,36 @@ class GenerateSkeleton:
 	##
 	## Smoothing
 	##
+    new_vertices, new_edges, new_lengths, new_tangents = self._Smoothing(vertices, edges)
+    
+    ##
+	## Calculate radiuses for each vartices (k-nearst neighbor)
+	##
+#    surface_vertices = self._LoadSurfaceVertices(id)
+#    tree = spatial.cKDTree(surface_vertices)
+#    dists, indexes = tree.query(new_vertices, k=5)
+#    new_radiuses	 = np.mean(dists, axis=1)
+#    print('new_radiuses: ', new_radiuses.shape)
+
+    ##
+	## Calculate radiuses for each vartices (raycaster)
+	##
+    mesh = self._LoadSurfaceMesh(id)
+    new_radiuses	 = _get_radius_ray(new_vertices, new_tangents, mesh)
+    print('new_radiuses: ', new_radiuses.shape)
+
+	##
+	## Save skeleton
+	##
+    skeleton_ids = self._SaveSkeletonFile(id, new_vertices, new_edges, new_radiuses, new_lengths, new_tangents)
+
+
+
+	##
+	## Smoothing
+	##
+
+  def _Smoothing(self, vertices, edges):
 
 	# Obtain crossing edges
     edges_ids         = edges.flatten().tolist()
@@ -142,6 +173,7 @@ class GenerateSkeleton:
     vertices_list = vertices.tolist()
     new_vertices  = []
     new_lengths   = []
+    new_tangents  = []
     new_edges	  = []
 
 
@@ -168,38 +200,37 @@ class GenerateSkeleton:
     	x_diff = np.diff(x_fit)
     	y_diff = np.diff(y_fit)
     	z_diff = np.diff(z_fit)
-    	tmp_lengths = np.sqrt(x_diff*x_diff + y_diff*y_diff + z_diff*z_diff)/2
-    	tmp_lengths = np.append(tmp_lengths, 0) + np.append(0, tmp_lengths)
+    	tmp_len     = np.sqrt(x_diff*x_diff + y_diff*y_diff + z_diff*z_diff)
+    	tmp_lengths = np.append(tmp_len, 0)/2 + np.append(0,tmp_len)/2
     	tmp_lengths = tmp_lengths.tolist()
     	# print('tmp_lengths: ', tmp_lengths)
+    	
+    	## Segmental tangents
+    	tmp_tangents = np.stack((x_diff, y_diff, z_diff))
+    	tmp_tangents /= tmp_len
+    	tmp_tangents = tmp_tangents.T
+    	tmp_tangents = np.vstack( [tmp_tangents, tmp_tangents[-1,:].reshape(1,3)] )
 
 		## Mapping
     	tmp_verts = [[ix,iy,iz] for ix,iy,iz in zip(x_fit, y_fit, z_fit) ]
     	ids_start_new = len(new_vertices)
     	new_vertices.extend(tmp_verts)
     	new_lengths.extend(tmp_lengths)
+    	new_tangents.extend(tmp_tangents)
     	ids_end_new = len(new_vertices)
     	tmp_edges = [[i, i+1] for i in range(ids_start_new,ids_end_new-1)]
     	new_edges.extend(tmp_edges)
 	
     new_vertices      = np.array(new_vertices)
     new_edges		  = np.array(new_edges)
+    new_lengths  	  = np.array(new_lengths)
+    new_tangents	  = np.array(new_tangents)
     print('Vertices: ', new_vertices.shape)
     print('Edges   : ', new_edges.shape)
-    
-    ##
-	## Calculate radiuses for each vartices (k-nearst neighbor)
-	##
-    surface_vertices = self._LoadSurfaceVertices(id)
-    tree = spatial.cKDTree(surface_vertices)
-    dists, indexes = tree.query(new_vertices, k=5)
-    new_radiuses	 = np.mean(dists, axis=1)
-    print('new_radiuses: ', new_radiuses.shape)
+    print('Lengths : ', new_lengths.shape)
+    print('Tangents: ', new_tangents.shape)
 
-	##
-	## Save skeleton
-	##
-    skeleton_ids = self._SaveSkeletonFile(id, new_vertices, new_edges, new_radiuses, new_lengths)
+    return new_vertices, new_edges, new_lengths, new_tangents
 
 
   def _LoadSurfaceVertices(self, id):
@@ -210,14 +241,22 @@ class GenerateSkeleton:
     print('')
     return vertices
 
+  def _LoadSurfaceMesh(self, id):
+    print('Loading surface, ID: ', id)
+    filename = self.surfaces_path + os.sep + str(id).zfill(10)+'.stl'
+    mesh = trimesh.load(filename)
+    print('')
+    return mesh
 
-  def _SaveSkeletonFile(self, id, vertices, edges, radiuses, lengths):
+
+  def _SaveSkeletonFile(self, id, vertices, edges, radiuses, lengths, tangents):
     filename = self.skeletons_path + os.sep + str(id).zfill(10)+'.hdf5'
     with h5py.File( filename ,'w') as f:
     	f.create_dataset('vertices', data=vertices)
-    	f.create_dataset('edges', data=edges)
+    	f.create_dataset('edges'   , data=edges)
     	f.create_dataset('radiuses', data=radiuses)
-    	f.create_dataset('lengths', data=lengths)
+    	f.create_dataset('lengths' , data=lengths)
+    	f.create_dataset('tangents', data=tangents)
     print('Generated skeleton ID: ', id)
     print('')
     return True

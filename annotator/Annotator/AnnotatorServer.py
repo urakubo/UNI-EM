@@ -108,7 +108,9 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
         return False
 #    trimesh.constants.tol.merge = 1e-7
     mesh = trimesh.Trimesh(vertices=vertices, faces=faces)
-
+    mesh.merge_vertices()
+    mesh.remove_degenerate_faces()
+    mesh.remove_duplicate_faces()
     if smooth_method == "Humphrey":
         mesh = trimesh.smoothing.filter_humphrey(mesh, iterations=num_iter)
         print("Humphrey filter with ", num_iter, " iterations")
@@ -120,9 +122,7 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
         print("Taubin filter with ", num_iter, " iterations")
     else :
         print("No smoothing.")
-    mesh.merge_vertices()
-    mesh.remove_degenerate_faces()
-    mesh.remove_duplicate_faces()
+
     print('Processed vertices:', mesh.vertices.shape)
     print('Processed faces   :', mesh.faces.shape)
 
