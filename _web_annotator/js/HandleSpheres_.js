@@ -65,16 +65,14 @@ APP.addSphereObject = function(id, col) {
 	    let g1 = f.get('vertices');
 	    let g2 = f.get('edges');
 	    let g3 = f.get('radiuses');
-	    let g4 = f.get('tangents');
 	    var data_vertices = g1.value;
 	    var data_edges    = g2.value;
 	    var data_radiuses = g3.value;
-	    var data_tangents = g4.value;
 	    
 	    data_vertices = splitArray(data_vertices, 3);
 	    data_edges    = splitArray(data_edges, 2);
 	    data_radiuses = splitArray(data_radiuses, 1);
-	    data_tangents = splitArray(data_tangents, 3);
+	    
 	    
 		var i1 = undefined;
 		var i2 = undefined;
@@ -109,9 +107,9 @@ APP.addSphereObject = function(id, col) {
 			geometry.vertices.push(v1, v2);
 
 
-			// Create circle object
+			// Create sphere object
 			var radius = data_radiuses[i1];
-			if ( (i1 % 10 == 1) && (radius > 0.01) ) {
+			if ( (i1 % 20 == 1) || (radius < 0.1) ) {
 				// if ( data_vertices[i1][2] <= APP.BoundingboxZ * 0.05 ) {continue;}
 				// if ( data_vertices[i1][1] <= APP.BoundingboxY * 0.05 ) {continue;}
 				// if ( data_vertices[i1][0] <= APP.BoundingboxX * 0.05 ) {continue;}
@@ -120,23 +118,10 @@ APP.addSphereObject = function(id, col) {
 				// if ( data_vertices[i1][0] >= APP.BoundingboxX * 0.95 ) {continue;}
 				// console.log(data_vertices[i1][0], data_vertices[i1][1], data_vertices[i1][2]);
 			
-				const geometry  = new THREE.CircleGeometry( radius, 20);
-				const material  = new THREE.MeshPhongMaterial( {color: col, opacity: 0.3, transparent: true, side: THREE.DoubleSide} );
+				const geometry  = new THREE.SphereGeometry( radius,  32, 32);
+				const material  = new THREE.MeshLambertMaterial( {color: col, opacity: 0.5, transparent: true, depthWrite: false} );
 				const vertice_r = new THREE.Mesh( geometry, material );
 				vertice_r.position.set(data_vertices[i1][0], data_vertices[i1][1], data_vertices[i1][2]);
-				var theta_z = Math.atan(data_tangents[i1][1] / data_tangents[i1][0])
-				var theta_x = Math.acos(data_tangents[i1][2])
-				//vertice_r.lookAt(new THREE.Vector3(0, 0, 0));
-				//vertice_r.rotation.set(rx,0,rz)
-				
-				var q = new THREE.Quaternion();
-				var axis1 = new THREE.Vector3(0,0,1);
-				var axis2 = new THREE.Vector3(data_tangents[i1][0], data_tangents[i1][1], data_tangents[i1][2]);
-				q.setFromUnitVectors ( axis1, axis2 ) ;
-				vertice_r.quaternion.multiply( q );
-
-
-				//vertice_r.quaternion.multiply( q );
 				spheres.add( vertice_r )
 
 				}

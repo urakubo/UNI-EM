@@ -47,7 +47,7 @@ def GetVolumes(surface_path, paint_path, skeleton_path):
 				print('Volume already exists: ', part_mesh_name)
 				continue
 			"""
-			closed_mesh, closed_mesh_for_vtk = GetVolume(surf_vertices, surf_faces, data['painted'])
+			closed_mesh, closed_mesh_for_vtk, area = GetVolume(surf_vertices, surf_faces, data['painted'])
 			if closed_mesh.volume is not None :
 				# print('Volume of ' + part_mesh_name + ' : ', volume)
 				id = os.path.basename(part_mesh_filename) 
@@ -55,8 +55,9 @@ def GetVolumes(surface_path, paint_path, skeleton_path):
 				id = int( id.split('-')[1] )
 				print('Surface ID          : ', whole_mesh_name_wo_ext)
 				print('Paint   ID          : ', id)
+				print('Painted area (um2)  : ', area)
 				print('Volume (um3)        : ', closed_mesh.volume)
-				text_vtk = "Surface ID : {0}\nPaint ID: {1}\nVolume (um3): {2:.4f}\n".format(whole_mesh_name_wo_ext, id, closed_mesh.volume)
+				text_vtk = "Surface ID : {0}\nPaint ID: {1}\nPainted area (um2): {2:.4f}\nVolume (um3): {3:.4f}\n".format(whole_mesh_name_wo_ext, id, area, closed_mesh.volume)
 				
 				if id in ids_volumes:
 					ids_volumes[id] += closed_mesh.volume
@@ -103,6 +104,7 @@ def GetVolume(v,f,data):
 			sub_face_id.append(f[i,:])
 
 	part_mesh = pymeshfix.MeshFix(v, np.array(sub_face_id))
+	area = part_mesh.mesh.area
 	part_mesh.repair()
 
 	closed_v = part_mesh.v # numpy np.float array
@@ -111,7 +113,7 @@ def GetVolume(v,f,data):
 	closed_mesh = trimesh.Trimesh(vertices=closed_v, faces=closed_f)
 	# print("Volume: ", closed_mesh.volume)
 	# Numpy-stl (mesh) にも同ルーチン有
-	return closed_mesh, part_mesh.mesh
+	return closed_mesh, part_mesh.mesh, area
 
 def GetRadiusLength2(closed_mesh, skel):
 
