@@ -738,7 +738,7 @@ class Canvas(object):
     """Restores state from the checkpoint at `path`."""
     self.log_info('Restoring inference checkpoint: %s', path)
     with gfile.Open(path, 'r') as f:
-      data = np.load(f)
+      data = np.load(f, allow_pickle=True)
 
       self.segmentation[:] = data['segmentation']
       self.seed[:] = data['seed']
