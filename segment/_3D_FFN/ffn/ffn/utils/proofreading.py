@@ -1,3 +1,18 @@
+# Copyright 2018 Google Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ==============================================================================
+
 """Utilities for small-scale proofreading in Neuroglancer."""
 
 from __future__ import absolute_import
@@ -198,7 +213,7 @@ class ObjectReview(Base):
 class ObjectClassification(Base):
   """Base class for object classification."""
 
-  def __init__(self, objects, key_to_class, num_to_prefetch=10):
+  def __init__(self, objects, key_to_class, num_to_prefetch=10, locations=None):
     """Constructor.
 
     Args:
@@ -209,6 +224,10 @@ class ObjectClassification(Base):
     super(ObjectClassification, self).__init__(num_to_prefetch=num_to_prefetch)
     self.todo = [[o] for o in objects]
     self.results = defaultdict(set)  # class -> ids
+
+    if locations is not None:
+      assert len(self.todo) == len(locations)
+      self.locations = list(locations)
 
     self.viewer.actions.add('mr-next-batch', lambda s: self.next_batch())
     self.viewer.actions.add('mr-prev-batch', lambda s: self.prev_batch())

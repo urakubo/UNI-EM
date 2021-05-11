@@ -27,7 +27,7 @@ import weakref
 
 import numpy as np
 from scipy import ndimage
-#import skimage
+import skimage
 import skimage.feature
 
 from . import storage
