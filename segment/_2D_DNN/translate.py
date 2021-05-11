@@ -30,7 +30,8 @@ if ('1.14' in tf.__version__) | ('1.15' in tf.__version__):
 
 # os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
 
-gpus = tf.config.experimental.list_physical_devices('GPU')
+#gpus = tf.config.experimental.list_physical_devices('GPU')
+gpus = 0
 if gpus:
   try:
     # Currently, memory growth needs to be the same across GPUs
