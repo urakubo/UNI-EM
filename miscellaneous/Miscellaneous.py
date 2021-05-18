@@ -56,10 +56,10 @@ def LockFolder(u_info, dir):
         try:
             tmp_file4lock[ofile] = open(ofile, 'r+')
         except:
-            print("Cannot lock file.")
+            print("Cannot lock file, but continue..")
             for closefile in tmp_file4lock.values():
                 closefile.close()
-            return False
+            return True
     u_info.open_files4lock[dir] = tmp_file4lock
 
 
@@ -74,10 +74,10 @@ def _LockFolder(u_info, dir):
                 try:
                     tmp_file4lock[ofile] = open(ofile, 'r+')
                 except:
-                    print("Cannot lock file.")
+                    print("Cannot lock file, but continue..")
                     for closefile in tmp_file4lock.values():
                         closefile.close()
-                    return False
+                    return True
     u_info.open_files4lock[dir] = tmp_file4lock
 
 
