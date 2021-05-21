@@ -2,6 +2,7 @@
 #warnings.filterwarnings('ignore', category=DeprecationWarning)
 #warnings.filterwarnings('ignore', category=FutureWarning)
 
+# Only for tensorboard 1.14
 
 import sys
 
