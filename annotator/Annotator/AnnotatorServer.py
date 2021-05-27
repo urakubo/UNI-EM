@@ -8,7 +8,8 @@ import asyncio
 import numpy as np
 import json
 
-from marching_cubes import march
+from skimage import measure
+# from marching_cubes import march
 from stl import mesh
 
 from os import path, pardir
@@ -42,15 +43,18 @@ class AnnotatorWebSocket(tornado.websocket.WebSocketHandler):
   def GenerateStl(self, id):
     mask = (self.small_ids == id)
     try:
-        vertices, normals, faces = march(mask, 2)
+        # vertices, normals, faces = march(mask, 2)
+        vertices, faces, normals, values = \
+        	measure.marching_cubes_lewiner(mask, level=0.5,\
+        	spacing=(1,1,1),gradient_direction='ascent')
     except:
         print('Mesh was not generated.')
         return False
     print('Generated face number: ', faces.shape)
     our_mesh = mesh.Mesh(np.zeros(faces.shape[0], dtype=mesh.Mesh.dtype))
     for i, f in enumerate(faces):
-        for j in range(3):
-            our_mesh.vectors[i][j] = vertices[f[j], :]
+        for j in [0,1,2]:
+            our_mesh.vectors[i][j] = vertices[f[j], [2,0,1]]
     ###
     our_mesh.save(os.path.join(self.data_annotator_path, 'i{0}.stl'.format(id) ))
     return True
