@@ -90,21 +90,13 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 
 	- pip install -r requirements-[os]-[cpu or gpu].txt
 
-5. **Copy [UNI-EM]\marching_cubes\marching_cubes`*` and paste it to {$INSTALL_PYTHON}\Lib\site-packages.**
-
-	- **Execute the Python command "import site; site.getsitepackages()" to find {$INSTALL_PYTHON}.**
-	
-	
-	The marching cube program is obtained from the ilastik: https://github.com/ilastik/marching_cubes
-
-
-6. Download one of sample EM/segmentation dojo folders from the following link, and unzip it:
+5. Download one of sample EM/segmentation dojo folders from the following link, and unzip it:
    	- https://www.dropbox.com/s/pxds28wdckmnpe8/ac3x75.zip?dl=0
 	- https://www.dropbox.com/s/6nvu8o6she6rx9v/ISBI_Dojo.zip?dl=0
 
-7. Execute "python main.py" in the [UNI-EM] folder. The control panel will appear.
+6. Execute "python main.py" in the [UNI-EM] folder. The control panel will appear.
 
-8.	Select Dojo → Open Dojo Folder from the dropdown menu, and specify the sample EM/segmentation dojo folder. The proofreading software Dojo will be launched.
+7.	Select Dojo → Open Dojo Folder from the dropdown menu, and specify the sample EM/segmentation dojo folder. The proofreading software Dojo will be launched.
 
 ## Authors
 
