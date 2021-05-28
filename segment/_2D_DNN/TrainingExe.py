@@ -162,7 +162,7 @@ class TrainingExe():
         # rm tmpdir
         if os.path.exists(tmpdir) :
         	shutil.rmtree(tmpdir)
-        ## m.LockFolder(parent.u_info,  params['Model Folder (Empty)'])  Tentatively commented out.
+        ## m.LockFolder(parent.u_info,  params['Model Folder (Empty)']) ## Tentatively commented out.
         parent.parent.ExecuteCloseFileFolder(params['Model Folder (Empty)'])
         parent.parent.OpenFolder(params['Model Folder (Empty)'])
         print('')
