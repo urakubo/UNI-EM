@@ -78,7 +78,7 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 	- git clone https://github.com/urakubo/UNI-EM.git
 
 
-4. requirements-[os]-[cpu or gpu].txtを参考、Pythonに必要モジュール「Tensorflow-gpu 1.12, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl」を pip install -r requirements-[os]-[cpu or gpu].txt などのコマンドを用いてインストールしてください。
+4. requirements-[os]-[cpu or gpu].txtを参考に、Pythonに必要モジュール「Tensorflow-gpu 1.12, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl」を pip install -r requirements-[os]-[cpu or gpu].txt などのコマンドを用いてインストールしてください。
 
 5. コマンドププロンプトにて[UNI-EM]フォルダへ移動して、 python main.py と実行してコントロールパネルを起動してください。
 6. 公開サンプルデータkasthuri15をダウンロードして適当なフォルダに展開してください。
