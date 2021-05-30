@@ -28,18 +28,6 @@ class FileManager():
     def GenerateDojoFolder(self):
         tmp = DialogGenerateDojoFolder(self, self.u_info)
 
-    def OpenFolder(self):
-        initdir = os.path.normpath( path.join(main_dir, "..") )
-        open_folder_name = QFileDialog.getExistingDirectory(self, "Select Dojo/Image folder", initdir)
-        if len(open_folder_name) == 0:
-            print('No folder was selected.')
-            return
-        open_folder_name = open_folder_name.replace('/', os.sep)
-        flag = self.OpenFolder(open_folder_name)
-        if flag == False:
-            return False
-
-
     def OpenRecentFileFolder(self):
         action = self.sender()
         if not action:
@@ -132,6 +120,7 @@ class FileManager():
 #    print("Cannot open file.")
 #    return  False
 ##
+
 
     def OpenDialogOpenFolder(self):
         initdir = os.path.normpath( path.join(main_dir, "..") )
