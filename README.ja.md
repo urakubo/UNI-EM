@@ -47,6 +47,11 @@ OS：　Microsoft Windows 10 (64 bit) または Linux (Ubuntu 18.04にて動作�
 
 - https://developer.nvidia.com/cuda-gpus
 
+注意：現在のUNI-EMはNVIDIA社の最新GPU (RTX30X0, A100など)に対応いたしません。UNI-EMがTensorflow1.Xに基づいて開発されている一方、最新GPUはTensorflow2.Xに対応しますが、Tensorflow1.Xに対応しないためです。詳細は、下記サイトをご参照ください。
+
+- https://www.pugetsystems.com/labs/hpc/How-To-Install-TensorFlow-1-15-for-NVIDIA-RTX30-GPUs-without-docker-or-CUDA-install-2005/
+- https://qiita.com/tanreinama/items/6fc3c71f21d64e61e006
+
 ## インストール方法：
 Pythonのインストールの必要のないPyinstaller版とPythonソースコードの両方を提供します。
 
