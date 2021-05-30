@@ -56,17 +56,16 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 ### Pyinstaller version (Microsoft Windows 10 only)
 1.	Download one of the following two versions, and unzip it:
 
-- Version 0.88 (2020/11/26):
-	- [CPU version (Ver0.88; 363 MB)](https://bit.ly/3nSmTVu)
-	- [GPU version (Ver0.88: 1,068 MB)](https://bit.ly/39cwi62)
+- Version 0.90.4 (2021/05/31):
+	- [CPU version (Ver0.90.4; 363MB)](https://bit.ly/3uwKHkB)
+	- [GPU version (Ver0.90.4: 1,068 MB)](https://bit.ly/2QWfFFb)
 
 - Release summary:
 	- Bug fix.
-		- 2D CNNs inference process is improved for large-size images.
-		- 2D CNNs handle multiple images in the process of training.
-		- Folder names with spaces are now accepted.
-		- The folders of "Tensorflow model" and "FFNs" are managed by the folder manager.
-		- Tensorflow/Cuda versions are updated (1.12/9.0 -> 1.14/10.0). Note if you find it unexecutable/unstable, please use the Python version below!
+		- Bug fix version of FFNs was used.
+		- Tentative solution in “Cannot lock file” error in the inference of 2D CNN.
+		- Safe launch of Tensorboard.
+		- Abolish the use of mcube (caused an occasional error in launching).
 
 - Previous version (2020/2/18):
 	- [CPU version (Ver0.86; 293 MB)](http://bit.ly/2wrxDF3)
