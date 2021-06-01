@@ -67,11 +67,6 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 		- Safe launch of Tensorboard.
 		- Abolish the use of mcube (caused an occasional error in launching).
 
-- Previous version (2020/2/18):
-	- [CPU version (Ver0.86; 293 MB)](http://bit.ly/2wrxDF3)
-	- [GPU version (Ver0.86: 717 MB)](http://bit.ly/323xXp5)
-
-
 2.	Download one of sample EM/segmentation dojo folders from the following link, and unzip it:
    	- https://www.dropbox.com/s/pxds28wdckmnpe8/ac3x75.zip?dl=0
 	- https://www.dropbox.com/s/6nvu8o6she6rx9v/ISBI_Dojo.zip?dl=0
