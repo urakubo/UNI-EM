@@ -114,13 +114,14 @@ class Params:
 
             _2D_DNN_dir = os.path.join(main_dir, 'segment', '_2D_DNN')
             _3D_FFN_dir = os.path.join(main_dir, 'segment', '_3D_FFN', 'ffn')
-            self.exec_translate 	= ['python' , os.path.join(_2D_DNN_dir, 'translate.py')]
-            self.exec_run_inference = ['python' , os.path.join(_3D_FFN_dir, 'run_inference_win.py')]
-            self.exec_compute_partition = ['python' , os.path.join(_3D_FFN_dir, 'compute_partitions.py')]
-            self.exec_build_coordinates = ['python' , os.path.join(_3D_FFN_dir, 'build_coordinates.py')]
-            self.exec_train = ['python', os.path.join(_3D_FFN_dir, 'train.py')]
+            python_exe = sys.executable # 'python', 'python3', etc
+            self.exec_translate 	= [python_exe , os.path.join(_2D_DNN_dir, 'translate.py')]
+            self.exec_run_inference = [python_exe , os.path.join(_3D_FFN_dir, 'run_inference_win.py')]
+            self.exec_compute_partition = [python_exe , os.path.join(_3D_FFN_dir, 'compute_partitions.py')]
+            self.exec_build_coordinates = [python_exe , os.path.join(_3D_FFN_dir, 'build_coordinates.py')]
+            self.exec_train = [python_exe, os.path.join(_3D_FFN_dir, 'train.py')]
             self.exec_tensorboard = ['tensorboard']
-            self.exec_template = ['python', os.path.join(main_dir,  'plugins', 'Template', 'run_example.py')]
+            self.exec_template = [python_exe, os.path.join(main_dir,  'plugins', 'Template', 'run_example.py')]
 
 
 
