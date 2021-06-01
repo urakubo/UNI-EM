@@ -58,7 +58,6 @@ class TrainingExe():
         sg = m.imread(seg_files[0], cv2.IMREAD_UNCHANGED)
         print('')
         print('Number of Segmentation images : ', len(seg_files))
-        print('Segmentation color type       : ', seg_files[0])
         print('Segmentation image dimensions : ', sg.shape)
         print('Segmentation filetype         : ', sg.dtype)
         print('')
