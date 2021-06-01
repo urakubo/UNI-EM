@@ -7,7 +7,7 @@ import sys, os, time, errno
 import threading
 import sqlite3
 import json
-from marching_cubes import march
+# from marching_cubes import march
 from stl import mesh
 from os import path, pardir
 
