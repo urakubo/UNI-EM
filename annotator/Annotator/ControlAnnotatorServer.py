@@ -8,7 +8,7 @@ import threading
 import sqlite3
 import json
 # from marching_cubes import march
-from stl import mesh
+# from stl import mesh
 from os import path, pardir
 
 ##
