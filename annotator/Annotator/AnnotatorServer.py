@@ -43,10 +43,10 @@ class AnnotatorWebSocket(tornado.websocket.WebSocketHandler):
   def GenerateStl(self, id):
     mask = (self.small_ids == id)
     try:
-        # vertices, normals, faces = march(mask, 2)
-        vertices, faces, normals, values = \
-        	measure.marching_cubes_lewiner(mask, level=0.5,\
-        	spacing=(1,1,1),gradient_direction='ascent')
+        if 'marching_cubes' in dir(measure):
+            vertices, faces, normals, values = measure.marching_cubes(mask, level=0.5)
+        elif 'marching_cubes_lewiner' in dir(measure):
+            vertices, faces, normals, values = measure.marching_cubes_lewiner(mask, level=0.5)
     except:
         print('Mesh was not generated.')
         return False
