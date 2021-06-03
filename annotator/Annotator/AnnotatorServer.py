@@ -92,9 +92,10 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
   def GenerateSurface(self, id, smooth_method, num_iter):
     mask = (self.ids_volume == id)
     try:
-        vertices, faces, normals, values = \
-        	measure.marching_cubes_lewiner(mask, level=0.5,\
-        	spacing=tuple(self.pitch),gradient_direction='ascent')
+        if 'marching_cubes' in dir(measure):
+            vertices, faces, normals, values = measure.marching_cubes(mask, level=0.5, spacing=tuple(self.pitch),gradient_direction='ascent')
+        elif 'marching_cubes_lewiner' in dir(measure):
+            vertices, faces, normals, values = measure.marching_cubes_lewiner(mask, level=0.5, spacing=tuple(self.pitch),gradient_direction='ascent')
         vertices = vertices - self.pitch
         # Parameters: spacing : length-3 tuple of floats
         # Voxel spacing in spatial dimensions corresponding to numpy array
