@@ -77,8 +77,10 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 
 ### Python version 
 1. Install Python 3.5-3.7 in a Microsoft Windows PC (64 bit) or Linux PC (Ubuntu 18.04 confirmed).
-2. Install cuda 9.0 and cuDNN 7.2.1 for Tensorflow 1.12.4 (latest combination on 2018/12/20) if your PC has a NVIDIA-GPU.
-	- https://developer.nvidia.com/compute/machine-learning/cudnn/secure/v7.2.1/prod/9.0_20180806/cudnn-9.0-windows10-x64-v7.2.1.38
+2. Install cuda 10.0 and cuDNN 7.4 for Tensorflow 1.14 if your PC has a NVIDIA-GPU.
+
+	- https://www.tensorflow.org/install/source
+	- https://www.tensorflow.org/install/source_windows
 3. Download the source codes from the github site:
 
 	- git clone https://github.com/urakubo/UNI-EM.git
