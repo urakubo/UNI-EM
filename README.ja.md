@@ -72,7 +72,7 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 
 ### Python版：
 1. Windows10またはLinux (Ubuntu18.04 にて動作確認済)にて Python3.5-3. をインストールしてください。
-2. Tensorflow 1.12 のためにGPUを利用する場合はcuda 9.0 および cuDNN 7.4.2 (or later)をインスト―ルしてください **[参考1]** 。
+2. Tensorflow 1.12 のためにGPUを利用する場合はcuda 10.0 および cuDNN 7.4 をインスト―ルしてください **[参考1]** 。
 3. 次の命令を実行してGithubより必要プログラムをダウンロードしてください。
 
 	- git clone https://github.com/urakubo/UNI-EM.git
@@ -90,10 +90,10 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 ## お願い：
 日本国内の実験研究者、情報学研究者さまのフィードバックをお待ちします（hurakubo あっと gmail.com; **[参考3]** ）。私一人で開発を続けることは困難なので、共同開発者も募集いたします。本アプリは、自然画像のセグメンテーション等に利用することも可能と思われますので、多様なコメントをお待ちしております。本アプリの開発には、革新脳、新学術、基盤Cのご支援をいただいております。
 
-- (参考1) cuda 9.0, cuDNN v7のインストール方法。
-	- <https://qiita.com/spiderx_jp/items/8d863b087507cd4a56b0>
-	- <https://qiita.com/kattoyoshi/items/494238793824f25fa489>
-	- <https://haitenaipants.hatenablog.com/entry/2018/07/25/002118>
+- (参考1) cuda 10.0, cuDNN v7.4のインストール方法。
+	- <https://www.kkaneko.jp/tools/win/tensorflow114.html>
+	- <https://www.tensorflow.org/install/source_windows?hl=ja>
+	- <https://www.tensorflow.org/install/source?hl=ja>
 
 - (参考2) さらに詳細なマニュアル設定を行ってtrainingを実行したい場合は、Python スクリプトを作成したのち、コントロールパネル上端のプルダウンメニューよりScript → Run Scriptを選択して実行してください（実装中です。書き方も記述します）。およびTorsten Bullmann博士のGithubサイトを参照してください。
 	- <https://github.com/tbullmann/imagetranslation-tensorflow>
