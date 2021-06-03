@@ -72,7 +72,7 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 
 ### Python版：
 1. Windows10またはLinux (Ubuntu18.04 にて動作確認済)にて Python3.5-3. をインストールしてください。
-2. Tensorflow 1.12 のためにGPUを利用する場合はcuda 10.0 および cuDNN 7.4 をインスト―ルしてください **[参考1]** 。
+2. Tensorflow 1.14 のためにGPUを利用する場合はcuda 10.0 および cuDNN 7.4 をインスト―ルしてください **[参考1]** 。
 3. 次の命令を実行してGithubより必要プログラムをダウンロードしてください。
 
 	- git clone https://github.com/urakubo/UNI-EM.git
