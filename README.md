@@ -81,7 +81,8 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 
 	- https://www.tensorflow.org/install/source
 	- https://www.tensorflow.org/install/source_windows
-3. Download the source codes from the github site:
+
+3. Download source code from the github site:
 
 	- git clone https://github.com/urakubo/UNI-EM.git
 
