@@ -49,6 +49,8 @@ Recommendation: High-performance NVIDIA graphics card whose GPU has over 3.5 com
 Caution: currently, UNI-EM cannot run on the newest NVIDIA GPUs, such as A100 and RTX30X0. This is because UNI-EM is based on tensorflow1.X, while the newest GPUs are compatible with tensorflow2.X, but not tensorflow1.X. Please refer to the following website.
 
 - https://www.pugetsystems.com/labs/hpc/How-To-Install-TensorFlow-1-15-for-NVIDIA-RTX30-GPUs-without-docker-or-CUDA-install-2005/
+- https://developer.nvidia.com/blog/accelerating-tensorflow-on-a100-gpus/
+- https://github.com/NVIDIA/tensorflow
 
 ## Installation
 We provide standalone versions (pyinstaller version) and Python source codes.
