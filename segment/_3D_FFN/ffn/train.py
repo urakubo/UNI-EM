@@ -49,7 +49,16 @@ import six
 
 from scipy.special import expit
 from scipy.special import logit
-import tensorflow as tf
+
+## HU
+import pkg_resources
+ver = pkg_resources.get_distribution('tensorflow').version
+if ('1.15' in ver) |( '2.' in ver ):
+  import tensorflow.compat.v1 as tf
+  tf.disable_v2_behavior()
+else:
+  import tensorflow as tf
+##
 
 from absl import app
 from absl import flags
@@ -65,16 +74,6 @@ from ffn.training import augmentation
 #from ffn.training import optimizer
 # pylint: enable=unused-import
 
-
-#HU
-if tf.__version__ == '1.12.0':
-    from tensorflow.python.util import deprecation
-    deprecation._PRINT_DEPRECATION_WARNINGS = False
-
-if ('1.14' in tf.__version__) | ('1.15' in tf.__version__):
-    tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
-tf.logging.set_verbosity(tf.logging.INFO)
-#
 
 
 

@@ -3,13 +3,22 @@ from __future__ import division
 from __future__ import print_function
 
 #HU{
-import warnings
-warnings.filterwarnings('ignore', category=DeprecationWarning)
-warnings.filterwarnings('ignore', category=FutureWarning)
+#import warnings
+#warnings.filterwarnings('ignore', category=DeprecationWarning)
+#warnings.filterwarnings('ignore', category=FutureWarning)
 #}HU
 
-import tensorflow as tf
-import tensorflow.contrib as contrib
+
+## HU
+import pkg_resources
+ver = pkg_resources.get_distribution('tensorflow').version
+if ('1.15' in ver) |( '2.' in ver ):
+  import tensorflow.compat.v1 as tf
+  tf.disable_v2_behavior()
+else:
+  import tensorflow as tf
+##
+
 import numpy as np
 import argparse
 import os
@@ -21,15 +30,6 @@ import math
 import time
 
 #HU{
-if tf.__version__ == '1.12.0':
-    from tensorflow.python.util import deprecation
-    deprecation._PRINT_DEPRECATION_WARNINGS = False
-
-if ('1.14' in tf.__version__) | ('1.15' in tf.__version__):
-    tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
-
-# os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
-
 gpus = tf.config.experimental.list_physical_devices('GPU')
 if gpus:
   try:
@@ -612,7 +612,7 @@ def create_model(inputs, targets, network=a.network, target_loss=a.loss):
     ema = tf.train.ExponentialMovingAverage(decay=0.99)
     update_losses = ema.apply([ loss])
 
-    global_step = tf.contrib.framework.get_or_create_global_step()
+    global_step = tf.train.get_or_create_global_step()
     incr_global_step = tf.assign(global_step, global_step+1)
 
     return Model(

@@ -31,7 +31,7 @@ class FFNTraining():
         record_file_path    = os.path.join( params['FFNs Folder'] , "tf_record_file"    )
 
         with h5py.File( training_image_file , 'r') as f:
-            image = f['raw'].value
+            image = f['raw'][()]
             image_mean = np.mean(image).astype(np.int16)
             image_std  = np.std(image).astype(np.int16)
         print('Training image mean: ', image_mean)

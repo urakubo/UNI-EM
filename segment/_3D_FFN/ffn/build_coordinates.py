@@ -16,7 +16,18 @@ from absl import logging
 
 import h5py
 import numpy as np
-import tensorflow as tf
+
+
+## HU
+import pkg_resources
+ver = pkg_resources.get_distribution('tensorflow').version
+if ('1.15' in ver) |( '2.' in ver ):
+  import tensorflow.compat.v1 as tf
+  tf.disable_v2_behavior()
+else:
+  import tensorflow as tf
+##
+
 
 FLAGS = flags.FLAGS
 
@@ -86,9 +97,9 @@ def main(argv):
   np.random.shuffle(indices)
 
   logging.info('Saving coordinates.')
-  record_options = tf.python_io.TFRecordOptions(
-      tf.python_io.TFRecordCompressionType.GZIP)
-  with tf.python_io.TFRecordWriter(FLAGS.coordinate_output,
+  record_options = tf.io.TFRecordOptions(
+      tf.io.TFRecordCompressionType.GZIP)
+  with tf.io.TFRecordWriter(FLAGS.coordinate_output,
                                    options=record_options) as writer:
     for i, coord_idx in indices:
       z, y, x = np.unravel_index(coord_idx, vol_shapes[i])
