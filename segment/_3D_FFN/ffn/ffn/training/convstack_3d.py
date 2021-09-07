@@ -56,12 +56,13 @@ main_dir = path.abspath(path.dirname(sys.argv[0]))
 current_dir = path.join(main_dir, "ffn","training")
 sys.path.append(current_dir)
 import model
-# tf.logging.set_verbosity(tf.logging.INFO)
 
+
+"""
 # Note: this model was originally trained with conv3d layers initialized with
 # TruncatedNormalInitializedVariable with stddev = 0.01.
 def _predict_object_mask_org(net, depth=9):
-  """Computes single-object mask prediction."""
+ 
   conv = tf.contrib.layers.conv3d
   with tf.contrib.framework.arg_scope([conv], num_outputs=32,
                                       kernel_size=(3, 3, 3),
@@ -83,14 +84,8 @@ def _predict_object_mask_org(net, depth=9):
   return logits
 
 
-
-# Note: this model was originally trained with conv3d layers initialized with
-# TruncatedNormalInitializedVariable with stddev = 0.01.
-
 # Modified by HU
-
 def _predict_object_mask_ch1(net, depth=9):
-  """Computes single-object mask prediction."""
 
   conv = tf.contrib.layers.conv3d
 
@@ -121,44 +116,48 @@ def _predict_object_mask_ch1(net, depth=9):
   logits = conv(net, 1, (1, 1, 1), activation_fn=None, scope='conv_lom')
 
   return logits
+"""
 
 
 
 # Note: this model was originally trained with conv3d layers initialized with
 # TruncatedNormalInitializedVariable with stddev = 0.01.
-
-# Modified by HU
-
+## Modified by HU
 def _predict_object_mask(net, depth=9):
   """Computes single-object mask prediction."""
 
   conv = tf.layers.conv3d
 
-  net = conv(net, scope_name='conv0_a',
+  net = conv(net,
                                       filters=32,
                                       kernel_size=(3, 3, 3),
-                                      padding='same')
-  net = conv(net, scope_name='conv0_b', activation=None,
+                                      padding='same',
+                                      scope_name='conv0_a')
+  net = conv(net,
                                       filters=32,
                                       kernel_size=(3, 3, 3),
-                                      padding='same')
+                                      padding='same',
+                                      activation=None,
+                                      scope_name='conv0_b')
 
   for i in range(1, depth):
     with tf.name_scope('residual%d' % i):
       in_net = net
       net = tf.nn.relu(net)
-      net = conv(net, scope_name='conv%d_a' % i,
+      net = conv(net,
                                       filters=32,
                                       kernel_size=(3, 3, 3),
-                                      padding='same')
-      net = conv(net, scope_name='conv%d_b' % i, activation=None,
+                                      padding='same',
+                                      scope_name='conv%d_a' % i)
+      net = conv(net, activation=None,
                                       filters=32,
                                       kernel_size=(3, 3, 3),
-                                      padding='same')
+                                      padding='same',
+                                      scope_name='conv%d_b' % i)
       net += in_net
 
   net = tf.nn.relu(net)
-  logits = conv(net, 1, (1, 1, 1), activation=None, scope_name='conv_lom')
+  logits = conv(net, filters=1, kernel_size=(1, 1, 1), activation=None, scope_name='conv_lom')
 
   return logits
 
