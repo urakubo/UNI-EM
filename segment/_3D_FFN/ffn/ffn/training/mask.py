@@ -18,7 +18,17 @@ from __future__ import division
 from __future__ import print_function
 
 import numpy as np
-import tensorflow as tf
+
+# import tensorflow as tf
+## HU
+import pkg_resources
+ver = pkg_resources.get_distribution('tensorflow').version
+if ('1.15' in ver) |( '2.' in ver ):
+  import tensorflow.compat.v1 as tf
+  tf.disable_v2_behavior()
+else:
+  import tensorflow as tf
+##
 
 
 # TODO(mjanusz): Consider integrating this with the numpy-only crop_and_pad,

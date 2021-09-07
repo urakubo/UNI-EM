@@ -34,7 +34,20 @@ from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb
 from google.protobuf import text_format
 from absl import app
 from absl import flags
-from tensorflow import gfile
+
+#from tensorflow import gfile
+## HU
+import pkg_resources
+ver = pkg_resources.get_distribution('tensorflow').version
+if ('1.15' in ver) |( '2.' in ver ):
+  from tensorflow.compat.v1 import gfile
+  import tensorflow.compat.v1 as tf
+  tf.disable_v2_behavior()
+else:
+  from tensorflow import gfile
+##
+
+
 
 from ffn.utils import bounding_box_pb2
 from ffn.inference import inference

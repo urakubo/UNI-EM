@@ -20,11 +20,21 @@ from __future__ import print_function
 
 
 import tensorflow as tf
+""" HU
+import pkg_resources
+ver = pkg_resources.get_distribution('tensorflow').version
+if ('1.15' in ver) |( '2.' in ver ):
+  import tensorflow.compat.v1 as tf
+  tf.disable_v2_behavior()
+else:
+  import tensorflow as tf
+"""
 
 
 import os
 os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
-tf.logging.set_verbosity(tf.logging.INFO)
+#tf.logging.set_verbosity(tf.logging.INFO)
+#
 #gpus = tf.config.experimental.list_physical_devices('GPU')
 #if gpus:
 #  try:
@@ -46,11 +56,11 @@ main_dir = path.abspath(path.dirname(sys.argv[0]))
 current_dir = path.join(main_dir, "ffn","training")
 sys.path.append(current_dir)
 import model
-tf.logging.set_verbosity(tf.logging.INFO)
+# tf.logging.set_verbosity(tf.logging.INFO)
 
 # Note: this model was originally trained with conv3d layers initialized with
 # TruncatedNormalInitializedVariable with stddev = 0.01.
-def _predict_object_mask(net, depth=9):
+def _predict_object_mask_org(net, depth=9):
   """Computes single-object mask prediction."""
   conv = tf.contrib.layers.conv3d
   with tf.contrib.framework.arg_scope([conv], num_outputs=32,
@@ -71,6 +81,88 @@ def _predict_object_mask(net, depth=9):
   logits = conv(net, 1, (1, 1, 1), activation_fn=None, scope='conv_lom')
 
   return logits
+
+
+
+# Note: this model was originally trained with conv3d layers initialized with
+# TruncatedNormalInitializedVariable with stddev = 0.01.
+
+# Modified by HU
+
+def _predict_object_mask_ch1(net, depth=9):
+  """Computes single-object mask prediction."""
+
+  conv = tf.contrib.layers.conv3d
+
+  net = conv(net, scope='conv0_a',
+                                      num_outputs=32,
+                                      kernel_size=(3, 3, 3),
+                                      padding='SAME')
+  net = conv(net, scope='conv0_b', activation_fn=None,
+                                      num_outputs=32,
+                                      kernel_size=(3, 3, 3),
+                                      padding='SAME')
+
+  for i in range(1, depth):
+    with tf.name_scope('residual%d' % i):
+      in_net = net
+      net = tf.nn.relu(net)
+      net = conv(net, scope='conv%d_a' % i,
+                                      num_outputs=32,
+                                      kernel_size=(3, 3, 3),
+                                      padding='SAME')
+      net = conv(net, scope='conv%d_b' % i, activation_fn=None,
+                                      num_outputs=32,
+                                      kernel_size=(3, 3, 3),
+                                      padding='SAME')
+      net += in_net
+
+  net = tf.nn.relu(net)
+  logits = conv(net, 1, (1, 1, 1), activation_fn=None, scope='conv_lom')
+
+  return logits
+
+
+
+# Note: this model was originally trained with conv3d layers initialized with
+# TruncatedNormalInitializedVariable with stddev = 0.01.
+
+# Modified by HU
+
+def _predict_object_mask(net, depth=9):
+  """Computes single-object mask prediction."""
+
+  conv = tf.layers.conv3d
+
+  net = conv(net, scope_name='conv0_a',
+                                      filters=32,
+                                      kernel_size=(3, 3, 3),
+                                      padding='same')
+  net = conv(net, scope_name='conv0_b', activation=None,
+                                      filters=32,
+                                      kernel_size=(3, 3, 3),
+                                      padding='same')
+
+  for i in range(1, depth):
+    with tf.name_scope('residual%d' % i):
+      in_net = net
+      net = tf.nn.relu(net)
+      net = conv(net, scope_name='conv%d_a' % i,
+                                      filters=32,
+                                      kernel_size=(3, 3, 3),
+                                      padding='same')
+      net = conv(net, scope_name='conv%d_b' % i, activation=None,
+                                      filters=32,
+                                      kernel_size=(3, 3, 3),
+                                      padding='same')
+      net += in_net
+
+  net = tf.nn.relu(net)
+  logits = conv(net, 1, (1, 1, 1), activation=None, scope_name='conv_lom')
+
+  return logits
+
+# End: modified by HU
 
 
 class ConvStack3DFFNModel(model.FFNModel):
