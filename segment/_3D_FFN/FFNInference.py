@@ -57,7 +57,7 @@ class FFNInference():
         removal_file2 = os.path.join( params['FFNs Folder'], '0','0','seg-0_0_0.prob')
 
         if os.path.isfile(removal_file1) or os.path.isfile(removal_file2) :
-            question = "seg-0_0_0 files were found in the FFNs Folder. Remove them?"
+            question = "Previous result of inference has been found in the FFNs Folder. Remove them?"
             reply = self.query_yes_no(question, default="yes")
 
             if reply == True:
@@ -65,7 +65,7 @@ class FFNInference():
                     os.remove(removal_file1)
                 with contextlib.suppress(FileNotFoundError):
                     os.remove(removal_file2)
-                print('seg-0_0_0 files were removed.')
+                print('Inference files were removed.')
             else:
                 print('FFN inference was canceled.')
                 m.LockFolder(parent.u_info,  params['FFNs Folder'])

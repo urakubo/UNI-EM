@@ -20,7 +20,7 @@ from __future__ import print_function
 
 
 import tensorflow as tf
-""" HU
+""
 import pkg_resources
 ver = pkg_resources.get_distribution('tensorflow').version
 if ('1.15' in ver) |( '2.' in ver ):
@@ -28,12 +28,12 @@ if ('1.15' in ver) |( '2.' in ver ):
   tf.disable_v2_behavior()
 else:
   import tensorflow as tf
-"""
+""
 
 
 import os
 os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
-#tf.logging.set_verbosity(tf.logging.INFO)
+tf.logging.set_verbosity(tf.logging.INFO)
 #
 #gpus = tf.config.experimental.list_physical_devices('GPU')
 #if gpus:
@@ -116,52 +116,100 @@ def _predict_object_mask_ch1(net, depth=9):
   logits = conv(net, 1, (1, 1, 1), activation_fn=None, scope='conv_lom')
 
   return logits
-"""
 
-
-
-# Note: this model was originally trained with conv3d layers initialized with
-# TruncatedNormalInitializedVariable with stddev = 0.01.
-## Modified by HU
 def _predict_object_mask(net, depth=9):
-  """Computes single-object mask prediction."""
 
-  conv = tf.layers.conv3d
+  conv = tf.layers.Conv3D
 
-  net = conv(net,
-                                      filters=32,
-                                      kernel_size=(3, 3, 3),
-                                      padding='same',
-                                      scope_name='conv0_a')
-  net = conv(net,
-                                      filters=32,
-                                      kernel_size=(3, 3, 3),
-                                      padding='same',
-                                      activation=None,
-                                      scope_name='conv0_b')
+  connector1 = conv(filters=32, kernel_size=(3, 3, 3), padding='same')
+  net   = connector1(net, activation=tf.nn.relu, scope='conv0_a')
+  net   = connector1(net, activation=None, scope='conv0_b')
 
   for i in range(1, depth):
     with tf.name_scope('residual%d' % i):
       in_net = net
-      net = tf.nn.relu(net)
-      net = conv(net,
-                                      filters=32,
-                                      kernel_size=(3, 3, 3),
-                                      padding='same',
-                                      scope_name='conv%d_a' % i)
-      net = conv(net, activation=None,
-                                      filters=32,
-                                      kernel_size=(3, 3, 3),
-                                      padding='same',
-                                      scope_name='conv%d_b' % i)
-      net += in_net
+      net   = tf.nn.relu(net)
+      net   = connector1(net, activation=tf.nn.relu, scope='conv%d_a' % i)
+      net   = connector1(net, activation=None, scope='conv%d_b' % i)
+      net  += in_net
 
-  net = tf.nn.relu(net)
-  logits = conv(net, filters=1, kernel_size=(1, 1, 1), activation=None, scope_name='conv_lom')
+  net    = tf.nn.relu(net)
+  connector2  = conv(filters=1, kernel_size=(1, 1, 1))
+  logits = connector2(net, activation=None, scope='conv_lom')
 
   return logits
 
-# End: modified by HU
+
+def _predict_object_mask(net, depth=9):
+
+  tf.disable_eager_execution()
+  conv = tf.layers.conv3d
+  with tf.variable_scope('conv0_a'):
+    net   = conv(net, filters=32, kernel_size=(3, 3, 3), padding='same', activation=tf.nn.relu)
+  with tf.variable_scope('conv0_b'):
+    net   = conv(net, filters=32, kernel_size=(3, 3, 3), padding='same', activation=None)
+
+  for i in range(1, depth):
+    with tf.name_scope('residual%d' % i):
+      in_net = net
+      net   = tf.nn.relu(net)
+      with tf.variable_scope('conv%d_a' % i):
+      	net   = conv(net, filters=32, kernel_size=(3, 3, 3), padding='same', activation=tf.nn.relu)
+      with tf.variable_scope('conv%d_b' % i):
+      	net   = conv(net, filters=32, kernel_size=(3, 3, 3), padding='same', activation=None)
+      net  += in_net
+
+  net    = tf.nn.relu(net)
+  with tf.variable_scope('conv_lom'):
+    logits = conv(net, filters=1, kernel_size=(1, 1, 1), activation=None)
+
+  return logits
+
+
+def _predict_object_mask(net, depth=9):
+
+  conv = tf.layers.conv3d
+  net   = conv(net, filters=32, kernel_size=(3, 3, 3), padding='same', activation=tf.nn.relu, name='conv0_a')
+  net   = conv(net, filters=32, kernel_size=(3, 3, 3), padding='same', activation=None, name='conv0_b')
+
+  for i in range(1, depth):
+    with tf.name_scope('residual%d' % i):
+      in_net = net
+      net   = tf.nn.relu(net)
+      net   = conv(net, filters=32, kernel_size=(3, 3, 3), padding='same', activation=tf.nn.relu, name='conv%d_a' % i)
+      net   = conv(net, filters=32, kernel_size=(3, 3, 3), padding='same', activation=None, name='conv%d_b' % i)
+      net  += in_net
+
+  net    = tf.nn.relu(net)
+  logits = conv(net, filters=1, kernel_size=(1, 1, 1), activation=None, name='conv_lom')
+
+  return logits
+
+"""
+
+## Modified by HU
+
+def _predict_object_mask(net, depth=9):
+
+  conv = tf.layers.conv3d
+  net   = conv(net, filters=32, kernel_size=(3, 3, 3), padding='same', activation=tf.nn.relu, name='conv0_a')
+  net   = conv(net, filters=32, kernel_size=(3, 3, 3), padding='same', activation=None, name='conv0_b')
+
+  for i in range(1, depth):
+    with tf.name_scope('residual%d' % i):
+      in_net = net
+      net   = tf.nn.relu(net)
+      net   = conv(net, filters=32, kernel_size=(3, 3, 3), padding='same', activation=tf.nn.relu, name='conv%d_a' % i)
+      net   = conv(net, filters=32, kernel_size=(3, 3, 3), padding='same', activation=None, name='conv%d_b' % i)
+      net  += in_net
+
+  net    = tf.nn.relu(net)
+  logits = conv(net, filters=1, kernel_size=(1, 1, 1), activation=None, name='conv_lom')
+
+  return logits
+
+## End: modified by HU
+
 
 
 class ConvStack3DFFNModel(model.FFNModel):
