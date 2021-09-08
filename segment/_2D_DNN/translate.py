@@ -687,8 +687,8 @@ def append_index(filesets, step=False, image_kinds=("inputs", "outputs", "target
 
 
 def main():
-    if tf.__version__.split('.')[0] != "1":
-        raise Exception("Tensorflow version 1 required")
+#    if tf.__version__.split('.')[0] != "1":
+#        raise Exception("Tensorflow version 1 required")
 
     if a.seed is None:
         a.seed = random.randint(0, 2**31 - 1)
