@@ -272,7 +272,7 @@ class PersephonepTableWidget(QWidget):
                 return
         ###
         if ('tensorboard' == self.appl[index]):
-            flag = self.parent.process_tensorboard.terminate()
+            flag = self.parent.process_tensorboard.kill()
             if (flag == 1):
                 print('Error ocurred in closing tensorboard.')
                 return
