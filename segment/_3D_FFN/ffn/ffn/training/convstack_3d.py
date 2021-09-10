@@ -53,7 +53,7 @@ import model
 
 # Note: this model was originally trained with conv3d layers initialized with
 # TruncatedNormalInitializedVariable with stddev = 0.01.
-def _predict_object_mask_org_TF1(net, depth=9):
+def _predict_object_mask_TF1(net, depth=9):
  
   conv = tf_contrib.layers.conv3d
   with tf_contrib.framework.arg_scope([conv], num_outputs=32,
