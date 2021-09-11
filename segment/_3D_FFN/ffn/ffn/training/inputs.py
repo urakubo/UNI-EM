@@ -41,7 +41,6 @@ else:
   from tensorflow import gfile
 ##
 
-
 from ..utils import bounding_box
 
 

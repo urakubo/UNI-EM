@@ -9,15 +9,6 @@ from __future__ import print_function
 #}HU
 
 
-## HU
-import pkg_resources
-ver = pkg_resources.get_distribution('tensorflow').version
-if ('1.15' in ver) |( '2.' in ver ):
-  import tensorflow.compat.v1 as tf
-  tf.disable_v2_behavior()
-else:
-  import tensorflow as tf
-##
 
 import numpy as np
 import argparse
@@ -28,6 +19,25 @@ import random
 import collections
 import math
 import time
+
+## HU
+import pkg_resources
+ver = pkg_resources.get_distribution('tensorflow').version
+if ('1.15' in ver) |( '2.' in ver ):
+  import tensorflow.compat.v1 as tf
+  tf.disable_v2_behavior()
+else:
+  import tensorflow as tf
+##
+import logging
+import warnings
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+warnings.simplefilter(action='ignore', category=FutureWarning)
+warnings.simplefilter(action='ignore', category=Warning)
+tf.get_logger().setLevel('INFO')
+tf.autograph.set_verbosity(0)
+tf.get_logger().setLevel(logging.ERROR)
+##
 
 #HU{
 gpus = tf.config.experimental.list_physical_devices('GPU')

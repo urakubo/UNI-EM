@@ -37,7 +37,6 @@ else:
   import tensorflow as tf
 ##
 
-
 from ..training.import_util import import_symbol
 
 # Unless stated otherwise, all shape/coordinate triples in this file are in zyx
