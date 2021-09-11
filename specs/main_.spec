@@ -5,9 +5,9 @@ main_dir = os.path.abspath(SPECPATH)
 main_dir = os.path.dirname(main_dir)
 
 
-CUDA_BIN     = "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.1\bin"
-CUDA_INCLUDE = "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.1\include"
-CUDA_LIB     = "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.1\libnvvp"
+CUDA_BIN     = "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.1\\bin"
+CUDA_INCLUDE = "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.1\\include"
+CUDA_LIB     = "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.1\\libnvvp"
 
 
 block_cipher = None
