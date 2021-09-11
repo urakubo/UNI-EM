@@ -4,6 +4,12 @@ from os import path, pardir
 main_dir = os.path.abspath(SPECPATH)
 main_dir = os.path.dirname(main_dir)
 
+
+CUDA_BIN     = "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.1\bin"
+CUDA_INCLUDE = "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.1\include"
+CUDA_LIB     = "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.1\libnvvp"
+
+
 block_cipher = None
 
 def analysis(_spec_path_list, _pathex, _datas, _hiddenimports, _name):
@@ -94,6 +100,8 @@ for dirpath, dirnames, filenames in os.walk( path.join(main_dir, "segment","_3D_
     if os.path.basename(dirpath) != '__pycache__':
             pathex.append(path.join(main_dir, "segment", dirpath))
 
+pathex.append(CUDA_BIN)
+
 translate=[path.join(main_dir, "segment","_3D_FFN","ffn","train.py")]
 hiddenimports=['scipy._lib.messagestream','pywt._extensions._cwt','gast','astor','termcolor','google.protobuf.wrappers_pb2','tensorflow.contrib']
 
@@ -106,6 +114,8 @@ pathex=[]
 for dirpath, dirnames, filenames in os.walk( path.join(main_dir, "segment","_3D_FFN","ffn") ):
     if os.path.basename(dirpath) != '__pycache__':
             pathex.append(path.join(main_dir, "segment", dirpath))
+
+pathex.append(CUDA_BIN)
 
 translate=[path.join(main_dir, "segment","_3D_FFN","ffn","run_inference_win.py")]
 hiddenimports=['scipy._lib.messagestream','pywt._extensions._cwt','PyQt5.sip','gast','astor','termcolor','google.protobuf.wrappers_pb2','tensorflow.contrib']
@@ -120,6 +130,8 @@ for dirpath, dirnames, filenames in os.walk( path.join(main_dir, "segment","_3D_
     if os.path.basename(dirpath) != '__pycache__':
             pathex.append(path.join(main_dir, "segment", dirpath))
 
+pathex.append(CUDA_BIN)
+
 translate=[path.join(main_dir, "segment","_3D_FFN","ffn","build_coordinates.py")]
 hiddenimports=['scipy._lib.messagestream','pywt._extensions._cwt','tensorflow.contrib']
 
@@ -132,6 +144,8 @@ pathex=[]
 for dirpath, dirnames, filenames in os.walk( path.join(main_dir, "segment","_3D_FFN","ffn") ):
     if os.path.basename(dirpath) != '__pycache__':
             pathex.append(path.join(main_dir, "segment", dirpath))
+
+pathex.append(CUDA_BIN)
 
 translate=[path.join(main_dir, "segment","_3D_FFN","ffn","compute_partitions.py")]
 hiddenimports=['scipy._lib.messagestream','pywt._extensions._cwt','tensorflow.contrib']
@@ -156,6 +170,9 @@ coll += analysis(tensorb, pathex, datas, hiddenimports, 'launch_tensorboard')
 
 ########################## translate ##########################
 pathex=[path.join(main_dir, "segment","_2D_DNN")]
+
+pathex.append(CUDA_BIN)
+
 translate=[path.join(main_dir, "segment","_2D_DNN","translate.py")]
 
 hiddenimports=['scipy._lib.messagestream','pywt._extensions._cwt','tensorflow.contrib']
