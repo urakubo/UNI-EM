@@ -53,12 +53,12 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 ### Pyinstaller版 (Windows10のみ)：
 1. GPU 版とCPU版を用意しました。いずれかをダウンロードして展開してください。
 
-- Version 0.92 (2021/09/13):
-	- [CPU & GPU version (Ver0.92; 2,774 MB)](https://bit.ly/2VFvaDS)
+	- Version 0.92 (2021/09/13; NVIDIA Ampere (RTX30X等) 対応):
+		- [CPU & GPU version (Ver0.92; 2,166 MB)](https://bit.ly/2VFvaDS)
 
-- 前Version 0.90.4 (2021/05/31):
-	- [CPU version (Ver0.90.4; 363 MB)](https://bit.ly/3uwKHkB)
-	- [GPU version (Ver0.90.4: 1,068 MB)](https://bit.ly/2QWfFFb)
+	- 前Version 0.90.4 (2021/05/31; NVIDIA Ampere (RTX30X等) 非対応):
+		- [CPU version (Ver0.90.4; 363 MB)](https://bit.ly/3uwKHkB)
+		- [GPU version (Ver0.90.4: 1,068 MB)](https://bit.ly/2QWfFFb)
 
 2. 公開サンプルデータkasthuri15をダウンロードして適当なフォルダに展開してください。
 	- https://www.dropbox.com/s/pxds28wdckmnpe8/ac3x75.zip?dl=0
@@ -73,7 +73,7 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 	- https://www.nvidia.com/Download/index.aspx
 
 
-6. Tensorflow トレーニングの際に、下の警告が出ることを浦久保は認識しておりますが、解決できておりません。どなたかのご助力をお願いいたします。
+- Tensorflow トレーニングの際に、下の警告が出ることを浦久保は認識しておりますが、解決できておりません。どなたかのご助力をお願いいたします。
 	- WARNING:tensorflow:It seems that global step (tf.train.get_global_step) has not been increased. Current value (could be stable): 0 vs previous value: 0. You could increase the global step by passing tf.train.get_global_step() to Optimizer.apply_gradients or Optimizer.minimize.
 
 
@@ -103,7 +103,10 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 	- tensorflow.python.framework.errors_impl.InternalError: cudaGetDevice() failed. Status: CUDA driver version is insufficient for CUDA runtime version
 	- https://www.nvidia.com/Download/index.aspx
 
-9. Tensorflow トレーニングの際に、下の警告が出ることを浦久保は認識しておりますが、解決できておりません。どなたかのご助力をお願いいたします。
+- Windows10の場合、TF1.15.4 + cuda 11.1 の組み合わせで、1.4倍程度トレーニング速度が速くなることを確認しています。 
+	- https://github.com/fo40225/tensorflow-windows-wheel/tree/master/1.15.4+nv20.12/
+
+- Tensorflow トレーニングの際に、下の警告が出ることを浦久保は認識しておりますが、解決できておりません。どなたかのご助力をお願いいたします。
 	- WARNING:tensorflow:It seems that global step (tf.train.get_global_step) has not been increased. Current value (could be stable): 0 vs previous value: 0. You could increase the global step by passing tf.train.get_global_step() to Optimizer.apply_gradients or Optimizer.minimize.
 
 
