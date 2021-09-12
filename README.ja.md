@@ -73,7 +73,7 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 	- https://www.nvidia.com/Download/index.aspx
 
 
-6. Tensorflow トレーニングの際に、下の警告が出ることを浦久保は認識しておりますが、解決できておりません。どなたかのご助力をお願いいたします。
+- Tensorflow トレーニングの際に、下の警告が出ることを浦久保は認識しておりますが、解決できておりません。どなたかのご助力をお願いいたします。
 	- WARNING:tensorflow:It seems that global step (tf.train.get_global_step) has not been increased. Current value (could be stable): 0 vs previous value: 0. You could increase the global step by passing tf.train.get_global_step() to Optimizer.apply_gradients or Optimizer.minimize.
 
 
@@ -103,7 +103,10 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 	- tensorflow.python.framework.errors_impl.InternalError: cudaGetDevice() failed. Status: CUDA driver version is insufficient for CUDA runtime version
 	- https://www.nvidia.com/Download/index.aspx
 
-9. Tensorflow トレーニングの際に、下の警告が出ることを浦久保は認識しておりますが、解決できておりません。どなたかのご助力をお願いいたします。
+- 下のTF1.15.4 + cuda 11.1 の組み合わせを使用することで、1.4倍程度トレーニング速度が速くなることを確認しています。 
+	- https://github.com/fo40225/tensorflow-windows-wheel/tree/master/1.15.4+nv20.12/
+
+- Tensorflow トレーニングの際に、下の警告が出ることを浦久保は認識しておりますが、解決できておりません。どなたかのご助力をお願いいたします。
 	- WARNING:tensorflow:It seems that global step (tf.train.get_global_step) has not been increased. Current value (could be stable): 0 vs previous value: 0. You could increase the global step by passing tf.train.get_global_step() to Optimizer.apply_gradients or Optimizer.minimize.
 
 
