@@ -76,7 +76,7 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 	- git clone https://github.com/urakubo/UNI-EM.git
 
 
-4. requirements-[os].txtを参考に、Pythonに必要モジュールを pip install -r requirements-[os].txt などのコマンドによりインストールしてください。Ubuntu18.04, Ubuntu20.04の場合は、 opencv, pyqt5 は apt でインストールしてください。
+4. requirements-[os].txtを参考に、Pythonに必要モジュールを pip install -r requirements-[os].txt などのコマンドによりインストールしてください。Ubuntu18.04, Ubuntu20.04の場合は、 opencv, pyqt5 は下のコマンド "apt" でインストールしてください。
 
 	- sudo apt install python3-dev python3-pip
 	- sudo apt install python3-opencv
