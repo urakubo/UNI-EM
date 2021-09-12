@@ -54,10 +54,10 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 1. GPU 版とCPU版を用意しました。いずれかをダウンロードして展開してください。
 
 - Version 0.92 (2021/09/13):
-	- [CPU & GPU version (Ver0.92; XXX MB)](https://bit.ly/3uwKHkB)
+	- [CPU & GPU version (Ver0.92; 2,774 MB)](https://bit.ly/2VFvaDS)
 
 - 前Version 0.90.4 (2021/05/31):
-	- [CPU version (Ver0.90.4; 363MB)](https://bit.ly/3uwKHkB)
+	- [CPU version (Ver0.90.4; 363 MB)](https://bit.ly/3uwKHkB)
 	- [GPU version (Ver0.90.4: 1,068 MB)](https://bit.ly/2QWfFFb)
 
 2. 公開サンプルデータkasthuri15をダウンロードして適当なフォルダに展開してください。
