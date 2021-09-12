@@ -72,6 +72,10 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 	- tensorflow.python.framework.errors_impl.InternalError: cudaGetDevice() failed. Status: CUDA driver version is insufficient for CUDA runtime version
 	- https://www.nvidia.com/Download/index.aspx
 
+6.	In the process of traning, HU sees the following warning, and has not found out how to suppress it. I ask someone for help.
+	- WARNING:tensorflow:It seems that global step (tf.train.get_global_step) has not been increased. Current value (could be stable): 0 vs previous value: 0. You could increase the global step by passing tf.train.get_global_step() to Optimizer.apply_gradients or Optimizer.minimize.
+
+
 ### Python version 
 1. Install Python 3.6- in a Microsoft Windows PC (64 bit) or Linux PC (Ubuntu 18.04 confirmed).
 2. Install "cuda 11.0 and cuDNN 8.0.4 for Tensorflow 2.4.1", or "cuda 11.2.2 and cuDNN 8.1.1 for Tensorflow 2.5.0" if your PC has a NVIDIA-GPU.
@@ -102,6 +106,8 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 	- tensorflow.python.framework.errors_impl.InternalError: cudaGetDevice() failed. Status: CUDA driver version is insufficient for CUDA runtime version
 	- https://www.nvidia.com/Download/index.aspx
 
+9.	In the process of traning, HU sees the following warning, and has not found out how to suppress it. I ask someone for help.
+	- WARNING:tensorflow:It seems that global step (tf.train.get_global_step) has not been increased. Current value (could be stable): 0 vs previous value: 0. You could increase the global step by passing tf.train.get_global_step() to Optimizer.apply_gradients or Optimizer.minimize.
 
 ## Authors
 
