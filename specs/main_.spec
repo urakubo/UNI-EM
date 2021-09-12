@@ -6,11 +6,15 @@ main_dir = os.path.dirname(main_dir)
 
 
 from pathlib import Path
-CUDA_BIN     = "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.0\\bin"
-CUDA_INCLUDE = "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.0\\include"
-CUDA_LIB     = "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.0\\libnvvp"
-binaries=[(str(i), ".") for i in Path(CUDA_BIN).rglob("*.dll")]
-binaries.append( (path.join(CUDA_BIN, "ptxas.exe"), ".") )
+
+# CUDA_BIN = "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.X\\bin"
+
+CUDA_BIN = os.environ.get('PATH').split(";")
+CUDA_BIN = [s for s in CUDA_BIN if "CUDA" in s]
+CUDA_BIN = [s for s in CUDA_BIN if "bin" in s]
+
+binaries=[(str(i), ".") for i in Path(CUDA_BIN[0]).rglob("*.dll")]
+binaries.append( (path.join(CUDA_BIN[0], "ptxas.exe"), ".") )
 
 
 block_cipher = None
