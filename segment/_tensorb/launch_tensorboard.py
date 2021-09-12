@@ -1,4 +1,4 @@
-# Only for tensorboard 1.15
+# Only for tensorboard 2.60
 # Modified from :
 # C:\Users\uraku\AppData\Local\Programs\Python\Python38\Lib\site-packages\tensorboard\main.py
 
@@ -8,15 +8,7 @@ main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 webfiles = path.join(main_dir,'tensorboard','webfiles.zip')
 
 
-# pylint: disable=g-import-not-at-top
-
-
-# Disable the TF GCS filesystem cache which interacts pathologically with the
-# pattern of reads used by TensorBoard for logdirs. See for details:
-#   https://github.com/tensorflow/tensorboard/issues/1225
-# This must be set before the first import of tensorflow.
-os.environ['GCS_READ_CACHE_DISABLED'] = '1'
-# pylint: enable=g-import-not-at-top
+import sys
 
 from absl import app
 from tensorboard import default
