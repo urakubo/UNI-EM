@@ -72,6 +72,11 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 	- tensorflow.python.framework.errors_impl.InternalError: cudaGetDevice() failed. Status: CUDA driver version is insufficient for CUDA runtime version
 	- https://www.nvidia.com/Download/index.aspx
 
+
+6. Tensorflow トレーニングの際に、下の警告が出ることを浦久保は認識しておりますが、解決できておりません。どなたかのご助力をお願いいたします。
+	- WARNING:tensorflow:It seems that global step (tf.train.get_global_step) has not been increased. Current value (could be stable): 0 vs previous value: 0. You could increase the global step by passing tf.train.get_global_step() to Optimizer.apply_gradients or Optimizer.minimize.
+
+
 ### Python版：
 1. Windows10またはLinux (Ubuntu18.04 にて動作確認済)にて Python3.6- をインストールしてください。
 2. Tensorflow 1.15, Tensorflow2.0- にて動作します。 NVIDIA GPU 利用する場合、Tensorflow 2.4.1の場合は"CUDA 11.0, cuDNN 8.0.4", TensorFlow 2.5.0の場合は"CUDA 11.2.2, cuDNN 8.1.1"をインスト―ルしてください **[参考1]** 。
@@ -97,6 +102,10 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 8. Tensorflow training時、inference時に下のエラーが出る場合は、NVIDIA Driverをアップデートしてください。
 	- tensorflow.python.framework.errors_impl.InternalError: cudaGetDevice() failed. Status: CUDA driver version is insufficient for CUDA runtime version
 	- https://www.nvidia.com/Download/index.aspx
+
+9. Tensorflow トレーニングの際に、下の警告が出ることを浦久保は認識しておりますが、解決できておりません。どなたかのご助力をお願いいたします。
+	- WARNING:tensorflow:It seems that global step (tf.train.get_global_step) has not been increased. Current value (could be stable): 0 vs previous value: 0. You could increase the global step by passing tf.train.get_global_step() to Optimizer.apply_gradients or Optimizer.minimize.
+
 
 ## お願い：
 日本国内の実験研究者、情報学研究者さまのフィードバックをお待ちします（hurakubo あっと gmail.com; **[参考3]** ）。私一人で開発を続けることは困難なので、共同開発者も募集いたします。本アプリは、自然画像のセグメンテーション等に利用することも可能と思われますので、多様なコメントをお待ちしております。本アプリの開発には、革新脳、新学術、基盤Cのご支援をいただいております。
