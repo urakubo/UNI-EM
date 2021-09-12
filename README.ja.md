@@ -103,7 +103,7 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 	- tensorflow.python.framework.errors_impl.InternalError: cudaGetDevice() failed. Status: CUDA driver version is insufficient for CUDA runtime version
 	- https://www.nvidia.com/Download/index.aspx
 
-- 下のTF1.15.4 + cuda 11.1 の組み合わせを使用することで、1.4倍程度トレーニング速度が速くなることを確認しています。 
+- Windows10の場合、TF1.15.4 + cuda 11.1 の組み合わせで、1.4倍程度トレーニング速度が速くなることを確認しています。 
 	- https://github.com/fo40225/tensorflow-windows-wheel/tree/master/1.15.4+nv20.12/
 
 - Tensorflow トレーニングの際に、下の警告が出ることを浦久保は認識しておりますが、解決できておりません。どなたかのご助力をお願いいたします。
