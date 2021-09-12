@@ -42,15 +42,9 @@ Multiple users can simultaneously use it through web browsers. The goal is to de
 ## System requirements
 Operating system: Microsoft Windows 10 (64 bit) or Linux (Ubuntu 18.04).
 
-Recommendation: High-performance NVIDIA graphics card whose GPU has over 3.5 compute capability.
+Recommendation: High-performance NVIDIA graphics card whose GPU has over 3.5 compute capability (e.g., GeForce GTX1080ti, RTX2080ti, and RTX3090).
 
 - https://developer.nvidia.com/cuda-gpus
-
-Caution: currently, UNI-EM cannot run on the newest NVIDIA GPUs, such as A100 and RTX30X0 (in particular, under microsoft windows). This is because UNI-EM is based on tensorflow1.X, while the newest GPUs are compatible with tensorflow2.X, but not tensorflow1.X. Please refer to the following website.
-
-- https://www.pugetsystems.com/labs/hpc/How-To-Install-TensorFlow-1-15-for-NVIDIA-RTX30-GPUs-without-docker-or-CUDA-install-2005/
-- https://developer.nvidia.com/blog/accelerating-tensorflow-on-a100-gpus/
-- https://github.com/NVIDIA/tensorflow
 
 ## Installation
 We provide standalone versions (pyinstaller version) and Python source codes.
@@ -58,16 +52,13 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 ### Pyinstaller version (Microsoft Windows 10 only)
 1.	Download one of the following two versions, and unzip it:
 
-- Version 0.90.4 (2021/05/31):
-	- [CPU version (Ver0.90.4; 363MB)](https://bit.ly/3uwKHkB)
-	- [GPU version (Ver0.90.4: 1,068 MB)](https://bit.ly/2QWfFFb)
+- Version 0.92 (2021/09/13):
+	- [CPU & GPU version (Ver0.92; XXXMB)](https://bit.ly/3uwKHkB)
 
 - Release summary:
+	- Compatibility with both tensorflow1.X and 2.X. It now works also on NVIDIA Ampere GPUS (RTX30X0, etc.). 
 	- Bug fix.
-		- Bug fix version of FFNs was used.
-		- Tentative solution in “Cannot lock file” error in the inference of 2D CNN.
-		- Safe launch of Tensorboard.
-		- Abolish the use of mcube (caused an occasional error in launching).
+		
 
 2.	Download one of sample EM/segmentation dojo folders from the following link, and unzip it:
    	- https://www.dropbox.com/s/pxds28wdckmnpe8/ac3x75.zip?dl=0
@@ -77,9 +68,13 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 
 4.	Select Dojo → Open Dojo Folder from the dropdown menu, and specify the folder of the sample EM/segmentation dojo files.  The proofreading software Dojo will be launched.
 
+5.	Update the dirver of NVIDIA GPU if you see the following error.
+	- tensorflow.python.framework.errors_impl.InternalError: cudaGetDevice() failed. Status: CUDA driver version is insufficient for CUDA runtime version
+	- https://www.nvidia.com/Download/index.aspx
+
 ### Python version 
-1. Install Python 3.5-3.7 in a Microsoft Windows PC (64 bit) or Linux PC (Ubuntu 18.04 confirmed).
-2. Install cuda 10.0 and cuDNN 7.4 for Tensorflow 1.14 if your PC has a NVIDIA-GPU.
+1. Install Python 3.6- in a Microsoft Windows PC (64 bit) or Linux PC (Ubuntu 18.04 confirmed).
+2. Install "cuda 11.0 and cuDNN 8.0.4 for Tensorflow 2.4.1", or "cuda 11.2.2 and cuDNN 8.1.1 for Tensorflow 2.5.0" if your PC has a NVIDIA-GPU.
 
 	- https://www.tensorflow.org/install/source
 	- https://www.tensorflow.org/install/source_windows
@@ -88,9 +83,12 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 
 	- git clone https://github.com/urakubo/UNI-EM.git
 
-4. Install the following modules of Python: Tensorflow-gpu, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl. Check "requirements-[os]-[cpu or gpu].txt". Users can install those module using the following command.
+4. Install the following modules of Python: Tensorflow-gpu, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl. Use the command "requirements-[os]-.txt". Use the following "apt" commands to install opencv and pyqt5 if you use Ubuntu/Linux:
 
-	- pip install -r requirements-[os]-[cpu or gpu].txt
+	- sudo apt install python3-dev python3-pip
+	- sudo apt install python3-opencv
+	- sudo apt install python3-pyqt5
+	- sudo apt install python3-pyqt5.qtwebengine
 
 5. Download one of sample EM/segmentation dojo folders from the following link, and unzip it:
    	- https://www.dropbox.com/s/pxds28wdckmnpe8/ac3x75.zip?dl=0
@@ -99,6 +97,11 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 6. Execute "python main.py" in the [UNI-EM] folder. The control panel will appear.
 
 7.	Select Dojo → Open Dojo Folder from the dropdown menu, and specify the sample EM/segmentation dojo folder. The proofreading software Dojo will be launched.
+
+8.	Update the dirver of NVIDIA GPU if you see the following error.
+	- tensorflow.python.framework.errors_impl.InternalError: cudaGetDevice() failed. Status: CUDA driver version is insufficient for CUDA runtime version
+	- https://www.nvidia.com/Download/index.aspx
+
 
 ## Authors
 
