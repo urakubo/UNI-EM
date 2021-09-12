@@ -43,14 +43,9 @@
 ## 動作条件：
 OS：　Microsoft Windows 10 (64 bit) または Linux (Ubuntu 18.04にて動作確認済) 
 
-推奨：NVIDIA社の高性能GPUを搭載したグラフィックスカード (Compute capability 3.5 以上のGPU搭載のもの。GeForce GTX 1080tiなど)。
+推奨：NVIDIA社の高性能GPUを搭載したグラフィックスカード (Compute capability 3.5 以上のGPU搭載のもの。GeForce GTX1080ti, RTX2080ti, RTX3090など)。
 
 - https://developer.nvidia.com/cuda-gpus
-
-注意：現在のUNI-EMはNVIDIA社の最新GPU (RTX30X0, A100など）で動作しません。UNI-EMがTensorflow1.Xに基づいて開発されている一方、最新GPUはTensorflow2.Xに対応しますが、Tensorflow1.Xに対応しないためです。詳細は、下記サイトをご参照ください。
-
-- https://www.pugetsystems.com/labs/hpc/How-To-Install-TensorFlow-1-15-for-NVIDIA-RTX30-GPUs-without-docker-or-CUDA-install-2005/
-- https://qiita.com/tanreinama/items/6fc3c71f21d64e61e006
 
 ## インストール方法：
 Pythonのインストールの必要のないPyinstaller版とPythonソースコードの両方を提供します。
@@ -58,7 +53,10 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 ### Pyinstaller版 (Windows10のみ)：
 1. GPU 版とCPU版を用意しました。いずれかをダウンロードして展開してください。
 
-- Version 0.90.4 (2021/05/31):
+- Version 0.92 (2021/09/13):
+	- [CPU & GPU version (Ver0.92; XXX MB)](https://bit.ly/3uwKHkB)
+
+- 前Version 0.90.4 (2021/05/31):
 	- [CPU version (Ver0.90.4; 363MB)](https://bit.ly/3uwKHkB)
 	- [GPU version (Ver0.90.4: 1,068 MB)](https://bit.ly/2QWfFFb)
 
@@ -71,14 +69,19 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 4. 上端のドロップダウンメニューより一番左のDojo → Open Dojo Folderを選択して、ダイアログよりkasthuri15フォルダ下のmojoを指定してください。サンプルデータがダウンロードされてDojoが起動します。
 
 ### Python版：
-1. Windows10またはLinux (Ubuntu18.04 にて動作確認済)にて Python3.5-3. をインストールしてください。
-2. Tensorflow 1.14 のためにGPUを利用する場合はcuda 10.0 および cuDNN 7.4 をインスト―ルしてください **[参考1]** 。
+1. Windows10またはLinux (Ubuntu18.04 にて動作確認済)にて Python3.6- をインストールしてください。
+2. Tensorflow 1.15, Tensorflow2.0- にて動作します。 NVIDIA GPU 利用する場合、Tensorflow 2.4.1の場合は"CUDA 11.0, cuDNN 8.0.4", TensorFlow 2.5.0の場合は"CUDA 11.2.2, cuDNN 8.1.1"をインスト―ルしてください **[参考1]** 。
 3. 次の命令を実行してGithubより必要プログラムをダウンロードしてください。
 
 	- git clone https://github.com/urakubo/UNI-EM.git
 
 
-4. requirements-[os]-[cpu or gpu].txtを参考に、Pythonに必要モジュール「Tensorflow-gpu 1.12, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl」を pip install -r requirements-[os]-[cpu or gpu].txt などのコマンドを用いてインストールしてください。
+4. requirements-[os].txtを参考に、Pythonに必要モジュールを pip install -r requirements-[os].txt などのコマンドによりインストールしてください。Ubuntu18.04, Ubuntu20.04の場合は、 opencv, pyqt5 は下のコマンド "apt" でインストールしてください。
+
+	- sudo apt install python3-dev python3-pip
+	- sudo apt install python3-opencv
+	- sudo apt install python3-pyqt5
+	- sudo apt install python3-pyqt5.qtwebengine
 
 5. コマンドププロンプトにて[UNI-EM]フォルダへ移動して、 python main.py と実行してコントロールパネルを起動してください。
 6. 公開サンプルデータkasthuri15をダウンロードして適当なフォルダに展開してください。
