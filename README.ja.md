@@ -68,6 +68,10 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 
 4. 上端のドロップダウンメニューより一番左のDojo → Open Dojo Folderを選択して、ダイアログよりkasthuri15フォルダ下のmojoを指定してください。サンプルデータがダウンロードされてDojoが起動します。
 
+5. Tensorflow training時、inference時に下のエラーが出る場合は、NVIDIA Driverをアップデートしてください。
+	- tensorflow.python.framework.errors_impl.InternalError: cudaGetDevice() failed. Status: CUDA driver version is insufficient for CUDA runtime version
+	- https://www.nvidia.com/Download/index.aspx
+
 ### Python版：
 1. Windows10またはLinux (Ubuntu18.04 にて動作確認済)にて Python3.6- をインストールしてください。
 2. Tensorflow 1.15, Tensorflow2.0- にて動作します。 NVIDIA GPU 利用する場合、Tensorflow 2.4.1の場合は"CUDA 11.0, cuDNN 8.0.4", TensorFlow 2.5.0の場合は"CUDA 11.2.2, cuDNN 8.1.1"をインスト―ルしてください **[参考1]** 。
