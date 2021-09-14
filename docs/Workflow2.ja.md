@@ -20,8 +20,8 @@ UNI-EMによる3D FFNセグメンテーションの一例として、ATUM/SEMに
 
 #### ●EM画像と教師セグメンテーション
 
-1. 下の ExampleFFN.zip をダウンロードして展開してください。dataフォルダの中身をUNI-EMフォルダ（[UNI-EM]）中のdataフォルダの中身と入れ替えてください。"[UNI-EM]/data/DNN_training_images" にトレーニング画像 (0000.png, ..., 0099.png; 8bit, grayscale png) 、"[UNI-EM]/data/DNN_ground_truth" に教師セグメンテーション (0000.png, ..., 0099.png; 16bit, grayscale png) が入っています(**Fig. 1**)。教師セグメンテーションの作成にはVast liteの使用をお勧めします
-( https://software.rc.fas.harvard.edu/lichtman/vast/ )。
+1. 下の ExampleFFN.zip をダウンロードして展開してください。ExampleFFN中のフォルダ"DNN_training_images"にトレーニング画像 (0000.png, ..., 0099.png; 8bit, grayscale) 、"DNN_ground_truth" に教師セグメンテーション (0000.png, ..., 0099.png; 16bit, grayscale)、 "DNN_ground_truth" に推論用画像 (0000.png, ..., 0099.png; 8bit RGBですが推論時に自動的にgrayscale に変換されます)が入っています(**Fig. 1**)。ご自身で教師セグメンテーションを作成される際にはVast liteの使用をお勧めします
+( https://software.rc.fas.harvard.edu/lichtman/vast/ )。"ffn", "DNN_model_tensorflow", "DNN_segmentation"は空フォルダです。 
 
 **ExampleFFN.zip** 522MB: https://www.dropbox.com/s/cztcf8w0ywj1pmz/ExampleFFN.zip?dl=0
 
@@ -37,11 +37,20 @@ UNI-EMによる3D FFNセグメンテーションの一例として、ATUM/SEMに
 
 #### ●前処理
 
-2. UNI-EMを起動してください。
+2. UNI-EMを起動して、ExampleFFN中の各フォルダ"DNN_training_images", "DNN_ground_truth", "DNN_ground_truth", "ffn", "DNN_model_tensorflow", "DNN_segmentation"をすべてUNI-EM上にドラッグ＆ドロップして読み込ませてください。
 
 3. UNI-EM上端のドロップダウンメニューより Segmentation → 3D FFN を選択して、3D FFN ダイアログを起動してください。
 	- Preprocessing タブを選択してください(**Fig. 2a**)。
-	- Browse... をクリックして Training Image Folder "[UNI-EM]/data/DNN_training_images" にEM画像が存在すること(**Fig. 2b**)、Ground Truth Folder "[UNI-EM]/data/DNN_ground_truth"に教師セグメンテーション画像が存在することを確認してください(**Fig. 2c**)。同様にFFN File Folder ("[UNI-EM]/data/ffn") が存在することを確認してください(**Fig. 2d**)。
+	- 下段の"Training Image Folder", "Groud Truth Folder", "Empty Folder for FFNs" の右側のプルダウンメニューより、各々"DNN_training_images" (8bit grayscale/RGB, png/tif/jpg, **Fig. 2b**), "DNN_ground_truth" (8bit/16bit grayscale, png/tif, **Fig. 2c**), "ffn" (空フォルダ, **Fig. 2d**) フォルダを選択してください。プルダウンメニューに該当フォルダ名が現れない場合は、もう一度フォルダをUNI-EM上にドラッグ＆ドロップするか、右の"Open...", "Browse..."よりフォルダを指定してください。
+
+<BR>
+<p align="center">
+  <img src="Images/FFN_Prep.png" alt="3D FFN Preprocessing" width="600">
+</p>
+<p align="center">
+  <font size="5"> <b>Figure 2. FFN Preprocessing </b> </font>
+</p>
+<BR>
 
 4. Preprocessing タブ最下段の Execute をクリックして、前処理ファイルの作成を開始してください(**Fig. 2f**)。FFN File Folderに次の４つのファイルが作成されます。作成時間は6-60分です。コンソールに下の様なプログレスメッセージが現れます。
 	- EM画像のhdf5ファイル"grayscale_maps.h5"
@@ -70,26 +79,17 @@ UNI-EMによる3D FFNセグメンテーションの一例として、ATUM/SEMに
 	FFN preparaion was finished.
 ```
 
-<BR>
-<p align="center">
-  <img src="Images/FFN_Prep.png" alt="3D FFN Preprocessing" width="600">
-</p>
-<p align="center">
-  <font size="5"> <b>Figure 2. FFN Preprocessing </b> </font>
-</p>
-<BR>
-
 
 #### ●トレーニング
 
 5. FFNダイアログのTrainingタブを選択してください(**Fig. 2a**)。
-	- Max Training Steps を設定してください。正確な推論のためには数百万ステップ以上のトレーニングが必要です。NVIDIA GTX1080tiを用いた場合で一週間以上かかります。ただし、Training 中は約3000ステップごとにtensorflowモデルが出力され、途中でトレーニングを止めた場合でも新たにTrainingを開始すると "[UNI-EM]/data/DNN_model_tensorflow” から最新のモデルを読み込み、そこからトレーニングを再開します。Max Training Steps に達するとモデルを出力してトレーニングは終了します。推論結果よりトレーニング不足であった場合は、さらに大きな Max Training Stepsを設定してトレーニングを再実行（再開）します。
+	- Max Training Steps を設定してください。正確な推論のためには数百万ステップ以上のトレーニングが必要です。NVIDIA GTX1080tiを用いた場合で一週間以上かかります。ただし、Training 中は約3000ステップごとにtensorflowモデルが出力され、途中でトレーニングを止めた場合でも新たにTrainingを開始すると "DNN_model_tensorflow” フォルダから最新のモデルを読み込み、そこからトレーニングを再開します。Max Training Steps に達するとモデルを出力してトレーニングは終了します。推論結果よりトレーニング不足であった場合は、さらに大きな Max Training Stepsを設定してトレーニングを再実行（再開）します。
 	- xyピッチ(nm/pixel)に比べてz方向のピッチ(nm/pixel)が大きい場合はSparse Zにチェックを入れてください。チェックの有無でFFNトレーニングパラメータが次のように変わります。
 		- チェックを入れない場合：　"depth":12,"fov_size":[33,33,33],"deltas":[8,8,8]
 		- チェックを入れた場合："depth":9,"fov_size":[33,33,17],"deltas":[8,8,4]
 
-	- Ground Truth h5 File, Tensorflow Record File, Tensorflow Record File が前処理したファイルを指定していることを確認してください。
-	- Tensorflow Model Folder に空フォルダが指定されていることを確認してください。
+	- "FFNs Folder" には"ffn"フォルダを指定してください。"ffn"フォルダの中にはPreprocessingにより作成された"groundtruth.h5", "tf_record_file", "af.h5" が入っている筈です。
+	- Tensorflow Model Folder にはトレーニング結果が入ります。空フォルダ、またはTensorflow model フォルダが指定されていることを確認してください。
 
 6. Trainingタブ最下段の Execute をクリックして、トレーニングを開始してください。コンソールに次の様なプログレスメッセージが現れます。
 ```FFN Training
@@ -107,12 +107,12 @@ I0217 23:14:48.805234  2272 train.py:699]
 #### ●推論
 
 7. FFNダイアログのInferenceタブを選択してください(**Fig. 2a**)。
-	- Target Image Folder に推論EM画像が存在することを確認してください(8bit, grayscale pngの連続番号ファイル)。
-	- Output Inference Folder が存在することを確認してください。同フォルダに推論結果が保存されます。
-	- Tensorflow Model Files にトレーニング済 tensorflow model file を指定してください。モデルファイルは ”model.ckpt-XXXXX.data-00000-of-00001", "model.ckpt-XXXXX.index", "model.ckpt-4000000.meta" の3つのファイルに分かれています。モデルファイル前半の各モデル共通部分"model.ckpt-XXXXX"を指定してください。
+	- "Target Image Folder" に推論用のEM画像が入ったフォルダ"DNN_test_images"を指定してください(8bit grayscale/RGB, png/tif/jpgの連続番号ファイル)。
+	- "Model Folder" にTensorflow modelフォルダの入った"DNN_model_tensorflow"指定してください。フォルダ内には ”model.ckpt-XXXXX.data-00000-of-00001", "model.ckpt-XXXXX.index", "model.ckpt-4000000.meta" の3つ組のファイルが存在する筈です。UNI-EMは、同３つ組ファイルが存在するフォルダをTensorflow modelフォルダと判定します。推論のために、"model.ckpt-XXXXX" のXXXXXがもっとも大きなファイル(最もトレーニングが進んだモデル)が自動的に読み込まれます。
+	- "FFNs Folder" に"ffns"フォルダを指定してください。同フォルダに推論結果が保存されます。
 	- トレーニングにおいて、Sparse Z にチェックを入れた場合は同様にチェックを入れてください。
 
-8. Inferenceタブ最下段の Execute をクリックして推論を開始してください。まず Target Image Folder にあるEM画像のhdf5ファイル "grayscale_inf.h5" およびパラメータファイル "inference_params.pbtxt" が FFN File Folder に作成されます。次に、推論が開始されます。コンソールに次の様なプログレスメッセージが現れます。"Executor shutdown complete."と表示されたら、Inferenceは終了です。Output Inference Folder 中サブフォルダ"0/0" に "seg-0_0_0.npz" という名前で推論セグメンテーションファイルが作成されます。 
+8. Inferenceタブ最下段の Execute をクリックして推論を開始してください。まず "ffns"フォルダに "DNN_test_images"中の画像のhdf5ファイル "grayscale_inf.h5" およびパラメータファイル "inference_params.pbtxt" が作成されます。続いて推論が開始されます。コンソールに下の様なプログレスメッセージが現れます。"Executor shutdown complete."と表示されたら、Inferenceは終了です。Output Inference Folder 中サブフォルダ"0/0" に "seg-0_0_0.npz" という名前で推論セグメンテーションファイルが作成されます。 
 
 ```FFN Inference
 	...
@@ -132,30 +132,32 @@ I0217 23:14:48.805234  2272 train.py:699]
 
 9. FFNダイアログのPostprocessingタブを選択してください(**Fig. 2a**)。
 
-10. Target Inference Fileに推論セグメンテーションファイル "seg-0_0_0.npz" が指定されていることを確認してください。
+10. "FFNs Folder" に"ffns"フォルダを指定してください。同フォルダには推論セグメンテーションファイル "0/0/seg-0_0_0.npz" が存在する筈です。
 
-11. Output Filetype に出力形式を指定してください。画像ファイルにて直観的に推定結果を確認したい場合には 8-bit color PNGを、プルーフリード・視覚化・アノテーションなどの操作を行いたい場合は16-bit gray scale PNGを指定してください。
+11. "Output Segmentation Folder" に"DNN_segmentation"フォルダを指定してください。空フォルダなら何でも結構です。
 
-12. Postprocessingタブ最下段のExecuteをクリックして後処理を開始してください。Output Segmentation Folder に推論結果ファイル 0000.png, 0001.png, ..., 0099.png が保存されていることを確認してください。
+12. Output Filetype に出力形式を指定してください。画像ファイルにて直観的に推定結果を確認したい場合には 8-bit color PNGを、プルーフリード・視覚化・アノテーションなどの操作を行いたい場合は16-bit gray scale PNGを指定してください。
+
+13. Postprocessingタブ最下段のExecuteをクリックして後処理を開始してください。Output Segmentation Folder に推論結果ファイル 0000.png, 0001.png, ..., 0099.png が保存されていることを確認してください。
 
 <BR>
 
 #### ● 推論結果のプルーフリード、視覚化、アノテーション
 
-13. UNI-EM上端のドロップダウンメニューより Dojo → Import EM Stack/Segmentation を選択して、Import Images & Segments ダイアログを起動してください。
+14. UNI-EM上端のドロップダウンメニューより Dojo → Import EM Stack/Segmentation を選択して、Import Images & Segments ダイアログを起動してください。
 	- Source Image Folder を ** Target Image Folder "[UNI-EM]/data/DNN_test_images" ** に設定してください。
 	- Source Segmentation Folder を ** Output Segmentation Folder "[UNI-EM]/data/DNN_segmentation" ** と同じに設定してください。
 	- 分かりやすい場所にフォルダを作成して Destination Dojo Folder に指定してください。フォルダ中にDojo形式でファイルが保存されます。
 
-14. Import Images & Segments ダイアログ最下段の OK をクリックして、Dojoファイルの生成を行ってください。ファイル作成後、Dojo が起動します(**Fig. 4a**)。
+15. Import Images & Segments ダイアログ最下段の OK をクリックして、Dojoファイルの生成を行ってください。ファイル作成後、Dojo が起動します(**Fig. 4a**)。
 
-15. 下段のSliceバー(**Fig. 4b**)、上段のZoomバー(**Fig. 4c**)、Opacityバー(**Fig. 4d**)を動かしつつ、セグメンテーションの正確さを視覚的に確認してください。 
+16. 下段のSliceバー(**Fig. 4b**)、上段のZoomバー(**Fig. 4c**)、Opacityバー(**Fig. 4d**)を動かしつつ、セグメンテーションの正確さを視覚的に確認してください。 
 
-16. 不正確なセグメンテーションを校正する場合は、ひょうたん形状のAdjustボタンをクリックして(**Fig. 4e**)、Adjustモードにしてください。欠損がある部分に向かってカーソル円(+/-で拡縮)をドラッグすると欠損を埋めることができます。欠損を埋めたのち、Tabボタンを押して変更反映してください。Escボタンを押すとキャンセルになります。また、消しゴムをクリックしたのち(**Fig. 4f**）、余分な部分をドラッグして余分な部分を削ってください。Tabボタンで消去を反映し、Escボタンでキャンセルします。
+17. 不正確なセグメンテーションを校正する場合は、ひょうたん形状のAdjustボタンをクリックして(**Fig. 4e**)、Adjustモードにしてください。欠損がある部分に向かってカーソル円(+/-で拡縮)をドラッグすると欠損を埋めることができます。欠損を埋めたのち、Tabボタンを押して変更反映してください。Escボタンを押すとキャンセルになります。また、消しゴムをクリックしたのち(**Fig. 4f**）、余分な部分をドラッグして余分な部分を削ってください。Tabボタンで消去を反映し、Escボタンでキャンセルします。
 
-17. 十分に校正ができたら、セグメンテーションを保存してください。また、UNI-EM上端のドロップダウンメニューより Dojo → Export Segmentation を選択することにより、校正したセグメンテーションファイルをpng/tiff形式で保存することができます。 
+18. 十分に校正ができたら、セグメンテーションを保存してください。また、UNI-EM上端のドロップダウンメニューより Dojo → Export Segmentation を選択することにより、校正したセグメンテーションファイルをpng/tiff形式で保存することができます。 
 
-18. UNI-EM上端のドロップダウンメニューより Annotator → Open を選択して3D Annotatorを開いてください。セグメンテーションしたミトコンドリアの3次元形状の視覚化・保存、名前づけ（アノテーション）、Markerの設置ができます(**Fig. 4g**)。詳細な使い方は[使い方：3D Annotator](../README.ja.md#3D-Annotator)をご覧ください。
+19. UNI-EM上端のドロップダウンメニューより Annotator → Open を選択して3D Annotatorを開いてください。セグメンテーションしたミトコンドリアの3次元形状の視覚化・保存、名前づけ（アノテーション）、Markerの設置ができます(**Fig. 4g**)。詳細な使い方は[使い方：3D Annotator](../README.ja.md#3D-Annotator)をご覧ください。
 
 <p align="center">
   <img src="Images/Proof_Annotation.png" alt="Proofreader Dojo and 3D Annotator" width="1000">
