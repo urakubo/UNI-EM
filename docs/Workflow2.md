@@ -85,7 +85,7 @@ Here we try automated membrane segmentation of a stack of EM images from mouse s
 		- "depth":12,"fov_size":[33,33,33],"deltas":[8,8,8] for checked
 		- "depth":9,"fov_size":[33,33,17],"deltas":[8,8,4] for unchecked
 
-	- Select the folder "ffn" for "FFNs folder". It should contain "grayscale_maps.h5", "groundtruth.h5", "af.h5", and "tf_record_file." They were generated in the preprocessing step.
+	- Select the folder "ffn" from the pulldown menu of "FFNs folder". It should contain "grayscale_maps.h5", "groundtruth.h5", "af.h5", and "tf_record_file." They were generated in the preprocessing step.
 	- Select the folder "DNN_model_tensorflow" for "Model Folder". It should be a empty folder or tensorflow model folder.
 
 6. Start training by clicking the "Execute" button. Users will see the following progress messages in the console window:
@@ -105,9 +105,9 @@ I0217 23:14:48.805234  2272 train.py:699]
 #### Inference
 
 7. Select the inference tab in the FFN dialogue (**Fig. 2a**).
-	- Confirm that the target EM images are located in the "Target Image Folder" (sequentially numbered image files; 8bit, grayscale png).
-	- Confirm that the "Output Inference Folder" exists. Inferred segmentation will be stored in this folder.
-	- Specify the Tensorflow Model File. The tensorflow model file consists of the three files ”model.ckpt-XXXXX.data-00000-of-00001", "model.ckpt-XXXXX.index", and "model.ckpt-4000000.meta". Specify the common prefix of those files: "model.ckpt-XXXXX".
+	- Select "DNN_test_images" from the pulldown menu of "Target Image Folder." I should contains EM images for inference (sequentially numbered image files; 8bit, grayscale/RGB; png/tif/jpg).
+	- Select "DNN_model_tensorflow" for "Model Folder" that contains Tensorflow models. The tensorflow model file consists of the three files of ”model.ckpt-XXXXX.data-00000-of-00001", "model.ckpt-XXXXX.index", and "model.ckpt-4000000.meta". UNI-EM automatically detects the folder that contains the trios of files, and uses the largest number model for inference.
+	- Select the folder "ffn" for "FFNs folder." Inferred segmentation will be stored in this folder.
 	- Check "Sparse Z" if the user check it in the process of training.
 
 8. Start inference by clicking the "Execute" button. The inference program firstly generates the hdf5 style file of target EM images "grayscale_inf.h5" and the parameter file "inference_params.pbtxt" in the FFN File Folder. Then, the inference starts based on those intermediate files. Users will see progress messages in the console window (shown below). Inference is finished if the message "Executor shutdown complete" appears. Confirm that the file "0/0/seg-0_0_0.npz" has been generated in the Output Inference Folder. This is the inferred segmentation. 
@@ -130,7 +130,7 @@ I0217 23:14:48.805234  2272 train.py:699]
 
 9. Select the postprocessing tab in the FFN dialogue (**Fig. 2a**).
 
-10. Confirm that the inferred segmentation file "seg-0_0_0.npz" was specified in the Target Inference File.
+10. Select the  that the inferred segmentation file "seg-0_0_0.npz" was specified in the Target Inference File.
 
 11. Set Output Filetype. The 8-bit color PNG style is recommended for visual inspection of the png files, and the 16-bit gray scale PNG style is recommended for further proofreading, 3D visualization, and annotation.
 
