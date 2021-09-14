@@ -57,8 +57,8 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 
 - Release summary:
 	- Compatibility with both tensorflow1.X and 2.X. It now works also on NVIDIA Ampere GPUS (RTX30X0, etc.). 
-	- Bug fix.
-		
+	- Documents for FFNs.
+	- Bug fix.		
 
 2.	Download one of sample EM/segmentation dojo folders from the following link, and unzip it:
    	- https://www.dropbox.com/s/pxds28wdckmnpe8/ac3x75.zip?dl=0
@@ -68,7 +68,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 
 4.	Select Dojo → Open Dojo Folder from the dropdown menu, and specify the folder of the sample EM/segmentation dojo files.  The proofreading software Dojo will be launched.
 
-5.	Update the dirver of NVIDIA GPU if you see the following error.
+Update the dirver of NVIDIA GPU if you see the following error.
 	- tensorflow.python.framework.errors_impl.InternalError: cudaGetDevice() failed. Status: CUDA driver version is insufficient for CUDA runtime version
 	- https://www.nvidia.com/Download/index.aspx
 
