@@ -49,6 +49,15 @@ UNI-EMによる3D FFNセグメンテーションの一例として、ATUM/SEMに
 	- FFN中間ファイル"af.h5"
 	- FFN中間ファイル"tf_record_file"
 
+<BR>
+<p align="center">
+  <img src="Images/FFN_Prep.png" alt="3D FFN Preprocessing" width="600">
+</p>
+<p align="center">
+  <font size="5"> <b>Figure 2. FFN Preprocessing </b> </font>
+</p>
+<BR>
+
 ```Preprocessing
         "grayscale_maps.h5" file (training image) was generated.
 	"groundtruth.h5" file (ground truth) was generated.
@@ -69,15 +78,6 @@ UNI-EMによる3D FFNセグメンテーションの一例として、ATUM/SEMに
 	I0217 21:52:38.350505  4268 build_coordinates.py:88] Saving coordinates.
 	FFN preparaion was finished.
 ```
-
-<BR>
-<p align="center">
-  <img src="Images/FFN_Prep.png" alt="3D FFN Preprocessing" width="600">
-</p>
-<p align="center">
-  <font size="5"> <b>Figure 2. FFN Preprocessing </b> </font>
-</p>
-<BR>
 
 
 #### ●トレーニング
