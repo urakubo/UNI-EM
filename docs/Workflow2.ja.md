@@ -41,7 +41,7 @@ UNI-EMによる3D FFNセグメンテーションの一例として、ATUM/SEMに
 
 3. UNI-EM上端のドロップダウンメニューより Segmentation → 3D FFN を選択して、3D FFN ダイアログを起動してください。
 	- Preprocessing タブを選択してください(**Fig. 2a**)。
-	- 下段の"Training Image Folder", "Groud Truth Folder", "Empty Folder for FFNs" の右側のプルダウンメニューより、各々"DNN_training_images" (8bit grayscale/RGB, png/tif/jpg; **Fig. 2b**), "DNN_ground_truth" (8bit/16bit grayscale, png/tif; **Fig. 2c**), "ffn" (空; **Fig. 2d**) フォルダを選択してください。プルダウンメニューに該当フォルダ名が現れない場合は、もう一度フォルダをUNI-EM上にドラッグ＆ドロップするか、右の"Open...", "Browse..."よりフォルダを指定してください。
+	- 下段の"Training Image Folder", "Groud Truth Folder", "Empty Folder for FFNs" の右側のプルダウンメニューより、各々"DNN_training_images" (8bit grayscale/RGB, png/tif/jpg; **Fig. 2b**), "DNN_ground_truth" (8bit/16bit grayscale, png/tif; **Fig. 2c**), "ffn" (空; **Fig. 2d**) フォルダを選択してください。プルダウンメニューに該当フォルダ名が現れない場合は、もう一度フォルダをUNI-EM上にドラッグ＆ドロップするか、右の"Open...", "Browse..."より該当フォルダを指定してください。
 
 <BR>
 <p align="center">
