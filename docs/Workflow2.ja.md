@@ -88,7 +88,7 @@ UNI-EMによる3D FFNセグメンテーションの一例として、ATUM/SEMに
 		- チェックを入れない場合：　"depth":12,"fov_size":[33,33,33],"deltas":[8,8,8]
 		- チェックを入れた場合："depth":9,"fov_size":[33,33,17],"deltas":[8,8,4]
 
-	- "FFNs Folder" には"ffn"フォルダを指定してください。"ffn"フォルダの中にはPreprocessingにより作成された"groundtruth.h5", "tf_record_file", "af.h5" が入っている筈です。
+	- "FFNs Folder" には"ffn"フォルダを指定してください。"ffn"フォルダの中にはPreprocessingにより作成された"grayscale_maps.h5""groundtruth.h5", "af.h5", "tf_record_file" が入っている筈です。
 	- Tensorflow Model Folder にはトレーニング結果が入ります。空フォルダ、またはTensorflow model フォルダが指定されていることを確認してください。
 
 6. Trainingタブ最下段の Execute をクリックして、トレーニングを開始してください。コンソールに次の様なプログレスメッセージが現れます。
