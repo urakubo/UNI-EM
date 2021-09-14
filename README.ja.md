@@ -68,12 +68,13 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 
 4. 上端のドロップダウンメニューより一番左のDojo → Open Dojo Folderを選択して、ダイアログよりkasthuri15フォルダ下のmojoを指定してください。サンプルデータがダウンロードされてDojoが起動します。
 
-5. Tensorflow training時、inference時に下のエラーが出る場合は、NVIDIA Driverをアップデートしてください。
+* Tensorflow training時、inference時に下のエラーが出る場合は、NVIDIA Driverをアップデートしてください。
 	- tensorflow.python.framework.errors_impl.InternalError: cudaGetDevice() failed. Status: CUDA driver version is insufficient for CUDA runtime version
 	- https://www.nvidia.com/Download/index.aspx
 
+* TF1のFFNモデルと、TF2のFFNモデルは同一ではありません。TF1でFFNトレーニングを行ったあと、TF2で更なるトレーニングを行ったり、推論を行う事はできません。
 
-- Tensorflow トレーニングの際に、下の警告が出ることを浦久保は認識しておりますが、解決できておりません。どなたかのご助力をお願いいたします。
+* Tensorflow トレーニングの際に、下の警告が出ることを浦久保は認識しておりますが、解決できておりません。どなたかのご助力をお願いいたします。
 	- WARNING:tensorflow:It seems that global step (tf.train.get_global_step) has not been increased. Current value (could be stable): 0 vs previous value: 0. You could increase the global step by passing tf.train.get_global_step() to Optimizer.apply_gradients or Optimizer.minimize.
 
 
@@ -99,14 +100,16 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 
 7. 上端のドロップダウンメニューより一番左のDojo → Open Dojo Folderを選択して、ダイアログよりkasthuri15フォルダ下のmojoを指定してください。サンプルデータがダウンロードされてDojoが起動します。
 
-8. Tensorflow training時、inference時に下のエラーが出る場合は、NVIDIA Driverをアップデートしてください。
+* Tensorflow training時、inference時に下のエラーが出る場合は、NVIDIA Driverをアップデートしてください。
 	- tensorflow.python.framework.errors_impl.InternalError: cudaGetDevice() failed. Status: CUDA driver version is insufficient for CUDA runtime version
 	- https://www.nvidia.com/Download/index.aspx
 
-- Windows10の場合、下のTF1.15.4 と cuda 11.1 の組み合わせで、1.4倍程度トレーニング速度が速くなることを確認しています。 
+* TF1のFFNモデルと、TF2のFFNモデルは同一ではありません。TF1でFFNトレーニングを行ったあと、TF2で更なるトレーニングを行ったり、推論を行う事はできません。
+
+* Windows10の場合、下のTF1.15.4 と cuda 11.1 の組み合わせで、1.4倍程度トレーニング速度が速くなることを確認しています。 
 	- https://github.com/fo40225/tensorflow-windows-wheel/tree/master/1.15.4+nv20.12/
 
-- Tensorflow トレーニングの際に、下の警告が出ることを浦久保は認識しておりますが、解決できておりません。どなたかのご助力をお願いいたします。
+* Tensorflow トレーニングの際に、下の警告が出ることを浦久保は認識しておりますが、解決できておりません。どなたかのご助力をお願いいたします。
 	- WARNING:tensorflow:It seems that global step (tf.train.get_global_step) has not been increased. Current value (could be stable): 0 vs previous value: 0. You could increase the global step by passing tf.train.get_global_step() to Optimizer.apply_gradients or Optimizer.minimize.
 
 
