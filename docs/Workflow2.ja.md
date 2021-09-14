@@ -88,7 +88,7 @@ UNI-EMによる3D FFNセグメンテーションの一例として、ATUM/SEMに
 		- チェックを入れない場合：　"depth":12,"fov_size":[33,33,33],"deltas":[8,8,8]
 		- チェックを入れた場合："depth":9,"fov_size":[33,33,17],"deltas":[8,8,4]
 
-	- "FFNs Folder" には"ffn"フォルダを指定してください。"ffn"フォルダの中にはPreprocessingにより作成された"grayscale_maps.h5""groundtruth.h5", "af.h5", "tf_record_file" が入っている筈です。
+	- "FFNs Folder" には"ffn"フォルダを指定してください。"ffn"フォルダの中にはPreprocessingにより作成された"grayscale_maps.h5", "groundtruth.h5", "af.h5", "tf_record_file" が入っている筈です。
 	- Tensorflow Model Folder にはトレーニング結果が入ります。空フォルダ、またはTensorflow model フォルダが指定されていることを確認してください。
 
 6. Trainingタブ最下段の Execute をクリックして、トレーニングを開始してください。コンソールに次の様なプログレスメッセージが現れます。
@@ -109,7 +109,7 @@ I0217 23:14:48.805234  2272 train.py:699]
 7. FFNダイアログのInferenceタブを選択してください(**Fig. 2a**)。
 	- "Target Image Folder" に推論用のEM画像が入ったフォルダ"DNN_test_images"を指定してください(8bit grayscale/RGB, png/tif/jpgの連続番号ファイル)。
 	- "Model Folder" にTensorflow modelフォルダの入った"DNN_model_tensorflow"指定してください。フォルダ内には ”model.ckpt-XXXXX.data-00000-of-00001", "model.ckpt-XXXXX.index", "model.ckpt-4000000.meta" の3つ組のファイルが存在する筈です。UNI-EMは、同３つ組ファイルが存在するフォルダをTensorflow modelフォルダと判定します。推論のために、"model.ckpt-XXXXX" のXXXXXがもっとも大きなファイル(最もトレーニングが進んだモデル)が自動的に読み込まれます。
-	- "FFNs Folder" に"ffns"フォルダを指定してください。同フォルダに推論結果が保存されます。
+	- "FFNs Folder" に"ffn"フォルダを指定してください。同フォルダに推論結果が保存されます。
 	- トレーニングにおいて、Sparse Z にチェックを入れた場合は同様にチェックを入れてください。
 
 8. Inferenceタブ最下段の Execute をクリックして推論を開始してください。まず "ffns"フォルダに "DNN_test_images"中の画像のhdf5ファイル "grayscale_inf.h5" およびパラメータファイル "inference_params.pbtxt" が作成されます。続いて推論が開始されます。コンソールに下の様なプログレスメッセージが現れます。"Executor shutdown complete."と表示されたら、Inferenceは終了です。Output Inference Folder 中サブフォルダ"0/0" に "seg-0_0_0.npz" という名前で推論セグメンテーションファイルが作成されます。 
@@ -132,7 +132,7 @@ I0217 23:14:48.805234  2272 train.py:699]
 
 9. FFNダイアログのPostprocessingタブを選択してください(**Fig. 2a**)。
 
-10. "FFNs Folder" に"ffns"フォルダを指定してください。同フォルダには推論セグメンテーションファイル "0/0/seg-0_0_0.npz" が存在する筈です。
+10. "FFNs Folder" に"ffn"フォルダを指定してください。同フォルダには推論セグメンテーションファイル "0/0/seg-0_0_0.npz" が存在する筈です。
 
 11. "Output Segmentation Folder" に"DNN_segmentation"フォルダを指定してください。空フォルダなら何でも結構です。
 
