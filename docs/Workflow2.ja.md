@@ -20,7 +20,7 @@ UNI-EMによる3D FFNセグメンテーションの一例として、ATUM/SEMに
 
 #### ●EM画像と教師セグメンテーション
 
-1. 下の ExampleFFN.zip をダウンロードして展開してください。ExampleFFN中のフォルダ"DNN_training_images"にトレーニング画像 (0000.png, ..., 0099.png; 8bit, grayscale) 、"DNN_ground_truth" に教師セグメンテーション (0000.png, ..., 0099.png; 16bit, grayscale)、 "DNN_ground_truth" に推論用画像 (0000.png, ..., 0099.png; 8bit RGBですが推論時に自動的にgrayscale に変換されます)が入っています(**Fig. 1**)。ご自身で教師セグメンテーションを作成される際にはVast liteの使用をお勧めします
+1. 下の ExampleFFN.zip をダウンロードして展開してください。ExampleFFN中のフォルダ"DNN_training_images"にトレーニング画像 (0000.png, ..., 0099.png; 8bit, grayscale) 、"DNN_ground_truth" に教師セグメンテーション (0000.png, ..., 0099.png; 16bit, grayscale)、 "DNN_ground_truth" に推論用画像 (0000.png, ..., 0099.png; 8bit RGBですが推論時に自動的に8bit grayscale に変換されます)が入っています(**Fig. 1**)。ご自身で教師セグメンテーションを作成される際にはVast liteの使用をお勧めします
 ( https://software.rc.fas.harvard.edu/lichtman/vast/ )。"ffn", "DNN_model_tensorflow", "DNN_segmentation"は空フォルダです。 
 
 **ExampleFFN.zip** 522MB: https://www.dropbox.com/s/cztcf8w0ywj1pmz/ExampleFFN.zip?dl=0
