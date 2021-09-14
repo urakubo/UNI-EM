@@ -21,7 +21,7 @@ Here we try automated membrane segmentation of a stack of EM images from mouse s
 
 #### Target EM images and ground truth
 
-1. Download the file "ExampleFFN.zip" from the link below and unzip it on your UNI-EM installed PC. Here the EM images for training are stored in the folder "DNN_training_images" (0000.png, ..., 0099.png; 8bit, grayscale), and the ground truth segmentations are stored in the folder "DNN_ground_truth" (0000.png, ..., 0099.png; 16bit, grayscale; **Fig. 1**), and the EM images for inference are stored in "DNN_test_images" (0000.png, ..., 0099.png; 8bit RGB that are converted to 8 bit grayscale). The software Vast lite is recommend to make such ground truth segmentation ( https://software.rc.fas.harvard.edu/lichtman/vast/ ).
+1. Download the file "ExampleFFN.zip" from the link below and unzip it on your UNI-EM installed PC. Here the EM images for training are stored in the folder "DNN_training_images" (0000.png, ..., 0099.png; 8bit, grayscale), and the ground truth segmentations are stored in the folder "DNN_ground_truth" (0000.png, ..., 0099.png; 16bit, grayscale; **Fig. 1**), and the EM images for inference are stored in "DNN_test_images" (0000.png, ..., 0099.png; 8bit RGB that are converted to 8 bit grayscale). The software Vast lite is recommend to make such ground truth segmentation ( https://software.rc.fas.harvard.edu/lichtman/vast/ ). The folders "ffn", "DNN_model_tensorflow", and "DNN_segmentation" are empty.
 
 - ExampleFFN.zip 154MB: https://www.dropbox.com/s/06eyzakq9o87cmk/ExampleFFN.zip?dl=0
 <BR>
@@ -35,11 +35,11 @@ Here we try automated membrane segmentation of a stack of EM images from mouse s
 
 #### Preprocessing
 
-2. Launch UNI-EM, and drag and drop the unzipped folders on UNI-EM: "DNN_training_images", "DNN_ground_truth", "DNN_test_images", "ffn", "DNN_model_tensorflow", and "DNN_segmentation".
+2. Launch UNI-EM, and drag and drop the unzipped folders on UNI-EM. The zipped file should contain "DNN_training_images", "DNN_ground_truth", "DNN_test_images", "ffn", "DNN_model_tensorflow", and "DNN_segmentation".
 
 3. Select "Segmentation → 3D FFN" from a UNI-EM dropdown menu to launch the dialogue, 3D FFN.
 	- Select Preprocessing tab (**Fig. 2a**).
-	- Select the folder "DNN_training_images" from the pulldown menu of "Training Image Folder". It should contains training EM images (sequentially numbered image files; 8bit grayscale/RGB and png/tif/jpg; **Fig. 2b**). Also select the folder "DNN_ground_truth" for "Ground Truth Folder". It should contains ground truth images (sequentially  numbered image files; 8bit/16bit grayscale, png/tif; **Fig. 2c**). Select the folder "ffn" for "Empty folder for FFNs" (or any empty folder; **Fig. 2d**).
+	- Select the folder "DNN_training_images" from the pulldown menu of "Training Image Folder". It should contain training EM images (sequentially numbered image files; 8bit grayscale/RGB and png/tif/jpg; **Fig. 2b**). Also select the folder "DNN_ground_truth" for "Ground Truth Folder". It should contains ground truth images (sequentially  numbered image files; 8bit/16bit grayscale, png/tif; **Fig. 2c**). Select the folder "ffn" for "Empty folder for FFNs" (or any empty folder; **Fig. 2d**).
 
 <BR>
 <p align="center">
@@ -105,8 +105,8 @@ I0217 23:14:48.805234  2272 train.py:699]
 #### Inference
 
 7. Select the inference tab in the FFN dialogue (**Fig. 2a**).
-	- Select "DNN_test_images" from the pulldown menu of "Target Image Folder." I should contains EM images for inference (sequentially numbered image files; 8bit, grayscale/RGB; png/tif/jpg).
-	- Select "DNN_model_tensorflow" for "Model Folder" that contains Tensorflow models. The tensorflow model file consists of the three files of ”model.ckpt-XXXXX.data-00000-of-00001", "model.ckpt-XXXXX.index", and "model.ckpt-4000000.meta". UNI-EM automatically detects the folder that contains the trios of files, and uses the largest number model for inference.
+	- Select the folder "DNN_test_images" from the pulldown menu of "Target Image Folder." It should contains EM images for inference (sequentially numbered image files; 8bit, grayscale/RGB; png/tif/jpg).
+	- Select the folder "DNN_model_tensorflow" for "Model Folder" that contains Tensorflow models. The tensorflow model file consists of the three files of ”model.ckpt-XXXXX.data-00000-of-00001", "model.ckpt-XXXXX.index", and "model.ckpt-4000000.meta". UNI-EM automatically detects the folder that contains the trios of files, and uses the largest number model for inference.
 	- Select the folder "ffn" for "FFNs folder." Inferred segmentation will be stored in this folder.
 	- Check "Sparse Z" if the user check it in the process of training.
 
@@ -130,30 +130,33 @@ I0217 23:14:48.805234  2272 train.py:699]
 
 9. Select the postprocessing tab in the FFN dialogue (**Fig. 2a**).
 
-10. Select the  that the inferred segmentation file "seg-0_0_0.npz" was specified in the Target Inference File.
+10. Select the folder "ffn" from the dropdown menu of "FFNs Folder." It should contain the inferred segmentation file "0/0/seg-0_0_0.npz."
 
-11. Set Output Filetype. The 8-bit color PNG style is recommended for visual inspection of the png files, and the 16-bit gray scale PNG style is recommended for further proofreading, 3D visualization, and annotation.
+11. Select the folder "DNN_segmentation" for "Output Segmentation Folder." You can select any empty folder.
 
-12. Start postprocessing by clicking the "Execute" button. Confirm that the inferred segmentation files 0000.png, 0001.png, ..., 0099.png were generated in the Output Segmentation Folder.
+12. Set Output Filetype. The 8-bit color PNG style is recommended for visual inspection of the png files, and the 16-bit gray scale PNG style is recommended for further proofreading, 3D visualization, and annotation.
+
+13. Start postprocessing by clicking the "Execute" button. Confirm that the inferred segmentation files 0000.png, 0001.png, ..., 0099.png were generated in the Output Segmentation Folder.
 
 <BR>
 
 #### Proofreading, annotation, and visualization
 
-13. Select "Dojo → Import EM Stack/Segmentation" from the UNI-EM dropdown menu to launch the dialogue "Import Images & Segments".
-	- Set "Source Image Folder" as **[UNI-EM]/data/DNN_test_images** .
-	- Set "Source Segmentation Folder" as **[UNI-EM]/data/DNN_segmentation** .
+14. Select "File → Create Dojo Folder" from the UNI-EM dropdown menu to launch the dialogue "Create Dojo Folder."
+	- Set "DNN_test_images" for "Source Image Folder."
+	- Set "DNN_segmentation" for "Source Segmentation Folder."
 	- Create a file folder and set it as "Destination Dojo Folder". Dojo style files will be generated in this folder.
+	Press the OK button to strat the Dojo folder generation.
 
-14. Generate the Dojo style files by clicking the "OK" button. The software Dojo will be launched after the file generation (**Fig. 3a**).
+15. Select "Dojo → Open Dojo Folder" from the UNI-EM dropdown menu to launch the dialogue "Open Dojo Folder." Specify the Dojo style files and click the "OK" button. The software Dojo will be launched (**Fig. 3a**).
 
-15. Inspect successful segmentation visually through manipulating the bottom slice bar (**Fig. 3b**), top Zoom bar (**Fig. 3c**), and top Opacity bar (**Fig. 3d**).
+16. Inspect successful segmentation visually through manipulating the bottom slice bar (**Fig. 3b**), top Zoom bar (**Fig. 3c**), and top Opacity bar (**Fig. 3d**).
 
-16. Correct erroneous segmentation by entering the mode "Adjust". Click an icon whose shape has a fused two area (**Fig. 3e**). In the adjust mode, users can fill voids by dragging the circled cursor from a filled area. The +/- keys change its radius. Press the Tab key to verify the change, or the Esc key to cancel the change. Users can erase unnecessary areas by dragging the circled cursor after clicking the eraser icon (**Fig. 3f**).
+17. Correct erroneous segmentation by entering the mode "Adjust". Click an icon whose shape has a fused two area (**Fig. 3e**). In the adjust mode, users can fill voids by dragging the circled cursor from a filled area. The +/- keys change its radius. Press the Tab key to verify the change, or the Esc key to cancel the change. Users can erase unnecessary areas by dragging the circled cursor after clicking the eraser icon (**Fig. 3f**).
 
-17. Save the segmentation after proofreading. Users can also export the segmentation by selecting "Dojo → Export Segmentation" from the UNI-EM dropdown menu. The export file style is sequential png/tiff images.
+18. Save the segmentation after proofreading. Users can also export the segmentation by selecting "Dojo → Export Segmentation" from the UNI-EM dropdown menu. The export file style is sequential png/tiff images.
 
-18. Select "Annotator → Open" from the UNI-EM dropdown menu to launch the 3D Annotator. Users can visually inspect the 3D shapes of target objects, save 3D images, annotate the target objects, and locate markers (**Fig. 3g**). Refer [3D Annotator](../README.md#3D-Annotator) for detail.
+19. Select "Annotator → Open" from the UNI-EM dropdown menu to launch the 3D Annotator. Users can visually inspect the 3D shapes of target objects, save 3D images, annotate the target objects, and locate markers (**Fig. 3g**). Refer [3D Annotator](../README.md#3D-Annotator) for detail.
 
 
 <p align="center">
