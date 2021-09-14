@@ -122,7 +122,7 @@ The VAST Lite is recommended for 3D ground truth generation (https://software.rc
 	- Load Parameters
 
 	Users will see an example EM image volume and their segmentation (kasthuri15) by downloading the following example data.
-	- ExampleFFN.zip 522MB: https://www.dropbox.com/s/cztcf8w0ywj1pmz/ExampleFFN.zip?dl=0
+	- ExampleFFN.zip 154MB: https://www.dropbox.com/s/06eyzakq9o87cmk/ExampleFFN.zip?dl=0
 
 3.	Execute the preprocessing. It takes 5 to 60 min depending on target image volume and machine speed. It produces three files in the FFN file folder: af.h5, groundtruth.h5, and tf_record_file .
 4.	Select the training tab and specify parameters:
