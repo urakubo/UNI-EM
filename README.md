@@ -68,11 +68,13 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 
 4.	Select Dojo → Open Dojo Folder from the dropdown menu, and specify the folder of the sample EM/segmentation dojo files.  The proofreading software Dojo will be launched.
 
-Update the dirver of NVIDIA GPU if you see the following error.
+* Update the dirver of NVIDIA GPU if you see the following error.
 	- tensorflow.python.framework.errors_impl.InternalError: cudaGetDevice() failed. Status: CUDA driver version is insufficient for CUDA runtime version
 	- https://www.nvidia.com/Download/index.aspx
 
-6.	In the process of traning, HU sees the following warning, and has not found out how to suppress it. I ask someone for help.
+* Caution: The model in TF1 is not consistent with that in TF2. The model in TF1 cannot be used for the training or inference in TF2. 
+
+* In the process of traning, HU sees the following warning, and has not found out how to suppress it. I ask someone for help.
 	- WARNING:tensorflow:It seems that global step (tf.train.get_global_step) has not been increased. Current value (could be stable): 0 vs previous value: 0. You could increase the global step by passing tf.train.get_global_step() to Optimizer.apply_gradients or Optimizer.minimize.
 
 
@@ -102,11 +104,13 @@ Update the dirver of NVIDIA GPU if you see the following error.
 
 7.	Select Dojo → Open Dojo Folder from the dropdown menu, and specify the sample EM/segmentation dojo folder. The proofreading software Dojo will be launched.
 
-8.	Update the dirver of NVIDIA GPU if you see the following error.
+* Update the dirver of NVIDIA GPU if you see the following error.
 	- tensorflow.python.framework.errors_impl.InternalError: cudaGetDevice() failed. Status: CUDA driver version is insufficient for CUDA runtime version
 	- https://www.nvidia.com/Download/index.aspx
 
-9.	In the process of traning, HU sees the following warning, and has not found out how to suppress it. I ask someone for help.
+* Caution: The model in TF1 is not consistent with that in TF2. The model in TF1 cannot be used for the training or inference in TF2. 
+
+* In the process of traning, HU sees the following warning, and has not found out how to suppress it. I ask someone for help.
 	- WARNING:tensorflow:It seems that global step (tf.train.get_global_step) has not been increased. Current value (could be stable): 0 vs previous value: 0. You could increase the global step by passing tf.train.get_global_step() to Optimizer.apply_gradients or Optimizer.minimize.
 
 ## Authors
