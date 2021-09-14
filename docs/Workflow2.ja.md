@@ -149,9 +149,9 @@ I0217 23:14:48.805234  2272 train.py:699]
 	- "Source Segmentation Folder" に "DNN_segmentation" フォルダを指定してください。
 	- 分かりやすい場所にフォルダを作成して Destination Dojo Folder に指定してください。同フォルダにDojo形式ファイルが保存されます。
 
-	Create Dojo Folder ダイアログ最下段の OK をクリックして、Dojoファイルの生成を行ってください。
+	Create Dojo Folder ダイアログ最下段の OK をクリックして、Dojoフォルダの作成を行ってください。
 
-15. UNI-EM上端のドロップダウンメニューより Dojo → Open Dojo Folder を選択して、Open Dojo Folder ダイアログを起動してください。プルダウンメニューより作成されたDojoフォルダを指定すると Dojo が起動します(**Fig. 4a**)。
+15. UNI-EM上端のドロップダウンメニューより Dojo → Open Dojo Folder を選択して、Open Dojo Folder ダイアログを起動してください。プルダウンメニューに作成されたDojoフォルダを指定してOKをクリックすると、Dojo が起動します(**Fig. 4a**)。
 
 16. 下段のSliceバー(**Fig. 4b**)、上段のZoomバー(**Fig. 4c**)、Opacityバー(**Fig. 4d**)を動かしつつ、セグメンテーションの正確さを視覚的に確認してください。 
 
