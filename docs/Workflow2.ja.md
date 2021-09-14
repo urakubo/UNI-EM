@@ -138,18 +138,20 @@ I0217 23:14:48.805234  2272 train.py:699]
 
 12. Output Filetype に出力形式を指定してください。画像ファイルにて直観的に推定結果を確認したい場合には 8-bit color PNGを、プルーフリード・視覚化・アノテーションなどの操作を行いたい場合は16-bit gray scale PNGを指定してください。
 
-13. Postprocessingタブ最下段のExecuteをクリックして後処理を開始してください。Output Segmentation Folder に推論結果ファイル 0000.png, 0001.png, ..., 0099.png が保存されていることを確認してください。
+13. Postprocessingタブ最下段のExecuteをクリックして後処理を開始してください。"DNN_segmentation"に推論結果ファイル 0000.png, 0001.png, ..., 0099.png が保存されていることを確認してください。
 
 <BR>
 
 #### ● 推論結果のプルーフリード、視覚化、アノテーション
 
-14. UNI-EM上端のドロップダウンメニューより Dojo → Import EM Stack/Segmentation を選択して、Import Images & Segments ダイアログを起動してください。
-	- Source Image Folder を ** Target Image Folder "[UNI-EM]/data/DNN_test_images" ** に設定してください。
-	- Source Segmentation Folder を ** Output Segmentation Folder "[UNI-EM]/data/DNN_segmentation" ** と同じに設定してください。
-	- 分かりやすい場所にフォルダを作成して Destination Dojo Folder に指定してください。フォルダ中にDojo形式でファイルが保存されます。
+14. UNI-EM上端のドロップダウンメニューより File → Create Dojo Folder を選択して、Create Dojo Folder ダイアログを起動してください。
+	- "Source Image Folder" に "DNN_test_images" フォルダを指定してください。
+	- "Source Segmentation Folder" に "DNN_segmentation" フォルダを指定してください。
+	- 分かりやすい場所にフォルダを作成して Destination Dojo Folder に指定してください。同フォルダにDojo形式ファイルが保存されます。
 
-15. Import Images & Segments ダイアログ最下段の OK をクリックして、Dojoファイルの生成を行ってください。ファイル作成後、Dojo が起動します(**Fig. 4a**)。
+	Create Dojo Folder ダイアログ最下段の OK をクリックして、Dojoファイルの生成を行ってください。
+
+15. UNI-EM上端のドロップダウンメニューより Dojo → Open Dojo Folder を選択して、Open Dojo Folder ダイアログを起動してください。プルダウンメニューより作成されたDojoフォルダを指定すると Dojo が起動します(**Fig. 4a**)。
 
 16. 下段のSliceバー(**Fig. 4b**)、上段のZoomバー(**Fig. 4c**)、Opacityバー(**Fig. 4d**)を動かしつつ、セグメンテーションの正確さを視覚的に確認してください。 
 
