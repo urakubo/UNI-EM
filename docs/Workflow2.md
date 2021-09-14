@@ -39,7 +39,7 @@ Here we try automated membrane segmentation of a stack of EM images from mouse s
 
 3. Select "Segmentation → 3D FFN" from a UNI-EM dropdown menu to launch the dialogue, 3D FFN.
 	- Select Preprocessing tab (**Fig. 2a**).
-	- Select the folder "DNN_training_images" from the pulldown menu of "Training Image Folder". It should contain training EM images (sequentially numbered image files; 8bit grayscale/RGB and png/tif/jpg; **Fig. 2b**). Also select the folder "DNN_ground_truth" for "Ground Truth Folder". It should contains ground truth images (sequentially  numbered image files; 8bit/16bit grayscale, png/tif; **Fig. 2c**). Select the folder "ffn" for "Empty folder for FFNs" (or any empty folder; **Fig. 2d**).
+	- Select the folder "DNN_training_images" from the pulldown menu of "Training Image Folder." It should contain training EM images (sequentially numbered image files; 8bit grayscale/RGB and png/tif/jpg; **Fig. 2b**). Also select the folder "DNN_ground_truth" for "Ground Truth Folder." It should contains ground truth images (sequentially  numbered image files; 8bit/16bit grayscale, png/tif; **Fig. 2c**). Select the folder "ffn" for "Empty folder for FFNs" (or any empty folder; **Fig. 2d**).
 
 <BR>
 <p align="center">
@@ -86,7 +86,7 @@ Here we try automated membrane segmentation of a stack of EM images from mouse s
 		- "depth":9,"fov_size":[33,33,17],"deltas":[8,8,4] for unchecked
 
 	- Select the folder "ffn" from the pulldown menu of "FFNs folder". It should contain "grayscale_maps.h5", "groundtruth.h5", "af.h5", and "tf_record_file." They were generated in the preprocessing step.
-	- Select the folder "DNN_model_tensorflow" for "Model Folder". It should be a empty folder or tensorflow model folder.
+	- Select the folder "DNN_model_tensorflow" for "Model Folder." It should be a empty folder or tensorflow model folder.
 
 6. Start training by clicking the "Execute" button. Users will see the following progress messages in the console window:
 ```FFN Training
