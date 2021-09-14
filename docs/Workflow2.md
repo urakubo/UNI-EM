@@ -23,7 +23,7 @@ Here we try automated membrane segmentation of a stack of EM images from mouse s
 
 1. Download the file "ExampleFFN.zip" from the link below and unzip it on your UNI-EM installed PC. Copy and paste the unzipped contents to the "data" folder of UNI-EM ([UNI-EM]). Here the training image is stored in "[UNI-EM]/data/DNN_training_images" (0000.png, ..., 0099.png; 8bit, grayscale png), and the ground truth segmentation is stored in "[UNI-EM]/data/DNN_ground_truth"  (0000.png, ..., 0099.png; 16bit, grayscale png; **Fig. 1**). The software Vast lite is recommend to make such ground truth segmentation ( https://software.rc.fas.harvard.edu/lichtman/vast/ ).
 
-- ExampleFFN.zip 522MB: https://www.dropbox.com/s/cztcf8w0ywj1pmz/ExampleFFN.zip?dl=0
+- ExampleFFN.zip 154MB: https://www.dropbox.com/s/06eyzakq9o87cmk/ExampleFFN.zip?dl=0
 <BR>
 <p align="center">
   <img src="Images/FFN_GT.png" alt="3D FFN Ground truth" width="600">
