@@ -59,7 +59,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 	- Compatibility with both tensorflow1.X and 2.X. It now works also on NVIDIA Ampere GPUS (RTX30X0, etc.). 
 	- Documents for FFNs.
 	- Bug fix.		
-	- Caution: The model in TF1 is not consistent with that in TF2. The model in TF1 cannot be used for the training or inference in TF2.
+	- Caution: FFN model in TF1 is not consistent with that in TF2. The trained model using TF1 cannot be served for the further training or inference in TF2.
 
 2.	Download one of sample EM/segmentation dojo folders from the following link, and unzip it:
    	- https://www.dropbox.com/s/pxds28wdckmnpe8/ac3x75.zip?dl=0
@@ -73,7 +73,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 	- tensorflow.python.framework.errors_impl.InternalError: cudaGetDevice() failed. Status: CUDA driver version is insufficient for CUDA runtime version
 	- https://www.nvidia.com/Download/index.aspx
 
-* Caution: The model in TF1 is not consistent with that in TF2. The model in TF1 cannot be used for the training or inference in TF2. 
+* Caution: FFN model in TF1 is not consistent with that in TF2. The trained model using TF1 cannot be served for the further training or inference in TF2.
 
 * In the process of traning, HU sees the following warning, and has not found out how to suppress it. I ask someone for help.
 	- WARNING:tensorflow:It seems that global step (tf.train.get_global_step) has not been increased. Current value (could be stable): 0 vs previous value: 0. You could increase the global step by passing tf.train.get_global_step() to Optimizer.apply_gradients or Optimizer.minimize.
@@ -109,7 +109,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 	- tensorflow.python.framework.errors_impl.InternalError: cudaGetDevice() failed. Status: CUDA driver version is insufficient for CUDA runtime version
 	- https://www.nvidia.com/Download/index.aspx
 
-* Caution: The model in TF1 is not consistent with that in TF2. The model in TF1 cannot be used for the training or inference in TF2. 
+* Caution: FFN model in TF1 is not consistent with that in TF2. The trained model using TF1 cannot be served for the further training or inference in TF2.
 
 * In the process of traning, HU sees the following warning, and has not found out how to suppress it. I ask someone for help.
 	- WARNING:tensorflow:It seems that global step (tf.train.get_global_step) has not been increased. Current value (could be stable): 0 vs previous value: 0. You could increase the global step by passing tf.train.get_global_step() to Optimizer.apply_gradients or Optimizer.minimize.
