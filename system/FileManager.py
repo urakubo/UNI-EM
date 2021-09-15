@@ -271,12 +271,9 @@ class FileManager():
                 filetypes.add('tif')
             if ext in ['.png','.PNG'] :
                 filetypes.add('png')
-            if ext in ['.jpg', '.jpeg'] :
+            if ext in ['.jpg', '.jpeg','.JPG', '.JPEG'] :
                 filetypes.add('jpg')
         return list(filetypes)
-
-        tmp = glob.glob(os.path.join(params['Image Folder'], "*.png"))
-        input_files.extend(tmp)
 
 
     def CheckFolderDojo(self, folder_path):

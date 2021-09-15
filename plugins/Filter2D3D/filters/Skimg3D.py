@@ -7,7 +7,7 @@ from os import path, pardir
 
 
 from scipy import ndimage as ndi
-from skimage.morphology import watershed
+from skimage.segmentation import watershed
 from skimage.feature    import peak_local_max
 
 class Skimg3D():
@@ -16,10 +16,13 @@ class Skimg3D():
 
         binary_image = np.logical_not(input_image > params['Binarization threshold'])
         distance = ndi.distance_transform_edt(binary_image)
-        local_maxi = peak_local_max(distance, min_distance=params['Min distance'], indices=False )
-        markers, n_markers = ndi.label(local_maxi)
+        local_maxi = peak_local_max(distance, labels=binary_image, min_distance=params['Min distance'])
+        mask = np.zeros(distance.shape, dtype=bool)
+        mask[tuple(local_maxi.T)] = True
+        markers, n_markers = ndi.label(mask)
         print('Number of markers: ', n_markers)
-        labels = watershed(input_image, markers)
+        labels = watershed(-distance, markers, mask=binary_image)
+
 
         return labels
 

@@ -21,13 +21,8 @@ class InferenceExe():
 
     def _Run(self, parent, params, comm_title):
 
+        input_files = m.ObtainImageFiles( params['Image Folder'] )
 
-        input_files = glob.glob(os.path.join(params['Image Folder'], "*.jpg"))
-        input_png = glob.glob(os.path.join(params['Image Folder'], "*.png"))
-        input_tif = glob.glob(os.path.join(params['Image Folder'], "*.tif"))
-        input_files.extend(input_png)
-        input_files.extend(input_tif)
-        input_files = sorted(input_files)
         if len(input_files) == 0:
             print('No images in the Image Folder.')
             return False
@@ -100,7 +95,9 @@ class InferenceExe():
 
             filename = path.basename(input_file)
             print(filename+' ')
-            filename = filename.replace('.tif', '.png')
+            for ext in ['.TIF','.tif', '.TIFF', '.tiff','.PNG','.jpg', '.jpeg','.JPG', '.JPEG'] :
+            	filename = filename.replace(ext, '.png')
+
             output_files.append(filename)
 
             # add fringe X
@@ -203,5 +200,4 @@ class InferenceExe():
             img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
         return img
 
-               
 

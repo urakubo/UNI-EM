@@ -137,14 +137,7 @@ class MiscellaneousFilters(SharedFileDialogs):
         # for ofileobj in ofolder.values():
         #    ofileobj.close()
         #
-        search1 = os.path.join(input_path, '*.png')
-        search2 = os.path.join(input_path, '*.tif')
-        search3 = os.path.join(input_path, '*.tiff')
-        filestack = sorted(glob.glob(search1))
-        filestack.extend(sorted(glob.glob(search2)))
-        filestack.extend(sorted(glob.glob(search3)))
-
-        # print('filestack : ', filestack)
+        filestack = m.ObtainImageFiles( input_path )
         return filestack
 
 
@@ -197,14 +190,13 @@ class MiscellaneousFilters(SharedFileDialogs):
         for zi, filename in enumerate(filestack):
             output_name = os.path.basename(filename)
             savename = os.path.join(output_path, output_name)
-            root, ext = os.path.splitext(savename)
-            if ext == ".tif" or ext == ".tiff" or ext == ".TIF" or ext == ".TIFF":
-                m.save_tif16(input_volume[:, :, zi], savename)
-            elif ext == ".png" or ext == ".PNG":
-                m.save_png16(input_volume[:, :, zi], savename)
+            print("Save: ",savename)
+            flag = m.SaveImage(input_volume[:, :, zi], savename)
+
         print('2D/3D filters were applied!')
-        # Lock Folder
-        m.LockFolder(self.parent.u_info, output_path)
+        # Change folder type
+        self.parent.parent.ExecuteCloseFileFolder(output_path)
+        self.parent.parent.OpenFolder(output_path)
 
 
     def Execute2D(self, w):
@@ -226,26 +218,15 @@ class MiscellaneousFilters(SharedFileDialogs):
             # input_image = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
             input_image = m.imread(filename, flags=cv2.IMREAD_GRAYSCALE)
             output_image = self.FilterApplication2D(w, input_image)
-            output_dtype = output_image.dtype
             savename = os.path.join(output_path, output_name)
-            root, ext = os.path.splitext(savename)
-            if ext == ".tif" or ext == ".tiff" or ext == ".TIF" or ext == ".TIFF":
-                if output_dtype == 'uint16':
-                    m.save_tif16(output_image, savename)
-                elif output_dtype == 'uint8':
-                    m.save_tif8(output_image, savename)
-                else:
-                    print('dtype mismatch: ', output_dtype)
-            elif ext == ".png" or ext == ".PNG":
-                if output_dtype == 'uint16':
-                    m.save_png16(output_image, savename)
-                elif output_dtype == 'uint8':
-                    m.save_png8(output_image, savename)
-                else:
-                    print('dtype mismatch: ', output_dtype)
+
+            flag = m.SaveImage(output_image, savename)
+
         print('2D filters were applied!')
-        # Lock Folder
-        m.LockFolder(self.parent.u_info, output_path)
+        # Change folder type
+        self.parent.parent.ExecuteCloseFileFolder(output_path)
+        self.parent.parent.OpenFolder(output_path)
+
 
 
     def FilterApplication2D(self, w, image):

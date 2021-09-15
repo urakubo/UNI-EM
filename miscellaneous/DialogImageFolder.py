@@ -15,6 +15,7 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 icon_dir = path.join(main_dir, "icons")
 sys.path.append(main_dir)
+import miscellaneous.Miscellaneous as m
 
 
 class _MyListModel(QAbstractListModel):
@@ -69,10 +70,9 @@ class DialogImageFolder():
         self.listview.setViewMode(QListView.IconMode)
         self.listview.setIconSize(QSize(192,192))
 
-        targetfiles1 =  glob.glob(os.path.join( init_path, '*.png'))
-        targetfiles2 =  glob.glob(os.path.join( init_path, '*.tif'))
-        targetfiles3 =  glob.glob(os.path.join( init_path, '*.tiff'))
-        targetfiles  = targetfiles1 + targetfiles2 + targetfiles3
+        ## Problem: JPEG
+        targetfiles  = m.ObtainImageFiles(init_path)
+
         lm = _MyListModel(targetfiles, self.parent)
         self.listview.setModel(lm)
 
@@ -101,10 +101,8 @@ class DialogImageFolder():
     def on_clicked(self, index):
         path = self.dirModel.fileInfo(index).absoluteFilePath()
 
-        targetfiles1 =  glob.glob(os.path.join( path, '*.png'))
-        targetfiles2 =  glob.glob(os.path.join( path, '*.tif'))
-        targetfiles3 =  glob.glob(os.path.join( path, '*.tiff'))
-        targetfiles  = targetfiles1 + targetfiles2 + targetfiles3
+        ## Problem: JPEG
+        targetfiles  = m.ObtainImageFiles(path)
 
         lm = _MyListModel(targetfiles, self.parent)
         self.listview.setModel(lm)
