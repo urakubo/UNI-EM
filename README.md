@@ -57,8 +57,8 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 
 - Release summary:
 	- Compatibility with both tensorflow1.X and 2.X. It now works also on NVIDIA Ampere GPUS (RTX30X0, etc.). 
-	- Documents for FFNs.
-	- Bug fix.		
+	- Revision of documents for FFNs.
+	- Bug fix (Tensorboard, 2D/3D watersheds, Filetype of 2D CNN inference).		
 	- Caution: FFN model in TF1 is not consistent with that in TF2. The trained model using TF1 cannot be served for the further training or inference in TF2.
 
 2.	Download one of sample EM/segmentation dojo folders from the following link, and unzip it:
