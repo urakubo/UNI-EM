@@ -262,18 +262,27 @@ def save_npy(self, id_data, filename):
     np.save(filename, id_data)
 
 def save_tif16(id_data, filename):
-    cv2.imwrite(filename, id_data.astype('uint16'))
+    imwrite(filename, id_data.astype('uint16'))
 
-def save_tif8(id_data, filename):
-    cv2.imwrite(filename, id_data.astype('uint8'))
+def save_tif8(id_data, filename, compression=5):
+
+    # int(cv.IMWRITE_TIFF_COMPRESSION) == 1: No compression
+    # int(cv.IMWRITE_TIFF_COMPRESSION) == 5: Lempel-Ziv & Welch (LZW) compression
+
+    if compression == 5:
+        imwrite(filename, id_data.astype('uint8') )
+    else :
+        imwrite(filename, id_data.astype('uint8'), params=( int(cv2.IMWRITE_TIFF_COMPRESSION), compression) )
+
     # pilOUT = PIL.Image.fromarray(np.uint8(tile_image))
     # pilOUT.save(current_tile_image_name)
 
+
 def save_jpg16(id_data, filename):
-    cv2.imwrite(filename, id_data.astype('uint16'))
+    imwrite(filename, id_data.astype('uint16'))
 
 def save_jpg8(id_data, filename):
-    cv2.imwrite(filename, id_data.astype('uint8'))
+    imwrite(filename, id_data.astype('uint8'))
 
 def save_png16(id_data, filename):
     # Use pypng to write zgray as a grayscale PNG.

@@ -18,17 +18,19 @@ class InferenceTab(InferenceExe):
         self.title = '2D Inference'
 
         self.tips = [
-                        'Path to folder containing images',
-                        'Path to folder to store segmentation',
+                        'Path to folder containing images for inference',
                         'Tensorflow model folder',
-                        'Large image will be splited into pieces of the unit images'
+                        'Path to folder to store inferred segmentation',
+                        'Output Filetype',
+                        'Unit size of images for inference. Large image will be splited into pieces of the unit-size images.'
                         ]
 
 
         self.args = [
                         ['Image Folder',    'SelectImageFolder', 'OpenImageFolder'],
-                        ['Output Segmentation Folder (Empty)', 'SelectEmptyFolder', 'OpenEmptyFolder'],
                         ['Model Folder',  'SelectModelFolder', 'OpenModelFolder'],
+                        ['Output Segmentation Folder (Empty)', 'SelectEmptyFolder', 'OpenEmptyFolder'],
+                        ['Output Filetype',  'ComboBox', ['8-bit gray scale PNG', '8-bit gray scale TIFF (Uncompressed)', '8-bit gray scale TIFF (Compressed)']],
                         ['Maximal unit image size',  'ComboBox', ["512", "1024", "2048"]]
                         ]
 
