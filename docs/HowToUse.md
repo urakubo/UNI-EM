@@ -114,39 +114,36 @@ The VAST Lite is recommended for 3D ground truth generation (https://software.rc
 
 #### Procedure:
 1.	Select Segmentation → 3D FFN in the pulldown menu. A dialog that has the four tabs appears: Preprocessing, Training, Inference, and Postprocessing.
-2.	Select the preprocessing tab and specify parameters:
-	- Image Folder:	Folder containing EM images (grayscale sequential tiff/png images).
-	- Ground Truth Folder: Folder containing ground truth segmentation (grayscale sequential tiff/png images).
-	- FFN File Folder: 	Folder storing generated files for training.
+2.	Select the preprocessing tab and specify folders:
+	- Training Image Folder: Folder containing EM images for training (sequentially numbered grayscale tiff/png images).
+	- Ground Truth Folder: Folder containing ground truth segmentation (sequentially numbered grayscale tiff/png images).
+	- Empty Folder for FFNs: Empty folder to store generated preprocessed files for training.
 	- Save Parameters
 	- Load Parameters
 
-	Users will see an example EM image volume and their segmentation (kasthuri15) by downloading the following example data.
+	Users can use an example EM image volume and their segmentation (kasthuri15) by downloading the following example data.
 	- ExampleFFN.zip 154MB: https://www.dropbox.com/s/06eyzakq9o87cmk/ExampleFFN.zip?dl=0
 
-3.	Execute the preprocessing. It takes 5 to 60 min depending on target image volume and machine speed. It produces three files in the FFN file folder: af.h5, groundtruth.h5, and tf_record_file .
+3.	Execute the preprocessing. It takes 5 to 60 min depending on target image volume and machine speed. It produces three files in the Empty Folder for FFNs: af.h5, groundtruth.h5, and tf_record_file .
 4.	Select the training tab and specify parameters:
 	- Max Training Steps: 	The number of training FFN, a key parameter.
 	- Sparse Z:	Check it if the target EM-image stack is anisotropic.
-	- Training Image h5 File:	Generated file
-	- Ground truth h5 File:		Generated file.
-	- Tensorflow Record File:	Generated file.
-	- Tensorflow Model Folder:	Folder storing training results.
+	- FFNs Folder:  Folder storing generated preprocessed files.
+	- Model Folder: Folder to store trained Tensorflow model.
 5.	Execute the training. It requires over a few days depending on the target image volume, machine speed, and the Max Training Steps. A few million training steps are required for minimal quality inference. Users can execute additive training by specifying the same parameter settings with the increasing number of "Max Training Steps".
-6.	Select the inference tab and specify parameters:
-	- Target Image Folder:	Folder containing EM images (sequential grayscale tiff/png images).
-	- Output Inference Folder: Folder that will store the inference result.
-	- Tensorflow Model Files: Specify the trained model files. Please remove their suffix, and just specify the prefix such as "model.ckpt-2000000."
+6.	Select the inference tab and specify folders:
+	- Target Image Folder:	Folder containing EM images for inference (sequentially numbered grayscale tiff/png images).
+	- Model Folder: Folder storing the trained Tensorflow model, i.e., trios of ”model.ckpt-XXXXX.data-00000-of-00001", "model.ckpt-XXXXX.index", and "model.ckpt-4000000.meta".
+	- FFNs Folder:  FFNs Folder. Inference results will be stored in this folder.
 	- Sparse Z:	Check if it was checked it at the training process.
 	- Checkpoint interval: Checkpoint interval.
-	- FFN File Folder: Folder storing generated files for inference "inference_params.pbtxt."
 	- Save Parameters
 	- Load Parameters
-7.  Execute the inference. It requires 5-60 min depending on target image volume and machine speed. It produces inference results "0/0/seg-0_0_0.npz " and " seg-0_0_0.prob " in the Output Inference Folder. It also produces "inference_params.pbtxt" in the FFN file folder.
+7.  Execute the inference. It requires 5-60 min depending on target image volume and machine speed. It produces inference results " 0/0/seg-0_0_0.npz " and " 0/0/seg-0_0_0.prob " in the FFNs Folder. It also produces "inference_params.pbtxt" in the FFNs folder.
 8.  Select the postprocessing tab and specify parameters:
-	- Target Inference File: Specify inferred segmentation file such as seg-0_0_0.npz.
-	- Output Inference Folder: Folder storing generated sequential image files.
-	- OUtput Filetype: Please select one of them. 16 bit images are recommended.
+	- FFNs Folder:  FFNs Folder that stores inference results, i.e., 0/0/seg-0_0_0.npz.
+	- Output Segmentation Folder (Empty): Folder to store generated sequential segmentation images.
+	- Output Filetype: Select one of them. 8 bit color PNG is good for visual inspection. 16 bit gray-scale filetypes are good for further analyses.
 	- Save Parameters
 	- Load Parameters
 9.  Execute the postprocessing. It generally requires less than 5 min. It produces the inference result in the Output Inference Folder.
