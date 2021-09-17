@@ -53,7 +53,7 @@ class GenerateDialog(QWidget):
             self.parent.process_tensorboard = s.Popen(comm, stdout=s.PIPE)
             time.sleep(1)
             self.parent.table_widget.addTab('tensorboard', 'Tensorboard',
-                                     'http://' + socket.gethostbyname(socket.gethostname()) + ':6006')
+                                     'http://' + socket.gethostbyname(socket.gethostname()) + ':6006/')
             print("Start tensorboard")
             return True
         except s.CalledProcessError as e:

@@ -38,9 +38,32 @@ from scipy.special import expit
 from scipy.special import logit
 from skimage import transform
 
-import tensorflow as tf
 
-from tensorflow import gfile
+#import tensorflow as tf
+#from tensorflow import gfile
+## HU
+import pkg_resources
+ver = pkg_resources.get_distribution('tensorflow').version
+if ('1.15' in ver) |( '2.' in ver ):
+  import tensorflow.compat.v1 as tf
+  from tensorflow.compat.v1 import gfile
+  tf.disable_v2_behavior()
+else:
+  import tensorflow as tf
+  from tensorflow import gfile
+##
+##
+import os
+import logging
+import warnings
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+warnings.simplefilter(action='ignore', category=FutureWarning)
+warnings.simplefilter(action='ignore', category=Warning)
+tf.get_logger().setLevel('INFO')
+tf.autograph.set_verbosity(0)
+tf.get_logger().setLevel(logging.ERROR)
+##
+
 from . import align
 from . import executor
 from . import inference_pb2
@@ -58,18 +81,6 @@ from ..utils import bounding_box
 
 MSEC_IN_SEC = 1000
 MAX_SELF_CONSISTENT_ITERS = 32
-
-
-#HU{
-if tf.__version__ == '1.12.0':
-    from tensorflow.python.util import deprecation
-    deprecation._PRINT_DEPRECATION_WARNINGS = False
-
-if ('1.14' in tf.__version__) | ('1.15' in tf.__version__):
-    tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
-tf.logging.set_verbosity(tf.logging.INFO)
-os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
-#}HU
 
 
 # Visualization.

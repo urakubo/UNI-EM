@@ -89,9 +89,9 @@ class FFNPostprocessing():
         self.title = 'Postprocessing'
 
         self.tips = [
-                        'Folder that contains 0/0/seg-0_0_0.npz.',
-                        'Output segmentation folder.',
-                        'Output filetype.'
+                        'Folder that contains 0/0/seg-0_0_0.npz',
+                        'Output segmentation folder',
+                        'Output filetype'
                         ]
 
         self.args = [

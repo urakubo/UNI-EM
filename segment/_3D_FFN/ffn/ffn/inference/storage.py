@@ -29,7 +29,31 @@ import tempfile
 import h5py
 import numpy as np
 
-from tensorflow import gfile
+
+#from tensorflow import gfile
+## HU
+import pkg_resources
+ver = pkg_resources.get_distribution('tensorflow').version
+if ('1.15' in ver) |( '2.' in ver ):
+  import tensorflow.compat.v1 as tf
+  from tensorflow.compat.v1 import gfile
+  tf.disable_v2_behavior()
+else:
+  import tensorflow as tf
+  from tensorflow import gfile
+##
+##
+import os
+import logging
+import warnings
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+warnings.simplefilter(action='ignore', category=FutureWarning)
+warnings.simplefilter(action='ignore', category=Warning)
+tf.get_logger().setLevel('INFO')
+tf.autograph.set_verbosity(0)
+tf.get_logger().setLevel(logging.ERROR)
+##
+
 from . import align
 from . import segmentation
 from ..utils import bounding_box

@@ -26,19 +26,22 @@ warnings.filterwarnings('ignore', category=FutureWarning)
 
 import re
 import numpy as np
-import tensorflow as tf
 
-from tensorflow import gfile
+#import tensorflow as tf
+#from tensorflow import gfile
+## HU
+import pkg_resources
+ver = pkg_resources.get_distribution('tensorflow').version
+if ('1.15' in ver) |( '2.' in ver ):
+  from tensorflow.compat.v1 import gfile
+  import tensorflow.compat.v1 as tf
+  tf.disable_v2_behavior()
+else:
+  import tensorflow as tf
+  from tensorflow import gfile
+##
+
 from ..utils import bounding_box
-
-#HU
-if tf.__version__ == '1.12.0':
-    from tensorflow.python.util import deprecation
-    deprecation._PRINT_DEPRECATION_WARNINGS = False
-
-if ('1.14' in tf.__version__) | ('1.15' in tf.__version__):
-    tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
-#
 
 
 def create_filename_queue(coordinates_file_pattern, shuffle=True):

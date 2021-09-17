@@ -3,13 +3,13 @@ from __future__ import division
 from __future__ import print_function
 
 #HU{
-import warnings
-warnings.filterwarnings('ignore', category=DeprecationWarning)
-warnings.filterwarnings('ignore', category=FutureWarning)
+#import warnings
+#warnings.filterwarnings('ignore', category=DeprecationWarning)
+#warnings.filterwarnings('ignore', category=FutureWarning)
 #}HU
 
-import tensorflow as tf
-import tensorflow.contrib as contrib
+
+
 import numpy as np
 import argparse
 import os
@@ -20,16 +20,26 @@ import collections
 import math
 import time
 
+## HU
+import pkg_resources
+ver = pkg_resources.get_distribution('tensorflow').version
+if ('1.15' in ver) |( '2.' in ver ):
+  import tensorflow.compat.v1 as tf
+  tf.disable_v2_behavior()
+else:
+  import tensorflow as tf
+##
+import logging
+import warnings
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+warnings.simplefilter(action='ignore', category=FutureWarning)
+warnings.simplefilter(action='ignore', category=Warning)
+tf.get_logger().setLevel('INFO')
+tf.autograph.set_verbosity(0)
+tf.get_logger().setLevel(logging.ERROR)
+##
+
 #HU{
-if tf.__version__ == '1.12.0':
-    from tensorflow.python.util import deprecation
-    deprecation._PRINT_DEPRECATION_WARNINGS = False
-
-if ('1.14' in tf.__version__) | ('1.15' in tf.__version__):
-    tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
-
-# os.environ['TF_FORCE_GPU_ALLOW_GROWTH'] = 'true'
-
 gpus = tf.config.experimental.list_physical_devices('GPU')
 if gpus:
   try:
@@ -612,7 +622,7 @@ def create_model(inputs, targets, network=a.network, target_loss=a.loss):
     ema = tf.train.ExponentialMovingAverage(decay=0.99)
     update_losses = ema.apply([ loss])
 
-    global_step = tf.contrib.framework.get_or_create_global_step()
+    global_step = tf.train.get_or_create_global_step()
     incr_global_step = tf.assign(global_step, global_step+1)
 
     return Model(
@@ -687,8 +697,8 @@ def append_index(filesets, step=False, image_kinds=("inputs", "outputs", "target
 
 
 def main():
-    if tf.__version__.split('.')[0] != "1":
-        raise Exception("Tensorflow version 1 required")
+#    if tf.__version__.split('.')[0] != "1":
+#        raise Exception("Tensorflow version 1 required")
 
     if a.seed is None:
         a.seed = random.randint(0, 2**31 - 1)

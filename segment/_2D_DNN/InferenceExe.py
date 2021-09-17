@@ -21,13 +21,8 @@ class InferenceExe():
 
     def _Run(self, parent, params, comm_title):
 
+        input_files = m.ObtainImageFiles( params['Image Folder'] )
 
-        input_files = glob.glob(os.path.join(params['Image Folder'], "*.jpg"))
-        input_png = glob.glob(os.path.join(params['Image Folder'], "*.png"))
-        input_tif = glob.glob(os.path.join(params['Image Folder'], "*.tif"))
-        input_files.extend(input_png)
-        input_files.extend(input_tif)
-        input_files = sorted(input_files)
         if len(input_files) == 0:
             print('No images in the Image Folder.')
             return False
@@ -100,7 +95,9 @@ class InferenceExe():
 
             filename = path.basename(input_file)
             print(filename+' ')
-            filename = filename.replace('.tif', '.png')
+            for ext in ['.TIF','.tif', '.TIFF', '.tiff','.PNG','.jpg', '.jpeg','.JPG', '.JPEG'] :
+            	filename = filename.replace(ext, '.png')
+
             output_files.append(filename)
 
             # add fringe X
@@ -158,10 +155,10 @@ class InferenceExe():
         	if (num_tiles_x == 1) and (num_tiles_y == 1) :
         	## Remove fringes
         		filename = os.path.join( tmpdir_output, output_file )
-        		inferred_segmentation = m.imread(filename)
+        		inferred_segmentation = m.imread(filename, flags=cv2.IMREAD_GRAYSCALE, dtype='uint8')
         	else :
         	## Merge split images.
-        		inferred_segmentation = np.zeros((converted_size_y, converted_size_x, 3), dtype = int)
+        		inferred_segmentation = np.zeros((converted_size_y, converted_size_x), dtype='uint8')
         		for iy in range( num_tiles_y ):
 	        		for ix in range( num_tiles_x ):
 	        			y0 = iy * unit_image_size_y
@@ -170,14 +167,30 @@ class InferenceExe():
 	        			x1 = x0 + unit_image_size_x
 	        			current_tile_filename = str(ix).zfill(3)[-3:]+'_'+ str(iy).zfill(3)[-3:]+'_'+output_file
 	        			current_tile_filename = os.path.join( tmpdir_output, current_tile_filename )
-	        			current_tile = m.imread(current_tile_filename)
-	        			inferred_segmentation[y0:y1, x0:x1] = current_tile
+	        			current_tile = m.imread(current_tile_filename, flags=cv2.IMREAD_GRAYSCALE, dtype='uint8')
+	        			inferred_segmentation[y0:y1, x0:x1] = current_tile[:,:]
         	inferred_segmentation = inferred_segmentation[0:image_size_y, 0:image_size_x]
 
-        	filename = os.path.splitext(os.path.basename(output_file))[0] + ext_image
+        	print('inferred_segmentation: ', inferred_segmentation.shape, inferred_segmentation.dtype)
+
+        	## Save
+        	filename_base = os.path.splitext(os.path.basename(output_file))[0]
+        	filename_base = os.path.join( params['Output Segmentation Folder (Empty)'], filename_base )
+
+        	filetype = params['Output Filetype']
+
+        	if filetype == '8-bit gray scale PNG':
+        		filename = filename_base + '.png'
+        		m.save_png8(inferred_segmentation, filename)
+        	elif filetype == '8-bit gray scale TIFF (Uncompressed)':
+        		filename = filename_base + '.tif'
+        		m.save_tif8(inferred_segmentation, filename, compression=1)
+        	elif filetype == '8-bit gray scale TIFF (Compressed)':
+        		filename = filename_base + '.tif'
+        		m.save_tif8(inferred_segmentation, filename)
+        	else:
+        		print('Internel error: bad filetype.')
         	print(filename)
-        	filename = os.path.join( params['Output Segmentation Folder (Empty)'], filename )
-        	m.imwrite(filename, inferred_segmentation)
 
         ##
 
@@ -203,5 +216,4 @@ class InferenceExe():
             img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
         return img
 
-               
 

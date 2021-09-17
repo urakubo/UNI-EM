@@ -50,7 +50,19 @@ from miscellaneous.SyncListQComboBoxManager import *
 
 class MainWindow(QMainWindow, FileMenu, DojoMenu, DojoFileIO, Credit, Script):
 
-    def __del__(self):
+    def closeEvent(self, event):
+
+        super(QMainWindow, self).closeEvent(event)
+        # print ('In close event')
+
+        #while self.table_widget.appl != []:
+        #    self.table_widget.closeTab(0)
+
+        if 'tensorboard' in self.table_widget.appl:
+            id = self.table_widget.appl.index('tensorboard')
+            self.table_widget.closeTab(id)
+
+
         for ofile in self.u_info.open_files4lock.values():
             if type(ofile) == dict :
                 for ofileobj in ofile.values():
@@ -272,7 +284,7 @@ class PersephonepTableWidget(QWidget):
                 return
         ###
         if ('tensorboard' == self.appl[index]):
-            flag = self.parent.process_tensorboard.terminate()
+            flag = self.parent.process_tensorboard.kill()
             if (flag == 1):
                 print('Error ocurred in closing tensorboard.')
                 return

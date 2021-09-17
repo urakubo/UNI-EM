@@ -9,6 +9,7 @@ import PIL
 import PIL.Image
 import cv2
 import png
+import tifffile
 from itertools import product
 import glob
 
@@ -89,17 +90,44 @@ def CloseFolder(u_info,  dir):
     u_info.open_files.remove(dir)
 
 
-
+# Due to unicode comaptibitiy
 # https://qiita.com/SKYS/items/cbde3775e2143cad7455
+# 16bit png seems not to be read in "np.fromfile".
+# http://jamesgregson.ca/16-bit-image-io-with-python.html
 
-def imread(filename, flags=cv2.IMREAD_COLOR, dtype=np.uint8):
+def imread(filename, flags=cv2.IMREAD_UNCHANGED, dtype=None):
+
     try:
-        n = np.fromfile(filename, dtype)
-        img = cv2.imdecode(n, flags)
+
+#        n = np.fromfile(filename, dtype)
+#        img = cv2.imdecode(n, flags)
+#        root, ext = os.path.splitext(filename)
+#
+#        if ext in ['.png','.PNG']:
+#            img = png.Reader(filename).read()
+#        elif ext in ['.TIF','.tif', '.TIFF', '.tiff','.png','.PNG','.jpg', '.jpeg','.JPG', '.JPEG']:
+#            img = tifffile.imread(filename)
+#        else:
+#
+
+        pil_img = PIL.Image.open(filename)
+        img = np.array(pil_img)
+
+        if img.dtype == 'int32':
+            img = img.astype('uint16')
+        if dtype != None:
+            img = img.astype(dtype)
+        if img.ndim == 3:
+            img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+            if flags == cv2.IMREAD_GRAYSCALE:
+                img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+#        print('Image dtype: ', img.dtype,  img.shape)
         return img
     except Exception as e:
         print(e)
         return None
+
+
 
 
 def imwrite(filename, img, params=None):
@@ -234,12 +262,27 @@ def save_npy(self, id_data, filename):
     np.save(filename, id_data)
 
 def save_tif16(id_data, filename):
-    cv2.imwrite(filename, id_data.astype('uint16'))
+    imwrite(filename, id_data.astype('uint16'))
 
-def save_tif8(id_data, filename):
-    cv2.imwrite(filename, id_data.astype('uint8'))
+def save_tif8(id_data, filename, compression=5):
+
+    # int(cv.IMWRITE_TIFF_COMPRESSION) == 1: No compression
+    # int(cv.IMWRITE_TIFF_COMPRESSION) == 5: Lempel-Ziv & Welch (LZW) compression
+
+    if compression == 5:
+        imwrite(filename, id_data.astype('uint8') )
+    else :
+        imwrite(filename, id_data.astype('uint8'), params=( int(cv2.IMWRITE_TIFF_COMPRESSION), compression) )
+
     # pilOUT = PIL.Image.fromarray(np.uint8(tile_image))
     # pilOUT.save(current_tile_image_name)
+
+
+def save_jpg16(id_data, filename):
+    imwrite(filename, id_data.astype('uint16'))
+
+def save_jpg8(id_data, filename):
+    imwrite(filename, id_data.astype('uint8'))
 
 def save_png16(id_data, filename):
     # Use pypng to write zgray as a grayscale PNG.
@@ -277,11 +320,45 @@ def save_hdf5( file, dataset_name, array ):
     hdf5.close()
 
 def ObtainImageFiles(input_path):
-    search1 = os.path.join(input_path, '*.png')
-    search2 = os.path.join(input_path, '*.tif')
-    search3 = os.path.join(input_path, '*.tiff')
-    filestack = sorted(glob.glob(search1))
-    filestack.extend(sorted(glob.glob(search2)))
-    filestack.extend(sorted(glob.glob(search3)))
-    return filestack
+    Image_files = []
+    files_in_folder = glob.glob(os.path.join(input_path, "*"))
+    for file in files_in_folder:
+        root, ext = os.path.splitext(file)
+        if ext in ['.TIF','.tif', '.TIFF', '.tiff','.png','.PNG','.jpg', '.jpeg','.JPG', '.JPEG'] :
+            Image_files.append(file)
+
+    Image_files = sorted(Image_files)
+    return Image_files
+
+
+def SaveImage(output_image, filename):
+    output_dtype = output_image.dtype
+    root, ext = os.path.splitext(filename)
+    if ext in ['.TIF','.tif', '.TIFF', '.tiff']:
+        if output_dtype == 'uint16':
+            save_tif16(output_image, filename)
+        elif output_dtype == 'uint8':
+            save_tif8(output_image, filename)
+        else:
+            print('dtype mismatch: ', ext, output_dtype)
+            return False
+    elif ext in ['.png','.PNG']:
+        if output_dtype == 'uint16':
+            save_png16(output_image, filename)
+        elif output_dtype == 'uint8':
+            save_png8(output_image, filename)
+        else:
+            print('dtype mismatch: ', ext, output_dtype)
+            return False
+    elif ext in ['.jpg', '.jpeg','.JPG', '.JPEG']:
+        if output_dtype == 'uint16':
+            save_jpg16(output_image, filename)
+        elif output_dtype == 'uint8':
+            save_jpg8(output_image, filename)
+        else:
+            print('dtype mismatch: ', ext, output_dtype)
+            return False
+
+    return True
+
 
