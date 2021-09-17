@@ -53,10 +53,10 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 ### Pyinstaller版 (Windows10のみ)：
 1. GPU 版とCPU版を用意しました。いずれかをダウンロードして展開してください。
 
-	- Version 0.92 (2021/09/17; NVIDIA Ampere (RTX30X等) 対応):
+	- Version 0.92 (2021/09/17; TF1&2 対応 [NVIDIA Ampere GPU (RTX30X等) でも利用可能]):
 		- [CPU & GPU version (Ver0.92; 2,166 MB)](https://bit.ly/2VFvaDS)
 
-	- 前Version 0.90.4 (2021/05/31; NVIDIA Ampere (RTX30X等) 非対応):
+	- 前Version 0.90.4 (2021/05/31; NVIDIA Turing GPU (RTX20X0等) 以前で利用可能 ):
 		- [CPU version (Ver0.90.4; 363 MB)](https://bit.ly/3uwKHkB)
 		- [GPU version (Ver0.90.4: 1,068 MB)](https://bit.ly/2QWfFFb)
 
