@@ -52,7 +52,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 ### Pyinstaller version (Microsoft Windows 10 only)
 1.	Download one of the following two versions, and unzip it:
 
-- Version 0.92 (2021/09/13):
+- Version 0.92 (2021/09/17):
 	- [CPU & GPU version (Ver0.92; 2,166 MB)](https://bit.ly/2VFvaDS)
 
 - Release summary:
