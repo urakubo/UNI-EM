@@ -162,18 +162,18 @@ class GenerateDialog(QDialog):
 		##
         data_dict = {
 		    	'boundingbox_voxel':{
-		    		'x': hmax,
-		    		'y': wmax,
+		    		'x': wmax,
+		    		'y': hmax,
 		    		'z': zmax
 		    		},
 		    	'boundingbox_um':{
-		    		'x': ph * hmax,
-		    		'y': pw * wmax,
+		    		'x': pw * wmax,
+		    		'y': ph * hmax,
 		    		'z': pz * zmax
 		    		},
 		    	'pitch_um':{
-		    		'x': ph,
-		    		'y': pw,
+		    		'x': pw,
+		    		'y': ph,
 		    		'z': pz
 		    		},
 				}

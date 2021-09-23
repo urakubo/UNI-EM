@@ -38,6 +38,7 @@ def GetVolumes(surface_path, paint_path, skeleton_path):
 				if 'lengths' in f.keys() :
 					skel['lengths']  = f['lengths'][()]
 
+		summary_morphos = []
 		for part_mesh_filename in part_mesh_filenames :
 			with open(part_mesh_filename, 'rb') as file:
 				data = pickle.load(file)
@@ -65,22 +66,25 @@ def GetVolumes(surface_path, paint_path, skeleton_path):
 					ids_volumes[id] = closed_mesh.volume
 
 				if skel != {}:
-					len_enclosed, len_tot, min_radius, max_radius = GetRadiusLength2(closed_mesh, skel)
+					len_enclosed, len_tot, min_radius, max_radius, mean_radius = GetRadiusLength2(closed_mesh, skel)
 					print('Total length (um)   : ', len_tot )
 					print('Enclosed length (um): ', len_enclosed )
 					print('Minimum radius (um) : ', min_radius )
 					print('Maximum radius (um) : ', max_radius )
-					text_vtk2 = "Length (um) : {0:.4f}\nMin r (um) : {1:.4f}\nMax r (um) : {2:.4f}".format(len_enclosed, min_radius, max_radius)
+					print('Mean radius (um)    : ', mean_radius )
+					text_vtk2 = "Length (um) : {0:.4f}\nMin r (um) : {1:.4f}\nMax r (um) : {2:.4f}\nMean r (um) : {3:.4f}".format(len_enclosed, min_radius, max_radius, mean_radius)
 					text_vtk = text_vtk + text_vtk2
+					summary_morphos.append([len_enclosed, min_radius, max_radius, mean_radius])
 
 				plotter = pv.Plotter()
 				plotter.add_mesh(closed_mesh_for_vtk, label='mesh')
 				plotter.add_text(text_vtk)
 				plotter.show()
 
-
-			else:
-				print('No skeleton file is detected for ', whole_mesh_filename)
+		if summary_morphos != [] :
+			print('Summary of morphoolgies: ')
+			print('length, min r, max r, mean r')
+			print(summary_morphos)
 
 
 		return ids_volumes
@@ -133,14 +137,18 @@ def GetRadiusLength2(closed_mesh, skel):
 
 	if np.any(mask) :
 		len_enclosed  = np.sum(skel['lengths'][mask == True])
-		min_radius    = np.min(skel['radiuses'][mask == True])
-		max_radius    = np.max(skel['radiuses'][mask == True])
+		radius_min    = np.min(skel['radiuses'][mask == True])
+		radius_max    = np.max(skel['radiuses'][mask == True])
+		radius_mean   = np.dot(skel['lengths'][mask == True], skel['radiuses'][mask == True]) / len_enclosed
+
 	else :
 		len_enclosed  = 0
-		min_radius    = 0
-		max_radius    = 0
+		radius_min    = 0
+		radius_max    = 0
+		radius_mean   = 0
 
-	return len_enclosed, len_tot, min_radius, max_radius
+
+	return len_enclosed, len_tot, radius_min, radius_max, radius_mean
 
 
 def GetRadiusLength(closed_mesh, skel):
