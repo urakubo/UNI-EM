@@ -56,7 +56,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 	- [CPU & GPU version (Ver0.92; 2,166 MB)](https://bit.ly/2VFvaDS)
 
 - Release summary:
-	- Compatibility with both tensorflow1.X and 2.X. It now works also on NVIDIA Ampere GPUS (RTX30X0, etc).
+	- Compatibility with both tensorflow1.X and 2.X. UNI-EM thus works on NVIDIA Ampere GPUs (RTX30X0, etc) that require >TF2.4/cuda11.0.
 		- Caution: FFN model in TF2 is not identical to that in TF1. Trained model using TF1 cannot be used for further training or inference in TF2. 
 	- Revision of documents for FFNs.
 	- Bug fix (Tensorboard, 2D/3D watersheds, Filetypes of 2D CNN inference, etc).		
