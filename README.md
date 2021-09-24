@@ -74,7 +74,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 	- tensorflow.python.framework.errors_impl.InternalError: cudaGetDevice() failed. Status: CUDA driver version is insufficient for CUDA runtime version
 	- https://www.nvidia.com/Download/index.aspx
 
-* Caution: FFN model in TF1 is not consistent with that in TF2. The trained model using TF1 cannot be served for the further training or inference in TF2.
+* Caution: FFN model in Tensorflow 1 (TF1) is not identical to TF2. The trained model using TF1 cannot be used further training or inference in TF2.
 
 * In the process of traning, HU sees the following warning, and has not found out how to suppress it. I ask someone for help.
 	- WARNING:tensorflow:It seems that global step (tf.train.get_global_step) has not been increased. Current value (could be stable): 0 vs previous value: 0. You could increase the global step by passing tf.train.get_global_step() to Optimizer.apply_gradients or Optimizer.minimize.
