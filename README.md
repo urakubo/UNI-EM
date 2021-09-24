@@ -37,7 +37,7 @@ Recent years have seen a rapid expansion in the field of micro-connectomics, whi
 4.	A 3D annotator was equipped for visual inspection and annotation.
 5.	2D/3D filtration functions were equipped for pre/postprocessing of the segmented images.
 
-Multiple users can simultaneously use it through web browsers. The goal is to develop a unified software environment for  ground truth preparation, DNN-based segmentation, pre/postprocessing, proofreading, annotation, and visualization. 
+Multiple users can simultaneously use it through web browsers. The goal is to develop a unified software environment for ground truth preparation, DNN-based segmentation, pre/postprocessing, proofreading, annotation, and visualization. 
 
 ## System requirements
 Operating system: Microsoft Windows 10 (64 bit) or Linux (Ubuntu 18.04).
@@ -74,7 +74,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 	- tensorflow.python.framework.errors_impl.InternalError: cudaGetDevice() failed. Status: CUDA driver version is insufficient for CUDA runtime version
 	- https://www.nvidia.com/Download/index.aspx
 
-* Caution: FFN model in Tensorflow 1 (TF1) is not identical to TF2. The trained model using TF1 cannot be used further training or inference in TF2.
+* Caution: FFN model in Tensorflow 1 (TF1) is not identical to TF2. The trained model using TF1 cannot be used for further training or inference in TF2.
 
 * In the process of traning, HU sees the following warning, and has not found out how to suppress it. I ask someone for help.
 	- WARNING:tensorflow:It seems that global step (tf.train.get_global_step) has not been increased. Current value (could be stable): 0 vs previous value: 0. You could increase the global step by passing tf.train.get_global_step() to Optimizer.apply_gradients or Optimizer.minimize.
