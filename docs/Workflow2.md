@@ -21,7 +21,7 @@ Here we try automated membrane segmentation of a stack of EM images from mouse s
 
 #### Target EM images and ground truth
 
-1. Download the file "ExampleFFN.zip" from the link below and unzip it on your UNI-EM installed PC. Here the EM images for training are stored in the folder "DNN_training_images" (0000.png, ..., 0099.png; 8bit, grayscale), and the ground truth segmentations are stored in the folder "DNN_ground_truth" (0000.png, ..., 0099.png; 16bit, grayscale; **Fig. 1**), and the EM images for inference are stored in "DNN_test_images" (0000.png, ..., 0099.png; 8bit RGB that are converted to 8 bit grayscale). The software Vast lite is recommend to make such ground truth segmentation ( https://software.rc.fas.harvard.edu/lichtman/vast/ ). The folders "ffn", "DNN_model_tensorflow", and "DNN_segmentation" are empty.
+1. Download the file "ExampleFFN.zip" from the link below and unzip it on your UNI-EM installed PC. EM images for training are stored in the folder "DNN_training_images" (0000.png, ..., 0099.png; 8bit, grayscale), and ground truth segmentations are stored in the folder "DNN_ground_truth" (0000.png, ..., 0099.png; 16bit, grayscale; **Fig. 1**), and EM images for inference are stored in "DNN_test_images" (0000.png, ..., 0099.png; 8bit RGB that are converted to 8 bit grayscale). The software Vast lite is recommend to make such ground truth segmentation ( https://software.rc.fas.harvard.edu/lichtman/vast/ ). The folders "ffn", "DNN_model_tensorflow", and "DNN_segmentation" are empty.
 
 - ExampleFFN.zip 154MB: https://www.dropbox.com/s/06eyzakq9o87cmk/ExampleFFN.zip?dl=0
 <BR>
