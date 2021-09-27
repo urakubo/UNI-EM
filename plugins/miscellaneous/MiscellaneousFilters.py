@@ -216,10 +216,10 @@ class MiscellaneousFilters(SharedFileDialogs):
             print(filename)
             output_name = os.path.basename(filename)
             # input_image = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
+
             input_image = m.imread(filename, flags=cv2.IMREAD_GRAYSCALE)
             output_image = self.FilterApplication2D(w, input_image)
             savename = os.path.join(output_path, output_name)
-
             flag = m.SaveImage(output_image, savename)
 
         print('2D filters were applied!')

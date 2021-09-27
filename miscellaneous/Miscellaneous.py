@@ -108,7 +108,7 @@ def imread(filename, flags=cv2.IMREAD_UNCHANGED, dtype=None):
 #        elif ext in ['.TIF','.tif', '.TIFF', '.tiff','.png','.PNG','.jpg', '.jpeg','.JPG', '.JPEG']:
 #            img = tifffile.imread(filename)
 #        else:
-#
+#cv2.COLOR_GRAY2RGB
 
         pil_img = PIL.Image.open(filename)
         img = np.array(pil_img)
@@ -121,7 +121,12 @@ def imread(filename, flags=cv2.IMREAD_UNCHANGED, dtype=None):
             img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
             if flags == cv2.IMREAD_GRAYSCALE:
                 img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+        elif img.ndim == 1:
+            if flags == cv2.IMREAD_COLOR:
+                img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+
 #        print('Image dtype: ', img.dtype,  img.shape)
+
         return img
     except Exception as e:
         print(e)

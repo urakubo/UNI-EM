@@ -22,7 +22,7 @@ class Skimg3D():
         markers, n_markers = ndi.label(mask)
         print('Number of markers: ', n_markers)
         labels = watershed(-distance, markers, mask=binary_image)
-
+        labels = labels.astype('uint16')
 
         return labels
 
