@@ -19,13 +19,13 @@ class Credit():
                             "(C) 2019 Hidetoshi Urakubo, Torsten Bullmann, Ryoji Miyamoto, Naoki Tamura, Ryoya Kamikawa.<BR>"
                             "This project is licensed under the GNU General Public License Version 3 (GPLv3).<BR>"
                             "UNI-EM is powered by the following software:<BR>"
-                            "<a href=\"https://github.com/google/ffn\">Flood filling networks</a><BR> "
-                            "<a href=\"https://github.com/affinelayer/pix2pix-tensorflow\">Imagetranslation-tensorflow</a><BR> "
+                            "<a href=\"https://github.com/google/ffn\">Flood filling networks</a>,<BR> "
+                            "<a href=\"https://github.com/affinelayer/pix2pix-tensorflow\">Imagetranslation-tensorflow</a>,<BR> "
                             "<a href=\"https://www.tensorflow.org/\">Tensorflow</a>,<BR>"
                             "<a href=\"http://doc.qt.digia.com/4.5/stylesheet.html\">Qt</a>,<BR>"
                             "<a href=\"https://threejs.org/\">Three.js</a>,<BR>"
-                            "<a href=\"http://www.rhoana.org/dojo/\">Rhoana Dojo</a><BR> "
-                            "<a href=\"https://opencv.org/\">Open CV</a><BR> "
+                            "<a href=\"http://www.rhoana.org/dojo/\">Rhoana Dojo</a>,<BR> "
+                            "<a href=\"https://opencv.org/\">Open CV</a>,<BR> "
                             "<a href=\"http://scikit-image.org/docs/dev/api/skimage.html\">Scikit-image</a><BR> "
                           )
         msg.setIconPixmap(QPixmap(path.join(icon_dir, "Mojo2_128.png")))
