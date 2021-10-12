@@ -167,6 +167,31 @@ window.CenterZX = function () {
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].controls.target.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0); // APP.renderer.render(APP.scene, APP.camera);
 };
 
+window.DirLightX = function (ischecked) {
+  if (ischecked == true) {
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].directionalLight.position.x = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0 + _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax;
+  } else {
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].directionalLight.position.x = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0 - _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax;
+  } // APP.renderer.render(APP.scene, APP.camera);
+
+};
+
+window.DirLightY = function (ischecked) {
+  if (ischecked == true) {
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].directionalLight.position.y = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0 + _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax;
+  } else {
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].directionalLight.position.y = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0 - _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax;
+  }
+};
+
+window.DirLightZ = function (ischecked) {
+  if (ischecked == true) {
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].directionalLight.position.z = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0 + _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax;
+  } else {
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].directionalLight.position.z = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0 - _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax;
+  }
+};
+
 /***/ }),
 
 /***/ "./js/HandleBasement.js":
@@ -494,9 +519,13 @@ function launchAnnotator() {
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BackGroundColor == 'White'; // Light
 
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].directionalLight = new THREE.DirectionalLight(0xffffff);
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].directionalLight.position.set(1, 1, 1);
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].directionalLight.intensity = 0.8;
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.add(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].directionalLight);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].directionalLight.position.set(0, 10, 0); //default; light shining from top
+
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].directionalLight.target.position.set(0, 0, 0); //default; light shining from top
+
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].directionalLight.intensity = 0.8; //APP.camera.add( APP.directionalLight );
+
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].directionalLight);
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].ambientLight = new THREE.AmbientLight(0xffffff);
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].ambientLight.intensity = 0.5;
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.add(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].ambientLight);
@@ -570,6 +599,10 @@ function launchAnnotator() {
     // Add sphere tmp2
 
     window.CenterXY();
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].directionalLight.target.position.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0);
+    window.DirLightX(false);
+    window.DirLightY(false);
+    window.DirLightZ(false);
   });
 }
 window.addEventListener('resize', onWindowResize, false);

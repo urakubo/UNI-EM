@@ -142,3 +142,33 @@ window.CenterZX = function () {
 	// APP.renderer.render(APP.scene, APP.camera);
 	}
 
+
+window.DirLightX = function (ischecked) {
+	if( ischecked == true ) {
+  		APP.directionalLight.position.x = APP.BoundingboxX/2.0+APP.BoundingboxMax;
+		}
+	else {
+		APP.directionalLight.position.x = APP.BoundingboxX/2.0-APP.BoundingboxMax;
+		}
+	// APP.renderer.render(APP.scene, APP.camera);
+	}
+
+window.DirLightY = function (ischecked) {
+	if( ischecked == true ) {
+		APP.directionalLight.position.y = APP.BoundingboxY/2.0+APP.BoundingboxMax;
+		}
+	else {
+		APP.directionalLight.position.y = APP.BoundingboxY/2.0-APP.BoundingboxMax;
+		}
+	}
+
+window.DirLightZ = function (ischecked) {
+	if( ischecked == true ) {
+		APP.directionalLight.position.z = APP.BoundingboxZ/2.0+APP.BoundingboxMax;
+		}
+	else {
+		APP.directionalLight.position.z = APP.BoundingboxZ/2.0-APP.BoundingboxMax;
+		}
+	}
+
+

@@ -48,19 +48,39 @@
             ON
           </li>
           <li>
-            <div class="menu-label">Directional light intensity:</div>
-            <input type="number" min="0" max="100" step="5" value="80" onchange="DirLight(this.value);">
+            <div class="menu-label">Centering:</div>
+            <button type="button" class="btn btn4 font2" onClick="CenterXY();">XY</button>
+            <button type="button" class="btn btn4 font2" onClick="CenterYZ();">YZ</button>
+            <button type="button" class="btn btn4 font2" onClick="CenterZX();">ZX</button>
           </li>
           <li>
             <div class="menu-label">Ambient light intensity:</div>
             <input type="number" min="0" max="100" step="5" value="50" onchange="AmbLight(this.value);">
           </li>
           <li>
-            <div class="menu-label">Centering:</div>
-            <button type="button" class="btn btn4 font2" onClick="CenterXY();">XY</button>
-            <button type="button" class="btn btn4 font2" onClick="CenterYZ();">YZ</button>
-            <button type="button" class="btn btn4 font2" onClick="CenterZX();">ZX</button>
+            <div class="menu-label">Directional light intensity:</div>
+            <input type="number" min="0" max="100" step="5" value="80" onchange="DirLight(this.value);">
           </li>
+          <li>
+            <div class="menu-label">Light direction:</div>
+            X
+            <label class="switch">
+              <input type="checkbox" onclick="DirLightX(this.checked);">
+              <span class="slider round"></span>
+            </label>
+             Y
+            <label class="switch">
+              <input type="checkbox" onclick="DirLightY(this.checked);">
+              <span class="slider round"></span>
+            </label>
+             Z
+            <label class="switch">
+              <input type="checkbox" onclick="DirLightZ(this.checked);">
+              <span class="slider round"></span>
+            </label>
+          </li>
+          
+          
         </ul>
         <!-- <div data-mode-show="paint" class="archive">Paint</div> -->
         <ul data-mode-show="paint" class="subMenu appearance-actions">

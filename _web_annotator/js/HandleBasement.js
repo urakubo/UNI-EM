@@ -299,9 +299,13 @@ export function launchAnnotator() {
 
 	// Light
 	APP.directionalLight = new THREE.DirectionalLight(0xffffff);
-	APP.directionalLight.position.set(1, 1, 1);
+	APP.directionalLight.position.set(0, 10, 0);  //default; light shining from top
+	APP.directionalLight.target.position.set(0, 0, 0);  //default; light shining from top
 	APP.directionalLight.intensity = 0.8;
-	APP.camera.add( APP.directionalLight );
+	//APP.camera.add( APP.directionalLight );
+	APP.scene.add( APP.directionalLight );
+
+	
 	APP.ambientLight = new THREE.AmbientLight( 0xffffff );
 	APP.ambientLight.intensity = 0.5;
 	APP.camera.add( APP.ambientLight );
@@ -384,6 +388,10 @@ export function launchAnnotator() {
 
 		
 		window.CenterXY()
+		APP.directionalLight.target.position.set(APP.BoundingboxX/2.0, APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0); 
+		window.DirLightX(false)
+		window.DirLightY(false)
+		window.DirLightZ(false)
     });
 }
 
