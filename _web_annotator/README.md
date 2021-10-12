@@ -1,6 +1,7 @@
 # Prepare (Ubuntu)
 ```
 sudo apt install node npm
+npm install webpack
 ```
 
 # Build

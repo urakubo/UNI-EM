@@ -123,54 +123,48 @@ function clickPosition( event ) {
 	
 	// Obtain crossing surface objects.
 	var intersected_surfaces = [];
+	var intersected_objects = [];
 	for (let i = 0; i < intersects.length; i++) {
 		var name = intersects[i].object.name;
-		if (/^\d*$/.test(name) && name.length === 10) {
+		if (/^\d*$/.test(name) && name.length === 10) { // /^\d*$/ 符号や小数点を許容しない数値
 				intersected_surfaces.push(intersects[i]);
 			}
-		}
-	
-	/*
-	intersects.traverse(function(obj) {
-		if (/^\d*$/.test(obj.object.name) && obj.object.name.length === 10 ) {
-			intersected_surfaces.push(intersects[i]);
-			}
-		})
-	*/
+		intersected_objects.push(intersects[i]);
+	}
 
-	// Put a marker if in the marker mode (this should be moved to HandleMarker.js).
-	// Show the ID if not.
-	if (intersected_surfaces.length > 0) {
-		// Get the most proximal one
-		var name = intersected_surfaces[ 0 ].object.name;
-		const target = document.getElementById("ClickedObjectID");
-		target.innerHTML = name;
+	if (APP.MarkerMode == 1 && intersected_surfaces.length > 0) {
+		// If in the marker mode, put a marker  (this should be moved to HandleMarker.js).
+		var x = intersected_surfaces[ 0 ].point.x;
+		var y = intersected_surfaces[ 0 ].point.y;
+		var z = intersected_surfaces[ 0 ].point.z;
 
-		if (APP.MarkerMode == 1) {
-			var x = intersected_surfaces[ 0 ].point.x;
-			var y = intersected_surfaces[ 0 ].point.y;
-			var z = intersected_surfaces[ 0 ].point.z;
+		//Append Jsontable
+		var markerName = APP.MarkerPrefix + String(APP.MarkerSuffix);
+		APP.addMarker({
+			act: 1,
+			name: markerName,
+			parentid: name,
+			radius: APP.MarkerRadius,
+			r: APP.MarkerR,
+			g: APP.MarkerG,
+			b: APP.MarkerB,
+			x: x,
+			y: y,
+			z: z
+		});
+	}
 
-			//Append Jsontable
-			var markerName = APP.MarkerPrefix + String(APP.MarkerSuffix);
-
-			APP.addMarker({
-				act: 1,
-				name: markerName,
-				parentid: name,
-				radius: APP.MarkerRadius,
-				r: APP.MarkerR,
-				g: APP.MarkerG,
-				b: APP.MarkerB,
-				x: x,
-				y: y,
-				z: z
-			});
-		}
-	}else{
+	if (intersected_objects.length <= 0) {
+		// Show "Background"
 		const target = document.getElementById("ClickedObjectID");
 		target.innerHTML = "Background";
-	}
+
+	}else{
+		// Show ID of the most proximal one
+		var name = intersected_objects[ 0 ].object.name;
+		const target = document.getElementById("ClickedObjectID");
+		target.innerHTML = name;
+	} // endif
 }
 
 

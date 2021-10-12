@@ -302,54 +302,51 @@ function clickPosition(event) {
   var intersects = raycaster.intersectObjects(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.children); // Obtain crossing surface objects.
 
   var intersected_surfaces = [];
+  var intersected_objects = [];
 
   for (let i = 0; i < intersects.length; i++) {
     var name = intersects[i].object.name;
 
     if (/^\d*$/.test(name) && name.length === 10) {
+      // /^\d*$/ 符号や小数点を許容しない数値
       intersected_surfaces.push(intersects[i]);
     }
+
+    intersected_objects.push(intersects[i]);
   }
-  /*
-  intersects.traverse(function(obj) {
-  	if (/^\d*$/.test(obj.object.name) && obj.object.name.length === 10 ) {
-  		intersected_surfaces.push(intersects[i]);
-  		}
-  	})
-  */
-  // Put a marker if in the marker mode (this should be moved to HandleMarker.js).
-  // Show the ID if not.
 
+  if (_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerMode == 1 && intersected_surfaces.length > 0) {
+    // If in the marker mode, put a marker  (this should be moved to HandleMarker.js).
+    var x = intersected_surfaces[0].point.x;
+    var y = intersected_surfaces[0].point.y;
+    var z = intersected_surfaces[0].point.z; //Append Jsontable
 
-  if (intersected_surfaces.length > 0) {
-    // Get the most proximal one
-    var name = intersected_surfaces[0].object.name;
-    const target = document.getElementById("ClickedObjectID");
-    target.innerHTML = name;
+    var markerName = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerPrefix + String(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerSuffix);
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addMarker({
+      act: 1,
+      name: markerName,
+      parentid: name,
+      radius: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerRadius,
+      r: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerR,
+      g: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerG,
+      b: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerB,
+      x: x,
+      y: y,
+      z: z
+    });
+  }
 
-    if (_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerMode == 1) {
-      var x = intersected_surfaces[0].point.x;
-      var y = intersected_surfaces[0].point.y;
-      var z = intersected_surfaces[0].point.z; //Append Jsontable
-
-      var markerName = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerPrefix + String(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerSuffix);
-      _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addMarker({
-        act: 1,
-        name: markerName,
-        parentid: name,
-        radius: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerRadius,
-        r: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerR,
-        g: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerG,
-        b: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].MarkerB,
-        x: x,
-        y: y,
-        z: z
-      });
-    }
-  } else {
+  if (intersected_objects.length <= 0) {
+    // Show "Background"
     const target = document.getElementById("ClickedObjectID");
     target.innerHTML = "Background";
-  }
+  } else {
+    // Show ID of the most proximal one
+    var name = intersected_objects[0].object.name;
+    const target = document.getElementById("ClickedObjectID");
+    target.innerHTML = name;
+  } // endif
+
 }
 
 var onDragStart = event => {
