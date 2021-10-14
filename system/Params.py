@@ -42,9 +42,9 @@ class Params:
         self.tile_num_pixels_y  = 512
         self.tile_num_pixels_x  = 512
         self.ncolors            = 16000 ########## 65535
-        self.tile_path_wz       = os.sep + 'w={0:08d}' + os.sep + 'z={1:08d}'
-        self.tile_ids_filename_wzyx = os.sep + 'w={0:08d}' + os.sep + 'z={1:08d}' + os.sep + 'y={2:08d},x={3:08d}.hdf5'
-        self.tile_images_filename_wzyx = os.sep + 'w={0:08d}' + os.sep + 'z={1:08d}' + os.sep + 'y={2:08d},x={3:08d}.tif'
+        self.tile_path_wz       = str(os.sep) + 'w={0:08d}' + str(os.sep) + 'z={1:08d}'
+        self.tile_ids_filename_wzyx = str(os.sep) + 'w={0:08d}' + str(os.sep) + 'z={1:08d}' + str(os.sep) + 'y={2:08d},x={3:08d}.hdf5'
+        self.tile_images_filename_wzyx = str(os.sep) + 'w={0:08d}' + str(os.sep) + 'z={1:08d}' + str(os.sep) + 'y={2:08d},x={3:08d}.tif'
 
         self.tile_ids_filename_yx = 'y={0:08d},x={1:08d}.hdf5'
         self.tile_images_filename_yx = 'y={0:08d},x={1:08d}.tif'
@@ -135,17 +135,17 @@ class Params:
         #
 
         self.files_path                = user_path
-        self.ids_path                  = self.files_path   + os.sep + 'ids'
-        self.tile_ids_path             = self.ids_path     + os.sep + 'tiles'
-        self.tile_ids_volume_file      = self.ids_path     + os.sep + 'tiledVolumeDescription.xml'
-        self.color_map_file            = self.ids_path     + os.sep + 'colorMap.hdf5'
-        self.segment_info_db_file      = self.ids_path     + os.sep + 'segmentInfo.db'
-        self.segment_info_db_undo_file  = self.ids_path    + os.sep + 'segmentInfo_undo.pickle'
-        self.segment_info_db_redo_file  = self.ids_path    + os.sep + 'segmentInfo_redo.pickle'
+        self.ids_path                  = os.path.join(self.files_path   ,'ids')
+        self.tile_ids_path             = os.path.join(self.ids_path     ,'tiles')
+        self.tile_ids_volume_file      = os.path.join(self.ids_path     ,'tiledVolumeDescription.xml')
+        self.color_map_file            = os.path.join(self.ids_path     ,'colorMap.hdf5')
+        self.segment_info_db_file      = os.path.join(self.ids_path     ,'segmentInfo.db')
+        self.segment_info_db_undo_file  = os.path.join(self.ids_path    ,'segmentInfo_undo.pickle')
+        self.segment_info_db_redo_file  = os.path.join(self.ids_path    ,'segmentInfo_redo.pickle')
 
-        self.images_path               = self.files_path   + os.sep + 'images'
-        self.tile_images_path          = self.images_path  + os.sep + 'tiles'
-        self.tile_images_volume_file   = self.images_path  + os.sep + 'tiledVolumeDescription.xml'
+        self.images_path               = os.path.join(self.files_path   ,'images')
+        self.tile_images_path          = os.path.join(self.images_path  ,'tiles')
+        self.tile_images_volume_file   = os.path.join(self.images_path  ,'tiledVolumeDescription.xml')
 
         self.ids_files_undo             = []
         self.ids_files_redo             = []
@@ -154,8 +154,8 @@ class Params:
 
         self.tmpdir = tempfile.mkdtemp()
         self.merge_table = []
-        self.tmp_ids_path = self.tmpdir + os.sep + 'ids'
-        self.tmp_tile_ids_path = self.tmpdir + os.sep + 'ids' + os.sep + 'tiles'
+        self.tmp_ids_path = os.path.join(self.tmpdir, 'ids')
+        self.tmp_tile_ids_path = os.path.join(self.tmpdir, 'ids', 'tiles')
 
         ## Recheck current ip
         self.ip = socket.gethostbyname(socket.gethostname())
