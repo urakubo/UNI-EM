@@ -36,7 +36,7 @@ class Hdf5Exe():
 			return False
 
 		if ids_volume.dtype not in ['int8','int16','int32','int64','uint8','uint16','uint64']:
-			print('Container must have integers, but ', ids_volume.dtype)
+			print('Container must be integers, but ', ids_volume.dtype)
 			return False
 
 		ch = int(params['Downsampling factor in X'])

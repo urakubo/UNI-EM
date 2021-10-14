@@ -295,10 +295,10 @@ def save_npy(self, id_data, filename):
     np.save(filename, id_data)
 
 def save_tif16(id_data, filename):
-    cv2.imwrite(filename, id_data.astype('uint16'))
+    imwrite(filename, id_data.astype('uint16'))
 
 def save_tif8(id_data, filename):
-    cv2.imwrite(filename, id_data.astype('uint8'))
+    imwrite(filename, id_data.astype('uint8'))
     # pilOUT = PIL.Image.fromarray(np.uint8(tile_image))
     # pilOUT.save(current_tile_image_name)
 

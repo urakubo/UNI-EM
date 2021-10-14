@@ -392,6 +392,8 @@ export function launchAnnotator() {
 		window.DirLightX(false)
 		window.DirLightY(false)
 		window.DirLightZ(false)
+		
+		// https://threejsfundamentals.org/threejs/lessons/threejs-lights.html
     });
 }
 
