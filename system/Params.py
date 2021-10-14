@@ -16,8 +16,8 @@ class Params:
         # Environmental variables
         #
         if os.name == 'nt':
-            desktop_path    = os.getenv("HOMEDRIVE") + os.getenv("HOMEPATH") + os.sep + "Desktop"
-            mydocument_path = os.getenv("HOMEDRIVE") + os.getenv("HOMEPATH") + os.sep + "Documents"
+            desktop_path    = os.getenv("HOMEDRIVE") + os.getenv("HOMEPATH") + str(os.sep) + "Desktop"
+            mydocument_path = os.getenv("HOMEDRIVE") + os.getenv("HOMEPATH") + str(os.sep) + "Documents"
             user_path       = os.getenv("HOMEDRIVE") + os.getenv("HOMEPATH")
         else:
             desktop_path = '~/Desktop'

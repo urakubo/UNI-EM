@@ -48,7 +48,7 @@ class Viewer(object):
       url += 'index.html'
 
     # get filename from query
-    requested_file = self.__web_dir + os.sep + url.replace('/dojo/', '')
+    requested_file = os.path.join( self.__web_dir , url.replace('/dojo/', ''))
     requested_file = os.path.normpath( requested_file )
     extension = os.path.splitext(requested_file)[1]
 

@@ -26,7 +26,7 @@ if is_linux:
             if extension in ['.so']:
                 source = os.path.join(dirpath, f)
                 dest = remove_prefix(dirpath,
-                                     os.path.dirname(pkg_base) + os.sep)
+                                     os.path.dirname(pkg_base) + str(os.sep))
                 _datas.append((source, dest))
     #datas = collect_native_files('tensorflow.contrib.bigtable.python.ops', ['_bigtable.so'])
     print(_datas)

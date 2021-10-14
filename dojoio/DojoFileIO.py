@@ -146,7 +146,7 @@ class DojoFileIO():
             print('No folder was selected.')
             return
         ##
-        dir = fname + os.sep + 'dojo'
+        dir = os.path.join(fname , 'dojo')
         print('Export folder: ', dir)
         tmp_info = Params()
         tmp_info.SetUserInfo(dir)

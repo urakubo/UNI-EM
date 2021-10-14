@@ -36,7 +36,7 @@ class ExportImgSeg():
     ## Export color data as a csv file
     def save_color_data(self, u_info, dir):
         colordata = m.load_hdf5(u_info.color_map_file, u_info.hdf_color_name)
-        filename = dir + os.sep + u_info.export_col_name + '.csv'
+        filename = os.path.join(dir, u_info.export_col_name + '.csv')
         print(filename)
         with open(filename, 'w') as f:
             writer = csv.writer(f, lineterminator='\n')
@@ -50,7 +50,7 @@ class ExportImgSeg():
         dbdata = cur.fetchall()
         con.close()
 
-        filename = dir + os.sep + u_info.export_db_name + '.csv'
+        filename = os.path.join(dir , u_info.export_db_name + '.csv')
         print(filename)
         with open(filename, 'w') as f:
             writer = csv.writer(f, lineterminator='\n')
