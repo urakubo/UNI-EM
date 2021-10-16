@@ -602,7 +602,7 @@ function launchAnnotator() {
     _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].directionalLight.target.position.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0);
     window.DirLightX(false);
     window.DirLightY(false);
-    window.DirLightZ(false);
+    window.DirLightZ(false); // https://threejsfundamentals.org/threejs/lessons/threejs-lights.html
   });
 }
 window.addEventListener('resize', onWindowResize, false);
@@ -823,8 +823,18 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeSkeletons = function () {
 
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].generateSkeletons = function () {
   const call_url = location.protocol + "//" + location.host + "/ws/surface_skeleton";
+  const skel_scale = document.getElementById("SkelScale");
+  const skel_constant = document.getElementById("SkelConstant");
+  const skel_min_voxels = document.getElementById("SkelMinVoxels");
+  const skel_max_paths = document.getElementById("SkelMaxPaths");
+  const skel_smoothness = document.getElementById("SkelSmoothness");
   var request = {};
   request["mode"] = "skeleton";
+  request["scale"] = String(skel_scale.value);
+  request["constant"] = String(skel_constant.value);
+  request["min_voxel"] = String(skel_min_voxels.value);
+  request["max_path"] = String(skel_max_paths.value);
+  request["smooth"] = String(skel_smoothness.value);
   request["element"] = []; // Get JSON variable that shows the skeletons "ids and colors", and associated markers.
 
   var rows = _SurfaceTable__WEBPACK_IMPORTED_MODULE_4__["SurfaceTable"].searchRows("act", "=", true);

@@ -155,7 +155,7 @@ APP.changeSurfaceObjectOpacity = function(opacity) {
 		}
 	}
 }
-		// if (obj instanceof THREE.Mesh === true && /^\d*$/.test(obj.name) && obj.name.length === 10 ) {
+// if (obj instanceof THREE.Mesh === true && /^\d*$/.test(obj.name) && obj.name.length === 10 ) {
 
 
 // Change the color of a surface object specified by the name.

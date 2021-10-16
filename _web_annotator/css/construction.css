@@ -66,9 +66,14 @@ ol ,ul {
     cursor:pointer;
     border-radius: 4px;
 }
+.subMenuH li {
+    background-color:#FFF;
+    padding:5px 4px 5px 4px;    /* 上 | 右 | 下 | 左 */
+    border-bottom:1px solid #FFF;
+}
 .subMenu li {
     background-color:#9CF;
-    padding:5px 10px;
+    padding:5px 10px;  /* 上下 | 左右 */
     border-bottom:1px solid #FFF;
 }
 

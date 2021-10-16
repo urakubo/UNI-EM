@@ -43,8 +43,6 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
     self.surfaces_path  = kwargs.pop('surfaces_path')
     self.skeletons_path = kwargs.pop('skeletons_path')
     
-    self.gen_skel = GenerateSkeleton(self.ids_volume, self.pitch, self.skeletons_path, self.surfaces_path)
-    
     super(SurfaceSkeletonHandler, self).__init__(*args, **kwargs)
 
   ###
@@ -60,6 +58,7 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
     	self.write("False")
     	return False
 
+    print('\n'.join("  {}: {}".format(k, v) for k, v in request.items()))
     if request['mode'] == 'surface':
 #    	print( str(request['smooth_method']) )
 #    	print( str(request['num_iter']) )
@@ -68,17 +67,24 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
     	num_iter 		= int(request['num_iter'])
 
     	# print('Target object id:', id)
-    	result = self.GenerateSurface(id, smooth_method, num_iter)
+    	result = self.generate_surface(id, smooth_method, num_iter)
     	if result :
     		self.write("True")
     	else :
     		self.write("False")
 
     elif request['mode'] == 'skeleton':
-    	# print('Request skeleton: ', request['element'][0])
+#    	print('Request skeleton: ')
+    	scale     = int(request['scale'])
+    	constant  = int(request['constant'])
+    	min_voxel = int(request['min_voxel'])
+    	max_path  = int(request['max_path'])
+    	smooth    = int(request['smooth'])
+    	gen_skel = GenerateSkeleton(self.ids_volume, self.pitch, self.skeletons_path, self.surfaces_path,\
+    		scale, constant, min_voxel, max_path, smooth)
     	for elem in request['element']:
 	    	# print('Skeleton: ', elem )
-	    	result = self.gen_skel.Run(elem['id'], elem['markerlocs'])
+	    	result = gen_skel.run(elem['id'], elem['markerlocs'])
 	    	if not result :
 	    		self.write("False")
     	self.write("True")
@@ -89,7 +95,7 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
     	return False
 
   ###
-  def GenerateSurface(self, id, smooth_method, num_iter):
+  def generate_surface(self, id, smooth_method, num_iter):
     mask = (self.ids_volume == id)
     try:
         if 'marching_cubes' in dir(measure):
@@ -114,15 +120,17 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
     mesh.remove_duplicate_faces()
     if smooth_method == "Humphrey":
         mesh = trimesh.smoothing.filter_humphrey(mesh, iterations=num_iter)
-        print("Humphrey filter with ", num_iter, " iterations")
+        # print("Humphrey filter with ", num_iter, " iterations")
     elif smooth_method == "Laplacian":
         mesh = trimesh.smoothing.filter_laplacian(mesh, iterations=num_iter)
-        print("Laplacian filter with ", num_iter, " iterations")
+        # print("Laplacian filter with ", num_iter, " iterations")
     elif smooth_method == "Taubin":
         mesh = trimesh.smoothing.filter_taubin(mesh, iterations=num_iter)
-        print("Taubin filter with ", num_iter, " iterations")
+        # print("Taubin filter with ", num_iter, " iterations")
     else :
-        print("No smoothing.")
+        pass
+        # print("No smoothing.")
+        # print("No smoothing.")
 
     print('Processed vertices:', mesh.vertices.shape)
     print('Processed faces   :', mesh.faces.shape)

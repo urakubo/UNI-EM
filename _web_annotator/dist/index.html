@@ -133,6 +133,33 @@
             <input type="number" min="0.05" max="1.0" step="0.05" value="0.5" onchange="APP.changeSurfaceObjectOpacity(this.value);">
           </li>
         </ul>
+        <ul  data-mode-show="skeleton" class="subMenuH appearance-actions">
+          <li>
+			<div class="menu-label">Parameters:</div>
+          </li>
+        </ul>
+        <ul  data-mode-show="skeleton" class="subMenu appearance-actions">
+          <li>
+            <div class="menu-label">Sphere r scale:</div>
+            <input type="number" min="1" max="64" step="1" value="4" id="SkelScale">
+          </li>
+          <li>
+            <div class="menu-label">Sphere r constant:</div>
+            <input type="number" min="10" max="1000" step="10" value="50" id="SkelConstant">
+          </li>
+          <li>
+            <div class="menu-label">Min num of voxels:</div>
+            <input type="number" min="10" max="1000" step="10" value="300" id="SkelMinVoxels">
+          </li>
+          <li>
+            <div class="menu-label">Max num of paths:</div>
+            <input type="number" min="1" max="200" step="1" value="50" id="SkelMaxPaths">
+          </li>
+          <li>
+            <div class="menu-label">Smoothness:</div>
+            <input type="number" min="0" max="100" step="1" value="4" id="SkelSmoothness">
+          </li>
+        </ul>
 
 
         <!-- Sphere -->

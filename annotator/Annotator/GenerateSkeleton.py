@@ -11,7 +11,7 @@ import trimesh
 from annotator.Annotator._get_radius_ray import _get_radius_ray
 
 class GenerateSkeleton:
-  def __init__( self, ids_volume, pitch, skeletons_path, surfaces_path):
+  def __init__( self, ids_volume, pitch, skeletons_path, surfaces_path, scale, constant, min_voxel, max_path, smooth):
 
     self.xpitch = pitch[0]
     self.ypitch = pitch[1]
@@ -20,18 +20,14 @@ class GenerateSkeleton:
     self.skeletons_path = skeletons_path
     self.surfaces_path  = surfaces_path
 
-    self.teasar_params={\
-		'scale': 4,
-		'const': 50, # physical units default 500
-		'pdrf_exponent': 4,
-		'pdrf_scale': 100000,
-		'soma_detection_threshold': 1100, # physical units
-		'soma_acceptance_threshold': 3500, # physical units
-		'soma_invalidation_scale': 1.0,
-		'soma_invalidation_const': 300, # physical units
-		'max_paths': 50}
+    self.scale     = scale
+    self.constant  = constant
+    self.min_voxel = min_voxel
+    self.max_path  = max_path
+    self.smooth    = smooth
 
-  def Run( self, id, markerlocs ):
+
+  def run( self, id, markerlocs ):
 
     # mask = (self.ids_volume == id)
 
@@ -42,7 +38,7 @@ class GenerateSkeleton:
 
     markerlocs_int_source = [(int(loc[0]/self.xpitch), int(loc[1]/self.ypitch), int(loc[2]/self.zpitch)) for loc in markerlocs]
     markerlocs_int = []
-    print("markerlocs_int_source: ", markerlocs_int_source)
+    #print("markerlocs_int_source: ", markerlocs_int_source)
     if markerlocs_int_source != []:
     	print("Targ ID: ", id)
     	for i, oloc in enumerate(markerlocs_int_source):
@@ -64,7 +60,7 @@ class GenerateSkeleton:
     						j = 10
     						break
 
-    print("markerlocs_int: ", markerlocs_int)
+#    print("markerlocs_int: ", markerlocs_int)
 
 #    	for i, org_loc in enumerate(markerlocs_int):
 #    		print("I and ID", i, self.ids_volume[org_loc[0], org_loc[1], org_loc[2]])
@@ -73,13 +69,25 @@ class GenerateSkeleton:
 	## Skeletonaization
 	##
 
+    print("Kimimaro initialization...")
+    teasar_params={\
+		'scale': self.scale,
+		'const': self.constant, # physical units default 500
+		'pdrf_exponent': 4,
+		'pdrf_scale': 100000,
+		'soma_detection_threshold': 1100, # physical units
+		'soma_acceptance_threshold': 3500, # physical units
+		'soma_invalidation_scale': 1.0,
+		'soma_invalidation_const': 300, # physical units
+		'max_paths': self.max_path}
+
     skels = kimimaro.skeletonize(
 	  self.ids_volume, 
-	  teasar_params=self.teasar_params,
+	  teasar_params=teasar_params,
 	  object_ids=[ id ], # process only the specified labels
 	  #extra_targets_before=markerlocs_int, # target points in voxels
 	  extra_targets_after=markerlocs_int, # target points in voxels
-	  dust_threshold=300, # skip connected components with fewer than this many voxels
+	  dust_threshold=self.min_voxel, # skip connected components with fewer than this many voxels
 	  anisotropy=( self.xpitch, self.ypitch, self.zpitch ), # default True
 	  fix_branching=True, # default True
 	  fix_borders=True, # default True
@@ -94,8 +102,11 @@ class GenerateSkeleton:
 
     print('skels.keys()   : ', skels.keys())
     print('len(skels)     : ', len(skels) )
+    if len(skels) == 0:
+    	print('No skeleton: ', i)
+    	return False
     if skels[id].vertices.shape[0] < 4:
-    	print('No skeleton')
+    	print('No skeleton: ', i)
     	return False
     if skels[id].edges.shape[0] < 4:
     	print('No skeleton: ', id)
@@ -113,7 +124,14 @@ class GenerateSkeleton:
 	## Smoothing
 	##
     new_vertices, new_edges, new_lengths, new_tangents = self._Smoothing(vertices, edges)
-    
+
+    if new_vertices.shape[0] < 4:
+    	print('No skeleton: ', id)
+    	return False
+    if new_edges.shape[0] < 4:
+    	print('No skeleton: ', id)
+    	return False
+
     ##
 	## Calculate radiuses for each vartices (k-nearst neighbor)
 	##
@@ -205,7 +223,7 @@ class GenerateSkeleton:
     	w = np.ones(x.shape[0])*10
     	w[0]  = large_value
     	w[-1] = large_value
-    	tck, u = interpolate.splprep([x,y,z], s=4, w=w )
+    	tck, u = interpolate.splprep([x,y,z], s=self.smooth, w=w ) # s = 50
     	u_fine = np.linspace(0,1,num_pts)
     	x_fit, y_fit, z_fit = interpolate.splev(u_fine, tck)
     	
