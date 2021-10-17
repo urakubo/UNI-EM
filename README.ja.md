@@ -80,7 +80,7 @@ Pythonのインストールの必要のないPyinstaller版とPythonソースコ
 
 ### Python版：
 1. Windows10またはLinux (Ubuntu18.04 にて動作確認済)にて Python3.6- をインストールしてください。
-2. Tensorflow 1.15, Tensorflow2.0- にて動作します。 NVIDIA GPU 利用する場合、Tensorflow 2.4.1の場合は"CUDA 11.0, cuDNN 8.0.4", TensorFlow 2.5.0の場合は"CUDA 11.2.2, cuDNN 8.1.1"をインスト―ルしてください **[参考1]** 。
+2. Tensorflow 1.15, Tensorflow2.0- にて動作します。 NVIDIA GPU 利用する場合、例えばTensorflow 2.4.1の場合は"CUDA 11.0, cuDNN 8.0.4", TensorFlow 2.5.0の場合は"CUDA 11.2.2, cuDNN 8.1.1"をインスト―ルしてください **[参考1]** 。
 3. 次の命令を実行してGithubより必要プログラムをダウンロードしてください。
 
 	- git clone https://github.com/urakubo/UNI-EM.git
