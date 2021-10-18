@@ -13,8 +13,8 @@ class ImagesTab(ImagesExe):
 
     def __init__(self, u_info):
 
-        self.xpitch = 0.012 ## n um
-        self.ypitch = 0.012 ## n um
+        self.xpitch = 0.024 ## n um
+        self.ypitch = 0.024 ## n um
         self.zpitch = 0.07  ## n um
         min_pitch   = 0.001
         max_pitch   = 1.0
