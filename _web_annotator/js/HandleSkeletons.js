@@ -34,19 +34,21 @@ APP.removeSkeletons = function() {
 APP.generateSkeletons = function() {
 	const call_url   = location.protocol+"//"+location.host+"/ws/surface_skeleton";
 
-	const skel_scale      = document.getElementById("SkelScale"); 
-	const skel_constant   = document.getElementById("SkelConstant"); 
-	const skel_min_voxels = document.getElementById("SkelMinVoxels"); 
-	const skel_max_paths  = document.getElementById("SkelMaxPaths"); 
-	const skel_smoothness = document.getElementById("SkelSmoothness"); 
+	const skel_scale       = document.getElementById("SkelScale"); 
+	const skel_constant    = document.getElementById("SkelConstant"); 
+	const skel_min_voxels  = document.getElementById("SkelMinVoxels"); 
+	const skel_max_paths   = document.getElementById("SkelMaxPaths"); 
+	const skel_smoothness  = document.getElementById("SkelSmoothness"); 
+	const skel_extra_after = document.getElementsByName("SkelExtraAfter"); 
 
 	var request = {};
-	request["mode"]      = "skeleton"
-	request["scale"]     = String(skel_scale.value)
-	request["constant"]  = String(skel_constant.value)
-	request["min_voxel"] = String(skel_min_voxels.value)
-	request["max_path"]  = String(skel_max_paths.value)
-	request["smooth"]    = String(skel_smoothness.value)
+	request["mode"]      = "skeleton";
+	request["scale"]     = String(skel_scale.value);
+	request["constant"]  = String(skel_constant.value);
+	request["min_voxel"] = String(skel_min_voxels.value);
+	request["max_path"]  = String(skel_max_paths.value);
+	request["smooth"]    = String(skel_smoothness.value);
+	request["extra_after"] = String(skel_extra_after.value) === 'true';
 	request["element"]   = [];
 	// Get JSON variable that shows the skeletons "ids and colors", and associated markers.
 	var rows = SurfaceTable.searchRows("act", "=",  true);

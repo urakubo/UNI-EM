@@ -11,7 +11,7 @@ import trimesh
 from annotator.Annotator._get_radius_ray import _get_radius_ray
 
 class GenerateSkeleton:
-  def __init__( self, ids_volume, pitch, skeletons_path, surfaces_path, scale, constant, min_voxel, max_path, smooth):
+  def __init__( self, ids_volume, pitch, skeletons_path, surfaces_path, scale, constant, min_voxel, max_path, smooth, extra_after):
 
     self.xpitch = pitch[0]
     self.ypitch = pitch[1]
@@ -20,11 +20,12 @@ class GenerateSkeleton:
     self.skeletons_path = skeletons_path
     self.surfaces_path  = surfaces_path
 
-    self.scale     = scale
-    self.constant  = constant
-    self.min_voxel = min_voxel
-    self.max_path  = max_path
-    self.smooth    = smooth
+    self.scale       = scale
+    self.constant    = constant
+    self.min_voxel   = min_voxel
+    self.max_path    = max_path
+    self.smooth      = smooth
+    self.extra_after = extra_after
 
 
   def run( self, id, markerlocs ):
@@ -69,6 +70,13 @@ class GenerateSkeleton:
 	## Skeletonaization
 	##
 
+    if self.extra_after == True:
+    	extra_targets_after  = markerlocs_int
+    	extra_targets_before = []
+    else :
+    	extra_targets_after  = []
+    	extra_targets_before = markerlocs_int
+
     print("Kimimaro initialization...")
     teasar_params={\
 		'scale': self.scale,
@@ -86,7 +94,8 @@ class GenerateSkeleton:
 	  teasar_params=teasar_params,
 	  object_ids=[ id ], # process only the specified labels
 	  #extra_targets_before=markerlocs_int, # target points in voxels
-	  extra_targets_after=markerlocs_int, # target points in voxels
+	  extra_targets_after=extra_targets_after, # target points in voxels
+	  extra_targets_before=extra_targets_before, # target points in voxels
 	  dust_threshold=self.min_voxel, # skip connected components with fewer than this many voxels
 	  anisotropy=( self.xpitch, self.ypitch, self.zpitch ), # default True
 	  fix_branching=True, # default True

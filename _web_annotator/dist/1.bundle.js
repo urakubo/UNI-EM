@@ -828,6 +828,7 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].generateSkeletons = function () {
   const skel_min_voxels = document.getElementById("SkelMinVoxels");
   const skel_max_paths = document.getElementById("SkelMaxPaths");
   const skel_smoothness = document.getElementById("SkelSmoothness");
+  const skel_extra_after = document.getElementsByName("SkelExtraAfter");
   var request = {};
   request["mode"] = "skeleton";
   request["scale"] = String(skel_scale.value);
@@ -835,6 +836,7 @@ _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].generateSkeletons = function () {
   request["min_voxel"] = String(skel_min_voxels.value);
   request["max_path"] = String(skel_max_paths.value);
   request["smooth"] = String(skel_smoothness.value);
+  request["extra_after"] = String(skel_extra_after.value) === 'true';
   request["element"] = []; // Get JSON variable that shows the skeletons "ids and colors", and associated markers.
 
   var rows = _SurfaceTable__WEBPACK_IMPORTED_MODULE_4__["SurfaceTable"].searchRows("act", "=", true);

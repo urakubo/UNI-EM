@@ -80,8 +80,9 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
     	min_voxel = int(request['min_voxel'])
     	max_path  = int(request['max_path'])
     	smooth    = int(request['smooth'])
+    	extra_after = bool(request['extra_after'])
     	gen_skel = GenerateSkeleton(self.ids_volume, self.pitch, self.skeletons_path, self.surfaces_path,\
-    		scale, constant, min_voxel, max_path, smooth)
+    		scale, constant, min_voxel, max_path, smooth, extra_after)
     	for elem in request['element']:
 	    	# print('Skeleton: ', elem )
 	    	result = gen_skel.run(elem['id'], elem['markerlocs'])
