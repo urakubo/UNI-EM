@@ -85,8 +85,29 @@ class Multicut():
 		# heuristics to solve the problem, introduced in
 		# http://xilinx.asia/_hdl/4/eda.ee.ucla.edu/EE201A-04Spring/kl.pdf
 
-		print('Process 4: multicut partitioning (Kernighan-Lin method)..')
-		node_labels = mc.multicut_kernighan_lin(rag, costs)
+		# ["kernighan lin", "greedy additive", "decomposition", "fusion moves", "greedy fixation"]
+
+		print('Process 4: multicut partitioning, ', params['Multicut solver'],' ..' )
+		trans_name = {'kernighan lin': 'kernighan-lin', \
+			'greedy additive': 'greedy-additive', \
+			'decomposition':'decomposition', \
+			'fusion moves': 'fusion-moves', \
+			'greedy fixation': 'greedy-fixation'}
+		arg = {'name': trans_name[params['Multicut solver']], 'graph': rag, 'costs': costs}
+		# node_labels = mc.get_multicut_solver(**arg )
+
+		if params['Multicut solver'] == 'kernighan lin':
+			node_labels = mc.multicut_kernighan_lin(rag, costs)
+		elif params['Multicut solver'] == 'greedy additive':
+			node_labels = mc.multicut_gaec(rag, costs)
+		elif params['Multicut solver'] == 'decomposition':
+			node_labels = mc.multicut_decomposition(rag, costs)
+		elif params['Multicut solver'] == 'fusion moves':
+			node_labels = mc.multicut_fusion_moves(rag, costs)
+		else :
+			print('Internal error occurs: ', params['Multicut solver'])
+			return False
+
 
 		segmentation = feats.project_node_labels_to_pixels(rag, node_labels)
 
@@ -156,15 +177,19 @@ class Multicut():
 
 		self.tips = [
 		                'Membrane probability',
+		                'Multicut solver'
 		                'Binarization threshold for boundary',
 		                'Sigma for Gaussian smoothing',
 		                'Minimal distance between seeds',
 		                'Intermediate output folder',
-		                'Output segmentation folder'
+		                'Intermediate output filetype',
+		                'Output segmentation folder',
+		                'Output filetype'
 		                ]
 
 		self.args = [
 		                ['Membrane probability', 'SelectImageFolder', 'OpenImageFolder'],
+		                ['Multicut solver', 'ComboBox', ["kernighan lin", "greedy additive", "decomposition", "fusion moves"]],
 		                ['Binarization threshold', 'SpinBox', [1, 128, 255]],
 		                ['Sigma for Gaussian smoothing', 'SpinBox', [0, 2, 255]],
 		                ['Minimal distance', 'SpinBox', [0, 10, 255]],

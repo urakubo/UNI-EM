@@ -181,11 +181,7 @@ def get_multicut_solver(name, **kwargs):
                'greedy-additive': partial(multicut_gaec, **kwargs),
                'decomposition': partial(multicut_decomposition, **kwargs),
                'fusion-moves': partial(multicut_fusion_moves, **kwargs),
-               'blockwise-multicut': partial(blockwise_multicut, **kwargs),
-               'greedy-fixation': partial(multicut_greedy_fixation, **kwargs),
-               'cut-glue-cut': partial(multicut_cgc, **kwargs),
-               'ilp': partial(multicut_ilp, **kwargs),
-               'rama': partial(multicut_rama, **kwargs)}
+               'greedy-fixation': partial(multicut_greedy_fixation, **kwargs)}
     try:
         solver = solvers[name]
     except KeyError:
@@ -289,8 +285,7 @@ def multicut_decomposition(graph, costs, time_limit=None,
     solver_factory = _get_solver_factory(objective, internal_solver)
     solver = objective.multicutDecomposerFactory(
         submodelFactory=solver_factory,
-        fallthroughFactory=solver_factory,
-        numberOfThreads=n_threads
+        fallthroughFactory=solver_factory
     ).create(objective)
     visitor = _get_visitor(objective, time_limit, **kwargs)
     return solver.optimize() if visitor is None else solver.optimize(visitor=visitor)
@@ -328,7 +323,6 @@ def multicut_fusion_moves(graph, costs, time_limit=None, n_threads=1,
 
     solver = objective.ccFusionMoveBasedFactory(fusionMove=sub_solver,
                                                 warmStartGreedy=warmstart,
-                                                warmStartKl=warmstart_kl,
                                                 proposalGenerator=proposal_gen,
                                                 numberOfThreads=n_threads,
                                                 numberOfIterations=num_it,
