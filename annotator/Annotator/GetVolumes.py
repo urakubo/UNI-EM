@@ -100,14 +100,22 @@ def GetVolumes(surface_path, paint_path, skeleton_path):
 """
 
 def GetVolume(v,f,data):
-
 	unzipped_tri = gzip.decompress(data)
 	sub_face_id = []
 	for i in range( f.shape[0] ) :
 		if (unzipped_tri[i*3:i*3+3] == b'\x01\x01\x01') :
 			sub_face_id.append(f[i,:])
 
-	part_mesh = pymeshfix.MeshFix(v, np.array(sub_face_id))
+	mesh = trimesh.Trimesh(v, np.array(sub_face_id))
+	mesh.merge_vertices()
+	mesh.remove_degenerate_faces()
+	mesh.remove_duplicate_faces()
+	vclean = mesh.vertices
+	fclean = mesh.faces
+
+#	vclean, fclean = pymeshfix.clean_from_arrays(v, np.array(sub_face_id))
+	part_mesh = pymeshfix.MeshFix(vclean, fclean)
+
 	area = part_mesh.mesh.area
 	part_mesh.repair()
 

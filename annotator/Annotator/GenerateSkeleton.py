@@ -39,6 +39,9 @@ class GenerateSkeleton:
 
     markerlocs_int_source = [(int(loc[0]/self.xpitch), int(loc[1]/self.ypitch), int(loc[2]/self.zpitch)) for loc in markerlocs]
     markerlocs_int = []
+
+    jmax = 200
+    pad_width = ((1,1),(1,1),(1,1))
     #print("markerlocs_int_source: ", markerlocs_int_source)
     if markerlocs_int_source != []:
     	print("Targ ID: ", id)
@@ -47,10 +50,12 @@ class GenerateSkeleton:
     			markerlocs_int.append( oloc )
     			continue
     		else:
-    			j = 1
-    			while (j < 10):
+    			j = 0
+    			while (j < jmax):
+    				outer = morphology.ball(j+1, dtype='bool')
+    				inner = np.pad( morphology.ball(j, dtype='bool') , pad_width)
+    				ball = np.where(outer ^ inner)
     				j += 1
-    				ball = np.where(morphology.ball(j, dtype=np.bool))
     				locs = [(ix+oloc[0],iy+oloc[1],iz+oloc[2]) for ix,iy,iz in zip(ball[0], ball[1], ball[2])]
     				#print('j = ', j)
     				for l in locs:
@@ -58,10 +63,10 @@ class GenerateSkeleton:
     						continue
     					if self.ids_volume[l[0], l[1], l[2]] == id:
     						markerlocs_int.append( l )
-    						j = 10
+    						j = jmax
     						break
 
-#    print("markerlocs_int: ", markerlocs_int)
+    print("markerlocs_int: ", markerlocs_int)
 
 #    	for i, org_loc in enumerate(markerlocs_int):
 #    		print("I and ID", i, self.ids_volume[org_loc[0], org_loc[1], org_loc[2]])
@@ -112,13 +117,13 @@ class GenerateSkeleton:
     print('skels.keys()   : ', skels.keys())
     print('len(skels)     : ', len(skels) )
     if len(skels) == 0:
-    	print('No skeleton: ', i)
+    	print('No skeleton. ')
     	return False
     if skels[id].vertices.shape[0] < 4:
-    	print('No skeleton: ', i)
+    	print('No skeleton. ')
     	return False
     if skels[id].edges.shape[0] < 4:
-    	print('No skeleton: ', id)
+    	print('No skeleton. ')
     	return False
 
 

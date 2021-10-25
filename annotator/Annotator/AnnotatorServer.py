@@ -119,11 +119,19 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
     mesh.merge_vertices()
     mesh.remove_degenerate_faces()
     mesh.remove_duplicate_faces()
+
+
+
     if smooth_method == "Humphrey":
         mesh = trimesh.smoothing.filter_humphrey(mesh, iterations=num_iter)
         # print("Humphrey filter with ", num_iter, " iterations")
     elif smooth_method == "Laplacian":
+        v1  = mesh.vertices
+        v1center = np.sum(v1,0) / v1.shape[0]
         mesh = trimesh.smoothing.filter_laplacian(mesh, iterations=num_iter)
+        v2 = mesh.vertices
+        v2center = np.sum(v2,0) / v2.shape[0]
+        mesh.vertices += v1center - v2center
         # print("Laplacian filter with ", num_iter, " iterations")
     elif smooth_method == "Taubin":
         mesh = trimesh.smoothing.filter_taubin(mesh, iterations=num_iter)
