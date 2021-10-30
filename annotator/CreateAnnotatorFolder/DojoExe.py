@@ -26,7 +26,7 @@ class DojoExe():
 
 		##
 		ref = Params()
-		ref.SetUserInfo(params['Dojo Folder'])
+		ref.SetUserInfo(params['Dojo folder'])
 
 		##
 		print('Create database json file.')
