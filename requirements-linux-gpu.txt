@@ -43,3 +43,9 @@ toolz==0.9.0
 tornado==5.1.1
 Werkzeug==0.15.3
 wincertstore==0.2
+
+# Tentative
+kimimaro==3.0.0
+pymeshfix==0.15.0
+ncollpyde==0.16.0
+

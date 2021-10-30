@@ -79,3 +79,9 @@ Werkzeug==0.15.3
 wincertstore==0.2
 wrapt==1.12.1
 zipp==3.4.0
+
+
+# Tentative
+kimimaro==3.0.0
+pymeshfix==0.15.0
+ncollpyde==0.16.0
