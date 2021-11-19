@@ -34,7 +34,7 @@ class ImagesExe():
 		    return False
 		seg_files = sorted(seg_files)
 
-		sg = m.imread(seg_files[0], cv2.IMREAD_GRAYSCALE)
+		sg = m.imread(seg_files[0], cv2.IMREAD_UNCHANGED)
 		print('')
 		print('Number of segmentation images : ', len(seg_files))
 		print('Segmentation image dimensions : ', sg.shape)
@@ -49,7 +49,7 @@ class ImagesExe():
 		ids_volume = np.zeros((xysize[0], xysize[1], len(seg_files)), dtype=sg.dtype)
 
 		for i, seg_file in enumerate(seg_files):
-			seg = m.imread(seg_file, cv2.IMREAD_GRAYSCALE)
+			seg = m.imread(seg_file, cv2.IMREAD_UNCHANGED)
 			ids_volume[:,:,i] = seg[::cw,::ch]
 
 		parent.SharedGenerateInfoFile(ids_volume, targ.surfaces_segment_info_json_file)
