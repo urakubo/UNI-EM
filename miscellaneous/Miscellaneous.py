@@ -100,6 +100,12 @@ def CloseFolder(u_info,  dir):
 
 def imread(filename, flags=cv2.IMREAD_UNCHANGED, dtype=None):
 
+<<<<<<< Updated upstream
+=======
+
+def imread(filename, flags=cv2.IMREAD_UNCHANGED, dtype=None):
+
+>>>>>>> Stashed changes
     try:
 
 #        n = np.fromfile(filename, dtype)
@@ -116,6 +122,11 @@ def imread(filename, flags=cv2.IMREAD_UNCHANGED, dtype=None):
         pil_img = PIL.Image.open(filename)
         img = np.array(pil_img)
 
+<<<<<<< Updated upstream
+=======
+#        if img.dtype == 'int32':
+#            img = img.astype('uint16')
+>>>>>>> Stashed changes
         if dtype != None:
             img = img.astype(dtype)
         if img.ndim == 3:
