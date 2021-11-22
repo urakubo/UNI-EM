@@ -98,35 +98,15 @@ def CloseFolder(u_info,  dir):
 # 16bit png seems not to be read in "np.fromfile".
 # http://jamesgregson.ca/16-bit-image-io-with-python.html
 
-def imread(filename, flags=cv2.IMREAD_UNCHANGED, dtype=None):
-
-<<<<<<< Updated upstream
-=======
 
 def imread(filename, flags=cv2.IMREAD_UNCHANGED, dtype=None):
 
->>>>>>> Stashed changes
     try:
-
-#        n = np.fromfile(filename, dtype)
-#        img = cv2.imdecode(n, flags)
-#        root, ext = os.path.splitext(filename)
-#
-#        if ext in ['.png','.PNG']:
-#            img = png.Reader(filename).read()
-#        elif ext in ['.TIF','.tif', '.TIFF', '.tiff','.png','.PNG','.jpg', '.jpeg','.JPG', '.JPEG']:
-#            img = tifffile.imread(filename)
-#        else:
-#cv2.COLOR_GRAY2RGB
 
         pil_img = PIL.Image.open(filename)
         img = np.array(pil_img)
 
-<<<<<<< Updated upstream
-=======
-#        if img.dtype == 'int32':
-#            img = img.astype('uint16')
->>>>>>> Stashed changes
+
         if dtype != None:
             img = img.astype(dtype)
         if img.ndim == 3:
