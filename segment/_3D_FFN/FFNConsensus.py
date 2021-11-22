@@ -28,7 +28,7 @@ sys.path.append(path.join(main_dir, "system"))
 ##
 ##
 
-class FFNInference():
+class FFNConsensus():
 
     def write_text(self, f, key, value, t):
         if isinstance(value, str):
@@ -53,18 +53,26 @@ class FFNInference():
         ## Remove preovious results.
         ##
         m.UnlockFolder(parent.u_info,  params['FFNs Folder'])
-        removal_file1 = os.path.join( params['FFNs Folder'] ,'0','0','seg-0_0_0.npz' )
-        removal_file2 = os.path.join( params['FFNs Folder'], '0','0','seg-0_0_0.prob')
+        forward_file1 = os.path.join( params['FFNs Folder'] ,'0','0','seg-0_0_0.npz' )
+        forward_file2 = os.path.join( params['FFNs Folder'], '0','0','seg-0_0_0.prob')
+
+        if not os.path.isfile(forward_file1) or os.path.isfile(forward_file2) :
+            print('There is no result of forward inference. Please conduct forward inference at first.')
+            return False
+
+
+        backward_file1 = os.path.join( params['FFNs Folder'] ,'Backward','0','seg-0_0_0.npz' )
+        backward_file2 = os.path.join( params['FFNs Folder'], 'Backward','0','seg-0_0_0.prob')
 
         if os.path.isfile(removal_file1) or os.path.isfile(removal_file2) :
-            question = "Previous result of inference has been found in the FFNs Folder. Remove them?"
+            question = "Previous result of backward inference has been found in the FFNs Folder. Remove them?"
             reply = self.query_yes_no(question, default="yes")
 
             if reply == True:
                 with contextlib.suppress(FileNotFoundError):
-                    os.remove(removal_file1)
+                    os.remove(backward_file1)
                 with contextlib.suppress(FileNotFoundError):
-                    os.remove(removal_file2)
+                    os.remove(backward_file2)
                 print('Inference files were removed.')
             else:
                 print('FFN inference was canceled.')
@@ -77,6 +85,8 @@ class FFNInference():
         target_image_file_h5 = os.path.join(params['FFNs Folder'], "grayscale_inf.h5")
 
         try:
+			##################################### ここをどうする。。
+			#####################################
             target_image_files = m.ObtainImageFiles(params['Target Image Folder'])
             images = [m.imread(i, cv2.IMREAD_GRAYSCALE) for i in target_image_files]
             images = np.array(images)
@@ -117,7 +127,8 @@ class FFNInference():
         request['image_mean'] = image_mean
         request['image_stddev'] = image_std
         request['checkpoint_interval'] = int(params['Checkpoint Interval'])
-        request['seed_policy'] = "PolicyPeaks"
+        request['seed_policy'] = "PolicyInvertOrigins" #
+        request['seed_policy_args'] = '{{\\\"segmentation_dir\\\": \\\"{}\\\"}}'.format(os.path.join(params['FFNs Folder'], '0','0'))
         request['model_checkpoint_path'] = max_id_model.replace('\\', '/')
         request['model_name'] = "convstack_3d.ConvStack3DFFNModel"
 
@@ -128,7 +139,7 @@ class FFNInference():
             request['model_args'] = "{\\\"depth\\\": 12, \\\"fov_size\\\": [33, 33, 33], \\\"deltas\\\": [8, 8, 8]}"
             #request['model_args'] = ' {"depth":12,"fov_size":[33,33,33],"deltas":[8,8,8]} '
 
-        request['segmentation_output_dir'] = params['FFNs Folder'].replace('\\', '/')
+        request['segmentation_output_dir'] = os.path.join(params['FFNs Folder'], "rev")
         inference_options = {}
         inference_options['init_activation'] = 0.95
         inference_options['pad_value'] = 0.05
@@ -153,7 +164,7 @@ class FFNInference():
         ##
         ## Inference start (I gave up the use of run_inference because of the augment parsing problem)
         ##
-        m.mkdir_safe(os.path.join( params['FFNs Folder'] ,'0','0' ) )
+        m.mkdir_safe(os.path.join( params['FFNs Folder'],'rev','0','0' ) )
         ##
         comm_inference = parent.u_info.exec_run_inference[:]
 
@@ -226,20 +237,18 @@ class FFNInference():
 
     def __init__(self, u_info):
 
-        self.paramfile = os.path.join(u_info.parameters_path, "FFN_Inference.pickle")
+        self.paramfile = os.path.join(u_info.parameters_path, "FFN_Consensus.pickle")
 
-        self.title = 'FFN Inference'
+        self.title = 'FFN Consensus'
 
         self.tips = [
-                        'Input: Path to folder containing target images.',
                         'Tensorflow model folder. The largest model.ckpt is automatically selected for inference.',
-                        'Folder that contains grayscale_maps.h5, groundtruth.h5, and tf_record_file. Inferred segmentation will be stored.',
+                        'Folder that contains grayscale_maps.h5, groundtruth.h5, tf_record_file, and af.h5. Reverted order inference and concensus will be stored.',
                         'Click it if you used in the training process.',
                         'Output Checkpoint Interval.'
                         ]
 
         self.args = [
-                        ['Target Image Folder',    'SelectImageFolder', 'OpenImageFolder'],
                         ['Model Folder', 'SelectModelFolder', 'OpenModelFolder'],
                         ['FFNs Folder',   'SelectFFNsFolder', 'OpenFFNsFolder'],
                         ['Sparse Z', 'CheckBox', False],

@@ -19,6 +19,7 @@ from segment._3D_FFN.FFNPrepTraining   import FFNPrepTraining
 from segment._3D_FFN.FFNTraining    import FFNTraining
 from segment._3D_FFN.FFNInference   import FFNInference
 from segment._3D_FFN.FFNPostprocessing   import FFNPostprocessing
+from segment._3D_FFN.FFNConsensus   import FFNConsensus
 
 segmentation_dir = path.join(main_dir, "segment")
 sys.path.append(segmentation_dir)
@@ -74,6 +75,14 @@ class GenerateDialog(QWidget):
         run_ffn = FFNPostprocessing(self.u_info)
         Widget4_bottom = tab.GenerateTabWidget(run_ffn) # Widget
         tabs.addTab(Widget4_bottom, 'Postprocessing')
+
+
+        ##
+        ## FFN concensus
+        ##
+        run_ffn = FFNConsensus(self.u_info)
+        Widget5_bottom = tab.GenerateTabWidget(run_ffn) # Widget
+        tabs.addTab(Widget5_bottom, 'Consensus')
 
         ##
         ## Generate tabs
