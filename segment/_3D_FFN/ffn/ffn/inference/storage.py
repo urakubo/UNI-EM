@@ -281,7 +281,7 @@ def load_origins(segmentation_dir, corner):
                                                          corner))
 
   with gfile.Open(target_path, 'rb') as f:
-    data = np.load(f)
+    data = np.load(f, allow_pickle=True)
     return data['origins'].item()
 
 

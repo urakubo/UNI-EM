@@ -8,7 +8,7 @@ import subprocess as s
 import fnmatch
 import cv2
 import h5py
-import json
+import pickle
 # import threading
 
 import contextlib
@@ -152,9 +152,9 @@ class FFNInference():
         backup['image_x'] = np.str( image_x )
         backup['image_y'] = np.str( image_y )
         backup['image_z'] = np.str( image_z )
-        config_backup_file = os.path.join(params['FFNs Folder'], "forward_inf_config_backup.npy")
-        np.save(config_backup_file, backup)
-
+        config_backup_file = os.path.join(params['FFNs Folder'], "forward_inf_config_backup.pickle")
+        with open(config_backup_file, 'wb') as f:
+            pickle.dump(backup, f)
         print('')
         print('Configuration file was saved at :')
         print(config_file)
