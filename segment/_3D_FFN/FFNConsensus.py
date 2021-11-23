@@ -80,32 +80,11 @@ class FFNConsensus():
                 return
 
         ##
-        ## h5 file (target image file) generation.
+        ## h5 file (target image file) confirm.
         ##
         target_image_file_h5 = os.path.join(params['FFNs Folder'], "grayscale_inf.h5")
-
-        try:
-			##################################### ここをどうする。。
-			#####################################
-            target_image_files = m.ObtainImageFiles(params['Target Image Folder'])
-            images = [m.imread(i, cv2.IMREAD_GRAYSCALE) for i in target_image_files]
-            images = np.array(images)
-            image_z    = images.shape[0]
-            image_y    = images.shape[1]
-            image_x    = images.shape[2]
-            image_mean = np.mean(images).astype(np.int16)
-            image_std  = np.std(images).astype(np.int16)
-
-            print('')
-            print('x: {}, y: {}, z: {}'.format(image_x, image_y, image_z))
-            with h5py.File( target_image_file_h5 , 'w') as f:
-                f.create_dataset('raw', data=images, compression='gzip')
-            print('"grayscale_inf.h5" file (target inference image) was generated.')
-            print('')
-        except:
-            print('')
-            print("Error: Target Image h5 was not generated.")
-            m.LockFolder(parent.u_info,  params['FFNs Folder'])
+        if not os.path.isfile(forward_file1) or os.path.isfile(forward_file2) :
+            print('grayscale_inf.h5 is not found.')
             return False
 
         ##
@@ -122,36 +101,18 @@ class FFNConsensus():
         ##
         ## Inference configration file generation
         ##
-        request = {}
-        request['image'] = {"hdf5": "{}@raw".format(target_image_file_h5).replace('\\', '/') }
-        request['image_mean'] = image_mean
-        request['image_stddev'] = image_std
-        request['checkpoint_interval'] = int(params['Checkpoint Interval'])
+        config_backup_file = os.path.join(params['FFNs Folder'], "forward_inference_params_backup.json")
+        with open( config_backup_file, 'r') as f:
+            backup = json.load(f)
+        request = backup['request']
+        image_x = backup['image_x']
+        image_y = backup['image_y']
+        image_z = backup['image_z']
+
         request['seed_policy'] = "PolicyInvertOrigins" #
         request['seed_policy_args'] = '{{\\\"segmentation_dir\\\": \\\"{}\\\"}}'.format(os.path.join(params['FFNs Folder'], '0','0'))
-        request['model_checkpoint_path'] = max_id_model.replace('\\', '/')
-        request['model_name'] = "convstack_3d.ConvStack3DFFNModel"
-
-        if params['Sparse Z'] != Qt.Unchecked:
-            request['model_args'] = "{\\\"depth\\\": 9, \\\"fov_size\\\": [33, 33, 17], \\\"deltas\\\": [8, 8, 4]}"
-            #request['model_args'] = ' {"depth":9,"fov_size":[33,33,17],"deltas":[8,8,4]} '
-        else :
-            request['model_args'] = "{\\\"depth\\\": 12, \\\"fov_size\\\": [33, 33, 33], \\\"deltas\\\": [8, 8, 8]}"
-            #request['model_args'] = ' {"depth":12,"fov_size":[33,33,33],"deltas":[8,8,8]} '
-
         request['segmentation_output_dir'] = os.path.join(params['FFNs Folder'], "rev")
-        inference_options = {}
-        inference_options['init_activation'] = 0.95
-        inference_options['pad_value'] = 0.05
-        inference_options['move_threshold'] = 0.9
-        if params['Sparse Z'] != Qt.Unchecked:
-            inference_options['min_boundary_dist'] = {"x": 2, "y": 2, "z": 1}
-        else :
-            inference_options['min_boundary_dist'] = {"x": 2, "y": 2, "z": 2}
-        inference_options['segment_threshold'] = 0.6
-        inference_options['min_segment_size'] = 1000
-        request['inference_options'] = inference_options
-
+        request['model_checkpoint_path'] = max_id_model.replace('\\', '/')
 
         config_file = os.path.join(params['FFNs Folder'], "inference_params.pbtxt")
         with open(config_file, "w", encoding='utf-8') as f:
@@ -168,9 +129,9 @@ class FFNConsensus():
         ##
         comm_inference = parent.u_info.exec_run_inference[:]
 
-        params = ['--image_size_x', np.str( image_x ), 
-                 '--image_size_y', np.str( image_y ),
-                 '--image_size_z',  np.str( image_z ),
+        params = ['--image_size_x' , image_x, 
+                 '--image_size_y'  , image_y,
+                 '--image_size_z'  , image_z,
                  '--parameter_file', config_file
                 ]
 
@@ -185,7 +146,6 @@ class FFNConsensus():
         print('')
         return True
         ##
-
 
     def SelectMaxModel(self, folder_path):
 
@@ -209,6 +169,7 @@ class FFNConsensus():
             return False
         max_id_name = os.path.join(folder_path, 'model.ckpt-' + str(max(map(int, intersection)))  )
         return max_id_name
+
 
     def query_yes_no(self, question, default="yes"):
 
@@ -244,15 +205,10 @@ class FFNConsensus():
         self.tips = [
                         'Tensorflow model folder. The largest model.ckpt is automatically selected for inference.',
                         'Folder that contains grayscale_maps.h5, groundtruth.h5, tf_record_file, and af.h5. Reverted order inference and concensus will be stored.',
-                        'Click it if you used in the training process.',
-                        'Output Checkpoint Interval.'
                         ]
 
         self.args = [
                         ['Model Folder', 'SelectModelFolder', 'OpenModelFolder'],
                         ['FFNs Folder',   'SelectFFNsFolder', 'OpenFFNsFolder'],
-                        ['Sparse Z', 'CheckBox', False],
-                        ['Checkpoint Interval', 'SpinBox', [100, 1800, 65535]]
-            ]
-
+                        ]
 
