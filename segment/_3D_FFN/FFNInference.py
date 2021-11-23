@@ -8,6 +8,7 @@ import subprocess as s
 import fnmatch
 import cv2
 import h5py
+import json
 # import threading
 
 import contextlib
@@ -146,15 +147,13 @@ class FFNInference():
         with open(config_file, "w", encoding='utf-8') as f:
             self.write_call(f, request, "")
 
-       inference_backup ={}
-       inference_backup['request'] = request
-       inference_backup['image_x'] = np.str( image_x )
-       inference_backup['image_y'] = np.str( image_y )
-       inference_backup['image_z'] = np.str( image_z )
-       config_backup_file = os.path.join(params['FFNs Folder'], "forward_inference_params_backup.json")
-		with open(config_backup_file, "w") as f:
-            json.dump(inference_backup, f)
-
+        backup ={}
+        backup['request'] = request
+        backup['image_x'] = np.str( image_x )
+        backup['image_y'] = np.str( image_y )
+        backup['image_z'] = np.str( image_z )
+        config_backup_file = os.path.join(params['FFNs Folder'], "forward_inf_config_backup.npy")
+        np.save(config_backup_file, backup)
 
         print('')
         print('Configuration file was saved at :')

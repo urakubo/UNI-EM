@@ -8,6 +8,7 @@ import subprocess as s
 import fnmatch
 import cv2
 import h5py
+import json
 # import threading
 
 import contextlib
@@ -101,9 +102,8 @@ class FFNConsensus():
         ##
         ## Inference configration file generation
         ##
-        config_backup_file = os.path.join(params['FFNs Folder'], "forward_inference_params_backup.json")
-        with open( config_backup_file, 'r') as f:
-            backup = json.load(f)
+        config_backup_file = os.path.join(params['FFNs Folder'], "forward_inf_config_backup.npy")
+        backup  = np.load(config_backup_file, allow_pickle='TRUE')
         request = backup['request']
         image_x = backup['image_x']
         image_y = backup['image_y']
