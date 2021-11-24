@@ -8,7 +8,7 @@ import subprocess as s
 import fnmatch
 import cv2
 import h5py
-import json
+import pickle
 # import threading
 
 import contextlib
@@ -57,7 +57,7 @@ class FFNConsensus():
         forward_file1 = os.path.join( params['FFNs Folder'] ,'0','0','seg-0_0_0.npz' )
         forward_file2 = os.path.join( params['FFNs Folder'], '0','0','seg-0_0_0.prob')
 
-        if not os.path.isfile(forward_file1) or os.path.isfile(forward_file2) :
+        if not os.path.isfile(forward_file1) or not os.path.isfile(forward_file2) :
             print('There is no result of forward inference. Please conduct forward inference at first.')
             return False
 
@@ -65,7 +65,7 @@ class FFNConsensus():
         backward_file1 = os.path.join( params['FFNs Folder'] ,'Backward','0','seg-0_0_0.npz' )
         backward_file2 = os.path.join( params['FFNs Folder'], 'Backward','0','seg-0_0_0.prob')
 
-        if os.path.isfile(removal_file1) or os.path.isfile(removal_file2) :
+        if os.path.isfile(backward_file1) or os.path.isfile(backward_file2) :
             question = "Previous result of backward inference has been found in the FFNs Folder. Remove them?"
             reply = self.query_yes_no(question, default="yes")
 
@@ -84,7 +84,7 @@ class FFNConsensus():
         ## h5 file (target image file) confirm.
         ##
         target_image_file_h5 = os.path.join(params['FFNs Folder'], "grayscale_inf.h5")
-        if not os.path.isfile(forward_file1) or os.path.isfile(forward_file2) :
+        if not os.path.isfile(target_image_file_h5):
             print('grayscale_inf.h5 is not found.')
             return False
 
@@ -102,8 +102,10 @@ class FFNConsensus():
         ##
         ## Inference configration file generation
         ##
-        config_backup_file = os.path.join(params['FFNs Folder'], "forward_inf_config_backup.npy")
-        backup  = np.load(config_backup_file, allow_pickle='TRUE')
+        config_backup_file = os.path.join(params['FFNs Folder'], "forward_inf_config_backup.pickle")
+        backup = pickle.load(open(config_backup_file,'rb'))
+        print(backup)
+
         request = backup['request']
         image_x = backup['image_x']
         image_y = backup['image_y']
