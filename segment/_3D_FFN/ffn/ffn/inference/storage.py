@@ -288,7 +288,6 @@ def load_origins(segmentation_dir, corner):
   return data['origins'].item()
 
 
-
 def clip_subvolume_to_bounds(corner, size, volume):
   """Clips a subvolume bounding box to the image volume store bounds.
 
