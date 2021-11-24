@@ -28,7 +28,7 @@ import tempfile
 
 import h5py
 import numpy as np
-
+os.environ["HDF5_USE_FILE_LOCKING"] = "FALSE"
 
 #from tensorflow import gfile
 ## HU
@@ -83,7 +83,10 @@ def decorated_volume(settings, **kwargs):
     if len(path) != 2:
       raise ValueError('hdf5 volume_path should be specified as file_path:'
                        'hdf5_internal_dataset_path.  Got: ' + settings.hdf5)
-    volume = h5py.File(path[0])[path[1]]
+    #print('Error: ', path[0])
+    #print('Error: ', path[1])
+    with h5py.File(path[0], 'r') as f:
+      volume = f[path[1]][()]
   else:
     raise ValueError('A volume_path must be set.')
 
@@ -281,8 +284,8 @@ def load_origins(segmentation_dir, corner):
                                                          corner))
 
   with gfile.Open(target_path, 'rb') as f:
-    data = np.load(f)
-    return data['origins'].item()
+    data = np.load(f, allow_pickle=True)
+  return data['origins'].item()
 
 
 def clip_subvolume_to_bounds(corner, size, volume):
