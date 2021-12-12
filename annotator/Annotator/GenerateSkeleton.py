@@ -4,6 +4,7 @@ import h5py
 import kimimaro
 from scipy import interpolate, spatial
 import collections
+import types
 
 from skimage import morphology
 import trimesh
@@ -26,6 +27,58 @@ class GenerateSkeleton:
     self.max_path    = max_path
     self.smooth      = smooth
     self.extra_after = extra_after
+
+  def _skeletonize( self, id, markerlocs_int):
+
+    if self.extra_after == True:
+    	extra_targets_after  = markerlocs_int
+    	extra_targets_before = []
+    else :
+    	extra_targets_after  = []
+    	extra_targets_before = markerlocs_int
+
+    teasar_params={\
+		'scale': self.scale,
+		'const': self.constant, # physical units default 500
+		'pdrf_exponent': 4,
+		'pdrf_scale': 100000,
+		'soma_detection_threshold': 1100, # physical units
+		'soma_acceptance_threshold': 3500, # physical units
+		'soma_invalidation_scale': 1.0,
+		'soma_invalidation_const': 300, # physical units
+		'max_paths': self.max_path}
+
+    skels = kimimaro.skeletonize(
+	  self.ids_volume, 
+	  teasar_params=teasar_params,
+	  object_ids=[ id ], # process only the specified labels
+	  #extra_targets_before=markerlocs_int, # target points in voxels
+	  extra_targets_after=extra_targets_after, # target points in voxels
+	  extra_targets_before=extra_targets_before, # target points in voxels
+	  dust_threshold=self.min_voxel, # skip connected components with fewer than this many voxels
+	  anisotropy=( self.xpitch, self.ypitch, self.zpitch ), # default True
+	  fix_branching=True, # default True
+	  fix_borders=True, # default True
+	  progress=True, # default False, show progress bar
+	  parallel=1, # <= 0 all cpu, 1 single process, 2+ multiprocess
+	  parallel_chunk_size=100, # how many skeletons to process before updating progress bar
+    )
+
+    skel = skels[id]
+    return skel
+
+  def _unbranched_centerline( self, id, markerlocs_int):
+
+    print('Unbranched line between markerpoints.')
+    skel = kimimaro.connect_points(
+	  labels = (self.ids_volume == id),
+      start = markerlocs_int[0],
+      end = markerlocs_int[1],
+      anisotropy = ( self.xpitch, self.ypitch, self.zpitch ),
+      pdrf_scale=100000, 
+      pdrf_exponent=4
+    )
+    return skel
 
 
   def run( self, id, markerlocs ):
@@ -75,69 +128,43 @@ class GenerateSkeleton:
 	## Skeletonaization
 	##
 
-    if self.extra_after == True:
-    	extra_targets_after  = markerlocs_int
-    	extra_targets_before = []
-    else :
-    	extra_targets_after  = []
-    	extra_targets_before = markerlocs_int
 
     print("Kimimaro initialization...")
-    teasar_params={\
-		'scale': self.scale,
-		'const': self.constant, # physical units default 500
-		'pdrf_exponent': 4,
-		'pdrf_scale': 100000,
-		'soma_detection_threshold': 1100, # physical units
-		'soma_acceptance_threshold': 3500, # physical units
-		'soma_invalidation_scale': 1.0,
-		'soma_invalidation_const': 300, # physical units
-		'max_paths': self.max_path}
 
-    skels = kimimaro.skeletonize(
-	  self.ids_volume, 
-	  teasar_params=teasar_params,
-	  object_ids=[ id ], # process only the specified labels
-	  #extra_targets_before=markerlocs_int, # target points in voxels
-	  extra_targets_after=extra_targets_after, # target points in voxels
-	  extra_targets_before=extra_targets_before, # target points in voxels
-	  dust_threshold=self.min_voxel, # skip connected components with fewer than this many voxels
-	  anisotropy=( self.xpitch, self.ypitch, self.zpitch ), # default True
-	  fix_branching=True, # default True
-	  fix_borders=True, # default True
-	  progress=True, # default False, show progress bar
-	  parallel=1, # <= 0 all cpu, 1 single process, 2+ multiprocess
-	  parallel_chunk_size=100, # how many skeletons to process before updating progress bar
-    )
+    if (self.max_path == 2) and (len(markerlocs_int) == 2):
+    	skel = self._unbranched_centerline( id, markerlocs_int )
+    else :
+    	skel = self._skeletonize( id, markerlocs_int )
     # skeleton_ids = self._SaveSkeletonFile(id, vertices, edges, radiuses)
 
     # vertices = skels[id].vertices
     # edges    = skels[id].edges
 
-    print('skels.keys()   : ', skels.keys())
-    print('len(skels)     : ', len(skels) )
-    if len(skels) == 0:
-    	print('No skeleton. ')
-    	return False
-    if skels[id].vertices.shape[0] < 4:
-    	print('No skeleton. ')
-    	return False
-    if skels[id].edges.shape[0] < 4:
+#    print('skel : ', skel)
+    if isinstance(skel, type(None)) :
     	print('No skeleton. ')
     	return False
 
+    vertices = skel.vertices
+    edges    = skel.edges
 
-    vertices = skels[id].vertices
-    edges    = skels[id].edges
-    # radiuses = skels[id].radius
+
+    if vertices.shape[0] < 4:
+    	print('No skeleton. ')
+    	return False
     if edges.shape[0] < 4:
-    	print('No skeleton: ', id)
+    	print('No skeleton. ')
     	return False
+
+    #print('Vertices: ', vertices)
+    #print('Edges   : ', edges)
+
+
 
 	##
 	## Smoothing
 	##
-    new_vertices, new_edges, new_lengths, new_tangents = self._Smoothing(vertices, edges)
+    new_vertices, new_edges, new_lengths, new_tangents = self._smoothing(vertices, edges)
 
     if new_vertices.shape[0] < 4:
     	print('No skeleton: ', id)
@@ -173,7 +200,7 @@ class GenerateSkeleton:
 	## Smoothing
 	##
 
-  def _Smoothing(self, vertices, edges):
+  def _smoothing(self, vertices, edges):
 
 	# Obtain crossing edges
     edges_ids         = edges.flatten().tolist()
@@ -184,6 +211,15 @@ class GenerateSkeleton:
     neighbors_cross = []
 
 	# Obtain the pairs of [crossing edges, neighboring edges]
+
+    if edges_cross == []:
+    	edges_ends = [k for k, v in edges_num_connect.items() if v == 1]
+    	partner    = edges[np.any(edges == edges_ends[0], axis=1),1][0]
+    	start_pair = [edges_ends[0], partner]
+    	segment = self._obtain_segment(start_pair, edges)
+#    	print('segment: ', segment)
+    	return self._core_smoothing(vertices, [segment])
+
     for id_cross in edges_cross:
     	tmp = edges[np.any(edges == id_cross, axis=1),:].flatten()
     	_neighbors_cross  = tmp[tmp != id_cross]
@@ -202,17 +238,18 @@ class GenerateSkeleton:
     new_segments = []
     for i, pair in enumerate(start_pairs):
     	if flag_used[i] == 0:
-    		segment = self._ObtainSegment(pair, edges)
+    		segment = self._obtain_segment(pair, edges)
     		segments.append( segment )
     		flag_used += (neighbors_cross == segment[-2])
-#    	else:
-#    		print("segment already traced.")
 
-#    print('flag_used: ', flag_used)
+    # print('segments', segments)
+    return self._core_smoothing(vertices, segments)
+
+
+  def _core_smoothing(self, vertices, segments):
 
     num_pts = 200
     large_value = 100000000
-
 
 	# Set new coordinate
     vertices_list = vertices.tolist()
@@ -220,9 +257,6 @@ class GenerateSkeleton:
     new_lengths   = []
     new_tangents  = []
     new_edges	  = []
-
-
-    # print('new_lengths : ', new_lengths)
 
 	# Smoothing and mapping of segments
     for segment in segments:
@@ -307,7 +341,7 @@ class GenerateSkeleton:
     return True
 
 
-  def _ObtainSegment(self, start_pair, edges):
+  def _obtain_segment(self, start_pair, edges):
     output_edges = start_pair # list
     while True:
     	tmp = edges[np.any(edges == output_edges[-1], axis=1),:]
