@@ -105,6 +105,20 @@ class GeometryState {
     colorArray[vertexIndex * 3 + 2] = colorParam.b;
   }
 
+//////////////
+  getColorId(vertexIndex) {
+	  var ids  = [];
+	  for (const colorId of this.activeColors) {
+	    const geometryColor = this.getGeometryColor(colorId);
+		if (geometryColor.painted[vertexIndex] == 1) {
+			ids.push(colorId);
+			}
+		}
+	  return ids;
+  }
+//////////////
+
+
   setColor(vertexIndex) {
     if (this.overwrite) {
       for (const colorId of this.activeColors) {
@@ -218,6 +232,37 @@ class GeometryState {
       }
     }
   }
+
+///////////////////////////
+  getPaintID(center) {
+    window.geometryState = this;
+    const geometry = this.geometry;
+    const center_x = center.x,
+      center_y = center.y,
+      center_z = center.z;
+    const positionArray = geometry.attributes.position.array;
+    const length = positionArray.length;
+
+    var x = positionArray[0] - center_x;
+    var y = positionArray[1] - center_y;
+    var z = positionArray[2] - center_z;
+    var dist  = x * x + y * y + z * z
+    var i_min = 0
+    for (let i = 0+3; i < length; i += 3) {
+        x = positionArray[i + 0] - center_x;
+        y = positionArray[i + 1] - center_y;
+        z = positionArray[i + 2] - center_z;
+        const d = x * x + y * y + z * z
+        if (d < dist) {
+          i_min = i;
+          dist  = d;
+        }
+    }
+    const ids = this.getColorId(i_min / 3);
+    return ids;
+  }
+///////////////////////////
+
   getCurrentParams() {
     let area = 0;
     const areas = Object.keys(this.geometryColors).map(colorId => {

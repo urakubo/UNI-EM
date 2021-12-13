@@ -10,8 +10,9 @@ import {
 	annotateBySphere,
 	getCurrentParams,
 	getChanges,
-	setAnnotation
-} from "three-annotator"
+	setAnnotation,
+	getPaintID
+} from "./three_annotator/index";
 
 var xratio = 0.6;
 var yratio = 0.95;
@@ -110,12 +111,22 @@ function clickPosition( event ) {
 	var intersects = raycaster.intersectObjects( APP.scene.children );
 	
 	// Obtain crossing surface objects.
+	var ids = [];
 	var intersected_surfaces = [];
 	var intersected_objects = [];
 	for (let i = 0; i < intersects.length; i++) {
 		var name = intersects[i].object.name;
 		if (/^\d*$/.test(name) && name.length === 10) { // /^\d*$/ 符号や小数点を許容しない数値
 				intersected_surfaces.push(intersects[i]);
+//
+			  	ids = getPaintID({
+					x: event.offsetX,
+					y: event.offsetY,
+					camera: APP.camera,
+					meshes: APP.getMeshes(),
+					container: APP.renderer.domElement,
+			  		});
+				//console.log('ids: ', ids);
 			}
 		intersected_objects.push(intersects[i]);
 	}
@@ -142,16 +153,13 @@ function clickPosition( event ) {
 		});
 	}
 
+	const target = document.getElementById("ClickedObjectID");
 	if (intersected_objects.length <= 0) {
-		// Show "Background"
-		const target = document.getElementById("ClickedObjectID");
 		target.innerHTML = "Background";
-
+	}else if (typeof ids[0] === "undefined") {
+		target.innerHTML = intersected_objects[ 0 ].object.name;
 	}else{
-		// Show ID of the most proximal one
-		var name = intersected_objects[ 0 ].object.name;
-		const target = document.getElementById("ClickedObjectID");
-		target.innerHTML = name;
+		target.innerHTML = intersected_objects[ 0 ].object.name +"-"+ids[0];
 	} // endif
 }
 

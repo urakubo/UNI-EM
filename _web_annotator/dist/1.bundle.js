@@ -214,7 +214,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _HandleSurfaces__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./HandleSurfaces */ "./js/HandleSurfaces.js");
 /* harmony import */ var zlib__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! zlib */ "./node_modules/browserify-zlib/lib/index.js");
 /* harmony import */ var zlib__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(zlib__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var three_annotator__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! three-annotator */ "./node_modules/three-annotator/index.js");
+/* harmony import */ var _three_annotator_index__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./three_annotator/index */ "./js/three_annotator/index.js");
 
 
 
@@ -317,6 +317,7 @@ function clickPosition(event) {
 
   var intersects = raycaster.intersectObjects(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.children); // Obtain crossing surface objects.
 
+  var ids = [];
   var intersected_surfaces = [];
   var intersected_objects = [];
 
@@ -325,7 +326,15 @@ function clickPosition(event) {
 
     if (/^\d*$/.test(name) && name.length === 10) {
       // /^\d*$/ 符号や小数点を許容しない数値
-      intersected_surfaces.push(intersects[i]);
+      intersected_surfaces.push(intersects[i]); //
+
+      ids = Object(_three_annotator_index__WEBPACK_IMPORTED_MODULE_7__["getPaintID"])({
+        x: event.offsetX,
+        y: event.offsetY,
+        camera: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera,
+        meshes: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].getMeshes(),
+        container: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.domElement
+      }); //console.log('ids: ', ids);
     }
 
     intersected_objects.push(intersects[i]);
@@ -352,15 +361,14 @@ function clickPosition(event) {
     });
   }
 
+  const target = document.getElementById("ClickedObjectID");
+
   if (intersected_objects.length <= 0) {
-    // Show "Background"
-    const target = document.getElementById("ClickedObjectID");
     target.innerHTML = "Background";
+  } else if (typeof ids[0] === "undefined") {
+    target.innerHTML = intersected_objects[0].object.name;
   } else {
-    // Show ID of the most proximal one
-    var name = intersected_objects[0].object.name;
-    const target = document.getElementById("ClickedObjectID");
-    target.innerHTML = name;
+    target.innerHTML = intersected_objects[0].object.name + "-" + ids[0];
   } // endif
 
 }
@@ -378,7 +386,7 @@ var annotate = event => {
   if (!_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].dragging) {
     const {
       intersect
-    } = Object(three_annotator__WEBPACK_IMPORTED_MODULE_7__["getIntersect"])({
+    } = Object(_three_annotator_index__WEBPACK_IMPORTED_MODULE_7__["getIntersect"])({
       x: event.offsetX,
       y: event.offsetY,
       camera: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera,
@@ -393,7 +401,7 @@ var annotate = event => {
   if (!_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].paint_mode) return;
   const {
     intersect
-  } = Object(three_annotator__WEBPACK_IMPORTED_MODULE_7__["annotateBySphere"])({
+  } = Object(_three_annotator_index__WEBPACK_IMPORTED_MODULE_7__["annotateBySphere"])({
     x: event.offsetX,
     y: event.offsetY,
     camera: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera,
@@ -412,7 +420,7 @@ const compress = paintData => paintData && zlib__WEBPACK_IMPORTED_MODULE_6__["gz
 const decompress = compressedData => compressedData && new Uint8Array(zlib__WEBPACK_IMPORTED_MODULE_6__["gunzipSync"](Buffer.from(compressedData)).buffer);
 
 const syncAnnotation = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.debounce(() => {
-  const changes = Object(three_annotator__WEBPACK_IMPORTED_MODULE_7__["getChanges"])({
+  const changes = Object(_three_annotator_index__WEBPACK_IMPORTED_MODULE_7__["getChanges"])({
     meshes: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].getMeshes()
   });
 
@@ -442,7 +450,7 @@ _SyncPaint__WEBPACK_IMPORTED_MODULE_3__["paintManager"].emitter.on("update", dat
       return;
     }
 
-    Object(three_annotator__WEBPACK_IMPORTED_MODULE_7__["setAnnotation"])({
+    Object(_three_annotator_index__WEBPACK_IMPORTED_MODULE_7__["setAnnotation"])({
       mesh,
       colorId,
       data: { ...data,
@@ -476,7 +484,7 @@ const updateCursor = position => {
 const updateMetricsOnPaintTable = () => {
   const activeSurfaces = new Set(_SurfaceTable__WEBPACK_IMPORTED_MODULE_4__["SurfaceTable"].getData().filter(row => row.act).map(row => Object(_HandleSurfaces__WEBPACK_IMPORTED_MODULE_5__["getSurfaceName"])(row.id)));
   const meshes = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].getMeshes().filter(mesh => activeSurfaces.has(mesh.name));
-  const params = Object(three_annotator__WEBPACK_IMPORTED_MODULE_7__["getCurrentParams"])({
+  const params = Object(_three_annotator_index__WEBPACK_IMPORTED_MODULE_7__["getCurrentParams"])({
     meshes
   });
   const areas = params.areas;
@@ -2902,7 +2910,23 @@ class GeometryState {
     colorArray[vertexIndex * 3 + 0] = colorParam.r;
     colorArray[vertexIndex * 3 + 1] = colorParam.g;
     colorArray[vertexIndex * 3 + 2] = colorParam.b;
-  }
+  } //////////////
+
+
+  getColorId(vertexIndex) {
+    var ids = [];
+
+    for (const colorId of this.activeColors) {
+      const geometryColor = this.getGeometryColor(colorId);
+
+      if (geometryColor.painted[vertexIndex] == 1) {
+        ids.push(colorId);
+      }
+    }
+
+    return ids;
+  } //////////////
+
 
   setColor(vertexIndex) {
     if (this.overwrite) {
@@ -3024,7 +3048,39 @@ class GeometryState {
         return true;
       }
     }
-  }
+  } ///////////////////////////
+
+
+  getPaintID(center) {
+    window.geometryState = this;
+    const geometry = this.geometry;
+    const center_x = center.x,
+          center_y = center.y,
+          center_z = center.z;
+    const positionArray = geometry.attributes.position.array;
+    const length = positionArray.length;
+    var x = positionArray[0] - center_x;
+    var y = positionArray[1] - center_y;
+    var z = positionArray[2] - center_z;
+    var dist = x * x + y * y + z * z;
+    var i_min = 0;
+
+    for (let i = 0 + 3; i < length; i += 3) {
+      x = positionArray[i + 0] - center_x;
+      y = positionArray[i + 1] - center_y;
+      z = positionArray[i + 2] - center_z;
+      const d = x * x + y * y + z * z;
+
+      if (d < dist) {
+        i_min = i;
+        dist = d;
+      }
+    }
+
+    const ids = this.getColorId(i_min / 3);
+    return ids;
+  } ///////////////////////////
+
 
   getCurrentParams() {
     let area = 0;
@@ -3083,13 +3139,14 @@ const calcArea = (x1, y1, z1, x2, y2, z2, x3, y3, z3) => {
 /*!*************************************!*\
   !*** ./js/three_annotator/index.js ***!
   \*************************************/
-/*! exports provided: getIntersect, annotateBySphere, getCurrentParams, setColorOptions, getChanges, setAnnotation */
+/*! exports provided: getIntersect, annotateBySphere, getPaintID, getCurrentParams, setColorOptions, getChanges, setAnnotation */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getIntersect", function() { return getIntersect; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "annotateBySphere", function() { return annotateBySphere; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPaintID", function() { return getPaintID; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCurrentParams", function() { return getCurrentParams; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setColorOptions", function() { return setColorOptions; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getChanges", function() { return getChanges; });
@@ -3186,7 +3243,41 @@ const annotateBySphere = ({
   return {
     intersect
   };
-};
+}; ///////////////////////////////
+
+const getPaintID = ({
+  x,
+  y,
+  camera,
+  meshes,
+  container
+}) => {
+  const raymouse = new THREE.Vector2(x / container.clientWidth * 2 - 1, -(y / container.clientHeight) * 2 + 1);
+
+  const intersect = _getIntersect({
+    raymouse,
+    camera,
+    meshes
+  });
+
+  if (!intersect) {
+    return {
+      intersect
+    };
+  }
+
+  const mesh = intersect.object;
+  const geometry = mesh.geometry; // 高速化のため、逆行列をかけておく
+
+  const center = intersect.point.clone().applyMatrix4(new THREE.Matrix4().getInverse(mesh.matrix)); //  const scale = mesh.scale.x; // scale.x, scale.y, scale.z are the same
+  //  const limit = (radius * radius) / (scale * scale);
+  //  const direction = getRay({ raymouse, camera });
+
+  const geometryState = Object(_geometryState__WEBPACK_IMPORTED_MODULE_0__["getGeometryState"])(geometry);
+  const ids = geometryState.getPaintID(center);
+  return ids;
+}; ///////////////////////////////
+
 const getCurrentParams = ({
   meshes
 }) => {

@@ -82,6 +82,42 @@ export const annotateBySphere = ({
   }
 };
 
+
+///////////////////////////////
+export const getPaintID = ({
+  x,
+  y,
+  camera,
+  meshes,
+  container,
+}) => {
+  const raymouse = new THREE.Vector2(
+    (x / container.clientWidth) * 2 - 1,
+    -(y / container.clientHeight) * 2 + 1
+  );
+  const intersect = _getIntersect({ raymouse, camera, meshes });
+  if (!intersect) {
+    return {
+      intersect
+    }
+  }
+  const mesh = intersect.object;
+  const geometry = mesh.geometry;
+  // 高速化のため、逆行列をかけておく
+  const center = intersect.point
+    .clone()
+    .applyMatrix4(new THREE.Matrix4().getInverse(mesh.matrix));
+//  const scale = mesh.scale.x; // scale.x, scale.y, scale.z are the same
+//  const limit = (radius * radius) / (scale * scale);
+//  const direction = getRay({ raymouse, camera });
+  const geometryState = getGeometryState(geometry);
+  const ids = geometryState.getPaintID( center );
+  return ids;
+};
+///////////////////////////////
+
+
+
 export const getCurrentParams = ({ meshes }) => {
   let area = 0;
   const areas = {};
