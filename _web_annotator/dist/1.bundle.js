@@ -237,17 +237,9 @@ function animate() {
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].dragging = false;
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].paint_mode = false;
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].paint_on = true;
-_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].paint_overwriteB = false; // ObtainWindowSize
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].paint_overwriteB = false; // Executed when the window size is changed.
 
-function onWindowResize() {
-  //   var aspect = window.innerWidth / window.innerHeight;
-  //   APP.camera.left   = - frustumSize * aspect / 2;
-  //   APP.camera.right  =   frustumSize * aspect / 2;
-  //   APP.camera.top    =   frustumSize / 2;
-  //APP.camera.bottom = - frustumSize / 2;
-  //APP.camera.updateProjectionMatrix();
-  // APP.renderer.setSize( window.innerWidth * xratio, window.innerHeight * yratio);
-  //APP.renderer.setPixelRatio(window.devicePixelRatio);
+window.addEventListener('resize', function () {
   // サイズを取得
   const width = window.innerWidth;
   const height = window.innerHeight; // カメラのアスペクト比を正す
@@ -257,8 +249,7 @@ function onWindowResize() {
 
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.setPixelRatio(window.devicePixelRatio);
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.setSize(width * xratio, height * yratio);
-} // Draw bounding box
-
+}, false); // Draw bounding box
 
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addBoundingBox = function () {
   if (_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BackGroundColor == 'Black') {
@@ -573,14 +564,7 @@ function launchAnnotator() {
 
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SkeletonMode = 0; // Sphere
 
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SphereMode = 0; // Add sphere tmp
-  // var geometry = new THREE.SphereGeometry(0.1, 32, 32);
-  // var material = new THREE.MeshBasicMaterial({color: 0x6699FF});
-  // var sphere = new THREE.Mesh(geometry, material);
-  // sphere.position.set(0, 0, 0);
-  // APP.scene.add(sphere);
-  // Add sphere tmp
-  //Boundingbox
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].SphereMode = 0; //Boundingbox
 
   const call_url = location.protocol + "//" + location.host + "/surface/VolumeDescription.json";
   $.getJSON(call_url).done(function (data) {
@@ -590,14 +574,7 @@ function launchAnnotator() {
     _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY = data.boundingbox_um.y;
     _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ = data.boundingbox_um.z;
     _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax = Math.max(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ);
-    console.log('APP.BoundingboxMax: ', _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax); // Add sphere tmp2
-    // var geometry = new THREE.SphereGeometry(0.1, 32, 32);
-    // var material = new THREE.MeshBasicMaterial({color: 0xFF9955});
-    // var sphere = new THREE.Mesh(geometry, material);
-    // sphere.position.set(APP.BoundingboxX/2.0, APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0);
-    // APP.scene.add(sphere);
-    // Add sphere tmp2
-
+    console.log('APP.BoundingboxMax: ', _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxMax);
     window.CenterXY();
     _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].directionalLight.target.position.set(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0);
     window.DirLightX(false);
@@ -605,7 +582,6 @@ function launchAnnotator() {
     window.DirLightZ(false); // https://threejsfundamentals.org/threejs/lessons/threejs-lights.html
   });
 }
-window.addEventListener('resize', onWindowResize, false);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node_modules/buffer/index.js */ "./node_modules/buffer/index.js").Buffer))
 
 /***/ }),
@@ -2769,7 +2745,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _js_HandleSpheres__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../js/HandleSpheres */ "./js/HandleSpheres.js");
 /* harmony import */ var _js_HandleMarkers__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../js/HandleMarkers */ "./js/HandleMarkers.js");
 /* harmony import */ var _js_SyncPaint__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../js/SyncPaint */ "./js/SyncPaint.js");
-/* harmony import */ var _js_HandleBasement__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../js/HandleBasement */ "./js/HandleBasement.js");
+/* harmony import */ var _js_three_annotator_index__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../js/three_annotator/index */ "./js/three_annotator/index.js");
+/* harmony import */ var _js_three_annotator_geometryState__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../js/three_annotator/geometryState */ "./js/three_annotator/geometryState.js");
+/* harmony import */ var _js_HandleBasement__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../js/HandleBasement */ "./js/HandleBasement.js");
 
 
 
@@ -2781,7 +2759,501 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-Object(_js_HandleBasement__WEBPACK_IMPORTED_MODULE_10__["launchAnnotator"])();
+
+
+Object(_js_HandleBasement__WEBPACK_IMPORTED_MODULE_12__["launchAnnotator"])();
+
+/***/ }),
+
+/***/ "./js/three_annotator/geometryState.js":
+/*!*********************************************!*\
+  !*** ./js/three_annotator/geometryState.js ***!
+  \*********************************************/
+/*! exports provided: getGeometryState */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getGeometryState", function() { return getGeometryState; });
+class GeometryColor {
+  constructor(length) {
+    this.painted = new Int8Array(length);
+    this.totalArea = 0;
+    this.updated = false;
+  }
+
+  clear() {
+    this.painted.fill(0);
+    this.totalArea = 0;
+  }
+
+}
+
+class GeometryState {
+  constructor(geometry) {
+    this.totalArea = 0;
+    this.geometryColors = {};
+    this.activeColors = [0, 1, 2];
+    this.targetColorId = 0;
+    this.colorParams = {
+      0: {
+        r: 1,
+        g: 0,
+        b: 0
+      },
+      1: {
+        r: 0,
+        g: 1,
+        b: 0
+      },
+      2: {
+        r: 0,
+        g: 0,
+        b: 1
+      },
+      eraser: {
+        r: 1,
+        g: 1,
+        b: 1
+      }
+    };
+    this.eraserColorId = "eraser";
+    this.overwrite = true;
+    this.geometry = geometry;
+    this.initArea();
+  }
+
+  initArea() {
+    const vertexCount = this.geometry.attributes.position.count;
+    const faceCount = vertexCount / 3;
+    this.areas = new Float32Array(faceCount);
+    const positionArray = this.geometry.attributes.position.array;
+    const length = positionArray.length;
+
+    for (let i = 0; i < length; i += 9) {
+      const face_area = calcArea(positionArray[i + 0], positionArray[i + 1], positionArray[i + 2], positionArray[i + 3], positionArray[i + 4], positionArray[i + 5], positionArray[i + 6], positionArray[i + 7], positionArray[i + 8]);
+      this.areas[i / 9] = face_area / 3;
+    }
+  }
+
+  getChanges() {
+    const response = {};
+
+    for (const colorId of this.activeColors) {
+      const geometryColor = this.geometryColors[colorId];
+
+      if (geometryColor === null || geometryColor === void 0 ? void 0 : geometryColor.updated) {
+        response[colorId] = {
+          painted: geometryColor.painted,
+          totalArea: geometryColor.totalArea
+        };
+        geometryColor.updated = false;
+      }
+    }
+
+    return response;
+  }
+
+  setAnnotation(colorId, data) {
+    const geometryColor = this.getGeometryColor(colorId);
+
+    if (data.painted) {
+      geometryColor.painted = data.painted;
+      geometryColor.totalArea = data.totalArea;
+      this.updateAllColor();
+    }
+  }
+
+  getGeometryColor(colorId) {
+    if (!this.geometryColors[colorId]) {
+      const vertexCount = this.geometry.attributes.position.count;
+      this.geometryColors[colorId] = new GeometryColor(vertexCount);
+    }
+
+    return this.geometryColors[colorId];
+  }
+
+  updateAllColor() {
+    const colorArray = this.geometry.attributes.color.array;
+    const vertexCount = colorArray.length / 3;
+
+    for (let i = 0; i < vertexCount; i += 1) {
+      this.updateColor(i);
+    }
+
+    this.geometry.attributes.color.needsUpdate = true;
+    this.geometry.colorsNeedUpdate = true;
+  }
+
+  updateColor(vertexIndex) {
+    let effecientColorId = this.eraserColorId;
+
+    for (const colorId of this.activeColors) {
+      var _this$geometryColors$;
+
+      if ((_this$geometryColors$ = this.geometryColors[colorId]) === null || _this$geometryColors$ === void 0 ? void 0 : _this$geometryColors$.painted[vertexIndex]) {
+        effecientColorId = colorId;
+        break;
+      }
+    }
+
+    const colorArray = this.geometry.attributes.color.array;
+    const colorParam = this.colorParams[effecientColorId];
+    colorArray[vertexIndex * 3 + 0] = colorParam.r;
+    colorArray[vertexIndex * 3 + 1] = colorParam.g;
+    colorArray[vertexIndex * 3 + 2] = colorParam.b;
+  }
+
+  setColor(vertexIndex) {
+    if (this.overwrite) {
+      for (const colorId of this.activeColors) {
+        const geometryColor = this.getGeometryColor(colorId);
+
+        if (colorId === this.targetColorId) {
+          if (geometryColor.painted[vertexIndex] === 0) {
+            geometryColor.painted[vertexIndex] = 1;
+            geometryColor.totalArea += this.areas[Math.floor(vertexIndex / 3)];
+            geometryColor.updated = true;
+          }
+        } else {
+          if (geometryColor.painted[vertexIndex] === 1) {
+            geometryColor.painted[vertexIndex] = 0;
+            geometryColor.totalArea -= this.areas[Math.floor(vertexIndex / 3)];
+            geometryColor.updated = true;
+          }
+        }
+      }
+
+      const colorArray = this.geometry.attributes.color.array;
+      const colorParam = this.colorParams[this.eraser ? this.eraserColorId : this.targetColorId];
+      colorArray[vertexIndex * 3 + 0] = colorParam.r;
+      colorArray[vertexIndex * 3 + 1] = colorParam.g;
+      colorArray[vertexIndex * 3 + 2] = colorParam.b;
+      return true;
+    } else if (this.eraser) {
+      const geometryColor = this.getGeometryColor(this.targetColorId);
+
+      if (geometryColor.painted[vertexIndex] === 1) {
+        geometryColor.painted[vertexIndex] = 0;
+        geometryColor.totalArea -= this.areas[Math.floor(vertexIndex / 3)];
+        geometryColor.updated = true;
+        this.updateColor(vertexIndex);
+        return true;
+      }
+    } else {
+      const geometryColor = this.getGeometryColor(this.targetColorId);
+
+      if (geometryColor.painted[vertexIndex] === 0) {
+        geometryColor.painted[vertexIndex] = 1;
+        geometryColor.totalArea += this.areas[Math.floor(vertexIndex / 3)];
+        geometryColor.updated = true;
+        this.updateColor(vertexIndex);
+        return true;
+      }
+    }
+  }
+
+  setColorOptions({
+    targetColorId,
+    activeColors,
+    colorParams,
+    eraserColorId,
+    eraser,
+    overwrite
+  }) {
+    this.activeColors = activeColors || this.activeColors;
+    this.eraserColorId = eraserColorId || this.eraserColorId;
+    this.colorParams = colorParams || this.colorParams;
+    this.eraser = eraser != null ? eraser : this.eraser;
+    this.overwrite = overwrite != null ? overwrite : this.overwrite;
+    this.targetColorId = this.eraser && this.overwrite ? this.eraserColorId : this.activeColors[0];
+    this.updateAllColor();
+  }
+
+  setColorParams(colorParams) {
+    this.colorParams = colorParams;
+    this.updateAllColor();
+  }
+
+  annotate({
+    center,
+    direction,
+    limit,
+    ignoreBackFace
+  }) {
+    window.geometryState = this;
+    const geometry = this.geometry;
+    const center_x = center.x,
+          center_y = center.y,
+          center_z = center.z;
+    const direction_x = direction.x,
+          direction_y = direction.y,
+          direction_z = direction.z;
+    let needsUpdate = false;
+
+    if (geometry.isBufferGeometry) {
+      const positionArray = geometry.attributes.position.array;
+      const normalArray = geometry.attributes.normal.array;
+      const length = positionArray.length;
+
+      for (let i = 0; i < length; i += 3) {
+        const x = positionArray[i + 0] - center_x;
+        const y = positionArray[i + 1] - center_y;
+        const z = positionArray[i + 2] - center_z;
+
+        if (x * x + y * y + z * z > limit) {
+          continue;
+        }
+
+        if (ignoreBackFace) {
+          if (normalArray[i + 0] * direction_x + normalArray[i + 1] * direction_y + normalArray[i + 2] * direction_z < 0) {
+            continue;
+          }
+        }
+
+        const hasUpdated = this.setColor(i / 3);
+
+        if (hasUpdated) {
+          needsUpdate = true;
+        }
+      }
+
+      if (needsUpdate) {
+        geometry.attributes.color.needsUpdate = true;
+        geometry.colorsNeedUpdate = true;
+        return true;
+      }
+    }
+  }
+
+  getCurrentParams() {
+    let area = 0;
+    const areas = Object.keys(this.geometryColors).map(colorId => {
+      var _this$geometryColors$2;
+
+      const partArea = (_this$geometryColors$2 = this.geometryColors[colorId]) === null || _this$geometryColors$2 === void 0 ? void 0 : _this$geometryColors$2.totalArea;
+      area += partArea;
+      return {
+        colorId,
+        area: partArea
+      };
+    });
+    return {
+      area,
+      areas
+    };
+  }
+
+}
+
+class GeometryStateMap {
+  constructor() {
+    this.map = new WeakMap();
+  }
+
+  get(geometry) {
+    if (!this.map.has(geometry)) {
+      this.map.set(geometry, new GeometryState(geometry));
+    }
+
+    return this.map.get(geometry);
+  }
+
+}
+
+const geometryStateMap = new GeometryStateMap();
+const getGeometryState = geometry => geometryStateMap.get(geometry);
+
+const calcArea = (x1, y1, z1, x2, y2, z2, x3, y3, z3) => {
+  const a1 = x1 - x3;
+  const b1 = y1 - y3;
+  const c1 = z1 - z3;
+  const a2 = x2 - x3;
+  const b2 = y2 - y3;
+  const c2 = z2 - z3;
+  const p1 = b1 * c2 - b2 * c1;
+  const p2 = c1 * a2 - c2 * a1;
+  const p3 = a1 * b2 - a2 * b1;
+  return (p1 * p1 + p2 * p2 + p3 * p3) / 2;
+};
+
+/***/ }),
+
+/***/ "./js/three_annotator/index.js":
+/*!*************************************!*\
+  !*** ./js/three_annotator/index.js ***!
+  \*************************************/
+/*! exports provided: getIntersect, annotateBySphere, getCurrentParams, setColorOptions, getChanges, setAnnotation */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getIntersect", function() { return getIntersect; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "annotateBySphere", function() { return annotateBySphere; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCurrentParams", function() { return getCurrentParams; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setColorOptions", function() { return setColorOptions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getChanges", function() { return getChanges; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setAnnotation", function() { return setAnnotation; });
+/* harmony import */ var _geometryState__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./geometryState */ "./js/three_annotator/geometryState.js");
+
+
+const getRay = ({
+  raymouse,
+  camera
+}) => {
+  if (camera && camera.isPerspectiveCamera) {
+    return new THREE.Vector3().set(raymouse.x, raymouse.y, 0).unproject(camera).sub(camera.position).normalize();
+  } else {
+    console.error("Unsupported camera type.");
+  }
+};
+
+const raycaster = new THREE.Raycaster();
+
+const _getIntersect = ({
+  raymouse,
+  camera,
+  meshes
+}) => {
+  raycaster.setFromCamera(raymouse, camera);
+  const intersects = raycaster.intersectObjects(meshes);
+  const intersect = intersects.find(intersect => intersect.object.type === "Mesh");
+  return intersect;
+};
+
+const getIntersect = ({
+  x,
+  y,
+  camera,
+  meshes,
+  container
+}) => {
+  const raymouse = new THREE.Vector2(x / container.clientWidth * 2 - 1, -(y / container.clientHeight) * 2 + 1);
+
+  const intersect = _getIntersect({
+    raymouse,
+    camera,
+    meshes
+  });
+
+  return {
+    intersect
+  };
+};
+const annotateBySphere = ({
+  x,
+  y,
+  camera,
+  meshes,
+  container,
+  radius,
+  ignoreBackFace,
+  color
+}) => {
+  const raymouse = new THREE.Vector2(x / container.clientWidth * 2 - 1, -(y / container.clientHeight) * 2 + 1);
+
+  const intersect = _getIntersect({
+    raymouse,
+    camera,
+    meshes
+  });
+
+  if (!intersect) {
+    return {
+      intersect
+    };
+  }
+
+  const mesh = intersect.object;
+  const geometry = mesh.geometry; // 高速化のため、逆行列をかけておく
+
+  const center = intersect.point.clone().applyMatrix4(new THREE.Matrix4().getInverse(mesh.matrix));
+  const scale = mesh.scale.x; // scale.x, scale.y, scale.z are the same
+
+  const limit = radius * radius / (scale * scale);
+  const direction = getRay({
+    raymouse,
+    camera
+  });
+  const geometryState = Object(_geometryState__WEBPACK_IMPORTED_MODULE_0__["getGeometryState"])(geometry);
+  geometryState.annotate({
+    center,
+    direction,
+    limit,
+    color,
+    ignoreBackFace
+  });
+  return {
+    intersect
+  };
+};
+const getCurrentParams = ({
+  meshes
+}) => {
+  let area = 0;
+  const areas = {};
+  meshes.forEach(mesh => {
+    const geometry = mesh.geometry;
+
+    if (!geometry.isBufferGeometry) {
+      return;
+    }
+
+    const geometryState = Object(_geometryState__WEBPACK_IMPORTED_MODULE_0__["getGeometryState"])(geometry);
+    const result = geometryState.getCurrentParams();
+    area += result.area;
+    result.areas.forEach(o => {
+      areas[o.colorId] = (areas[o.colorId] || 0) + o.area;
+    });
+  });
+  return {
+    area,
+    areas
+  };
+};
+const setColorOptions = (options, {
+  meshes
+}) => {
+  meshes.forEach(mesh => {
+    const geometry = mesh.geometry;
+
+    if (!geometry.isBufferGeometry) {
+      return;
+    }
+
+    const geometryState = Object(_geometryState__WEBPACK_IMPORTED_MODULE_0__["getGeometryState"])(geometry);
+    geometryState.setColorOptions(options);
+  });
+};
+const getChanges = ({
+  meshes
+}) => {
+  const response = {};
+  meshes.forEach(mesh => {
+    const geometry = mesh.geometry;
+
+    if (!geometry.isBufferGeometry) {
+      return;
+    }
+
+    const geometryState = Object(_geometryState__WEBPACK_IMPORTED_MODULE_0__["getGeometryState"])(geometry);
+    const changes = geometryState.getChanges();
+
+    if (Object.keys(changes).length > 0) {
+      response[mesh.name] = changes;
+    }
+  });
+  return response;
+};
+const setAnnotation = ({
+  mesh,
+  colorId,
+  data
+}) => {
+  const geometry = mesh.geometry;
+  const geometryState = Object(_geometryState__WEBPACK_IMPORTED_MODULE_0__["getGeometryState"])(geometry);
+  geometryState.setAnnotation(colorId, data);
+};
 
 /***/ }),
 

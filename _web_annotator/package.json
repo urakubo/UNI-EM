@@ -35,7 +35,6 @@
     "lodash": "^4.17.19",
     "socket.io-client": "^2.3.0",
     "tabulator-tables": "^4.5.3",
-    "three": "^0.112.1",
-    "three-annotator": "github:honeysol/three-annotator#b45e293c53e76e7841516c38a9faefc692a35194"
+    "three": "^0.112.1"
   }
 }

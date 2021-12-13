@@ -30,32 +30,20 @@ APP.paint_on = true;
 APP.paint_overwriteB = false;
 
 
-// ObtainWindowSize
-function onWindowResize() {
- //   var aspect = window.innerWidth / window.innerHeight;
- //   APP.camera.left   = - frustumSize * aspect / 2;
- //   APP.camera.right  =   frustumSize * aspect / 2;
- //   APP.camera.top    =   frustumSize / 2;
- //APP.camera.bottom = - frustumSize / 2;
- //APP.camera.updateProjectionMatrix();
- // APP.renderer.setSize( window.innerWidth * xratio, window.innerHeight * yratio);
-    
-	//APP.renderer.setPixelRatio(window.devicePixelRatio);
-    
-	    
-	      // サイズを取得
+// Executed when the window size is changed.
+window.addEventListener('resize', function() {
+	// サイズを取得
 	const width = window.innerWidth;
 	const height = window.innerHeight;
 
-	  // カメラのアスペクト比を正す
+	// カメラのアスペクト比を正す
 	APP.camera.aspect = (width * xratio) / (height * yratio);
 	APP.camera.updateProjectionMatrix();
 
-	  // レンダラーのサイズを調整する
+	// レンダラーのサイズを調整する
 	APP.renderer.setPixelRatio(window.devicePixelRatio);
 	APP.renderer.setSize(width * xratio, height * yratio);
-    
-	}
+	}, false );
 
 
 // Draw bounding box
@@ -357,15 +345,6 @@ export function launchAnnotator() {
 	// Sphere
 	APP.SphereMode   = 0;
 
-    // Add sphere tmp
-    // var geometry = new THREE.SphereGeometry(0.1, 32, 32);
-    // var material = new THREE.MeshBasicMaterial({color: 0x6699FF});
-    // var sphere = new THREE.Mesh(geometry, material);
-    // sphere.position.set(0, 0, 0);
-    // APP.scene.add(sphere);
-    // Add sphere tmp
-
-
 	//Boundingbox
 	const call_url   = location.protocol+"//"+location.host+"/surface/VolumeDescription.json";
 	$.getJSON(call_url).done(function(data) {
@@ -377,16 +356,6 @@ export function launchAnnotator() {
 		APP.BoundingboxMax = Math.max(APP.BoundingboxX, APP.BoundingboxY, APP.BoundingboxZ);
 		console.log('APP.BoundingboxMax: ', APP.BoundingboxMax)
 		
-		
-		// Add sphere tmp2
-		// var geometry = new THREE.SphereGeometry(0.1, 32, 32);
-		// var material = new THREE.MeshBasicMaterial({color: 0xFF9955});
-		// var sphere = new THREE.Mesh(geometry, material);
-		// sphere.position.set(APP.BoundingboxX/2.0, APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0);
-		// APP.scene.add(sphere);
-		// Add sphere tmp2
-
-		
 		window.CenterXY()
 		APP.directionalLight.target.position.set(APP.BoundingboxX/2.0, APP.BoundingboxY/2.0, APP.BoundingboxZ/2.0); 
 		window.DirLightX(false)
@@ -397,7 +366,5 @@ export function launchAnnotator() {
     });
 }
 
-
-window.addEventListener( 'resize', onWindowResize, false );
 
 

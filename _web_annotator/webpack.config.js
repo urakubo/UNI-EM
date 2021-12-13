@@ -42,7 +42,7 @@ module.exports = env => {
           exclude: {
             include: /node_modules/,
             exclude: [
-              /node_modules[\\/]three-annotator[\\/]/,
+              /node_modules[\\/]/,
             ]
           },
           loader: "babel-loader",

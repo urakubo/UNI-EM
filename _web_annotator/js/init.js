@@ -9,5 +9,8 @@ import "../js/HandleSpheres";
 import "../js/HandleMarkers";
 import "../js/SyncPaint";
 
+import "../js/three_annotator/index";
+import "../js/three_annotator/geometryState";
+
 import { launchAnnotator } from "../js/HandleBasement";
 launchAnnotator();
