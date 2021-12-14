@@ -235,7 +235,7 @@ class GeometryState {
 
 ///////////////////////////
   getPaintID(center) {
-    window.geometryState = this;
+    //window.geometryState = this;
     const geometry = this.geometry;
     const center_x = center.x,
       center_y = center.y,

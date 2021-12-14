@@ -26,8 +26,19 @@ window.APP = APP;
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _APP__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./APP */ "./js/APP.js");
  //
-// Shared
-//
+// Executed when the window size is changed.
+
+window.addEventListener('resize', function () {
+  // サイズを取得
+  const width = window.innerWidth;
+  const height = window.innerHeight; // カメラのアスペクト比を正す
+
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.aspect = width * xratio / (height * yratio);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.updateProjectionMatrix(); // レンダラーのサイズを調整する
+
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.setPixelRatio(window.devicePixelRatio);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.setSize(width * xratio, height * yratio);
+}, false); // Mode
 
 window.ChangeMode = function (mode) {
   switch (mode) {
@@ -120,21 +131,13 @@ window.SaveImage = function (ischecked) {
 
 window.BackgroundWhiteBlack = function (ischecked) {
   if (ischecked == true) {
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].setBackGroundColor(0x000000);
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.background = new THREE.Color(0x000000);
     _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BackGroundColor = 'Black';
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].setBoundingBoxColor(0xffffff);
+    setBoundingBoxColor(0xffffff);
   } else {
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].setBackGroundColor(0xffffff);
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.background = new THREE.Color(0xffffff);
     _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BackGroundColor = 'White';
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].setBoundingBoxColor(0x000000);
-  }
-};
-
-window.FrameOffOn = function (ischecked) {
-  if (ischecked == true) {
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addBoundingBox();
-  } else {
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeBoundingBox();
+    setBoundingBoxColor(0x000000);
   }
 };
 
@@ -192,6 +195,59 @@ window.DirLightZ = function (ischecked) {
   }
 };
 
+window.FrameOffOn = function (ischecked) {
+  if (ischecked == true) {
+    addBoundingBox();
+  } else {
+    removeBoundingBox();
+  }
+}; // Draw bounding box
+
+
+function addBoundingBox() {
+  if (_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BackGroundColor == 'Black') {
+    var mat = new THREE.LineBasicMaterial({
+      color: 0xFFFFFF,
+      linewidth: 2
+    });
+  } else {
+    var mat = new THREE.LineBasicMaterial({
+      color: 0x000000,
+      linewidth: 2
+    });
+  }
+
+  var geometry = new THREE.BoxBufferGeometry(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ);
+  var geo = new THREE.EdgesGeometry(geometry); // or WireframeGeometry( geometry )
+
+  var boundingbox = new THREE.LineSegments(geo, mat);
+  boundingbox.name = 'BoundingBox';
+  boundingbox.scale.set(1, 1, 1);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(boundingbox);
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingBox = 'On';
+  boundingbox.translateX(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0);
+  boundingbox.translateY(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0);
+  boundingbox.translateZ(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0);
+}
+
+function removeBoundingBox() {
+  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName('BoundingBox');
+
+  if (obj != undefined) {
+    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.remove(obj);
+  }
+
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingBox = 'Off';
+}
+
+function setBoundingBoxColor(objcolor) {
+  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName('BoundingBox');
+
+  if (obj != undefined) {
+    obj.material.color.setHex(objcolor);
+  }
+}
+
 /***/ }),
 
 /***/ "./js/HandleBasement.js":
@@ -237,69 +293,7 @@ function animate() {
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].dragging = false;
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].paint_mode = false;
 _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].paint_on = true;
-_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].paint_overwriteB = false; // Executed when the window size is changed.
-
-window.addEventListener('resize', function () {
-  // サイズを取得
-  const width = window.innerWidth;
-  const height = window.innerHeight; // カメラのアスペクト比を正す
-
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.aspect = width * xratio / (height * yratio);
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.updateProjectionMatrix(); // レンダラーのサイズを調整する
-
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.setPixelRatio(window.devicePixelRatio);
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.setSize(width * xratio, height * yratio);
-}, false); // Draw bounding box
-
-_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].addBoundingBox = function () {
-  if (_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BackGroundColor == 'Black') {
-    var mat = new THREE.LineBasicMaterial({
-      color: 0xFFFFFF,
-      linewidth: 2
-    });
-  } else {
-    var mat = new THREE.LineBasicMaterial({
-      color: 0x000000,
-      linewidth: 2
-    });
-  }
-
-  var geometry = new THREE.BoxBufferGeometry(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ);
-  var geo = new THREE.EdgesGeometry(geometry); // or WireframeGeometry( geometry )
-
-  var boundingbox = new THREE.LineSegments(geo, mat);
-  boundingbox.name = 'BoundingBox';
-  boundingbox.scale.set(1, 1, 1);
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(boundingbox);
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingBox = 'On';
-  boundingbox.translateX(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxX / 2.0);
-  boundingbox.translateY(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxY / 2.0);
-  boundingbox.translateZ(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingboxZ / 2.0);
-};
-
-_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].removeBoundingBox = function () {
-  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName('BoundingBox');
-
-  if (obj != undefined) {
-    _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.remove(obj);
-  }
-
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].BoundingBox = 'Off';
-};
-
-_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].setBoundingBoxColor = function (objcolor) {
-  var obj = _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.getObjectByName('BoundingBox');
-
-  if (obj != undefined) {
-    obj.material.color.setHex(objcolor);
-  }
-}; // Set background color
-
-
-_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].setBackGroundColor = function (backcolor) {
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.background = new THREE.Color(backcolor);
-}; // Operation on mouse click
-
+_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].paint_overwriteB = false; // Operation on mouse click
 
 function clickPosition(event) {
   onDragStart(event); // Location of mouse
@@ -326,7 +320,7 @@ function clickPosition(event) {
 
     if (/^\d*$/.test(name) && name.length === 10) {
       // /^\d*$/ 符号や小数点を許容しない数値
-      intersected_surfaces.push(intersects[i]); //
+      intersected_surfaces.push(intersects[i]); ////
 
       ids = Object(_three_annotator_index__WEBPACK_IMPORTED_MODULE_7__["getPaintID"])({
         x: event.offsetX,
@@ -334,7 +328,8 @@ function clickPosition(event) {
         camera: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera,
         meshes: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].getMeshes(),
         container: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.domElement
-      }); //console.log('ids: ', ids);
+      }); ////
+      //console.log('ids: ', ids);
     }
 
     intersected_objects.push(intersects[i]);
@@ -527,9 +522,9 @@ function launchAnnotator() {
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene.add(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].directionalLight);
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].ambientLight = new THREE.AmbientLight(0xffffff);
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].ambientLight.intensity = 0.5;
-  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.add(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].ambientLight);
-  var min = 0;
-  var max = 255; // Controlsを用意
+  _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera.add(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].ambientLight); // var min = 0 ;
+  // var max = 255 ;
+  // Controlsを用意
 
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].controls = new THREE.TrackballControls(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.domElement);
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].controls.rotateSpeed = 10;
@@ -1851,7 +1846,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PaintTable", function() { return PaintTable; });
 /* harmony import */ var _APP__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./APP */ "./js/APP.js");
 /* harmony import */ var _SyncPaint__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SyncPaint */ "./js/SyncPaint.js");
-/* harmony import */ var three_annotator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! three-annotator */ "./node_modules/three-annotator/index.js");
+/* harmony import */ var _three_annotator_index__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./three_annotator/index */ "./js/three_annotator/index.js");
 /* harmony import */ var tabulator_tables__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! tabulator-tables */ "./node_modules/tabulator-tables/dist/js/tabulator.js");
 /* harmony import */ var tabulator_tables__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(tabulator_tables__WEBPACK_IMPORTED_MODULE_3__);
 
@@ -1936,7 +1931,7 @@ const updateColorOptionsOnAnnotator = () => {
     eraser: !_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].paint_on,
     overwrite: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].paint_overwriteB
   };
-  Object(three_annotator__WEBPACK_IMPORTED_MODULE_2__["setColorOptions"])(colorOptions, {
+  Object(_three_annotator_index__WEBPACK_IMPORTED_MODULE_2__["setColorOptions"])(colorOptions, {
     meshes: _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].getMeshes()
   });
 };
@@ -3052,7 +3047,7 @@ class GeometryState {
 
 
   getPaintID(center) {
-    window.geometryState = this;
+    //window.geometryState = this;
     const geometry = this.geometry;
     const center_x = center.x,
           center_y = center.y,

@@ -1,8 +1,23 @@
 import { APP } from "./APP";
 
 //
-// Shared
-//
+
+// Executed when the window size is changed.
+window.addEventListener('resize', function() {
+	// サイズを取得
+	const width = window.innerWidth;
+	const height = window.innerHeight;
+
+	// カメラのアスペクト比を正す
+	APP.camera.aspect = (width * xratio) / (height * yratio);
+	APP.camera.updateProjectionMatrix();
+
+	// レンダラーのサイズを調整する
+	APP.renderer.setPixelRatio(window.devicePixelRatio);
+	APP.renderer.setSize(width * xratio, height * yratio);
+	}, false );
+
+// Mode
 window.ChangeMode = function (mode) {
 	switch (mode) {
 		case "view":
@@ -92,22 +107,14 @@ window.SaveImage = function (ischecked) {
 //
 window.BackgroundWhiteBlack = function (ischecked) {
 		if( ischecked == true ) {
-			APP.setBackGroundColor( 0x000000 );
+			APP.scene.background = new THREE.Color( 0x000000 );
 			APP.BackGroundColor = 'Black';
-			APP.setBoundingBoxColor( 0xffffff );
+			setBoundingBoxColor( 0xffffff );
    			}
 		else {
-		    APP.setBackGroundColor( 0xffffff );
+			APP.scene.background = new THREE.Color( 0xffffff );
       		APP.BackGroundColor = 'White';
-      		APP.setBoundingBoxColor( 0x000000 );
-			}
-      }
-window.FrameOffOn =  function (ischecked) {
-		if( ischecked == true ) {
-      		APP.addBoundingBox();
-   			}
-		else {
-			APP.removeBoundingBox();
+      		setBoundingBoxColor( 0x000000 );
 			}
       }
 window.DirLight = function (isnum) {
@@ -170,5 +177,50 @@ window.DirLightZ = function (ischecked) {
 		APP.directionalLight.position.z = APP.BoundingboxZ/2.0-APP.BoundingboxMax;
 		}
 	}
+window.FrameOffOn =  function (ischecked) {
+		if( ischecked == true ) {
+      		addBoundingBox();
+   			}
+		else {
+			removeBoundingBox();
+			}
+      }
 
+
+// Draw bounding box
+function addBoundingBox() {
+	if ( APP.BackGroundColor == 'Black'){
+		  var mat = new THREE.LineBasicMaterial( { color: 0xFFFFFF, linewidth: 2 } );
+		  }
+	else{
+		var mat = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 2 } );
+		}
+
+	var geometry = new THREE.BoxBufferGeometry( APP.BoundingboxX, APP.BoundingboxY, APP.BoundingboxZ );
+	var geo = new THREE.EdgesGeometry( geometry ); // or WireframeGeometry( geometry )
+
+	var boundingbox = new THREE.LineSegments( geo, mat );
+	boundingbox.name = 'BoundingBox';
+	boundingbox.scale.set(1,1,1);
+	APP.scene.add(boundingbox);
+	APP.BoundingBox = 'On';
+	boundingbox.translateX( APP.BoundingboxX / 2.0 );
+	boundingbox.translateY( APP.BoundingboxY / 2.0 );
+	boundingbox.translateZ( APP.BoundingboxZ / 2.0 );
+	}
+
+function removeBoundingBox(){
+	var obj = APP.scene.getObjectByName('BoundingBox');
+	if ( obj != undefined ) {
+    		APP.scene.remove(obj);
+		}
+	APP.BoundingBox = 'Off';
+	}
+
+function setBoundingBoxColor(objcolor){
+	var obj = APP.scene.getObjectByName('BoundingBox');
+	if ( obj != undefined ) {
+    	obj.material.color.setHex( objcolor );
+		}
+	}
 

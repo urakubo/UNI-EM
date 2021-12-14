@@ -31,65 +31,6 @@ APP.paint_on = true;
 APP.paint_overwriteB = false;
 
 
-// Executed when the window size is changed.
-window.addEventListener('resize', function() {
-	// サイズを取得
-	const width = window.innerWidth;
-	const height = window.innerHeight;
-
-	// カメラのアスペクト比を正す
-	APP.camera.aspect = (width * xratio) / (height * yratio);
-	APP.camera.updateProjectionMatrix();
-
-	// レンダラーのサイズを調整する
-	APP.renderer.setPixelRatio(window.devicePixelRatio);
-	APP.renderer.setSize(width * xratio, height * yratio);
-	}, false );
-
-
-// Draw bounding box
-APP.addBoundingBox = function(){
-
-	if ( APP.BackGroundColor == 'Black'){
-		  var mat = new THREE.LineBasicMaterial( { color: 0xFFFFFF, linewidth: 2 } );
-		  }
-	else{
-		var mat = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 2 } );
-		}
-
-	var geometry = new THREE.BoxBufferGeometry( APP.BoundingboxX, APP.BoundingboxY, APP.BoundingboxZ );
-	var geo = new THREE.EdgesGeometry( geometry ); // or WireframeGeometry( geometry )
-
-	var boundingbox = new THREE.LineSegments( geo, mat );
-	boundingbox.name = 'BoundingBox';
-	boundingbox.scale.set(1,1,1);
-	APP.scene.add(boundingbox);
-	APP.BoundingBox = 'On';
-	boundingbox.translateX( APP.BoundingboxX / 2.0 );
-	boundingbox.translateY( APP.BoundingboxY / 2.0 );
-	boundingbox.translateZ( APP.BoundingboxZ / 2.0 );
-	}
-
-APP.removeBoundingBox = function(){
-	var obj = APP.scene.getObjectByName('BoundingBox');
-	if ( obj != undefined ) {
-    		APP.scene.remove(obj);
-		}
-	APP.BoundingBox = 'Off';
-	}
-
-APP.setBoundingBoxColor = function(objcolor){
-	var obj = APP.scene.getObjectByName('BoundingBox');
-	if ( obj != undefined ) {
-    	obj.material.color.setHex( objcolor );
-		}
-	}
-
-// Set background color
-APP.setBackGroundColor = function( backcolor ){
-		APP.scene.background = new THREE.Color( backcolor );
-	}
-
 // Operation on mouse click
 function clickPosition( event ) {
 	onDragStart(event);
@@ -118,7 +59,7 @@ function clickPosition( event ) {
 		var name = intersects[i].object.name;
 		if (/^\d*$/.test(name) && name.length === 10) { // /^\d*$/ 符号や小数点を許容しない数値
 				intersected_surfaces.push(intersects[i]);
-//
+////
 			  	ids = getPaintID({
 					x: event.offsetX,
 					y: event.offsetY,
@@ -126,6 +67,7 @@ function clickPosition( event ) {
 					meshes: APP.getMeshes(),
 					container: APP.renderer.domElement,
 			  		});
+////
 				//console.log('ids: ', ids);
 			}
 		intersected_objects.push(intersects[i]);
@@ -306,8 +248,8 @@ export function launchAnnotator() {
 	APP.ambientLight.intensity = 0.5;
 	APP.camera.add( APP.ambientLight );
 
-	var min = 0 ;
-	var max = 255 ;
+	// var min = 0 ;
+	// var max = 255 ;
 
 	// Controlsを用意
 	APP.controls = new THREE.TrackballControls( APP.camera, APP.renderer.domElement );
