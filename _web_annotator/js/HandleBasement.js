@@ -315,6 +315,3 @@ export function launchAnnotator() {
 		// https://threejsfundamentals.org/threejs/lessons/threejs-lights.html
     });
 }
-
-
-
