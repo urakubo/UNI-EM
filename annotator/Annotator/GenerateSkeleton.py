@@ -308,6 +308,7 @@ class GenerateSkeleton:
     print('Edges   : ', new_edges.shape)
     print('Lengths : ', new_lengths.shape)
     print('Tangents: ', new_tangents.shape)
+    print('Total length : ', np.sum(new_lengths))
 
     return new_vertices, new_edges, new_lengths, new_tangents
 
