@@ -14596,7 +14596,7 @@ THREE.STLLoader.prototype = Object.assign(Object.create(THREE.Loader.prototype),
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\uraku\Desktop\UNI-EM\_web_annotator/app/index.js */"./app/index.js");
+module.exports = __webpack_require__(/*! C:\Users\uraku\Desktop\UNI-EM_related\Annotator\UNI-EM_anntoator\_web_annotator/app/index.js */"./app/index.js");
 
 
 /***/ })

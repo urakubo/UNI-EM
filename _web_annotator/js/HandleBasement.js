@@ -16,7 +16,7 @@ import {
 
 var xratio = 0.6;
 var yratio = 0.95;
-var frustumSize = 1000;
+// var frustumSize = 1000;
 
 function animate() {
 	APP.renderer.render( APP.scene, APP.camera );

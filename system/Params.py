@@ -42,12 +42,14 @@ class Params:
 
 
         # Mojo unit image size for import
+        sep = str(os.sep)
+
         self.tile_num_pixels_y  = 512
         self.tile_num_pixels_x  = 512
         self.ncolors            = 16000 ########## 65535
-        self.tile_path_wz       = os.sep + 'w={0:08d}' + os.sep + 'z={1:08d}'
-        self.tile_ids_filename_wzyx = os.sep + 'w={0:08d}' + os.sep + 'z={1:08d}' + os.sep + 'y={2:08d},x={3:08d}.hdf5'
-        self.tile_images_filename_wzyx = os.sep + 'w={0:08d}' + os.sep + 'z={1:08d}' + os.sep + 'y={2:08d},x={3:08d}.tif'
+        self.tile_path_wz       = sep + 'w={0:08d}' + sep + 'z={1:08d}'
+        self.tile_ids_filename_wzyx = sep + 'w={0:08d}' + sep + 'z={1:08d}' + sep + 'y={2:08d},x={3:08d}.hdf5'
+        self.tile_images_filename_wzyx = sep + 'w={0:08d}' + sep + 'z={1:08d}' + sep + 'y={2:08d},x={3:08d}.tif'
 
         self.tile_ids_filename_yx = 'y={0:08d},x={1:08d}.hdf5'
         self.tile_images_filename_yx = 'y={0:08d},x={1:08d}.tif'
@@ -137,17 +139,17 @@ class Params:
 
 
         self.files_path                = user_path
-        self.ids_path                  = self.files_path   + os.sep + 'ids'
-        self.tile_ids_path             = self.ids_path     + os.sep + 'tiles'
-        self.tile_ids_volume_file      = self.ids_path     + os.sep + 'tiledVolumeDescription.xml'
-        self.color_map_file            = self.ids_path     + os.sep + 'colorMap.hdf5'
-        self.segment_info_db_file      = self.ids_path     + os.sep + 'segmentInfo.db'
-        self.segment_info_db_undo_file  = self.ids_path    + os.sep + 'segmentInfo_undo.pickle'
-        self.segment_info_db_redo_file  = self.ids_path    + os.sep + 'segmentInfo_redo.pickle'
+        self.ids_path                  = os.path.join(self.files_path   ,'ids')
+        self.tile_ids_path             = os.path.join(self.ids_path     ,'tiles')
+        self.tile_ids_volume_file      = os.path.join(self.ids_path     ,'tiledVolumeDescription.xml')
+        self.color_map_file            = os.path.join(self.ids_path     ,'colorMap.hdf5')
+        self.segment_info_db_file      = os.path.join(self.ids_path     ,'segmentInfo.db')
+        self.segment_info_db_undo_file  = os.path.join(self.ids_path    ,'segmentInfo_undo.pickle')
+        self.segment_info_db_redo_file  = os.path.join(self.ids_path    ,'segmentInfo_redo.pickle')
 
-        self.images_path               = self.files_path   + os.sep + 'images'
-        self.tile_images_path          = self.images_path  + os.sep + 'tiles'
-        self.tile_images_volume_file   = self.images_path  + os.sep + 'tiledVolumeDescription.xml'
+        self.images_path               = os.path.join(self.files_path   ,'images')
+        self.tile_images_path          = os.path.join(self.images_path  ,'tiles')
+        self.tile_images_volume_file   = os.path.join(self.images_path  ,'tiledVolumeDescription.xml')
 
         self.ids_files_undo             = []
         self.ids_files_redo             = []
@@ -156,8 +158,9 @@ class Params:
 
         self.tmpdir = tempfile.mkdtemp()
         self.merge_table = []
-        self.tmp_ids_path = self.tmpdir + os.sep + 'ids'
-        self.tmp_tile_ids_path = self.tmpdir + os.sep + 'ids' + os.sep + 'tiles'
+        self.tmp_ids_path = os.path.join(self.tmpdir, 'ids')
+        self.tmp_tile_ids_path = os.path.join(self.tmpdir, 'ids', 'tiles')
+
 
         ## Recheck current ip
         self.ip = socket.gethostbyname(socket.gethostname())
@@ -167,17 +170,17 @@ class Params:
     def SetUserInfoAnnotator(self, user_path):
 
         self.annotator_files_path      = user_path
-        self.volume_path               = self.annotator_files_path   + os.sep + 'volume'
-        self.volume_file               = self.volume_path + os.sep + 'volume.hdf5' 
+        self.volume_path               = os.path.join(self.annotator_files_path ,'volume')
+        self.volume_file               = os.path.join(self.volume_path, 'volume.hdf5')
 
-        self.skeletons_path            = self.annotator_files_path   + os.sep + 'skeletons'
-        self.surfaces_path             = self.annotator_files_path   + os.sep + 'surfaces'
-        self.skeletons_whole_path      = self.annotator_files_path   + os.sep + 'skeletons' + os.sep + 'whole'
-        self.surfaces_whole_path       = self.annotator_files_path   + os.sep + 'surfaces' + os.sep + 'whole'
-        self.paint_path                = self.annotator_files_path   + os.sep + 'paint'
+        self.skeletons_path            = os.path.join(self.annotator_files_path, 'skeletons')  
+        self.surfaces_path             = os.path.join(self.annotator_files_path, 'surfaces')  
+        self.skeletons_whole_path      = os.path.join(self.annotator_files_path, 'skeletons', 'whole')
+        self.surfaces_whole_path       = os.path.join(self.annotator_files_path, 'surfaces', 'whole')
+        self.paint_path                = os.path.join(self.annotator_files_path, 'paint')
 
-        self.surfaces_segment_info_json_file 	    = self.surfaces_path + os.sep + 'segmentInfo.json'
-        self.surfaces_volume_description_json_file 	= self.surfaces_path + os.sep + 'VolumeDescription.json'
+        self.surfaces_segment_info_json_file 	    = os.path.join(self.surfaces_path, 'segmentInfo.json')
+        self.surfaces_volume_description_json_file 	= os.path.join(self.surfaces_path, 'VolumeDescription.json')
 
         self.tmpdir = tempfile.mkdtemp()
 

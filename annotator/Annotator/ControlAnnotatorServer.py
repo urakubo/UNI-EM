@@ -9,12 +9,12 @@ from os import path, pardir
 
 ##
 
-main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
-sys.path.append(path.join(main_dir, "annotator"))
-sys.path.append(os.path.join(main_dir, "system"))
+#main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
+#sys.path.append(path.join(main_dir, "annotator"))
+#sys.path.append(os.path.join(main_dir, "system"))
 
 from Annotator.AnnotatorServer import AnnotatorServerLogic
-from Params import Params
+#from Params import Params
 import miscellaneous.Miscellaneous as m
 ##
 ##

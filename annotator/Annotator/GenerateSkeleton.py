@@ -12,8 +12,7 @@ import trimesh
 from annotator.Annotator._get_radius_ray import _get_radius_ray
 
 class GenerateSkeleton:
-  def __init__( self, ids_volume, pitch, skeletons_path, surfaces_path, scale, constant, min_voxel, max_path, smooth, extra_after):
-
+  def __init__( self, ids_volume, pitch, skeletons_path, surfaces_path):
     self.xpitch = pitch[0]
     self.ypitch = pitch[1]
     self.zpitch = pitch[2]
@@ -21,6 +20,7 @@ class GenerateSkeleton:
     self.skeletons_path = skeletons_path
     self.surfaces_path  = surfaces_path
 
+  def set_params( self, scale, constant, min_voxel, max_path, smooth, extra_after):
     self.scale       = scale
     self.constant    = constant
     self.min_voxel   = min_voxel
@@ -28,60 +28,7 @@ class GenerateSkeleton:
     self.smooth      = smooth
     self.extra_after = extra_after
 
-  def _skeletonize( self, id, markerlocs_int):
-
-    if self.extra_after == True:
-    	extra_targets_after  = markerlocs_int
-    	extra_targets_before = []
-    else :
-    	extra_targets_after  = []
-    	extra_targets_before = markerlocs_int
-
-    teasar_params={\
-		'scale': self.scale,
-		'const': self.constant, # physical units default 500
-		'pdrf_exponent': 4,
-		'pdrf_scale': 100000,
-		'soma_detection_threshold': 1100, # physical units
-		'soma_acceptance_threshold': 3500, # physical units
-		'soma_invalidation_scale': 1.0,
-		'soma_invalidation_const': 300, # physical units
-		'max_paths': self.max_path}
-
-    skels = kimimaro.skeletonize(
-	  self.ids_volume, 
-	  teasar_params=teasar_params,
-	  object_ids=[ id ], # process only the specified labels
-	  #extra_targets_before=markerlocs_int, # target points in voxels
-	  extra_targets_after=extra_targets_after, # target points in voxels
-	  extra_targets_before=extra_targets_before, # target points in voxels
-	  dust_threshold=self.min_voxel, # skip connected components with fewer than this many voxels
-	  anisotropy=( self.xpitch, self.ypitch, self.zpitch ), # default True
-	  fix_branching=True, # default True
-	  fix_borders=True, # default True
-	  progress=True, # default False, show progress bar
-	  parallel=1, # <= 0 all cpu, 1 single process, 2+ multiprocess
-	  parallel_chunk_size=100, # how many skeletons to process before updating progress bar
-    )
-
-    skel = skels[id]
-    return skel
-
-  def _unbranched_centerline( self, id, markerlocs_int):
-
-    print('Unbranched line between markerpoints.')
-    skel = kimimaro.connect_points(
-	  labels = (self.ids_volume == id),
-      start = markerlocs_int[0],
-      end = markerlocs_int[1],
-      anisotropy = ( self.xpitch, self.ypitch, self.zpitch ),
-      pdrf_scale=100000, 
-      pdrf_exponent=4
-    )
-    return skel
-
-
-  def run( self, id, markerlocs ):
+  def exec( self, id, markerlocs ):
 
     # mask = (self.ids_volume == id)
 
@@ -121,13 +68,9 @@ class GenerateSkeleton:
 
     print("markerlocs_int: ", markerlocs_int)
 
-#    	for i, org_loc in enumerate(markerlocs_int):
-#    		print("I and ID", i, self.ids_volume[org_loc[0], org_loc[1], org_loc[2]])
-
     ##
 	## Skeletonaization
 	##
-
 
     print("Kimimaro initialization...")
 
@@ -135,12 +78,7 @@ class GenerateSkeleton:
     	skel = self._unbranched_centerline( id, markerlocs_int )
     else :
     	skel = self._skeletonize( id, markerlocs_int )
-    # skeleton_ids = self._SaveSkeletonFile(id, vertices, edges, radiuses)
 
-    # vertices = skels[id].vertices
-    # edges    = skels[id].edges
-
-#    print('skel : ', skel)
     if isinstance(skel, type(None)) :
     	print('No skeleton. ')
     	return False
@@ -155,10 +93,6 @@ class GenerateSkeleton:
     if edges.shape[0] < 4:
     	print('No skeleton. ')
     	return False
-
-    #print('Vertices: ', vertices)
-    #print('Edges   : ', edges)
-
 
 
 	##
@@ -176,7 +110,7 @@ class GenerateSkeleton:
     ##
 	## Calculate radiuses for each vartices (k-nearst neighbor)
 	##
-#    surface_vertices = self._LoadSurfaceVertices(id)
+#    surface_vertices = self._load_surface_vertices(id)
 #    tree = spatial.cKDTree(surface_vertices)
 #    dists, indexes = tree.query(new_vertices, k=5)
 #    new_radiuses	 = np.mean(dists, axis=1)
@@ -185,14 +119,14 @@ class GenerateSkeleton:
     ##
 	## Calculate radiuses for each vartices (raycaster)
 	##
-    mesh = self._LoadSurfaceMesh(id)
+    mesh = self._load_surface_mesh(id)
     new_radiuses	 = _get_radius_ray(new_vertices, new_tangents, mesh)
     print('new_radiuses: ', new_radiuses.shape)
 
 	##
 	## Save skeleton
 	##
-    skeleton_ids = self._SaveSkeletonFile(id, new_vertices, new_edges, new_radiuses, new_lengths, new_tangents)
+    skeleton_ids = self._save_skeleton_file(id, new_vertices, new_edges, new_radiuses, new_lengths, new_tangents)
 
 
 
@@ -218,7 +152,7 @@ class GenerateSkeleton:
     	start_pair = [edges_ends[0], partner]
     	segment = self._obtain_segment(start_pair, edges)
 #    	print('segment: ', segment)
-    	return self._core_smoothing(vertices, [segment])
+    	return self._exec_smoothing(vertices, [segment])
 
     for id_cross in edges_cross:
     	tmp = edges[np.any(edges == id_cross, axis=1),:].flatten()
@@ -227,7 +161,6 @@ class GenerateSkeleton:
     	pairs = [[id_cross, neighbor]  for neighbor in _neighbors_cross]
     	neighbors_cross.extend( _neighbors_cross.tolist() )
     	start_pairs.extend( pairs )
-
 #    print('start_pairs: ',start_pairs)
 
     flag_used       = np.zeros(len(neighbors_cross))
@@ -243,10 +176,10 @@ class GenerateSkeleton:
     		flag_used += (neighbors_cross == segment[-2])
 
     # print('segments', segments)
-    return self._core_smoothing(vertices, segments)
+    return self._exec_smoothing(vertices, segments)
 
 
-  def _core_smoothing(self, vertices, segments):
+  def _exec_smoothing(self, vertices, segments):
 
     num_pts = 200
     large_value = 100000000
@@ -313,7 +246,7 @@ class GenerateSkeleton:
     return new_vertices, new_edges, new_lengths, new_tangents
 
 
-  def _LoadSurfaceVertices(self, id):
+  def _load_surface_vertices(self, id):
     print('Loading surface, ID: ', id)
     filename = self.surfaces_path + os.sep + str(id).zfill(10)+'.stl'
     mesh = trimesh.load(filename)
@@ -321,7 +254,7 @@ class GenerateSkeleton:
     print('')
     return vertices
 
-  def _LoadSurfaceMesh(self, id):
+  def _load_surface_mesh(self, id):
     print('Loading surface, ID: ', id)
     filename = self.surfaces_path + os.sep + str(id).zfill(10)+'.stl'
     mesh = trimesh.load(filename)
@@ -329,7 +262,7 @@ class GenerateSkeleton:
     return mesh
 
 
-  def _SaveSkeletonFile(self, id, vertices, edges, radiuses, lengths, tangents):
+  def _save_skeleton_file(self, id, vertices, edges, radiuses, lengths, tangents):
     filename = self.skeletons_path + os.sep + str(id).zfill(10)+'.hdf5'
     with h5py.File( filename ,'w') as f:
     	f.create_dataset('vertices', data=vertices)
@@ -352,4 +285,59 @@ class GenerateSkeleton:
     		output_edges.extend(newid)
     	else:
     		return output_edges
+
+
+  def _skeletonize( self, id, markerlocs_int):
+
+    if self.extra_after == True:
+    	extra_targets_after  = markerlocs_int
+    	extra_targets_before = []
+    else :
+    	extra_targets_after  = []
+    	extra_targets_before = markerlocs_int
+
+    teasar_params={\
+		'scale': self.scale,
+		'const': self.constant, # physical units default 500
+		'pdrf_exponent': 4,
+		'pdrf_scale': 100000,
+		'soma_detection_threshold': 1100, # physical units
+		'soma_acceptance_threshold': 3500, # physical units
+		'soma_invalidation_scale': 1.0,
+		'soma_invalidation_const': 300, # physical units
+		'max_paths': self.max_path}
+
+    skels = kimimaro.skeletonize(
+	  self.ids_volume, 
+	  teasar_params=teasar_params,
+	  object_ids=[ id ], # process only the specified labels
+	  #extra_targets_before=markerlocs_int, # target points in voxels
+	  extra_targets_after=extra_targets_after, # target points in voxels
+	  extra_targets_before=extra_targets_before, # target points in voxels
+	  dust_threshold=self.min_voxel, # skip connected components with fewer than this many voxels
+	  anisotropy=( self.xpitch, self.ypitch, self.zpitch ), # default True
+	  fix_branching=True, # default True
+	  fix_borders=True, # default True
+	  progress=True, # default False, show progress bar
+	  parallel=1, # <= 0 all cpu, 1 single process, 2+ multiprocess
+	  parallel_chunk_size=100, # how many skeletons to process before updating progress bar
+    )
+
+    print("skels: ", skels)
+    skel = skels[id]
+    return skel
+
+
+  def _unbranched_centerline( self, id, markerlocs_int):
+
+    print('Unbranched line between markerpoints.')
+    skel = kimimaro.connect_points(
+	  labels = (self.ids_volume == id),
+      start = markerlocs_int[0],
+      end = markerlocs_int[1],
+      anisotropy = ( self.xpitch, self.ypitch, self.zpitch ),
+      pdrf_scale=100000, 
+      pdrf_exponent=4
+    )
+    return skel
 

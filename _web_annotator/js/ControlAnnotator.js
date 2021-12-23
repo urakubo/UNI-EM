@@ -1,6 +1,9 @@
 import { APP } from "./APP";
 
 //
+var xratio = 0.6;
+var yratio = 0.95;
+//
 
 // Executed when the window size is changed.
 window.addEventListener('resize', function() {

@@ -4,6 +4,7 @@ from urllib.parse import parse_qs
 import socketio
 import pickle
 import os
+import pprint
 from annotator.Annotator import room
 
 sio = socketio.AsyncServer(async_mode='tornado')
@@ -36,25 +37,34 @@ async def update_paint_volumes(sid):
   surface_path = u_info.surfaces_whole_path
   skeleton_path= u_info.skeletons_whole_path
   paint_path   = u_info.paint_path
-  ids_volumes  = GetVolumes(surface_path, paint_path, skeleton_path)
+  get_volumes  = GetVolumes(surface_path, paint_path, skeleton_path)
+  attributes   = get_volumes.exec()
+
+  pprint.pprint(attributes, indent=2)
 
   room_id = 'list'
   data = read_file(room_id)
-#  print('Before: ', data)
+#  pprint.pprint(data, indent=2)
   for data_row in data[room_id]:
-#  	print('data_row: ', data_row)
-  	if data_row['id'] in ids_volumes.keys():
-  		data_row['volume'] = ids_volumes[data_row['id']]
-  data["sid"] = 0
+  	id = data_row['id']
+  	if id in attributes.keys():
+  		data_row['area_reserv'] = attributes[id]['area']
+  		data_row['length']      = attributes[id]['length']
+  		data_row['max_radius']  = attributes[id]['max_radius']
+  		data_row['mean_radius'] = attributes[id]['mean_radius']
+  		data_row['min_radius']  = attributes[id]['min_radius']
+  		data_row['volume']      = attributes[id]['volume']
+
+#  data["sid"] = 0
+  data["sid"] = sid
+  write_file(room_id, data)
+  await sio.emit('update', data, room=room_id)
+
 
   # socket.id was intentionally destroyed so that
   # the paint table of the requesting client is to be updated.
   # HU does not know that this is a safe operation.
   # Should ask some professional.
-
-#  print('After: ', data)
-  write_file(room_id, data)
-  await sio.emit('update', data, room=room_id)
 
 
 @sio.event

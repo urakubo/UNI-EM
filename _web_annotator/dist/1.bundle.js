@@ -2065,6 +2065,51 @@ const PaintTable = new tabulator_tables__WEBPACK_IMPORTED_MODULE_3__('#PaintTabl
     formatterParams: {
       precision: 5
     }
+  }, {
+    title: "Area reserv",
+    field: "area_reserv",
+    headerSort: false,
+    formatter: "money",
+    formatterParams: {
+      precision: 5
+    },
+    visible: false
+  }, {
+    title: "Length",
+    field: "length",
+    headerSort: false,
+    formatter: "money",
+    formatterParams: {
+      precision: 5
+    },
+    visible: false
+  }, {
+    title: "Max r",
+    field: "max_radius",
+    headerSort: false,
+    formatter: "money",
+    formatterParams: {
+      precision: 5
+    },
+    visible: false
+  }, {
+    title: "Mean r",
+    field: "max_radius",
+    headerSort: false,
+    formatter: "money",
+    formatterParams: {
+      precision: 5
+    },
+    visible: false
+  }, {
+    title: "Min r",
+    field: "min_radius",
+    headerSort: false,
+    formatter: "money",
+    formatterParams: {
+      precision: 5
+    },
+    visible: false
   }],
   rowMoved: row => {
     updateColor();
@@ -2121,15 +2166,22 @@ $('#save-paint-table-csv').on('click', event => {
 
 $('#calc-volumes').on('click', event => {
   _SyncPaint__WEBPACK_IMPORTED_MODULE_1__["paintManager"].updatePaintVolumes();
-}); ////
+}); //// 211223
 
 const downloadPaintTableAsCSV = () => {
   const tableData = PaintTable.getData("active");
-  const csvData = [["id", "name", "r", "g", "b", "area", "volume"]];
+  const csvData = [["id", "name", "r", "g", "b", "area", "volume", "area_reserv", "length", "max_radius", "mean_radius", "min_radius"]];
 
   for (const row of tableData) {
-    csvData.push([row.id, row.name, row.r, row.g, row.b, row.area, row.volume]);
+    csvData.push([row.id, row.name, row.r, row.g, row.b, row.area, row.volume, row.area_reserv, row.length, row.max_radius, row.mean_radius, row.min_radius]);
   }
+  /*
+    const csvData = [["id", "name", "r", "g", "b", "area", "volume"]]
+    for (const row of tableData) {
+      csvData.push([row.id, row.name, row.r, row.g, row.b, row.area, row.volume]);
+    }
+  */
+
 
   const csvContent = "data:text/csv;charset=utf-8," + csvData.map(e => e.join(",")).join("\n");
   const encodeUri = encodeURI(csvContent); // window.open(encodeUri); This also download CSV file
@@ -2160,7 +2212,12 @@ _SyncPaint__WEBPACK_IMPORTED_MODULE_1__["paintManager"].emitter.on("update", dat
           r: incomingRow.r,
           g: incomingRow.g,
           b: incomingRow.b,
-          volume: incomingRow.volume
+          volume: incomingRow.volume,
+          area_reserv: incomingRow.area_reserv,
+          length: incomingRow.length,
+          max_radius: incomingRow.max_radius,
+          mean_radius: incomingRow.mean_radius,
+          min_radius: incomingRow.min_radius
         };
       }));
     } else {
@@ -2175,7 +2232,12 @@ _SyncPaint__WEBPACK_IMPORTED_MODULE_1__["paintManager"].emitter.on("update", dat
             r: incomingRow.r,
             g: incomingRow.g,
             b: incomingRow.b,
-            volume: incomingRow.volume
+            volume: incomingRow.volume,
+            area_reserv: incomingRow.area_reserv,
+            length: incomingRow.length,
+            max_radius: incomingRow.max_radius,
+            mean_radius: incomingRow.mean_radius,
+            min_radius: incomingRow.min_radius
           });
           incomingRowsMap.delete(currentRow.id);
         }
@@ -2189,7 +2251,12 @@ _SyncPaint__WEBPACK_IMPORTED_MODULE_1__["paintManager"].emitter.on("update", dat
           r: incomingRow.r,
           g: incomingRow.g,
           b: incomingRow.b,
-          volume: incomingRow.volume
+          volume: incomingRow.volume,
+          area_reserv: incomingRow.area_reserv,
+          length: incomingRow.length,
+          max_radius: incomingRow.max_radius,
+          mean_radius: incomingRow.mean_radius,
+          min_radius: incomingRow.min_radius
         });
       }
 

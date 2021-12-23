@@ -10,23 +10,12 @@ import numpy as np
 import json
 import socketio
 
-from skimage import measure
-import trimesh
 import h5py
 
-# from marching_cubes import march
-# import mcubes
-# import zmesh
-
-
 from os import path, pardir
-main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
-sys.path.append(main_dir)
-sys.path.append(path.join(main_dir, "system"))
 
-from Params import Params
 from annotator.Annotator.sio import sio, set_u_info
-import miscellaneous.Miscellaneous as m
+from annotator.Annotator.GenerateSurface import GenerateSurface
 from annotator.Annotator.GenerateSkeleton import GenerateSkeleton
 
 
@@ -42,7 +31,10 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
     self.pitch		= kwargs.pop('pitch')
     self.surfaces_path  = kwargs.pop('surfaces_path')
     self.skeletons_path = kwargs.pop('skeletons_path')
-    
+
+    self.gen_surf = GenerateSurface( self.ids_volume, self.pitch, self.surfaces_path)
+    self.gen_skel = GenerateSkeleton(self.ids_volume, self.pitch, self.skeletons_path, self.surfaces_path)
+
     super(SurfaceSkeletonHandler, self).__init__(*args, **kwargs)
 
   ###
@@ -57,36 +49,29 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
     	print('Bad request: ', request)
     	self.write("False")
     	return False
-
     print('\n'.join("  {}: {}".format(k, v) for k, v in request.items()))
+
     if request['mode'] == 'surface':
-#    	print( str(request['smooth_method']) )
-#    	print( str(request['num_iter']) )
     	id 				= int(request['id'])
     	smooth_method 	= str(request['smooth_method'])
     	num_iter 		= int(request['num_iter'])
-
-    	# print('Target object id:', id)
-    	result = self.generate_surface(id, smooth_method, num_iter)
-    	if result :
+    	flag = self.gen_surf.exec(id, smooth_method, num_iter)
+    	if flag :
     		self.write("True")
     	else :
     		self.write("False")
 
     elif request['mode'] == 'skeleton':
-#    	print('Request skeleton: ')
     	scale     = int(request['scale'])
     	constant  = int(request['constant'])
     	min_voxel = int(request['min_voxel'])
     	max_path  = int(request['max_path'])
     	smooth    = int(request['smooth'])
     	extra_after = bool(request['extra_after'])
-    	gen_skel = GenerateSkeleton(self.ids_volume, self.pitch, self.skeletons_path, self.surfaces_path,\
-    		scale, constant, min_voxel, max_path, smooth, extra_after)
+    	self.gen_skel.set_params(scale, constant, min_voxel, max_path, smooth, extra_after)
     	for elem in request['element']:
-	    	# print('Skeleton: ', elem )
-	    	result = gen_skel.run(elem['id'], elem['markerlocs'])
-	    	if not result :
+	    	flag = self.gen_skel.exec(elem['id'], elem['markerlocs'])
+	    	if not flag:
 	    		self.write("False")
     	self.write("True")
 
@@ -94,59 +79,6 @@ class SurfaceSkeletonHandler(tornado.web.RequestHandler):
     	print('Bad request: ', request)
     	self.write("False")
     	return False
-
-  ###
-  def generate_surface(self, id, smooth_method, num_iter):
-    mask = (self.ids_volume == id)
-    try:
-        if 'marching_cubes' in dir(measure):
-            vertices, faces, normals, values = measure.marching_cubes(mask, level=0.5, spacing=tuple(self.pitch),gradient_direction='ascent')
-        elif 'marching_cubes_lewiner' in dir(measure):
-            vertices, faces, normals, values = measure.marching_cubes_lewiner(mask, level=0.5, spacing=tuple(self.pitch),gradient_direction='ascent')
-        vertices = vertices - self.pitch
-        # Parameters: spacing : length-3 tuple of floats
-        # Voxel spacing in spatial dimensions corresponding to numpy array
-        # indexing dimensions (M, N, P) as in `volume`.
-        # Returns: verts : (V, 3) array matches input `volume` (M, N, P).
-        #
-        # ??? verts and normals have x and z flipped because skimage uses zyx ordering
-        # vertices = vertices[:, [2,0,1]]
-    except:
-        print('Mesh was not generated.')
-        return False
-#    trimesh.constants.tol.merge = 1e-7
-    mesh = trimesh.Trimesh(vertices=vertices, faces=faces)
-    mesh.merge_vertices()
-    mesh.remove_degenerate_faces()
-    mesh.remove_duplicate_faces()
-
-
-
-    if smooth_method == "Humphrey":
-        mesh = trimesh.smoothing.filter_humphrey(mesh, iterations=num_iter)
-        # print("Humphrey filter with ", num_iter, " iterations")
-    elif smooth_method == "Laplacian":
-        v1  = mesh.vertices
-        v1center = np.sum(v1,0) / v1.shape[0]
-        mesh = trimesh.smoothing.filter_laplacian(mesh, iterations=num_iter)
-        v2 = mesh.vertices
-        v2center = np.sum(v2,0) / v2.shape[0]
-        mesh.vertices += v1center - v2center
-        # print("Laplacian filter with ", num_iter, " iterations")
-    elif smooth_method == "Taubin":
-        mesh = trimesh.smoothing.filter_taubin(mesh, iterations=num_iter)
-        # print("Taubin filter with ", num_iter, " iterations")
-    else :
-        pass
-        # print("No smoothing.")
-        # print("No smoothing.")
-
-    print('Processed vertices:', mesh.vertices.shape)
-    print('Processed faces   :', mesh.faces.shape)
-
-    filename = os.path.join(self.surfaces_path, str(id).zfill(10)+'.stl')
-    mesh.export(file_obj=filename)
-    return True
 
   ###
 class AnnotatorServerLogic:
@@ -167,23 +99,20 @@ class AnnotatorServerLogic:
     self.pitch  = [xpitch, ypitch, zpitch]
 
     ## Load volume file
-    with h5py.File(self.u_info.volume_file, 'r') as f:		
+    with h5py.File(self.u_info.volume_file, 'r') as f:
       self.ids_volume = f['volume'][()]
 
-#    print('self.ids_volume.shape: ', self.ids_volume.shape)
     return None
 
 
   def run( self ):
     ####
     web_path = os.path.join(self.u_info.web_annotator_path, "dist")
-    skeletons_path  = self.u_info.skeletons_path
-    surfaces_path   = self.u_info.surfaces_path
+    skeletons_path       = self.u_info.skeletons_path
+    surfaces_path        = self.u_info.surfaces_path
     skeletons_whole_path = self.u_info.skeletons_whole_path
     surfaces_whole_path  = self.u_info.surfaces_whole_path
-
-    ####
-    paint_path  = self.u_info.paint_path
+    paint_path           = self.u_info.paint_path
     ####
     ev_loop = asyncio.new_event_loop()
     asyncio.set_event_loop(ev_loop)
