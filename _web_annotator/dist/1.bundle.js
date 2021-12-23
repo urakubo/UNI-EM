@@ -26,6 +26,9 @@ window.APP = APP;
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _APP__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./APP */ "./js/APP.js");
  //
+
+var xratio = 0.6;
+var yratio = 0.95; //
 // Executed when the window size is changed.
 
 window.addEventListener('resize', function () {
@@ -280,8 +283,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var xratio = 0.6;
-var yratio = 0.95;
-var frustumSize = 1000;
+var yratio = 0.95; // var frustumSize = 1000;
 
 function animate() {
   _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].renderer.render(_APP__WEBPACK_IMPORTED_MODULE_0__["APP"].scene, _APP__WEBPACK_IMPORTED_MODULE_0__["APP"].camera);
@@ -2175,13 +2177,6 @@ const downloadPaintTableAsCSV = () => {
   for (const row of tableData) {
     csvData.push([row.id, row.name, row.r, row.g, row.b, row.area, row.volume, row.area_reserv, row.length, row.max_radius, row.mean_radius, row.min_radius]);
   }
-  /*
-    const csvData = [["id", "name", "r", "g", "b", "area", "volume"]]
-    for (const row of tableData) {
-      csvData.push([row.id, row.name, row.r, row.g, row.b, row.area, row.volume]);
-    }
-  */
-
 
   const csvContent = "data:text/csv;charset=utf-8," + csvData.map(e => e.join(",")).join("\n");
   const encodeUri = encodeURI(csvContent); // window.open(encodeUri); This also download CSV file
