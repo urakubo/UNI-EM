@@ -30,7 +30,7 @@ class InferenceTab(InferenceExe):
                         ['Image Folder',    'SelectImageFolder', 'OpenImageFolder'],
                         ['Model Folder',  'SelectModelFolder', 'OpenModelFolder'],
                         ['Output Segmentation Folder (Empty)', 'SelectEmptyFolder', 'OpenEmptyFolder'],
-                        ['Output Filetype',  'ComboBox', ['8-bit gray scale PNG', '8-bit gray scale TIFF (Uncompressed)', '8-bit gray scale TIFF (Compressed)']],
+                        ['Output Filetype',  'ComboBox', ['8-bit gray scale PNG', '8-bit gray scale TIFF (Uncompressed)', '8-bit gray scale TIFF (Compressed)', '24-bit RGB TIFF (Uncompressed)']],
                         ['Maximal unit image size',  'ComboBox', ["512", "1024", "2048"]]
                         ]
 

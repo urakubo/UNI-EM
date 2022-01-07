@@ -91,7 +91,7 @@ class InferenceExe():
         print('Image standardization: ')
         for input_file in input_files:
             im_col = m.imread(input_file)
-            # im_col = self._ChangeIntoColor(im_col)
+            im_col = self._gray_to_color(im_col)
 
             filename = path.basename(input_file)
             print(filename+' ')
@@ -181,13 +181,16 @@ class InferenceExe():
 
         	if filetype == '8-bit gray scale PNG':
         		filename = filename_base + '.png'
-        		m.save_png8(inferred_segmentation, filename)
+        		m.save_png8(self._color_to_gray(inferred_segmentation), filename)
         	elif filetype == '8-bit gray scale TIFF (Uncompressed)':
         		filename = filename_base + '.tif'
-        		m.save_tif8(inferred_segmentation, filename, compression=1)
+        		m.save_tif8(self._color_to_gray(inferred_segmentation), filename, compression=1)
         	elif filetype == '8-bit gray scale TIFF (Compressed)':
         		filename = filename_base + '.tif'
-        		m.save_tif8(inferred_segmentation, filename)
+        		m.save_tif8(self._color_to_gray(inferred_segmentation), filename)
+        	elif filetype == '24-bit RGB TIFF (Uncompressed)':
+        		filename = filename_base + '.tif'
+        		m.save_tif24(self._gray_to_color(inferred_segmentation), filename)
         	else:
         		print('Internel error: bad filetype.')
         	print(filename)
@@ -208,7 +211,7 @@ class InferenceExe():
         return True
 
 
-    def _ChangeIntoColor(self, img):
+    def _gray_to_color(self, img):
 
         if len(img.shape) == 2:
             img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
@@ -216,4 +219,11 @@ class InferenceExe():
             img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
         return img
 
+    def _color_to_gray(self, img):
+        if len(img.shape) == 3:
+            if img.shape[2] == 3:
+            	img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            elif img.shape[2] == 4:
+            	img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        return img
 

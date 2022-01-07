@@ -266,8 +266,19 @@ def save_pngc(id_data, filename, colordata):
 def save_npy(self, id_data, filename):
     np.save(filename, id_data)
 
+'''
+def save_tif_rgb(id_data, filename):
+	if id_data.()
+
+    imwrite(filename, id_data.astype('uint16'))
+'''
+
 def save_tif16(id_data, filename):
     imwrite(filename, id_data.astype('uint16'))
+
+def save_tif24(id_data, filename):
+    pilOUT = PIL.Image.fromarray(np.uint8(id_data))
+    pilOUT.save(filename)
 
 def save_tif8(id_data, filename, compression=5):
 

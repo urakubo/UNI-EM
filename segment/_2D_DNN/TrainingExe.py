@@ -26,14 +26,11 @@ class TrainingExe():
         ## Transform bitdepth of EM images and segmentation in the target directory.
         ## Translate.py only accepts unit24 (RGB color).
         ##
-        img_files = glob.glob(os.path.join(params['Image Folder'], "*.jpg"))
-        img_png = glob.glob(os.path.join(params['Image Folder'], "*.png"))
-        img_tif = glob.glob(os.path.join(params['Image Folder'], "*.tif"))
-        img_files.extend(img_png)
-        img_files.extend(img_tif)
-        img_files = sorted(img_files)
+
+        img_files = m.ObtainImageFiles(os.path.join(params['Image Folder']))
         if len(img_files) == 0:
             print('No image file.')
+            print('Aborted.')
             return False
 
         im = m.imread(img_files[0], cv2.IMREAD_UNCHANGED)
@@ -43,14 +40,8 @@ class TrainingExe():
         print('Image dimensions : ', im.shape)
         print('Image filetype   : ', im.dtype)
 
-        seg_files = glob.glob(os.path.join(params['Segmentation Folder'], "*.jpg"))
-        seg_png = glob.glob(os.path.join(params['Segmentation Folder'], "*.png"))
-        seg_tif = glob.glob(os.path.join(params['Segmentation Folder'], "*.tif"))
-        seg_files.extend(seg_png)
-        seg_files.extend(seg_tif)
-        seg_files = sorted(seg_files)
+        seg_files = m.ObtainImageFiles(os.path.join(params['Segmentation Folder']))
         if len(seg_files) == 0:
-            print('')
             print('No segmentation file.')
             print('Aborted.')
             return False
