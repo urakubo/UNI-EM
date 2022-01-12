@@ -91,7 +91,7 @@ We provide standalone versions (pyinstaller version) and Python source codes.
 
 	- git clone https://github.com/urakubo/UNI-EM.git
 
-4. Install the following modules of Python: Tensorflow-gpu, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl. Use the command "requirements-[os]-.txt". Use the following "apt" commands to install opencv and pyqt5 if you use Ubuntu/Linux:
+4. Install the following modules of Python: Tensorflow-gpu, PyQt5, openCV3, pypng, tornado, pillow, libtiff, mahotas, h5py, lxml, numpy, scipy, scikit-image, pypiwin32, numpy-stl. Use the command "pip install -r requirements-[os]-.txt". Use the following commands to install opencv and pyqt5 if you use Ubuntu/Linux:
 
 	- sudo apt install python3-dev python3-pip
 	- sudo apt install python3-opencv
