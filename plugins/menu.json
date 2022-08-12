@@ -7,6 +7,10 @@
 	"Sub":		0,
 	"Func":		"Multicut"
 },
+"Volume Splitter": {
+	"Sub":		0,
+	"Func":		"Splitter"
+},
 "Template": {
 	"Sub":		0,
 	"Func":		"Template"
