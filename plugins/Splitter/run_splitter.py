@@ -166,9 +166,9 @@ class Splitter():
 		
 		p ={}
 		if params['Reflect padding'] != Qt.Unchecked:
-			p['Reflect padding'] == True
+			p['Reflect padding'] = True
 		else:
-			p['Reflect padding'] == False
+			p['Reflect padding'] = False
 		
 		p['Img folder'] = params['Img folder']
 		p['Seg folder'] = params['Seg folder']
