@@ -12,6 +12,7 @@ import png
 import tifffile
 from itertools import product
 import glob
+import math
 
 from PyQt5.QtWidgets import QDialog, QDialogButtonBox,\
     QHBoxLayout, QLabel, QLineEdit, QMenu, QMenuBar, QPushButton, QVBoxLayout, \
@@ -28,6 +29,127 @@ sys.path.append(main_dir)
 # sys.path.append(os.path.join(main_dir, "filesystem"))
 
 # import miscellaneous.Miscellaneous as m
+
+
+
+def assign_regions_for_merge(im_size, split_size, overlap_size):
+	overlap_size_2 = overlap_size // 2
+	unit_size = split_size - overlap_size
+	num       = math.ceil( (im_size - overlap_size) / unit_size )
+	
+	if   num == 1:
+		panels = [[0, im_size]]
+		merged = [[0, im_size]]
+		return panels, merged
+	elif num == 2:
+		panels = [ [0, split_size - overlap_size_2], [overlap_size_2, im_size - split_size] ]
+		merged = [ [0, unit_size + overlap_size_2], [unit_size + overlap_size_2, im_size] ]
+		return panels, merged
+	elif num >= 3:
+		panels = [ [0, split_size - overlap_size_2] ]
+		merged = [ [0, split_size - overlap_size_2] ]
+		for i in  range( 1, num ):
+			m0 = i * unit_size + overlap_size_2
+			m1 = (i+1) * unit_size + overlap_size_2
+			p0 = overlap_size_2
+			p1 = unit_size + overlap_size_2
+			if im_size < m1:
+				m1 = im_size
+				p1 = np.mod(im_size, unit_size) # -1
+			merged.append([m0, m1])
+			panels.append([p0, p1])
+		return panels, merged
+
+def crop_with_overlap(im_size, split_size, overlap_size):
+	unit_size = split_size - overlap_size
+	num       = math.ceil( (im_size - overlap_size) / unit_size )
+	ws = []
+	for i in  range( num ):
+		w0 = i * unit_size
+		w1 = (i+1) * unit_size + overlap_size
+		w1 = min([w1, im_size])
+		ws.append([w0, w1])
+	return ws, num
+
+
+def obtain_list_image_files( image_folder ):
+	types = ['jpg', 'png', 'tif', 'tiff']
+	input_files = []
+	for ext in types:
+		paths = os.path.join( image_folder , '*.{}'.format(ext))
+		input_files.extend(glob.glob(paths))
+	input_files = sorted(input_files)
+	if len(input_files) == 0:
+		print('No images in the Image Folder.')
+		return False
+
+	return input_files
+
+
+def ObtainImageFiles(input_path):
+    search1 = os.path.join(input_path, '*.png')
+    search2 = os.path.join(input_path, '*.tif')
+    search3 = os.path.join(input_path, '*.tiff')
+    filestack = sorted(glob.glob(search1))
+    filestack.extend(sorted(glob.glob(search2)))
+    filestack.extend(sorted(glob.glob(search3)))
+    return filestack
+
+
+def read_image(input_file, ext):
+	#root, ext = os.path.splitext(os.path.basename(input_file))
+	if ext in ['tif', 'tiff'] :
+		im = imread(input_file)
+	else :
+		im = imread(input_file, cv2.IMREAD_UNCHANGED)
+	return im
+
+
+def read_seg_image(input_file, ext):
+	#ext = os.path.splitext(os.path.basename(input_file))[1][1:]
+	if ext in ['tif', 'tiff'] :
+		im = imread(input_file)
+	else :
+		im = imread(input_file, cv2.IMREAD_UNCHANGED)
+	if im.ndim == 3 and im.shape[2] == 3:
+		im = im[:,:,0].astype(int) \
+			+ im[:,:,1].astype(int)*256 \
+			+ im[:,:,2].astype(int)*256*256
+
+	elif im.ndim == 3 and im.shape[2] == 4:
+		im = im[:,:,0].astype(int) \
+			+ im[:,:,1].astype(int)*256 \
+			+ im[:,:,2].astype(int)*256*256 \
+			+ im[:,:,3].astype(int)*256*256*256
+	return im
+
+
+
+def query_yes_no(question, default="yes"):
+
+    valid = {"yes":True,   "y":True,  "ye":True,
+        "no":False,     "n":False}
+    if default == None:
+        prompt = " [y/n] "
+    elif default == "yes":
+        prompt = " [Y/n] "
+    elif default == "no":
+        prompt = " [y/N] "
+    else:
+        raise ValueError("invalid default answer: '%s'" % default)
+
+    while True:
+        sys.stdout.write(question + prompt)
+        choice = input().lower()
+        if default is not None and choice == '':
+        	return valid[default]
+        elif choice in valid:
+        	return valid[choice]
+        else:
+        	sys.stdout.write("Please respond with 'yes' or 'no' "\
+	                         "(or 'y' or 'n').\n")
+
+
 
 def UnlockFolder(u_info, dir):
     tmp_open_files4lock = u_info.open_files4lock.get(dir)

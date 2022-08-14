@@ -36,7 +36,7 @@ def load_volume( folder, i_slices, ext, im_dtype, size_hh, size_ww ):
 	return volume
 
 
-def connector(reference, target, threshold):
+def _connector(reference, target, threshold):
 
 	TH = threshold / 100
 	connection = []
@@ -84,7 +84,7 @@ def register_graph( g, ids_connector, ref_hwz, targ_hwz ):
 	return g
 
 
-class SimpleMerger():
+class Connector():
 
 	def save_image(self, image2d, filename, filetype, colormap = None):
 		if filetype == '16-bit gray scale TIFF':
@@ -185,7 +185,7 @@ class SimpleMerger():
 			v_sub_targ = self.load_seg_volume(ih, iw, iz+1, size_hh, size_ww, [0,self.overlap_size_z])
 			#print('v_sub_ref.shape  ', v_sub_ref.shape)
 			#print('v_sub_targ.shape ', v_sub_targ.shape)
-			ids_connector = connector(v_sub_ref, v_sub_targ, self.threshold)
+			ids_connector = _connector(v_sub_ref, v_sub_targ, self.threshold)
 			self.g = register_graph(self.g, ids_connector, (ih, iw, iz), (ih, iw, iz+1))
 
 
@@ -198,7 +198,7 @@ class SimpleMerger():
 			### Reference volume
 			v_sub_ref  = self.load_seg_volume(  ih, iw, iz, size_hh_ref , size_ww, [0,-1] )
 			v_sub_targ = self.load_seg_volume(ih+1, iw, iz, size_hh_targ, size_ww, [0,-1] )
-			ids_connector = connector(v_sub_ref, v_sub_targ)
+			ids_connector = _connector(v_sub_ref, v_sub_targ)
 			self.g = register_graph(self.g, ids_connector, (ih, iw, iz), (ih+1, iw, iz))
 
 
@@ -211,7 +211,7 @@ class SimpleMerger():
 			### Reference volume
 			v_sub_ref  = self.load_seg_volume(ih,   iw, iz, size_hh, size_ww_ref , [0,-1])
 			v_sub_targ = self.load_seg_volume(ih, iw+1, iz, size_hh, size_ww_targ, [0,-1])
-			ids_connector = connector(v_sub_ref, v_sub_targ)
+			ids_connector = _connector(v_sub_ref, v_sub_targ)
 			self.g = register_graph(self.g, ids_connector, (ih, iw, iz), (ih, iw+1, iz))
 		
 		##
@@ -331,7 +331,7 @@ class SimpleMerger():
 		                ]
 
 		self.args = [
-		                ['Overlap for connected components', 'SpinBox', [0, 80, 100]],
+		                ['Overlap level for connected components (%)', 'SpinBox', [0, 80, 100]],
 		                ['Merged segmentation folder (Empty)',  'SelectEmptyModelFolder', 'OpenEmptyModelFolder'],
                         ['Merged segmentation Filetype', 'ComboBox', ["8-bit color PNG", "16-bit gray scale PNG", "8-bit gray scale PNG", 
                                                          "8-bit color TIFF", "16-bit gray scale TIFF", "8-bit gray scale TIFF"]]

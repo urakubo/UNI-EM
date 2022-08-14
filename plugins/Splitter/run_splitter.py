@@ -4,8 +4,9 @@
 import sys, os
 import subprocess as s
 import miscellaneous.Miscellaneous as m
+from PyQt5.QtCore import Qt
 
-import os, sys, shutil, pprint
+import os, sys, shutil, pprint, math
 import numpy as np
 import json
 from itertools import product
@@ -63,19 +64,19 @@ class Splitter():
 
 	def _Run(self, parent, params, comm_title):
 		#
-		input_image_files = m.obtain_list_image_files( params['Original image folder'] )
+		original_image_files = m.obtain_list_image_files( params['Target image folder'] )
 		ext, im_shape, im_dtype = _check_image_attr(original_image_files[0])
 		
 		params['Img folder'] = 'img'
 		params['Seg folder'] = 'seg'
 		
-		split_size_h   = params['Split size (h)']
-		split_size_w   = params['Split size (w)']
-		split_size_z   = params['Split size (z)']
+		split_size_h   = int(params['Split size (h)'])
+		split_size_w   = int(params['Split size (w)'])
+		split_size_z   = int(params['Split size (z)'])
 		
-		overlap_size_h = params['Overlap size (h, even number)']
-		overlap_size_w = params['Overlap size (w, even number)']
-		overlap_size_z = params['Overlap size (z, even number)']
+		overlap_size_h = int(params['Overlap size (h, even number)'])
+		overlap_size_w = int(params['Overlap size (w, even number)'])
+		overlap_size_z = int(params['Overlap size (z, even number)'])
 		
 		if   overlap_size_h % 2 != 0:
 			print('Overlap size (h) is not a even number.')
@@ -229,9 +230,9 @@ class Splitter():
 		                ['Split size (h)', 'SpinBox', [2, 1024, 32768]],
 		                ['Split size (w)', 'SpinBox', [2, 1024, 32768]],
 		                ['Split size (z)', 'SpinBox', [2, 100 , 32768]],
-		                ['Overlap size (h, even number)', 'SpinBox', [2, 2, 255]],
-		                ['Overlap size (w, even number)', 'SpinBox', [2, 2, 255]],
-		                ['Overlap size (z, even number)', 'SpinBox', [2, 2, 255]],
+		                ['Overlap size (h, even number)', 'SpinBox', [2, 24, 255]],
+		                ['Overlap size (w, even number)', 'SpinBox', [2, 24, 255]],
+		                ['Overlap size (z, even number)', 'SpinBox', [2, 4, 255]],
 		                ['Reflect padding', 'CheckBox', False]
 		    ]
 

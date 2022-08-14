@@ -19,7 +19,7 @@ from miscellaneous.TabGenerator import TabGenerator
 
 plugins_dir = path.join(main_dir, "plugins")
 sys.path.append(plugins_dir)
-from plugins.Splitter.run_Splitter import Splitter
+from plugins.Splitter.run_splitter import Splitter
 from plugins.Splitter.run_simple_merger import SimpleMerger
 from plugins.Splitter.run_connector  import Connector
 
@@ -49,7 +49,7 @@ class GenerateDialog(QWidget):
         # Training
         splitter        = Splitter(self.u_info)
         tab_splitter    = tab.GenerateTabWidget(splitter)
-        tabs.addTab(tab_multicut, 'Splitter')
+        tabs.addTab(tab_splitter, 'Splitter')
 
         # Inferernce
         simple_merger     = SimpleMerger(self.u_info)

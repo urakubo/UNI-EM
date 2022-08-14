@@ -36,7 +36,8 @@ import segment._tensorb._tensorb  as d4
 import plugins.Blank.Blank  as d5
 import plugins.Filter2D3D.Filter2D3D  as d6
 import plugins.Template.Template  as d7
-import plugins.Multicut.Multicut  as d8
+#import plugins.Multicut.Multicut  as d8
+import plugins.Splitter.Splitter as d9
 #
 
 from Params  import Params
