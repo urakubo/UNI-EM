@@ -115,7 +115,6 @@ def read_seg_image(input_file, ext):
 		im = im[:,:,0].astype(int) \
 			+ im[:,:,1].astype(int)*256 \
 			+ im[:,:,2].astype(int)*256*256
-
 	elif im.ndim == 3 and im.shape[2] == 4:
 		im = im[:,:,0].astype(int) \
 			+ im[:,:,1].astype(int)*256 \

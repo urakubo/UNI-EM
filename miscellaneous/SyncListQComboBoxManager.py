@@ -121,7 +121,6 @@ class SyncListQComboBoxManager():
             self.currentIndexChanged.connect(lambda idx: manager.saveSelected(self, idx, key))
 
 
-
 class SyncListQComboBoxEmptyManager(SyncListQComboBoxManager):
     
     def isInclude(self, fileName):
@@ -150,6 +149,16 @@ class SyncListQComboBoxModelManager(SyncListQComboBoxManager):
         if not fileName in self.my_u_info.open_files_type.keys():
             return True
         return self.my_u_info.open_files_type[fileName] == 'Model'
+
+
+class SyncListQComboBoxSplitterManager(SyncListQComboBoxManager):
+    
+    def isInclude(self, fileName):
+        if not fileName:
+            return True
+        if not fileName in self.my_u_info.open_files_type.keys():
+            return True
+        return self.my_u_info.open_files_type[fileName] == 'Split'
 
 
 class SyncListQComboBoxEmptyModelManager(SyncListQComboBoxManager):

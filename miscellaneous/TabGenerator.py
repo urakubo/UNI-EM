@@ -146,6 +146,10 @@ class TabGenerator(SharedFileDialogs):
                 obj_args.append(SyncListQComboBoxEmptyModelManager.get().create(att, i))
                 if args[i][2] == 'OpenEmptyModelFolder':
                     require_browse_dir_specific[i] = ['Empty','Model']
+            elif args[i][1] == 'SelectSplitterFolder':
+                obj_args.append(SyncListQComboBoxSplitterManager.get().create(att, i))
+                if args[i][2] == 'OpenSplitterFolder':
+                    require_browse_dir_specific[i] = ['Split']
             else:
                 print('Internal error. No fucntion.')
 

@@ -27,7 +27,7 @@ def _check_image_attr(input_file):
 	print('ext              : ', ext )
 	print('Image dimension  : ', im.shape)
 	print('Image filetype   : ', im.dtype)
-	return ext, im.shape, im.dtype
+	return ext, im.shape, str(im.dtype)
 
 
 
@@ -104,16 +104,18 @@ class Splitter():
 		im_size_z = len(original_image_files)
 		ids_original_files = list(range(im_size_z))
 		
-			
+		
 		if params['Reflect padding'] != Qt.Unchecked:
 			im_size_h += 2*overlap_size_h
 			im_size_w += 2*overlap_size_w
 			im_size_z += 2*overlap_size_z
-
+		
+		
 		im_split_size    = list(im_shape)
 		im_split_size[0] = split_size_h
 		im_split_size[1] = split_size_w
-
+		
+		
 		cropped_hs, num_h = m.crop_with_overlap(im_size_h, split_size_h, overlap_size_h)
 		cropped_ws, num_w = m.crop_with_overlap(im_size_w, split_size_w, overlap_size_w)
 		cropped_zs, num_z = m.crop_with_overlap(im_size_z, split_size_z, overlap_size_z)
@@ -141,8 +143,9 @@ class Splitter():
 			for i_slice, id_original_file in enumerate( ids_original_files[iz] ):
 				image_file = original_image_files[id_original_file]
 				z_sub_info.append({'i_slice': i_slice, 'id_original_file': id_original_file, 'image_file': image_file})
-				print('image_file: ', image_file)
 				image = m.read_image(image_file, ext)
+				print('image_file : ', image_file)
+				# print('np.unique(image) : ', np.unique(image))
 				
 				if params['Reflect padding'] != Qt.Unchecked:
 					image = np.pad(image, pad_width=pad_width, mode='reflect')
@@ -159,6 +162,9 @@ class Splitter():
 					output_file = os.path.join(params['Split img/seg folder (Empty)'], \
 						params['Img folder'], \
 						'{:03d}_{:03d}_{:03d}'.format(ih,iw,iz), '{:04d}.{}'.format( i_slice, ext ) )
+
+					# print('cropped_image.dtype: ', str(cropped_image.dtype))
+
 					m.imwrite(output_file, cropped_image)
 			z_info.append(z_sub_info)
 
@@ -203,6 +209,9 @@ class Splitter():
 		
 		#
 		print(comm_title, 'was finished.')
+		folder = params['Split img/seg folder (Empty)']
+		parent.parent.ExecuteCloseFileFolder(folder)
+		parent.parent.OpenFolder(folder)
 		return True
 
 	def __init__(self, u_info):
@@ -226,10 +235,10 @@ class Splitter():
 
 		self.args = [
 		                ['Target image folder', 'SelectImageFolder', 'OpenImageFolder'],
-		                ['Split img/seg folder (Empty)',  'SelectEmptyModelFolder', 'OpenEmptyModelFolder'],
-		                ['Split size (h)', 'SpinBox', [2, 1024, 32768]],
-		                ['Split size (w)', 'SpinBox', [2, 1024, 32768]],
-		                ['Split size (z)', 'SpinBox', [2, 100 , 32768]],
+		                ['Split img/seg folder (Empty)',  'SelectEmptyFolder', 'OpenEmptyFolder'],
+		                ['Split size (h)', 'SpinBox', [2, 512, 32768]],
+		                ['Split size (w)', 'SpinBox', [2, 512, 32768]],
+		                ['Split size (z)', 'SpinBox', [2, 40 , 32768]],
 		                ['Overlap size (h, even number)', 'SpinBox', [2, 24, 255]],
 		                ['Overlap size (w, even number)', 'SpinBox', [2, 24, 255]],
 		                ['Overlap size (z, even number)', 'SpinBox', [2, 4, 255]],

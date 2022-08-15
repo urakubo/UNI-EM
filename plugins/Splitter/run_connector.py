@@ -10,6 +10,8 @@ import numpy as np
 import json
 from itertools import product
 
+import networkx as nx
+
 
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
@@ -116,43 +118,64 @@ class Connector():
 	
 	def _Run(self, parent, params, comm_title):
 		#
-		self.threshold = params['Overlap for connected components']
-		self.merge_folder   = params['Merged segmentation folder']
+		self.split_folder = params['Split img/seg folder (Split)']
+		self.threshold = int( params['Overlap level for connected components (%)'] )
+		self.merge_folder   = params['Merged segmentation folder (Empty)']
 		self.merge_filetype = params['Merged segmentation filetype']
-		self.z_info       = params['z_info']
-		self.reflect_pad  = params['Reflect padding']
-	
-		self.split_folder = params['Split img/seg folder']
-		self.seg_folder   = params['Seg folder']
-	
-		self.ext       = params['ext']
-		self.im_dtype  = params['im_dtype']
+		
+		filename = os.path.join(params['Split img/seg folder (Split)'], 'attr.json')
+		with open(filename, 'r') as fp:
+			p = json.load(fp)
+		
+		self.z_info       = p['z_info']
+		self.reflect_pad  = p['Reflect padding']
+		
+		self.seg_folder   = p['Seg folder']
+		
+		self.ext          = p['ext']
+		
+		i_slice_0 = self.z_info[0][0]["i_slice"]
+		ih, iw, iz = 0, 0, 0
+		file_panel = os.path.join( \
+			self.obtain_seg_dir(ih, iw, iz), \
+			'{:04d}.{}'.format(i_slice_0, self.ext) )
+		
+		image = m.read_image(file_panel, self.ext)
+		if image is None:
+			print("Error: Split image was not loaded.")
+			return False
+
+		#self.im_dtype  = p['im_dtype']
+		#self.im_shape  = p['im_shape']
+		#
+		
+		#self.im_dtype  = image.dtype
 		self.im_dtype  = np.int64
+		self.im_shape  = image.shape
 		
-		self.im_shape  = params['im_shape']
+		self.im_size_h = int(p['im_size_h'])
+		self.im_size_w = int(p['im_size_w'])
+		self.im_size_z = int(p['im_size_z'])
 		
-		
-		self.im_size_h = params['im_size_h']
-		self.im_size_w = params['im_size_w']
-		self.im_size_z = params['im_size_z']
-		
-		self.cropped_hs = params['cropped_hs']
-		self.cropped_ws = params['cropped_ws']
-		self.cropped_zs = params['cropped_zs']
-		self.num_h = params['num_h']
-		self.num_w = params['num_w']
-		self.num_z = params['num_z']
+		#cropped_hs = p['cropped_hs']
+		#cropped_ws = p['cropped_ws']
+		#cropped_zs = p['cropped_zs']
+		self.num_h = int(p['num_h'])
+		self.num_w = int(p['num_w'])
+		self.num_z = int(p['num_z'])
 
-		self.split_size_h   = params['Split size (h)']
-		self.split_size_w   = params['Split size (w)']
-		self.split_size_z   = params['Split size (z)']
+		self.split_size_h   = int(p['Split size (h)'])
+		self.split_size_w   = int(p['Split size (w)'])
+		self.split_size_z   = int(p['Split size (z)'])
 
-		self.overlap_size_h = params['Overlap size (h)']
-		self.overlap_size_w = params['Overlap size (w)']
-		self.overlap_size_z = params['Overlap size (z)']
-		self.overlap_size_h_2 = self.overlap_size_h // 2
-		self.overlap_size_w_2 = self.overlap_size_w // 2
+		self.overlap_size_h = int(p['Overlap size (h)'])
+		self.overlap_size_w = int(p['Overlap size (w)'])
+		self.overlap_size_z = int(p['Overlap size (z)'])
+		print('overlap_size_z ', self.overlap_size_z)
 		self.overlap_size_z_2 = self.overlap_size_z // 2
+
+		#self.overlap_size_h_2 = self.overlap_size_h // 2
+		#self.overlap_size_w_2 = self.overlap_size_w // 2
 
 		
 		# Slices per (ih, iw, iz)
@@ -164,6 +187,9 @@ class Connector():
 		self.connector()
 		self.merger()
 		print(comm_title, 'was finished.')
+		parent.parent.ExecuteCloseFileFolder(self.merge_folder)
+		parent.parent.OpenFolder(self.merge_folder)
+		
 		return True
 		
 		
@@ -198,7 +224,7 @@ class Connector():
 			### Reference volume
 			v_sub_ref  = self.load_seg_volume(  ih, iw, iz, size_hh_ref , size_ww, [0,-1] )
 			v_sub_targ = self.load_seg_volume(ih+1, iw, iz, size_hh_targ, size_ww, [0,-1] )
-			ids_connector = _connector(v_sub_ref, v_sub_targ)
+			ids_connector = _connector(v_sub_ref, v_sub_targ, self.threshold)
 			self.g = register_graph(self.g, ids_connector, (ih, iw, iz), (ih+1, iw, iz))
 
 
@@ -211,7 +237,7 @@ class Connector():
 			### Reference volume
 			v_sub_ref  = self.load_seg_volume(ih,   iw, iz, size_hh, size_ww_ref , [0,-1])
 			v_sub_targ = self.load_seg_volume(ih, iw+1, iz, size_hh, size_ww_targ, [0,-1])
-			ids_connector = _connector(v_sub_ref, v_sub_targ)
+			ids_connector = _connector(v_sub_ref, v_sub_targ, self.threshold)
 			self.g = register_graph(self.g, ids_connector, (ih, iw, iz), (ih, iw+1, iz))
 		
 		##
@@ -227,7 +253,7 @@ class Connector():
 		
 		print('Check split-volume specific objects.')
 		self.ids_unique = np.empty((self.num_h, self.num_w, self.num_z), dtype=object)
-		connected_id_list = list(con.g.nodes)
+		connected_id_list = list(self.g.nodes)
 		for ih, iw, iz in product( range(self.num_h), range(self.num_w), range(self.num_z) ):
 			seg_dir = self.obtain_seg_dir(ih, iw, iz)
 			ids  = {}
@@ -251,7 +277,7 @@ class Connector():
 		merged_im_size  = (self.im_size_h, self.im_size_w)
 
 		if  'color' in self.merge_filetype:
-			colormap = np.random.randint(255, size=(self.num_color+2, 3), dtype=np.uint8)
+			colormap = np.random.randint(255, size=(self.num_color+1, 3), dtype=np.uint8)
 			colormap[0,:] = 0
 		else:
 			colormap = None
@@ -266,7 +292,6 @@ class Connector():
 		##
 		##
 		##
-		self._create_merge_folder()
 		assign_panel_hs, assign_merged_hs = m.assign_regions_for_merge(self.im_size_h, self.split_size_h, self.overlap_size_h)
 		assign_panel_ws, assign_merged_ws = m.assign_regions_for_merge(self.im_size_w, self.split_size_w, self.overlap_size_w)
 		z_info = self.z_info
@@ -281,7 +306,7 @@ class Connector():
 		##
 		##
 		##
-		for iz in  range(self. num_z ):
+		for iz in  range(self.num_z ):
 			for z_sub_info in z_info[iz]:
 				#print('iz, ', iz)
 				merged_image = np.zeros( merged_im_size, dtype = merged_im_dtype )
@@ -325,16 +350,17 @@ class Connector():
 		self.title = 'Splitter'
 
 		self.tips = [
+		                'Split img/seg folder (Split)',
 		                'Threshold for connected components',
 		                'Merged segmentation folder',
                         'Output filetype'
 		                ]
 
 		self.args = [
+		                ['Split img/seg folder (Split)',  'SelectSplitterFolder', 'OpenSplitterFolder'],
 		                ['Overlap level for connected components (%)', 'SpinBox', [0, 80, 100]],
-		                ['Merged segmentation folder (Empty)',  'SelectEmptyModelFolder', 'OpenEmptyModelFolder'],
-                        ['Merged segmentation Filetype', 'ComboBox', ["8-bit color PNG", "16-bit gray scale PNG", "8-bit gray scale PNG", 
-                                                         "8-bit color TIFF", "16-bit gray scale TIFF", "8-bit gray scale TIFF"]]
-		    ]
+		                ['Merged segmentation folder (Empty)',  'SelectEmptyFolder', 'OpenEmptyFolder'],
+                        ['Merged segmentation filetype', 'ComboBox', ["8-bit color PNG", "16-bit gray scale PNG", "8-bit gray scale PNG", "8-bit color TIFF", "16-bit gray scale TIFF", "8-bit gray scale TIFF"]]
+		    		]
 
 

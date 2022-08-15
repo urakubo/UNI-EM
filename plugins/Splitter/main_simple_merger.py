@@ -28,9 +28,6 @@ def obtain_seg_dir(params,ih,iw,iz):
 	return os.path.join(params['Split img/seg folder'], params['Seg folder'], '{:03d}_{:03d}_{:03d}'.format(ih,iw,iz) )
 
 
-
-
-
 def merge_simple(params):
 
 	z_info = params['z_info']
@@ -67,12 +64,10 @@ def merge_simple(params):
 	overlap_size_z_2 = overlap_size_z // 2
 
 
-
 	if len(im_shape) == 3:
 		merged_im_size = (im_size_h, im_size_w, im_shape[2])
 	else:
 		merged_im_size = (im_size_h, im_size_w)
-
 
 
 	_create_folder_merge(params)

@@ -15,61 +15,61 @@ from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 
 
-def _create_folder_merge( params ):
-
-	if os.path.exists( params['Merged segmentation folder'] ):
-		question = 'Merged segmentation folder "{}" already exists. Remove it?'.format(params['Merged segmentation folder'])
-		reply = m.query_yes_no(question, default="yes")
-		if reply == True:
-			shutil.rmtree(params['Merged segmentation folder'])
-		else:
-			exit()
-
-	os.makedirs(params['Merged segmentation folder'], exist_ok=True)
-	return True
-
-
-def _obtain_seg_dir(params,ih,iw,iz):
-	return os.path.join(params['Split img/seg folder'], params['Seg folder'], '{:03d}_{:03d}_{:03d}'.format(ih,iw,iz) )
-
-
-
 
 class SimpleMerger():
 
+	def obtain_seg_dir(self, ih, iw, iz):
+		return os.path.join( self.split_folder, self.seg_folder, '{:03d}_{:03d}_{:03d}'.format(ih,iw,iz) )
+
+
 	def _Run(self, parent, params, comm_title):
 		#
-		z_info = params['z_info']
-		ext    = params['ext']
+		filename = os.path.join(params['Split img/seg folder (Split)'], 'attr.json')
+		with open(filename, 'r') as fp:
+			p = json.load(fp)
 
+		self.split_folder = params['Split img/seg folder (Split)']
+		self.seg_folder   = p['Seg folder']
+		merged_segmentation_folder = params['Merged segmentation folder (Empty)']
+
+		z_info = p['z_info']
+		ext    = p['ext']
+		
+		
 		i_slice_0 = z_info[0][0]["i_slice"]
 		ih, iw, iz = 0, 0, 0
 		file_panel = os.path.join( \
-			obtain_seg_dir(params,ih,iw,iz), \
+			self.obtain_seg_dir(ih, iw, iz), \
 			'{:04d}.{}'.format(i_slice_0, ext) )
+		
 		image = m.read_image(file_panel, ext)
+		if image is None:
+			print("Error: Split image was not loaded.")
+			return False
+		
 		
 		im_dtype  = image.dtype
 		im_shape  = image.shape
 		
-		im_size_h = params['im_size_h']
-		im_size_w = params['im_size_w']
-		im_size_z = params['im_size_z']
+		im_size_h = int(p['im_size_h'])
+		im_size_w = int(p['im_size_w'])
+		im_size_z = int(p['im_size_z'])
 		
-		cropped_hs = params['cropped_hs']
-		cropped_ws = params['cropped_ws']
-		cropped_zs = params['cropped_zs']
-		num_h = params['num_h']
-		num_w = params['num_w']
-		num_z = params['num_z']
+		#cropped_hs = p['cropped_hs']
+		#cropped_ws = p['cropped_ws']
+		#cropped_zs = p['cropped_zs']
+		num_h = int(p['num_h'])
+		num_w = int(p['num_w'])
+		num_z = int(p['num_z'])
 
-		split_size_h   = params['Split size (h)']
-		split_size_w   = params['Split size (w)']
-		split_size_z   = params['Split size (z)']
+		split_size_h   = int(p['Split size (h)'])
+		split_size_w   = int(p['Split size (w)'])
+		split_size_z   = int(p['Split size (z)'])
 
-		overlap_size_h = params['Overlap size (h)']
-		overlap_size_w = params['Overlap size (w)']
-		overlap_size_z = params['Overlap size (z)']
+		overlap_size_h = int(p['Overlap size (h)'])
+		overlap_size_w = int(p['Overlap size (w)'])
+		overlap_size_z = int(p['Overlap size (z)'])
+		print('overlap_size_z ', overlap_size_z)
 		overlap_size_z_2 = overlap_size_z // 2
 
 
@@ -77,9 +77,6 @@ class SimpleMerger():
 			merged_im_size = (im_size_h, im_size_w, im_shape[2])
 		else:
 			merged_im_size = (im_size_h, im_size_w)
-
-
-		_create_folder_merge(params)
 
 
 		assign_panel_hs, assign_merged_hs = m.assign_regions_for_merge(im_size_h, split_size_h, overlap_size_h)
@@ -94,10 +91,8 @@ class SimpleMerger():
 			pass
 
 		# return z_info
-		print('cropped_ws ', cropped_ws)
-		print('cropped_hs ', cropped_hs)
 
-		if params['Reflect padding'] == True:
+		if p['Reflect padding'] == True:
 			 z_info[0] = z_info[0][overlap_size_z:]
 
 
@@ -106,7 +101,7 @@ class SimpleMerger():
 				merged_image = np.zeros( merged_im_size, dtype=im_dtype )
 				for iw, ih in product( range(num_w), range(num_h) ):
 					file_panel = os.path.join( \
-						obtain_seg_dir(params,ih,iw,iz), \
+						self.obtain_seg_dir(ih, iw, iz), \
 						'{:04d}.{}'.format(z_sub_info['i_slice'], ext) )
 					cropped_image = m.read_image(file_panel, ext)
 					#
@@ -116,11 +111,11 @@ class SimpleMerger():
 					pw = assign_panel_ws[iw]
 					merged_image[mh[0]:mh[1], mw[0]:mw[1]] = cropped_image[ph[0]:ph[1], pw[0]:pw[1]]
 				
-				if params['Reflect padding'] == True:
+				if p['Reflect padding'] == True:
 					merged_image = merged_image[overlap_size_h:-overlap_size_h, overlap_size_w:-overlap_size_w]
 				
 				base_name = os.path.splitext(os.path.basename(z_sub_info['image_file']))[0]
-				file_merged = os.path.join(params['Merged segmentation folder'], \
+				file_merged = os.path.join( merged_segmentation_folder, \
 					'{}.{}'.format( base_name, ext ) )
 				print('file_merged: ', file_merged)
 				m.imwrite(file_merged, merged_image)
@@ -128,10 +123,10 @@ class SimpleMerger():
 				#if params['Reflect padding'] == True:
 				#	image = np.pad(image, pad_width=pad_width, mode='reflect')
 
-
-
 		#
 		print(comm_title, 'was finished.')
+		parent.parent.ExecuteCloseFileFolder(merged_segmentation_folder)
+		parent.parent.OpenFolder(merged_segmentation_folder)
 		return True
 
 	def __init__(self, u_info):
@@ -139,14 +134,16 @@ class SimpleMerger():
 		self.u_info = u_info
 		self.paramfile = os.path.join(u_info.parameters_path, "SimpleMerger.pickle")
 
-		self.title = 'Splitter'
+		self.title = 'Simple merger'
 
 		self.tips = [
+		                'Split img/seg folder (Split)',
 		                'Merged segmentation folder'
 		                ]
 
 		self.args = [
-		                ['Merged segmentation folder (Empty)',  'SelectEmptyModelFolder', 'OpenEmptyModelFolder']
+		                ['Split img/seg folder (Split)',  'SelectSplitterFolder', 'OpenSplitterFolder'],
+		                ['Merged segmentation folder (Empty)',  'SelectEmptyFolder', 'OpenEmptyFolder']
 		    ]
 
 

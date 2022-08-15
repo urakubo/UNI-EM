@@ -102,6 +102,7 @@ class MainWindow(QMainWindow, FileMenu, DojoMenu, DojoFileIO, Credit, Script):
         SyncListQComboBoxEmptyModelManager.build(self.u_info)
         SyncListQComboBoxImageManager.build(self.u_info)
         SyncListQComboBoxDojoManager.build(self.u_info)
+        SyncListQComboBoxSplitterManager.build(self.u_info)
 
         self.initUI()
 

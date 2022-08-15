@@ -110,6 +110,7 @@ class FileManager():
         SyncListQComboBoxEmptyModelManager.get().removeModel(file_name)
         SyncListQComboBoxImageManager.get().removeModel(file_name)
         SyncListQComboBoxDojoManager.get().removeModel(file_name)
+        SyncListQComboBoxSplitterManager.get().removeModel(file_name)
 
 ######
 
@@ -174,6 +175,8 @@ class FileManager():
             return "Model"
         elif self.CheckFolderFFNs(folder_name):
             return "FFNs"
+        elif self.CheckFolderSplitterMerger(folder_name):
+            return "Split"
         elif self.CheckFolderImage(folder_name) != [] :
             ext = self.CheckFolderImage(folder_name)
             if   len(ext) > 1 :
@@ -210,6 +213,8 @@ class FileManager():
         SyncListQComboBoxEmptyModelManager.get().addModel(folder_name)
         SyncListQComboBoxImageManager.get().addModel(folder_name)
         SyncListQComboBoxDojoManager.get().addModel(folder_name)
+        SyncListQComboBoxSplitterManager.get().addModel(folder_name)
+
 
     def ExecuteFolderOpen(self, folder_name, folder_type):
 
@@ -291,6 +296,24 @@ class FileManager():
             os.path.exists(tmp_info.tile_images_path) and \
             os.path.isfile(tmp_info.tile_images_volume_file) :
 
+            return 1
+        else:
+            return 0
+
+
+    def CheckFolderSplitterMerger(self, folder_path):
+        required_files = [ \
+            'attr.json', \
+            'img', \
+            'seg']
+        tmp = glob.glob( path.join(folder_path, "*") )
+        filenames_in_folder = [os.path.basename(r) for r in tmp]
+
+        flags = []
+        for required_file in required_files:
+            match_fname = [fnmatch.fnmatch(fn, required_file) for fn in filenames_in_folder]
+            flags.append(any(match_fname))
+        if all(flags):
             return 1
         else:
             return 0
