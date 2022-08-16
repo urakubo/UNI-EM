@@ -3,10 +3,6 @@
 	"Sub":		0,
 	"Func":		"Filter2D3D"
 },
-#"Multicut": {
-#	"Sub":		0,
-#	"Func":		"Multicut"
-#},
 "Volume Splitter": {
 	"Sub":		0,
 	"Func":		"Splitter"

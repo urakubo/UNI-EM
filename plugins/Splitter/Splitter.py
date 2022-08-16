@@ -26,7 +26,7 @@ from plugins.Splitter.run_connector  import Connector
 
 class GenerateDialog(QWidget):
     def __init__(self, parent):
-        self.title  = "Template"
+        self.title  = "Splitter/connector"
         self.left   = 200
         self.top    = 200
         self.width  = 800
