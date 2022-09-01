@@ -14,6 +14,14 @@ from itertools import product
 from os import path, pardir
 main_dir = path.abspath(path.dirname(sys.argv[0]))  # Dir of main
 
+'''
+import psutil
+import platform
+if platform.system() == 'Windows':
+	print("Set maximal number of open files as 2048")
+	import win32file
+	win32file._setmaxstdio(2048)
+'''
 
 
 class SimpleMerger():
@@ -24,13 +32,20 @@ class SimpleMerger():
 
 	def _Run(self, parent, params, comm_title):
 		#
+
+		self.split_folder = params['Split img/seg folder (Split)']
+		merged_segmentation_folder = params['Merged segmentation folder (Empty)']
+
+		if (len(self.split_folder) == 0) or (len(merged_segmentation_folder) == 0):
+			print('Input/output folder unspecified.')
+			return False
+
 		filename = os.path.join(params['Split img/seg folder (Split)'], 'attr.json')
 		with open(filename, 'r') as fp:
 			p = json.load(fp)
-
-		self.split_folder = params['Split img/seg folder (Split)']
 		self.seg_folder   = p['Seg folder']
-		merged_segmentation_folder = params['Merged segmentation folder (Empty)']
+
+
 
 		z_info = p['z_info']
 		ext    = p['ext']
@@ -78,10 +93,8 @@ class SimpleMerger():
 		else:
 			merged_im_size = (im_size_h, im_size_w)
 
-
 		assign_panel_hs, assign_merged_hs = m.assign_regions_for_merge(im_size_h, split_size_h, overlap_size_h)
 		assign_panel_ws, assign_merged_ws = m.assign_regions_for_merge(im_size_w, split_size_w, overlap_size_w)
-
 
 		if len(z_info) >= 2:
 			z_info = [z_info[0][:-overlap_size_z_2]] + \
@@ -114,6 +127,10 @@ class SimpleMerger():
 				if p['Reflect padding'] == True:
 					merged_image = merged_image[overlap_size_h:-overlap_size_h, overlap_size_w:-overlap_size_w]
 				
+				#"""
+				#p = psutil.Process(os.getpid())
+				#p.get_open_files()
+				#"""
 				base_name = os.path.splitext(os.path.basename(z_sub_info['image_file']))[0]
 				file_merged = os.path.join( merged_segmentation_folder, \
 					'{}.{}'.format( base_name, ext ) )

@@ -14,6 +14,8 @@ from itertools import product
 import glob
 import math
 
+
+
 from PyQt5.QtWidgets import QDialog, QDialogButtonBox,\
     QHBoxLayout, QLabel, QLineEdit, QMenu, QMenuBar, QPushButton, QVBoxLayout, \
     QTreeView, QFileSystemModel, QListView, QTableView, QAbstractItemView
@@ -41,11 +43,7 @@ def assign_regions_for_merge(im_size, split_size, overlap_size):
 		panels = [[0, im_size]]
 		merged = [[0, im_size]]
 		return panels, merged
-	elif num == 2:
-		panels = [ [0, split_size - overlap_size_2], [overlap_size_2, im_size - split_size] ]
-		merged = [ [0, unit_size + overlap_size_2], [unit_size + overlap_size_2, im_size] ]
-		return panels, merged
-	elif num >= 3:
+	elif num >= 2:
 		panels = [ [0, split_size - overlap_size_2] ]
 		merged = [ [0, split_size - overlap_size_2] ]
 		for i in  range( 1, num ):
@@ -59,6 +57,13 @@ def assign_regions_for_merge(im_size, split_size, overlap_size):
 			merged.append([m0, m1])
 			panels.append([p0, p1])
 		return panels, merged
+
+	'''
+	elif num == 2:
+		panels = [ [0, split_size - overlap_size_2], [overlap_size_2, split_size] ]
+		merged = [ [0, unit_size + overlap_size_2], [unit_size + overlap_size_2, im_size] ]
+		return panels, merged
+	'''
 
 def crop_with_overlap(im_size, split_size, overlap_size):
 	unit_size = split_size - overlap_size
@@ -231,8 +236,8 @@ def imread(filename, flags=cv2.IMREAD_UNCHANGED, dtype=None):
 #        else:
 #cv2.COLOR_GRAY2RGB
 
-        pil_img = PIL.Image.open(filename)
-        img = np.array(pil_img)
+        with PIL.Image.open(filename) as pil_img:
+            img = np.array(pil_img)
 
         if img.dtype == 'int32':
             img = img.astype('uint16')
@@ -251,26 +256,40 @@ def imread(filename, flags=cv2.IMREAD_UNCHANGED, dtype=None):
         return img
     except Exception as e:
         print(e)
+        print("Error at imread")
         return None
 
 
-
-
 def imwrite(filename, img, params=None):
-    try:
-        ext = os.path.splitext(filename)[1]
-        result, n = cv2.imencode(ext, img, params)
 
-        if result:
-            with open(filename, mode='w+b') as f:
-                n.tofile(f)
+	# open CV does not support unicode filenames
+    #print('img.dtype ', img.dtype)
+    #print('img.shape ', img.shape)
+    #print('img.ndim  ', img.ndim)
+    ext = os.path.splitext(os.path.basename(filename))[1][1:]
+    img_dtype = img.dtype
+    if img.dtype in [np.uint8, np.int8]:
+        try:
+            pil_image = PIL.Image.fromarray(img)
+            pil_image.save(filename)
             return True
-        else:
+        except Exception as e:
+            print(e)
+            print("Error at imwrite")
             return False
-    except Exception as e:
-        print(e)
+    elif np.issubdtype(img.dtype, np.integer):
+        if ext in ['tif','tiff','TIFF']:
+            save_tif16(img.astype(np.uint16), filename)
+        elif ext in ['png','PNG']:
+            save_png16(img.astype(np.uint16), filename)
+        else:
+            print('ext: ', ext, ' img.dtype: ', img_dtype)
+            print('Save image: unsupported data/file type: 1.')
+            return False
+    else:
+        print('ext: ', ext, ' img.dtype: ', img_dtype)
+        print('Save image: unsupported data/file type: 2.')
         return False
-
 
 
 def ObtainFullSizeImagesPanel(u_info, db, iz):
@@ -282,7 +301,11 @@ def ObtainFullSizeImagesPanel(u_info, db, iz):
         ## Load panels
         tile_filename = target_path + u_info.tile_images_filename_wzyx.format(iw, iz, iy, ix)
         #tile_images = cv2.imread(tile_filename, cv2.IMREAD_UNCHANGED)
-        tile_images = PIL.Image.open(tile_filename)
+        # tile_images = PIL.Image.open(tile_filename)
+
+        with PIL.Image.open(tile_filename) as pil_img:
+            tile_images = np.array(pil_img)
+
 
         ## Obtain merged ids
         y = iy * db.num_voxels_per_tile_y
@@ -394,8 +417,20 @@ def save_tif_rgb(id_data, filename):
     imwrite(filename, id_data.astype('uint16'))
 '''
 
-def save_tif16(id_data, filename):
-    imwrite(filename, id_data.astype('uint16'))
+
+
+def save_tif16(u16in, tiff_filename):
+	"""
+	Since Pillow has poor support for 16-bit TIFF, we make our own
+	save function to properly save a 16-bit TIFF.
+	"""
+	# write 16-bit TIFF image
+	# PIL interprets mode 'I;16' as "uint16, little-endian"
+	img_out = PIL.Image.new('I;16', u16in.shape)
+	outpil = u16in.astype(u16in.dtype.newbyteorder("<")).tobytes()
+	img_out.frombytes(outpil)
+	img_out.save(tiff_filename)
+
 
 def save_tif24(id_data, filename):
     pilOUT = PIL.Image.fromarray(np.uint8(id_data))

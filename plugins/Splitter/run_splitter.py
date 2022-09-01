@@ -64,7 +64,14 @@ class Splitter():
 
 	def _Run(self, parent, params, comm_title):
 		#
-		original_image_files = m.obtain_list_image_files( params['Target image folder'] )
+
+		target_image_folder = params['Target image folder']
+		split_folder        = params['Split img/seg folder (Empty)']
+		if (len(target_image_folder) == 0) or (len(split_folder) == 0):
+			print('Input/output folder unspecified.')
+			return False
+
+		original_image_files = m.obtain_list_image_files( target_image_folder )
 		ext, im_shape, im_dtype = _check_image_attr(original_image_files[0])
 		
 		params['Img folder'] = 'img'
@@ -159,7 +166,7 @@ class Splitter():
 					else:
 						cropped_image = image[h[0]:h[1], w[0]:w[1]]
 						
-					output_file = os.path.join(params['Split img/seg folder (Empty)'], \
+					output_file = os.path.join(split_folder, \
 						params['Img folder'], \
 						'{:03d}_{:03d}_{:03d}'.format(ih,iw,iz), '{:04d}.{}'.format( i_slice, ext ) )
 
@@ -202,16 +209,15 @@ class Splitter():
 		p['Overlap size (z)']= params['Overlap size (z, even number)']
 
 
-		filename = os.path.join(params['Split img/seg folder (Empty)'], 'attr.json')
+		filename = os.path.join(split_folder, 'attr.json')
 		with open(filename, 'w') as fp:
 			json.dump(p, fp, indent=4)
 		
 		
 		#
 		print(comm_title, 'was finished.')
-		folder = params['Split img/seg folder (Empty)']
-		parent.parent.ExecuteCloseFileFolder(folder)
-		parent.parent.OpenFolder(folder)
+		parent.parent.ExecuteCloseFileFolder(split_folder)
+		parent.parent.OpenFolder(split_folder)
 		return True
 
 	def __init__(self, u_info):

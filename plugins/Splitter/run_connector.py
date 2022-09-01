@@ -118,10 +118,17 @@ class Connector():
 	
 	def _Run(self, parent, params, comm_title):
 		#
+		# Preprocessing
 		self.split_folder = params['Split img/seg folder (Split)']
 		self.threshold = int( params['Overlap level for connected components (%)'] )
 		self.merge_folder   = params['Merged segmentation folder (Empty)']
 		self.merge_filetype = params['Merged segmentation filetype']
+
+		if (len(self.split_folder) == 0) or (len(self.merge_folder) == 0):
+			print('Input/output folder unspecified.')
+			return False
+
+
 		
 		filename = os.path.join(params['Split img/seg folder (Split)'], 'attr.json')
 		with open(filename, 'r') as fp:
