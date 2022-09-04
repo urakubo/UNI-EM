@@ -275,6 +275,7 @@ def imwrite(filename, img, params=None):
             return True
         except Exception as e:
             print(e)
+            print('ext: ', ext, ' img.dtype: ', img_dtype)
             print("Error at imwrite")
             return False
     elif np.issubdtype(img.dtype, np.integer):
@@ -426,7 +427,7 @@ def save_tif16(u16in, tiff_filename):
 	"""
 	# write 16-bit TIFF image
 	# PIL interprets mode 'I;16' as "uint16, little-endian"
-	img_out = PIL.Image.new('I;16', u16in.shape)
+	img_out = PIL.Image.new('I;16', (u16in.shape[1], u16in.shape[0]))
 	outpil = u16in.astype(u16in.dtype.newbyteorder("<")).tobytes()
 	img_out.frombytes(outpil)
 	img_out.save(tiff_filename)
