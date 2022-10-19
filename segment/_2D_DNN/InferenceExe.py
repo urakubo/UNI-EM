@@ -95,7 +95,7 @@ class InferenceExe():
 
             filename = path.basename(input_file)
             print(filename+' ')
-            for ext in ['.TIF','.tif', '.TIFF', '.tiff','.PNG','.jpg', '.jpeg','.JPG', '.JPEG'] :
+            for ext in ['.TIFF', '.tiff','.TIF','.tif','.PNG','.jpg', '.jpeg','.JPG', '.JPEG'] :
             	filename = filename.replace(ext, '.png')
 
             output_files.append(filename)
