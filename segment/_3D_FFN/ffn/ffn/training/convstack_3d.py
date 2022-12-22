@@ -150,4 +150,5 @@ class ConvStack3DFFNModel(model.FFNModel):
       self.show_center_slice(self.labels, sigmoid=False)
       self.add_summaries()
 
-    self.saver = tf.train.Saver(keep_checkpoint_every_n_hours=1)
+    # self.saver = tf.train.Saver(keep_checkpoint_every_n_hours=1)
+    self.saver = tf.train.Saver(keep_checkpoint_every_n_hours=1, save_relative_paths=True) # 221222HU

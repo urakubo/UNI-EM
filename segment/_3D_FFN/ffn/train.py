@@ -659,7 +659,8 @@ def train_ffn(model_cls, **model_kwargs):
         save_flags()
 
       summary_writer = None
-      saver = tf.train.Saver(keep_checkpoint_every_n_hours=0.25)
+      # saver = tf.train.Saver(keep_checkpoint_every_n_hours=0.25)
+      saver = tf.train.Saver(keep_checkpoint_every_n_hours=0.25, save_relative_paths=True) # 221222HU
       scaffold = tf.train.Scaffold(saver=saver)
       with tf.train.MonitoredTrainingSession(
           master=FLAGS.master,
