@@ -15,7 +15,7 @@ class Credit():
     def Credit(self):
         #QMessageBox.setIcon(QMessageBox.Information)
         msg = QMessageBox(QMessageBox.Information, "About UNI-EM",
-                            "<h1>UNI-EM Ver0.92.10</h1><BR>"
+                            "<h1>UNI-EM Ver0.92.12</h1><BR>"
                             "(C) 2019 Hidetoshi Urakubo, Torsten Bullmann, Ryoji Miyamoto, Naoki Tamura, Ryoya Kamikawa.<BR>"
                             "This project is licensed under the GNU General Public License Version 3 (GPLv3).<BR>"
                             "UNI-EM is powered by the following software:<BR>"
