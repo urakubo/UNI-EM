@@ -7,6 +7,7 @@ import numpy as np
 import h5py
 import PIL
 import PIL.Image
+PIL.Image.MAX_IMAGE_PIXELS = None
 import cv2
 import png
 import tifffile
