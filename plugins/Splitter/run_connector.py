@@ -251,7 +251,7 @@ class Connector():
 		## from graph 'g' to dict ids_unique
 		##
 		print('Check cross split-volume objects.')
-		id_color = 1
+		id_color = 0
 		for subs in sorted(nx.connected_components(self.g), key=len, reverse=True):
 			#print('id_color', id_color)
 			for sub in subs:
