@@ -43,17 +43,24 @@ def _connector(reference, target, threshold):
 	TH = threshold / 100
 	connection = []
 	for id_ref, count_ref in zip( *np.unique(reference, return_counts=True) ) :
+                ## 230810 for 0
+		if id_ref == 0:
+                        continue
 		t = target[reference == id_ref]
 		ids, counts = np.unique( t, return_counts=True )
 		ids = ids[ counts/count_ref > TH ]
-		connection.extend([(id_ref, id) for id in ids])
+                ## 230810 for 0
+		connection.extend([(id_ref, id) for id in ids if id != 0])
+		# connection.extend([(id_ref, id) for id in ids])
 	# print('connection ref->targ ', connection)
 
 	for id_targ, count_targ in zip( *np.unique( target, return_counts=True) ) :
 		t = reference[target == id_targ]
 		ids, counts = np.unique( t, return_counts=True )
 		ids = ids[ counts/count_targ > TH ]
-		connection.extend([(id, id_targ) for id in ids])
+                ## 230810 for 0
+		connection.extend([(id, id_targ) for id in ids if id != 0])
+		# connection.extend([(id, id_targ) for id in ids])
 
 	connection = list(set(connection))
 	return connection
@@ -251,7 +258,7 @@ class Connector():
 		## from graph 'g' to dict ids_unique
 		##
 		print('Check cross split-volume objects.')
-		id_color = 0
+		id_color = 1
 		for subs in sorted(nx.connected_components(self.g), key=len, reverse=True):
 			#print('id_color', id_color)
 			for sub in subs:
@@ -266,7 +273,10 @@ class Connector():
 			ids  = {}
 			for id in load_unique_ids( seg_dir, self.i_slices[ih,iw,iz], self.ext, self.im_dtype ):
 				node_name = '{:03d}_{:03d}_{:03d}_{:d}'.format(ih,iw,iz,id)
-				if node_name not in connected_id_list:
+                                ## 230810 for 0
+				if id == 0:
+					ids[id] = 0
+				elif node_name not in connected_id_list:
 					ids[id] = id_color
 					id_color += 1
 				else:
