@@ -266,7 +266,7 @@ def threshold_segmentation(segmentation_dir, corner, labels, threshold):
       raise ValueError('Cannot find probability map %s' % prob_path)
 
   with gfile.Open(prob_path, 'rb') as f:
-    data = np.load(f)
+    data = np.load(f, allow_pickle=True)
     if 'qprob' not in data:
       raise ValueError('Invalid FFN probability map.')
 
@@ -281,7 +281,7 @@ def load_origins(segmentation_dir, corner):
                                                          corner))
 
   with gfile.Open(target_path, 'rb') as f:
-    data = np.load(f)
+    data = np.load(f, allow_pickle=True)
     return data['origins'].item()
 
 
