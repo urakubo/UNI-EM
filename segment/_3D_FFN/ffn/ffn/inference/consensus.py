@@ -24,10 +24,14 @@ import os
 import numpy as np
 import psutil
 
-
-from . import consensus_pb2
-from . import storage
-from . import segmentation
+try:
+  from . import consensus_pb2
+  from . import storage
+  from . import segmentation
+except:
+  import consensus_pb2
+  import storage
+  import segmentation
 
 
 def compute_consensus_for_segmentations(v1, v2, request):
