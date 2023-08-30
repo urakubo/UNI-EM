@@ -19,8 +19,10 @@ from __future__ import division
 from __future__ import print_function
 
 import numpy as np
-from ..utils import bounding_box
-
+try:
+  from ..utils import bounding_box
+except:
+  import utils.bounding_box as bounding_box
 
 class Alignment(object):
   """Base class to represent local ad-hoc alignment of Subvolumes.
