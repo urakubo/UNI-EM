@@ -53,10 +53,14 @@ tf.get_logger().setLevel('INFO')
 tf.autograph.set_verbosity(0)
 tf.get_logger().setLevel(logging.ERROR)
 ##
-
-from . import align
-from . import segmentation
-from ..utils import bounding_box
+try:
+  from . import align
+  from . import segmentation
+  from ..utils import bounding_box
+except:
+  import align
+  import segmentation
+  import utils.bounding_box as bounding_box
 
 OriginInfo = namedtuple('OriginInfo', ['start_zyx', 'iters', 'walltime_sec'])
 
