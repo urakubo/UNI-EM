@@ -787,7 +787,9 @@ class Canvas(object):
           seed_policy_state = self.seed_policy.get_state()
 
         np.savez_compressed(fd,
-                            movement_policy=self.movement_policy.get_state(),
+                            movement_policy=np.asarray(
+                              self.movement_policy.get_state(), dtype=object
+                            ),
                             segmentation=self.segmentation,
                             seg_qprob=self.seg_prob,
                             seed=self.seed,
