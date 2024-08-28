@@ -797,7 +797,7 @@ class Canvas(object):
                             overlaps=self.overlaps,
                             history=np.array(self.history),
                             history_deleted=np.array(self.history_deleted),
-                            seed_policy_state=seed_policy_state,
+                            seed_policy_state=np.asarray(seed_policy_state, dtype=object),
                             counters=self.counters.dumps())
     self.log_info('Inference checkpoint saved.')
 
